@@ -105,7 +105,7 @@ body{
 
 // Card
 .card {
-  box-shadow: 0 0px 10px 0 rgba(black, 0.1);
+  box-shadow: 0 0px 20px 0 rgba(#7e7d7d, 0.2);
   border: none;
   border-radius: 8px;
 }
@@ -114,6 +114,11 @@ body{
   &:first-child {
     border-radius: 8px 8px 0 0;
   }
+}
+
+.c-subheader {
+  
+  border-radius: 0 0 8px 8px !important;
 }
 
 // Tablas personalizadas
@@ -154,6 +159,12 @@ body{
 // Estilos varios
 .sinSalto{
   white-space: nowrap;
+}
+
+.mx-md-4{
+  @media (min-width: 768px) {
+    margin-left: 29px !important; margin-right: 29px !important;
+   }
 }
 
 // BADGES

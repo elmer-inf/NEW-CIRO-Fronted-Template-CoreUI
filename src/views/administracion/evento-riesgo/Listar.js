@@ -10,15 +10,22 @@ import { buildSelectTwo } from '../../../functions/Function'
 
 const AdministracionEventoListar = () => {
 
+  const [labelTabla, setLabelTabla] = useState([])
+
   const columns = [
     {
       dataField: 'id',
       text: 'ID',
       sort: false,
-      //hidden: true
+      hidden: true
     },{
         dataField: 'clave',
-        text: 'CLAVE',
+        text: (labelTabla === 'Área' || labelTabla === 'Unidad' || labelTabla === 'Proceso')?
+              'CODIGO' : (labelTabla === 'Entidad' || labelTabla === 'Tipo de evento')?
+                          'SIGLA' : /* (labelTabla === 'Canal ASFI')?
+                                      'CODIGO' : */   (labelTabla === 'Moneda')?
+                                                      'ABREVIATURA' : (labelTabla === 'Póliza ATC')?
+                                                                      'NRO' : '',
         sort: true,
         //formatter: columnaVacia
         //hidden : (row) => row.clave == null ? true : false
@@ -36,7 +43,8 @@ const AdministracionEventoListar = () => {
         //headerFormatter: typeFormatter
     }, {
         dataField: 'descripcion',
-        text: 'DESCRIPCION',
+        text: (labelTabla === 'Categoria de tipo de Evento' || labelTabla === 'Efecto de pérdida' || labelTabla === 'Impacto')?
+              'DESCRIPCION' : '',
         sort: true,
        /*  filter: customFilter(),
         filterRenderer: (onFilter, column) =>
@@ -46,13 +54,14 @@ const AdministracionEventoListar = () => {
          dataField: 'tablaLista.nombre_tabla',
          text: 'TABLA',
          sort: true,
-        /*  filter: textFilter({
-             className: 'test-classname',
-             placeholder: 'Buscar',
-         }),
-         align: 'right', */
-         //headerFormatter: typeFormatter
-     },{
+     }
+     /* {
+      dataField: 'tablaLista.nivel2',
+      text: (tablaLista.nivel2 === 1)?
+              'Agencia' : (tablaLista.nivel2 === 3)?
+                          'Área' : '',
+      sort: true,
+     } */,{
         dataField: 'acciones',
         text: 'ACCIONES',
         headerAlign: 'center',
@@ -60,16 +69,6 @@ const AdministracionEventoListar = () => {
         formatter: (cell, row) => actionFormatter(cell, row)
     }
   ]
-
-  /* function columnaVacia(column) {
-    if (column.clave !== null){
-      return column;
-    }
-    else
-      return {
-        hidden: column.hidden
-      }
-  } */
 
   const actionFormatter = (cell, row) => {
     return <ActionFormatter cell={cell} row={row} detailFunction={detailsRow} editFunction={editRow} />
@@ -97,8 +96,8 @@ const AdministracionEventoListar = () => {
     getTablaLista()
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre_tabla', false)
-        console.log('El response de tabla: ', res.data)
-        console.log('options : ', options)
+        //console.log('El response de tabla: ', res.data)
+        //console.log('options : ', options)
         setTablaListaOptions(options)
       }).catch((error) => {
         console.log('Error: ', error)
@@ -113,21 +112,45 @@ const AdministracionEventoListar = () => {
 
   /* LISTA TABLA DESCRIPCION despendiento de seleccion tabla lista*/
   const handleSelectOnChange = (result) => {
-    console.log('select:  ', result)
+    //console.log('select:  ', result)
+    const labelTable = result.label
+    setLabelTabla(labelTable)
     getTablaDescripcion(result.value);
   }
 
   const getTablaDescripcion = (idTabla) => {
     getTablaDescripcionNivel(idTabla)
     .then(res => {
-      console.log('nivel 1: ', res.data)
+      //console.log('nivel 1: ', res.data)
       setDAtaApi(res.data)
     }).catch((error) => {
       console.log('Error: ', error)
       //notificationToast('error', Messages.notification.notOk)
     })
-  } 
+  }
 
+  // Style Select
+  const customStyles =  {
+    control: (styles,) => ({
+        ...styles,
+        boxShadow: 'none'
+    }),
+    option: (styles, { isDisabled, isSelected }) => {
+      return {
+        ...styles,
+        backgroundColor: isSelected ? '#e79140' : 'white',
+        cursor: isDisabled ? 'not-allowed' : 'default',
+        ':active': {
+            backgroundColor: '#e79140',
+            color: 'white'
+        },
+        ':hover':{
+            backgroundColor: isSelected ? '#e79140' : '#fbf3eb',
+            color: isSelected ? 'white' : '#e79140'
+        }
+      }
+    }
+  }
 
   return (
     <div id='' className='table-hover-animation'>
@@ -155,6 +178,7 @@ const AdministracionEventoListar = () => {
                   //defaultValue={tablaListaOptions[0]}
                   options={tablaListaOptions}
                   isLoading={true}
+                  styles={customStyles}
                   theme={theme => ({
                     ...theme,
                     borderRadius: 5,

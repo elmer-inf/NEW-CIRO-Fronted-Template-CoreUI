@@ -125,6 +125,29 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
   }, [formik.values.tablaLista])
 
 
+  // Style Select
+  const customStyles =  {
+    control: (styles,) => ({
+        ...styles,
+        boxShadow: 'none'
+    }),
+    option: (styles, { isDisabled, isSelected }) => {
+      return {
+        ...styles,
+        backgroundColor: isSelected ? '#e79140' : 'white',
+        cursor: isDisabled ? 'not-allowed' : 'default',
+        ':active': {
+            backgroundColor: '#e79140',
+            color: 'white'
+        },
+        ':hover':{
+            backgroundColor: isSelected ? '#e79140' : '#fbf3eb',
+            color: isSelected ? 'white' : '#e79140'
+        }
+      }
+    }
+  }
+
   return (
     <Form onSubmit={formik.handleSubmit} autoComplete="off">
       <FormGroup row>
@@ -142,27 +165,48 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
             error={formik.errors.tablaLista}
             touched={formik.touched.tablaLista}
             options={tablaListaOptions}
+            //styles={customStyles}
           />
         </Col>
       </FormGroup>
 
-      <FormGroup row>
-        <Label sm='3' for='clave'>
-          Clave
-        </Label>
-        <Col sm='9'>
-          <CInputReact
-            type={"text"}
-            id={'clave'}
-            placeholder={'Clave'}
-            value={formik.values.clave}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            touched={formik.touched.clave}
-            errors={formik.errors.clave}
-          />
-        </Col>
-      </FormGroup>
+      { (formik.values.tablaLista !== null &&
+        (formik.values.tablaLista.label === 'Área' ||
+        formik.values.tablaLista.label === 'Unidad' ||
+        formik.values.tablaLista.label === 'Entidad' ||
+        formik.values.tablaLista.label === 'Tipo de evento' ||
+        formik.values.tablaLista.label === 'Canal ASFI' ||
+        formik.values.tablaLista.label === 'Proceso' ||
+        formik.values.tablaLista.label === 'Moneda' ||
+        formik.values.tablaLista.label === 'Póliza ATC')) ?
+        <FormGroup row>
+          <Label sm='3' for='clave'>
+            {(formik.values.tablaLista.label === 'Área' ||
+              formik.values.tablaLista.label === 'Unidad' ||
+              formik.values.tablaLista.label === 'Canal ASFI' ||
+              formik.values.tablaLista.label === 'Proceso') ? 'Código': null }
+            {(formik.values.tablaLista.label === 'Entidad' ||
+              formik.values.tablaLista.label === 'Tipo de evento') ? 'Sigla': null }
+            {formik.values.tablaLista.label === 'Moneda' ? 'Abreviatura': null }
+            {formik.values.tablaLista.label === 'Póliza ATC' ? 'Nro': null }
+
+          </Label>
+          <Col sm='9'>
+            <CInputReact
+              type={"text"}
+              id={'clave'}
+              placeholder={'Clave'}
+              value={formik.values.clave}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              touched={formik.touched.clave}
+              errors={formik.errors.clave}
+            />
+          </Col>
+        </FormGroup>
+      : null
+      }
+
 
       <FormGroup row>
         <Label sm='3' for='nombre'>
@@ -182,38 +226,44 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
         </Col>
       </FormGroup>
 
-      <FormGroup row>
-        <Label sm='3' for='descripcion'>
-          Descripción
-        </Label>
-        <Col sm='9'>
-          <CInputReact
-            type={"textarea"}
-            id={'descripcion'}
-            placeholder={'Descripción'}
-            value={formik.values.descripcion}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            touched={formik.touched.descripcion}
-            errors={formik.errors.descripcion}
-            rows={5}
-          />
-        </Col>
-      </FormGroup>
+      { (formik.values.tablaLista !== null &&
+        (formik.values.tablaLista.label === 'Categoria de tipo de Evento' ||
+        formik.values.tablaLista.label === 'Efecto de pérdida' ||
+        formik.values.tablaLista.label === 'Impacto')) ?
+        <FormGroup row>
+          <Label sm='3' for='descripcion'>
+            Descripción
+          </Label>
+          <Col sm='9'>
+            <CInputReact
+              type={"textarea"}
+              id={'descripcion'}
+              placeholder={'Descripción'}
+              value={formik.values.descripcion}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              touched={formik.touched.descripcion}
+              errors={formik.errors.descripcion}
+              rows={5}
+            />
+          </Col>
+        </FormGroup>
+      : null
+      }
 
       { (formik.values.tablaLista !== null &&
-        (formik.values.tablaLista.value === 2 ||
-          formik.values.tablaLista.value === 4 ||
-          formik.values.tablaLista.value === 12 ||
-          formik.values.tablaLista.value === 16 ||
-          formik.values.tablaLista.value === 21)) ? // Para nivel 2
+        (formik.values.tablaLista.label === 'Ciudad' ||
+          formik.values.tablaLista.label === 'Unidad' ||
+          formik.values.tablaLista.label === 'Sub evento - Basilea' ||
+          formik.values.tablaLista.label === 'Procedimiento' ||
+          formik.values.tablaLista.label === 'Tipo de servicio')) ? // Para nivel 2
         <FormGroup row>
           <Label sm='3' for='nivel2_id'>
-            { (formik.values.tablaLista !== null && (formik.values.tablaLista.value === 2 )) ? 'Agencia': null }
-            { (formik.values.tablaLista !== null && (formik.values.tablaLista.value === 4 )) ? 'Área': null }
-            { (formik.values.tablaLista !== null && (formik.values.tablaLista.value === 12 )) ? 'Categoria de tipo de Evento': null }
-            { (formik.values.tablaLista !== null && (formik.values.tablaLista.value === 16 )) ? 'Proceso': null }
-            { (formik.values.tablaLista !== null && (formik.values.tablaLista.value === 21 )) ? 'Operación, producto, servicio': null }
+            {formik.values.tablaLista.label === 'Ciudad' ? 'Agencia': null }
+            {formik.values.tablaLista.label === 'Unidad' ? 'Área': null }
+            {formik.values.tablaLista.label === 'Sub evento - Basilea' ? 'Categoria de tipo de Evento': null }
+            {formik.values.tablaLista.label === 'Procedimiento' ? 'Proceso': null }
+            {formik.values.tablaLista.label === 'Tipo de servicio' ? 'Operación, producto, servicio': null }
           </Label>
           <Col sm='9'>
             <CSelectReact
@@ -231,11 +281,13 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
         </FormGroup>
       : null }
 
-      { (formik.values.tablaLista !== null && (formik.values.tablaLista.value === 13 || formik.values.tablaLista.value === 22)) ? // para  nivel 2 y 3
+      { (formik.values.tablaLista !== null &&
+        (formik.values.tablaLista.label === 'Clase Evento - Basilea' ||
+          formik.values.tablaLista.label === 'Descripción de servicio')) ? // para  nivel 2 y 3
         <FormGroup row>
           <Label sm='3' for='nivel2_id'>
-            { (formik.values.tablaLista !== null && (formik.values.tablaLista.value === 13 )) ? 'Categoria de tipo de Evento': null }
-            { (formik.values.tablaLista !== null && (formik.values.tablaLista.value === 22 )) ? 'Operaciones, productos, servicios': null }
+            {formik.values.tablaLista.label === 'Clase Evento - Basilea' ? 'Categoria de tipo de Evento': null }
+            {formik.values.tablaLista.label === 'Descripción de servicio' ? 'Operaciones, productos, servicios': null }
           </Label>
           <Col sm='9'>
             <CSelectReact
@@ -252,8 +304,8 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
           </Col>
 
           <Label sm='3' for='nivel3'>
-            { (formik.values.tablaLista !== null && (formik.values.tablaLista.value === 13 )) ? 'Sub evento - Basilea': null }
-            { (formik.values.tablaLista !== null && (formik.values.tablaLista.value === 22 )) ? 'Tipo de servicio': null }
+            {formik.values.tablaLista.label === 'Clase Evento - Basilea' ? 'Sub evento - Basilea': null }
+            {formik.values.tablaLista.label === 'Descripción de servicio' ? 'Tipo de servicio': null }
           </Label>
           <Col sm='9'>
             <CSelectReact

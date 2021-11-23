@@ -1,5 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { CardHeader, Row } from 'reactstrap'
 import {
   CHeader,
   CToggler,
@@ -32,7 +33,7 @@ const TheHeader = () => {
   }
 
   return (
-    <CHeader withSubheader className='mx-4 mt-4'>
+    <CHeader withSubheader className='mx-3 mx-md-4 mt-4 mb-0 card'>
       <CToggler
         inHeader
         className="ml-md-3 d-lg-none"
@@ -55,7 +56,7 @@ const TheHeader = () => {
 
       <CHeaderNav className="d-md-down-none mr-auto">
         <span  style={{letterSpacing: '2px'}} className='text-primary h4 pl-1 pt-2'>
-          SISTEMA INTEGRADO DE RIESGOS
+          SISTEMA DE RIESGOS INTEGRADO
         </span>
       </CHeaderNav>
 
@@ -66,29 +67,28 @@ const TheHeader = () => {
         <TheHeaderDropdown/>
       </CHeaderNav>
 
-      <CSubheader className="px-3 justify-content-between">
-        <CBreadcrumbRouter 
-          className="border-0 c-subheader-nav m-0 px-0 px-md-3" 
-          routes={routes} 
-        />
-          {/* <div className="d-md-down-none mfe-2 c-subheader-nav">
-            <CLink className="c-subheader-nav-link"href="#">
-              <CIcon name="cil-speech" alt="Settings" />
-            </CLink>
-            <CLink 
-              className="c-subheader-nav-link" 
-              aria-current="page" 
-              to="/dashboard"
-            >
-              <CIcon name="cil-graph" alt="Dashboard" />&nbsp;Dashboard
-            </CLink>
-            <CLink className="c-subheader-nav-link" href="#">
-              <CIcon name="cil-settings" alt="Settings" />&nbsp;Settings
-            </CLink>
-          </div> */}
-      </CSubheader>
+      <CSubheader className="px-3 justify-content-between" >
+          <CBreadcrumbRouter
+            className="border-0 c-subheader-nav m-0 px-0 px-md-3"
+            routes={routes}
+          />
+            {/* <div className="d-md-down-none mfe-2 c-subheader-nav">
+              <CLink className="c-subheader-nav-link"href="#">
+                <CIcon name="cil-speech" alt="Settings" />
+              </CLink>
+              <CLink 
+                className="c-subheader-nav-link" 
+                aria-current="page" 
+                to="/dashboard"
+              >
+                <CIcon name="cil-graph" alt="Dashboard" />&nbsp;Dashboard
+              </CLink>
+              <CLink className="c-subheader-nav-link" href="#">
+                <CIcon name="cil-settings" alt="Settings" />&nbsp;Settings
+              </CLink>
+            </div> */}
+        </CSubheader>
     </CHeader>
   )
 }
-
 export default TheHeader

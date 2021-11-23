@@ -165,7 +165,6 @@ const EventoRiesgoRegistrar = () => {
 
   const setObject = (result) => {
     console.log("result: ", result)
-    
     const values = {
       ...requestData,
       ...result
