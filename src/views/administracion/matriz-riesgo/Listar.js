@@ -1,13 +1,13 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import { Card, CardHeader, CardBody, CardTitle, Button, Col, Label, Row} from 'reactstrap'
 import BootstrapTable from 'react-bootstrap-table-next';
-import ActionFormatter from '../../../reusable/ActionFormatter';
+import ActionFormatter from 'src/reusable/ActionFormatter';
 import Select from 'react-select'
 import { useHistory } from 'react-router-dom'
 import { getTablaListaMatrizR, getTablaDescripcionMatrizR } from './controller/AdminMatrizRController'
-import { buildSelectTwo } from '../../../functions/Function'
+import { buildSelectTwo } from 'src/functions/Function'
 
-const AdministracionMatrizRiesgos = () => {
+const AdministracionMatrizRiesgosListar = () => {
 
   const [labelTabla, setLabelTabla] = useState([])
 
@@ -20,7 +20,8 @@ const AdministracionMatrizRiesgos = () => {
     }, {
       dataField: 'campoA',
       text: (labelTabla === 'Probabilidad' || labelTabla === 'Impacto de Riesgo')?
-                        'NIVEL': '',
+                        'NIVEL': (labelTabla === 'Normas para control')?
+                        'CODIGO' : '',
       sort: true,
      /*  filter: customFilter(),
       filterRenderer: (onFilter, column) =>
@@ -28,10 +29,12 @@ const AdministracionMatrizRiesgos = () => {
       //headerFormatter: typeFormatter
     }, {
         dataField: 'nombre',
-        text: (labelTabla === 'Pérdida ASFI')?
+        text: (labelTabla === 'Pérdida ASFI' ||
+               labelTabla === 'Tipo de control' ||
+               labelTabla === 'Nivel de automatización')?
               'NOMBRE' : (labelTabla === 'Probabilidad' || labelTabla === 'Impacto de Riesgo')?
-                        'DESCRIPTIVO': (labelTabla === 'Factores - Debilidades')?
-                                        'FACTOR' :  (labelTabla === 'Controles')?
+                        'DESCRIPTIVO': (labelTabla === 'Normas para control')?
+                                        'TITULO DEL DOCUMENTO' :  (labelTabla === 'Controles')?
                                                     'DESCRIPCION' : '',
         sort: true,
         //formatter: columnaVacia
@@ -44,8 +47,7 @@ const AdministracionMatrizRiesgos = () => {
         dataField: 'campoB',
         text: (labelTabla === 'Probabilidad')?
                         'PROBABILIDAD': (labelTabla === 'Impacto de Riesgo')?
-                                        'IMPACTO-SEVERIDAD 1' :  (labelTabla === 'Factores - Debilidades')?
-                                                    'SUB-FACTOR' : (labelTabla === 'Controles')?
+                                        'IMPACTO-SEVERIDAD 1' : (labelTabla === 'Controles')?
                                                                     'PONDERACION' : '',
         sort: true,
        /*  filter: customFilter(),
@@ -210,24 +212,22 @@ const AdministracionMatrizRiesgos = () => {
                 Seleccione Tabla
               </Label>
               <Col sm='9' lg='4'>
-                {/* <Select options={tablaListaOptions}/> */}
                 <Select
                   onChange={(e) => handleSelectOnChange(e)}
                   placeholder={'Buscar . . .'}
                   className='react-select'
                   classNamePrefix='select'
-                  //defaultValue={tablaListaOptions[0]}
                   options={tablaListaOptions}
                   isLoading={true}
                   styles={customStyles}
                   theme={theme => ({
-                    ...theme,
-                    borderRadius: 5,
-                    colors: {
-                        ...theme.colors,
-                        primary: '#e79140'
-                    }
-                })}
+                      ...theme,
+                      borderRadius: 5,
+                      colors: {
+                          ...theme.colors,
+                          primary: '#e79140'
+                      }
+                  })}
                 />
               </Col>
             </Row>
@@ -254,4 +254,4 @@ const AdministracionMatrizRiesgos = () => {
   )
 }
 
-export default AdministracionMatrizRiesgos
+export default AdministracionMatrizRiesgosListar

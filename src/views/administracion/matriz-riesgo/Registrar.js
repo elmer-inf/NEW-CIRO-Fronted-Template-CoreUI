@@ -2,29 +2,28 @@ import { Fragment } from 'react'
 import { Card, CardHeader, CardTitle, CardBody} from 'reactstrap'
 import { useHistory } from 'react-router-dom'
 import Formulario from './component/Formulario'
-import { postListDescripcion } from './controller/AdminEventoController'
+import { postListDescripcionMatrizR } from './controller/AdminMatrizRController'
 
-const AdministracionEventoRegistrar = () => {
+const AdministracionMatrizRiesgosRegistrar = () => {
 
   const history = useHistory()
   const formValueInitial = {
-      tablaLista: null,
-      nombre: '',
-      clave: '',
-      descripcion: '',
-      campoA: '',
-      campoB: '',
-      campoC: '',
-      campoD: '',
-      nivel2_id: null,
-      nivel3_id: null
+    campoA: '',
+    nombre: '',
+    campoB: '',
+    campoC: '',
+    campoD: '',
+    campoE: '',
+    campoF: '',
+    campoG: '',
+    tablaId: null
   }
 
   const handleOnSubmit = (dataToRequest) =>{
-    postListDescripcion(dataToRequest)
+    postListDescripcionMatrizR(dataToRequest)
     .then(response => {
       console.log('Envio el request : ', response);
-      history.push("/administracion/evento-riesgo/listar")
+      history.push("/administracion/matriz-riesgo/listar")
     }).catch((error) => {
       console.log('Error al obtener datos: ', error)
     })
@@ -35,7 +34,7 @@ const AdministracionEventoRegistrar = () => {
       <Fragment>
         <Card>
           <CardHeader>
-            <CardTitle className='float-left h4 pt-2'>Registrar Parámetro de Evento de Riesgo</CardTitle>
+            <CardTitle className='float-left h4 pt-2'>Registrar Parámetro de Matriz de Riesgo</CardTitle>
           </CardHeader>
           <CardBody className='mt-4'>
             <Formulario
@@ -48,4 +47,4 @@ const AdministracionEventoRegistrar = () => {
     </div>
   )
 }
-export default AdministracionEventoRegistrar
+export default AdministracionMatrizRiesgosRegistrar

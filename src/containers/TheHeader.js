@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { CardHeader, Row } from 'reactstrap'
+/* import { CardHeader, Row } from 'reactstrap' */
 import {
   CHeader,
   CToggler,
@@ -55,9 +55,15 @@ const TheHeader = () => {
       </CHeaderBrand>
 
       <CHeaderNav className="d-md-down-none mr-auto">
-        <span  style={{letterSpacing: '2px'}} className='text-primary h4 pl-1 pt-2'>
+        {/* <span  style={{letterSpacing: '2px'}} className='text-primary h4 pl-1 pt-2'>
           SISTEMA DE RIESGOS INTEGRADO
-        </span>
+        </span> */}
+        <CIcon
+          className="c-sidebar-brand-full pl-2"
+          src = "/logo/titulo.png"
+          name="logo-negative"
+          height={20}
+        />
       </CHeaderNav>
 
       <CHeaderNav className="px-3">

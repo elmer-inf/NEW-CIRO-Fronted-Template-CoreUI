@@ -1,7 +1,7 @@
 import { React, useState, useEffect } from 'react'
 import { FileText, Activity, DollarSign, BarChart2 } from 'react-feather'
 import { Row, Col, Card, CardBody, CardHeader, CardTitle, Badge, Button, ListGroup, ListGroupItem} from 'reactstrap';
-import { CNav, CNavItem, CNavLink, CTabContent, CTabPane, CTabs, CButton, CCollapse, CCard, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle} from '@coreui/react'
+import { CNav, CNavItem, CNavLink, CTabContent, CTabPane, CTabs, CButton, CCollapse, CCard, CModal, CModalBody, CModalHeader, CModalTitle} from '@coreui/react'
 import { getEventoRiesgoId, getUltimaObservacion, putEvaluaEvento } from './controller/EventoController';
 import FormularioEvaluar from './component/FormularioEvaluar'
 var _ = require('lodash');
@@ -13,6 +13,7 @@ const EventoRiesgo = ({ match }) => {
   useEffect(() => {
     getById();
     getByIdObservacion();
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getById = async () => {
@@ -225,7 +226,7 @@ const EventoRiesgo = ({ match }) => {
 
                           <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                             <div className='text-label'>Comercio afectado: </div>
-                            {(dataApi.comercioAfectado = true)?
+                            {(dataApi.comercioAfectado === true)?
                             <div className='text-data'>Si</div>
                             :
                             <div className='text-data'>No</div>
@@ -308,8 +309,14 @@ const EventoRiesgo = ({ match }) => {
                             <div className='text-label'>Clase evento - Basilea - ASFI: </div>
                             <div className='text-data'>{dataApi.claseEventoId !== null ? dataApi.claseEventoId.nombre : <i>Sin registro</i>}</div>
                           </Col>
+                          {dataApi.otros !== null ?
+                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                              <div className='text-label'>Otros (Clase evento - Basilea - ASFI): </div>
+                              <div className='text-data'>{dataApi.otros}</div>
+                            </Col>
+                          : null}
 
-                          <Col xs='12' sm='6' md='4' xl='6' className='pt-2'>
+                          <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                             <div className='text-label'>Detalle evento crítico: </div>
                             <div className='text-data'>{dataApi.detalleEventoCritico !== null ? dataApi.detalleEventoCritico : <i>Sin registro</i>}</div>
                           </Col>
@@ -388,7 +395,7 @@ const EventoRiesgo = ({ match }) => {
                         <Row className='pt-3'>
                           <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                             <div className='text-label'>Tasa de cambio: </div>
-                            <div className='text-data'>6.86</div>
+                            <div className='text-data'>{dataApi.tasaCambioId !== null ? dataApi.tasaCambioId : <i>Sin registro</i>}</div>
                           </Col>
                           <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                             <div className='text-label'>Moneda: </div>

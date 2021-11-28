@@ -1,6 +1,6 @@
 import React from 'react'
 import { CDropdown, CDropdownMenu, CDropdownToggle, CDropdownItem, CTooltip } from '@coreui/react';
-import { Edit3, Trash2, FileText, MoreVertical } from 'react-feather'
+import { Edit3, FileText, MoreVertical } from 'react-feather'
 
 const ActionFormatterEvento = ({ cell, row, detailFunction, editFunction }) => {
 

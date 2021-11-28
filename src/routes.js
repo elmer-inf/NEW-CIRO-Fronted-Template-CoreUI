@@ -38,19 +38,27 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'));
 const Users = React.lazy(() => import('./views/users/Users'));
 const User = React.lazy(() => import('./views/users/User'));
 
-
+// Parametrizacion - Evento de riesgo
 const AdministracionEventoListar = React.lazy(() => import('./views/administracion/evento-riesgo/Listar'));
 const AdministracionEventoRegistrar = React.lazy(() => import('./views/administracion/evento-riesgo/Registrar'));
 const AdministracionEventoEditar = React.lazy(() => import('./views/administracion/evento-riesgo/Editar'));
 
-const AdministracionMatrizRiesgos = React.lazy(() => import('./views/administracion/matriz-riesgo/Listar'));
+// Parametrizacion Matriz de riesgo
+const AdministracionMatrizRiesgosListar = React.lazy(() => import('./views/administracion/matriz-riesgo/Listar'));
+const AdministracionMatrizRiesgosRegistrar = React.lazy(() => import('./views/administracion/matriz-riesgo/Registrar'));
+const AdministracionMatrizRiesgosEditar = React.lazy(() => import('./views/administracion/matriz-riesgo/Editar'));
 
+// Parametrizacion Matriz de oportunidad
 const AdministracionMatrizOportunidad = React.lazy(() => import('./views/administracion/matriz-oportunidad/Listar'));
 
-
+// 1er Modulo: Eventos de riesgo
 const EventoRiesgoListar = React.lazy(() => import('./views/eventoRiesgo/Listar'));
 const EventoRiesgoRegistrar = React.lazy(() => import('./views/eventoRiesgo/Registrar'));
 const EventoRiesgo = React.lazy(() => import('./views/eventoRiesgo/Mostrar'));
+
+// 2do Modulo: Matriz de riesgos
+const MatrizRiesgoListar = React.lazy(() => import('./views/matrizRiesgo/Listar'));
+const MatrizRiesgoRegistrar = React.lazy(() => import('./views/matrizRiesgo/Registrar'));
 
 
 const routes = [
@@ -95,21 +103,28 @@ const routes = [
   { path: '/users', exact: true,  name: 'Users', component: Users },
   { path: '/users/:id', exact: true, name: 'User Details', component: User },
 
- 
+  // Parametrizacion
   { path: '/administracion', name: 'Administración', component: AdministracionEventoListar, exact: true },
-  { path: '/administracion/evento-riesgo/Listar', name: 'Eventos de riesgo', component: AdministracionEventoListar },
+  { path: '/administracion/evento-riesgo/Listar', name: 'Parámetros de Eventos de riesgo', component: AdministracionEventoListar },
   { path: '/administracion/evento-riesgo/Registrar', name: 'Registrar parámetro de Evento de Riesgo', component: AdministracionEventoRegistrar },
   { path: '/administracion/evento-riesgo/Editar/:id', name: 'Editar parámetro de Evento de Riesgo', component: AdministracionEventoEditar },
 
-  { path: '/administracion/matriz-riesgo/Listar', name: 'Matriz de riesgo', component: AdministracionMatrizRiesgos },
+  { path: '/administracion/matriz-riesgo/Listar', name: 'Parámetros de Matriz de riesgo', component: AdministracionMatrizRiesgosListar },
+  { path: '/administracion/matriz-riesgo/Registrar', name: 'Registrar parámetro de Matriz de riesgo', component: AdministracionMatrizRiesgosRegistrar },
+  { path: '/administracion/matriz-riesgo/Editar/:id', name: 'Editar parámetro de Matriz de riesgo', component: AdministracionMatrizRiesgosEditar },
 
   { path: '/administracion/matriz-oportunidad/Listar', name: 'Matriz de oportunidad', component: AdministracionMatrizOportunidad },
 
-
-  { path: '/eventoRiesgo', name: 'Eventos de Riesgo', component: AdministracionEventoListar, exact: true },
-  { path: '/eventoRiesgo/Listar', name: 'Eventos de riesgo', component: EventoRiesgoListar },
+  // 1er Modulo: Eventos de riesgo
+  { path: '/eventoRiesgo', name: 'Eventos de Riesgo', component: EventoRiesgoListar, exact: true },
+  { path: '/eventoRiesgo/Listar', name: 'Lista de Eventos de riesgo', component: EventoRiesgoListar },
   { path: '/eventoRiesgo/Registrar', name: 'Registrar Evento de Riesgo', component: EventoRiesgoRegistrar },
   { path: '/eventoRiesgo/Mostrar/:id', name: 'Evento de Riesgo', component: EventoRiesgo },
+
+  // 2do Modulo: Matriz de riesgo
+  { path: '/matrizRiesgo', name: 'Matriz de Riesgo', component: MatrizRiesgoListar, exact: true },
+  { path: '/matrizRiesgo/Listar', name: 'Lista de Matrices de riesgo', component: MatrizRiesgoListar },
+  { path: '/matrizRiesgo/Registrar', name: 'Registrar Matriz de Riesgo', component: MatrizRiesgoRegistrar },
 ];
 
 export default routes;

@@ -13,9 +13,10 @@ import { buildSelectTwo } from '../../../functions/Function'
 const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValues, isEdit }) => {
 
   const formik = useFormik({
-    initialValues: initValues,
+    initialValues : initValues,
     validationSchema: Yup.object().shape(
       {
+       /*  tasaCambioId : Yup.mixed().nullable(),
         monedaId: Yup.mixed().nullable(),
         montoPerdida: Yup.number().required('Campo obligatorio'),
         montoPerdidaRiesgo: Yup.number().required('Campo obligatorio'),
@@ -27,9 +28,9 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
         montoRecuperadoSeguro: Yup.number().nullable(),
         recuperacionActivo: Yup.string().required('Campo obligatorio'),
         perdidaMercado: Yup.number().required('Campo obligatorio'),
-        totalPerdida: Yup.number().nullable(),
+        totalPerdida: Yup.number().nullable(), */
 
-        /* monedaId: Yup.mixed().nullable(),
+        monedaId: Yup.mixed().nullable(),
         montoPerdida: Yup.number().nullable(),
         montoPerdidaRiesgo: Yup.number().nullable(),
         gastoAsociado: Yup.number().nullable(),
@@ -40,13 +41,14 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
         montoRecuperadoSeguro: Yup.number().nullable(),
         recuperacionActivo: Yup.string().nullable(),
         perdidaMercado: Yup.number().nullable(),
-        totalPerdida: Yup.number().nullable() */
+        totalPerdida: Yup.number().nullable()
       }
     ),
 
     onSubmit: values => {
       const data = {
        ...values,
+        tasaCambioId:   tasaCambio,
         monedaId:       (values.monedaId !== null) ?        values.monedaId.value : 0,
         impactoId:      (values.impactoId !== null) ?       values.impactoId.value : 0,
         polizaSeguroId: (values.polizaSeguroId !== null) ?  values.polizaSeguroId.value : 0
@@ -58,6 +60,22 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
   })
 
   /*   P  A  R  A  M  E  T  R  O  S   */
+  // Tasa de cambio
+  const [tasaCambio, setLabelTasaCambio] = useState('')
+
+  const [dataApiTasaCambio, setDataApiTasaCambio] = useState('')
+  const callApiTasaCambio = (idTablaDes) => {
+    getTablaDescripcionNivel(idTablaDes)
+      .then(res => {
+        const options = buildSelectTwo(res.data, 'id', 'nombre', false)
+        //console.log('tasa cambio: ', options)
+        setLabelTasaCambio(options[0].label)
+        setDataApiTasaCambio(options[0].label)
+      }).catch((error) => {
+        console.log('Error: ', error)
+      })
+  }
+
   // Moneda
   const [dataApiMoneda, setDataApiMoneda] = useState([])
   const callApiMoneda = (idTablaDes) => {
@@ -93,6 +111,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
         console.log('Error: ', error)
       })
   }
+
   // Cobertura seguro
   const optionCobertura = [
     { value: true, label: 'Si' },
@@ -103,8 +122,18 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
     callApiMoneda(23);
     callApiImpacto(24);
     callApiPoliza(25);
+    callApiTasaCambio(14);
   }, [])
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
+
+  // Resetea "Poliza de seguro" dependiendo del check Cobertura seguro
+  const resetPoliza = () => { formik.setFieldValue('polizaSeguroId', null, false); }
+  useEffect(() => {
+    if(formik.values.coberturaSeguro !== true){
+      resetPoliza();
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.coberturaSeguro])
 
   return (
     <Fragment>
@@ -119,13 +148,13 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
             </Label>
             <CInputReact
               type={"number"}
-              id={'codigoInicial'}
-              placeholder={6.86}
-              /* value={formik.values.codigoInicial}
-              onChange={formik.handleChange}
+              id={'tasaCambioId'}
+              placeholder={dataApiTasaCambio}
+              /* value={formik.values.monedaId}
+              onChange={dataApiTasaCambio}
               onBlur={formik.handleBlur}
-              touched={formik.touched.codigoInicial}
-              errors={formik.errors.codigoInicial} */
+              touched={formik.touched.tasaCambioId}
+              errors={formik.errors.tasaCambioId} */
               disabled={true}
             />
           </FormGroup>

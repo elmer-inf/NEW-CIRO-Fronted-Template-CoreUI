@@ -60,7 +60,6 @@ export const CSelectReact = (props) => {
             primary25: '#fbf3eb', // hover
             primary50: '#fbf3eb', //active
           }
-          
         })}
         styles={
           (props.touched && !!props.error) ?

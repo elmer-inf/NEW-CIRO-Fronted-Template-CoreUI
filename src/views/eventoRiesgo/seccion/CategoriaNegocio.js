@@ -4,8 +4,9 @@ import { Label, FormGroup, Row, Col, Form, Button } from 'reactstrap'
 
 import { useFormik } from "formik"
 import * as Yup from "yup"
-import { CInputReact } from '../../../reusable/CInputReact'
-import { CSelectReact } from '../../../reusable/CSelectReact'
+import { CInputReact } from 'src/reusable/CInputReact'
+import { CSelectReact } from 'src/reusable/CSelectReact'
+import  CInputCheckbox  from 'src/reusable/CInputCheckbox'
 import { getTablaDescripcionNivel, getTablaDescripcionNivel2, getTablaDescripcionNivel3 } from '../controller/EventoController';
 import { buildSelectTwo } from '../../../functions/Function'
 
@@ -26,12 +27,14 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
     initialValues: initValues,
     validationSchema: Yup.object().shape(
       {
-        codigoInicial: Yup.string().nullable(),
+        /* codigoInicial: Yup.string().nullable(),
         subcategorizacionId: Yup.mixed().nullable(),
         trimestre: Yup.string().nullable(),
         tipoEventoPerdidaId: Yup.mixed().required('Campo obligatorio'),
         subEventoId: Yup.mixed().nullable(),
         claseEventoId:  Yup.mixed().nullable(),
+        otrosAux: Yup.string().nullable(),
+        otros: Yup.string().nullable(),
         detalleEventoCritico: Yup.string().required('Campo obligatorio').nullable(),
         factorRiesgoId: Yup.mixed().required('Campo obligatorio'),
         procesoId: Yup.mixed().required('Campo obligatorio'),
@@ -46,9 +49,9 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         tipoServicioId: Yup.mixed().nullable(),
         descServicioId: Yup.mixed().nullable(),
         riesgoRelacionado: Yup.mixed().nullable(),
-        detalleEstado: Yup.string().nullable()
+        detalleEstado: Yup.string().nullable() */
 
-        /* codigoInicial: Yup.string().nullable(),
+        codigoInicial: Yup.string().nullable(),
         subcategorizacionId: Yup.mixed().nullable(),
         trimestre: Yup.string().nullable(),
         tipoEventoPerdidaId: Yup.mixed().nullable(),
@@ -68,7 +71,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         tipoServicioId: Yup.mixed().nullable(),
         descServicioId: Yup.mixed().nullable(),
         riesgoRelacionado: Yup.mixed().nullable(),
-        detalleEstado: Yup.string().nullable() */
+        detalleEstado: Yup.string().nullable()
       }
     ),
 
@@ -287,7 +290,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   useEffect(() => {
     callApiSubcat(10);
     callApiTipoEvento(11);
-    callApiFactorRiesgo(14);
+    callApiFactorRiesgo(26);
     callApiProceso(15);
     callApiLineaAsfi(17);
     callApiOperacion(18);
@@ -302,6 +305,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
       callApiSubevento(12, formik.values.tipoEventoPerdidaId.id);
       resetSubeventoYclase();
     }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.tipoEventoPerdidaId])
 
   // Clase evento (nivel 3)
@@ -311,6 +315,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
       callApiClaseEvento(13, formik.values.subEventoId.id, formik.values.tipoEventoPerdidaId.id);
       resetClaseEvento();
     }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.subEventoId])
 
   // Procedimiento (nivel 2)
@@ -320,6 +325,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
       callApiProcedimiento(16, formik.values.procesoId.id);
       resetProcedimiento();
     }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.procesoId])
 
   // Tipo de servicio (nivel 2)
@@ -329,6 +335,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
       callApiTipoServicio(21, formik.values.opeProSerId.id);
       resetTipoYservicio();
     }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.opeProSerId])
 
   //  Descripción de servicio (nivel 3)
@@ -338,7 +345,17 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
       callApiServicioDesc(22, formik.values.tipoServicioId.id, formik.values.opeProSerId.id);
       resetServicioDesc();
     }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.tipoServicioId])
+
+  // Resetea "otros" dependiendo del check
+  const resetOtros = () => { formik.setFieldValue('otros', null, false); }
+  useEffect(() => {
+    if(formik.values.otrosAux !== true){
+      resetOtros();
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.otrosAux])
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
   return (
@@ -449,7 +466,38 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
             />
           </FormGroup>
 
-          <FormGroup tag={Col} md='6' lg='6' className='mb-0'>
+          <FormGroup tag={Col} md='6' lg='3' className='mb-0' style={{position: 'sticky'}}>
+            <CInputCheckbox
+              id={'otrosAux'}
+              type={"checkbox"}
+              value={formik.values.otrosAux}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              label='Otros (Clase evento - Basilea - ASFI)'
+            />
+          </FormGroup>
+
+          {formik.values.otrosAux === true ?
+            <FormGroup tag={Col} md='6' lg='' className='mb-0'>
+              <Label className='form-label'>
+                Otros ( Clase evento - Basilea - ASFI)
+              </Label>
+              <CInputReact
+                type={"text"}
+                id={'otros'}
+                placeholder={'Otros'}
+                value={formik.values.otros}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                touched={formik.touched.otros}
+                errors={formik.errors.otros}
+              />
+            </FormGroup>
+          : null}
+
+          
+
+          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
               Detalle evento crítico <span className='text-primary h5'><b>*</b></span>
             </Label>

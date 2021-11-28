@@ -7,7 +7,7 @@ import * as Yup from "yup"
 import { CInputReact } from '../../../reusable/CInputReact'
 import { CSelectReact } from '../../../reusable/CSelectReact'
 import  CInputCheckbox  from '../../../reusable/CInputCheckbox'
-import { getTablaDescripcionNivel, getTablaDescripcionNivel2 } from '../controller/EventoController';
+//import { getTablaDescripcionNivel, getTablaDescripcionNivel2 } from '../controller/MatrizRiesgoController';
 import { buildSelectTwo } from '../../../functions/Function'
 
 const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
@@ -79,32 +79,9 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   })
 
   /*   P  A  R  A  M  E  T  R  O  S   */
-  /* Agencia */
-  const [dataApiAgencia, setDataApiAgencia] = useState([])
-  const callApiAgencia = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
-      .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
-        setDataApiAgencia(options)
-      }).catch((error) => {
-        console.log('Error: ', error)
-      })
-  }
-
-  /* Ciudad (Nivel 2), depende de agencia */
-  const [dataApiCiudad, setDataApiCiudad] = useState([])
-  const callApiCiudad = (idTablaDes, idNivel2) => {
-    getTablaDescripcionNivel2(idTablaDes, idNivel2)
-      .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
-        setDataApiCiudad(options)
-      }).catch((error) => {
-        console.log('Error: ', error)
-      })
-  }
 
   // Area
-  const [dataApiArea, setDataApiArea] = useState([])
+/*   const [dataApiArea, setDataApiArea] = useState([])
   const callApiArea = (idTablaDes) => {
     getTablaDescripcionNivel(idTablaDes)
       .then(res => {
@@ -127,30 +104,6 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
       })
   }
 
-  // Entidades
-  const [dataApiEntidad, setDataApiEntidad] = useState([])
-  const callApiEntidad = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
-      .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', false)
-        setDataApiEntidad(options)
-      }).catch((error) => {
-        console.log('Error: ', error)
-      })
-  }
-
-  // Tipo de evento
-  /* const [dataApiTipoEvento, setDataApiTipoEvento] = useState([])
-  const callApiTipoEvento = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
-      .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'clave', false)
-        setDataApiTipoEvento(options)
-      }).catch((error) => {
-        console.log('Error: ', error)
-      })
-  } */
-
   // Cargos
   const [dataApiCargo, setDataApiCargo] = useState([])
   const callApiCargo = (idTablaDes) => {
@@ -163,54 +116,10 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
       })
   }
 
-  // Estado de evento
-  const optionsEstado = [
-    { value: 'Reportado', label: 'Reportado' },
-    { value: 'No reportado', label: 'No reportado' }
-  ]
-
-  // Fuente de informacion
-  const [dataApiFuente, setDataApiFuente] = useState([])
-  const callApiFuente = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
-      .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', false)
-        setDataApiFuente(options)
-      }).catch((error) => {
-        console.log('Error: ', error)
-      })
-  }
-
-  // Canal Asfi
-  const [dataApiCanal, setDataApiCanal] = useState([])
-  const callApiCanal = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
-      .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', false)
-        setDataApiCanal(options)
-      }).catch((error) => {
-        console.log('Error: ', error)
-      })
-  }
-
   useEffect(() => {
-    callApiAgencia(1);
     callApiArea(3);
-    callApiEntidad(5);
-    //callApiTipoEvento(6);
     callApiCargo(7);
-    callApiFuente(8);
-    callApiCanal(9);
   }, [])
-
-  const resetCiudadId = () => { formik.setFieldValue('ciudadId', null, false); }
-  useEffect(() => {
-    if(formik.values.agenciaId !== null){
-      callApiCiudad(2, formik.values.agenciaId.id);
-      resetCiudadId();
-    }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.agenciaId])
 
   const resetUnidadId = () => { formik.setFieldValue('unidadId', null, false); }
   useEffect(() => {
@@ -219,16 +128,8 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
       resetUnidadId();
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.areaID])
+  }, [formik.values.areaID]) */
 
-  // Resetea "Entidad" dependiendo del check Entidad afectada
-  const resetEntidad = () => { formik.setFieldValue('entidadId', null, false); }
-  useEffect(() => {
-    if(formik.values.entidadAfectada !== true){
-      resetEntidad();
-    }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.entidadAfectada])
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
   return (
@@ -236,7 +137,8 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
      {/*  <div className='content-header'>
         <h5 className='mb-0'>Datos Iniciales</h5>
       </div> */}
-      <Form onSubmit={formik.handleSubmit} autoComplete="off">
+
+      {/* <Form onSubmit={formik.handleSubmit} autoComplete="off">
         <Row className='pt-4'>
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'> 
@@ -315,7 +217,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
               onBlur={formik.setFieldTouched}
               error={formik.errors.agenciaId}
               touched={formik.touched.agenciaId}
-              options={dataApiAgencia}
+              //options={dataApiAgencia}
             />
           </FormGroup>
 
@@ -332,7 +234,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
               onBlur={formik.setFieldTouched}
               error={formik.errors.ciudadId}
               touched={formik.touched.ciudadId}
-              options={dataApiCiudad}
+              //options={dataApiCiudad}
             />
           </FormGroup>
 
@@ -349,7 +251,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
               onBlur={formik.setFieldTouched}
               error={formik.errors.areaID}
               touched={formik.touched.areaID}
-              options={dataApiArea}
+              //options={dataApiArea}
             />
           </FormGroup>
 
@@ -366,7 +268,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
               onBlur={formik.setFieldTouched}
               error={formik.errors.unidadId}
               touched={formik.touched.unidadId}
-              options={dataApiUnidad}
+              //options={dataApiUnidad}
             />
           </FormGroup>
 
@@ -407,7 +309,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
               onBlur={formik.setFieldTouched}
               error={formik.errors.entidadId}
               touched={formik.touched.entidadId}
-              options={dataApiEntidad}
+              //options={dataApiEntidad}
               isDisabled={(formik.values.entidadAfectada === true) ? false : true}
             />
           </FormGroup>
@@ -425,7 +327,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
               onBlur={formik.setFieldTouched}
               error={formik.errors.cargoId}
               touched={formik.touched.cargoId}
-              options={dataApiCargo}
+              //options={dataApiCargo}
             />
           </FormGroup>
 
@@ -442,7 +344,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
               onBlur={formik.setFieldTouched}
               error={formik.errors.estadoReportado}
               touched={formik.touched.estadoReportado}
-              options={optionsEstado}
+              //options={optionsEstado}
             />
           </FormGroup>
 
@@ -459,7 +361,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
               onBlur={formik.setFieldTouched}
               error={formik.errors.fuenteInfId}
               touched={formik.touched.fuenteInfId}
-              options={dataApiFuente}
+              //options={dataApiFuente}
             />
           </FormGroup>
 
@@ -476,7 +378,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
               onBlur={formik.setFieldTouched}
               error={formik.errors.canalAsfiId}
               touched={formik.touched.canalAsfiId}
-              options={dataApiCanal}
+              //options={dataApiCanal}
             />
           </FormGroup>
 
@@ -546,7 +448,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
           </Button>
         </div>
 
-      </Form>
+      </Form> */}
     </Fragment>
   )
 }

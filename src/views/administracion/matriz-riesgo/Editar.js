@@ -2,22 +2,21 @@ import React, { Fragment, useState, useEffect } from 'react'
 import { Card, CardHeader, CardTitle, CardBody } from 'reactstrap'
 import { useHistory } from 'react-router-dom'
 import Formulario from './component/Formulario'
-import { editTablaDescripcion, getTablaDescripcionId } from './controller/AdminEventoController'
+import { editTablaDescripcionMatrizR, getTablaDescripcioMatrizId } from './controller/AdminMatrizRController'
 
 const AdministracionEventoEditar = ( { match } ) => {
 
   const history = useHistory()
   const formValueInitial = {
-      tablaLista: null,
-      nombre: '',
-      clave: '',
-      descripcion: '',
-      campoA: '',
-      campoB: '',
-      campoC: '',
-      campoD: '',
-      nivel2_id: null,
-      nivel3_id: null
+    campoA: '',
+    nombre: '',
+    campoB: '',
+    campoC: '',
+    campoD: '',
+    campoE: '',
+    campoF: '',
+    campoG: '',
+    tablaId: null
   }
 
   const [formValueToEdit, setformValueToEdit] = useState(formValueInitial)
@@ -27,64 +26,50 @@ const AdministracionEventoEditar = ( { match } ) => {
   const handleOnSubmit = (dataToRequest) => {
     console.log('data que se edita: ', dataToRequest)
     const idTabDesc = match.params.id;
-    editTablaDescripcion(idTabDesc,dataToRequest)
+    editTablaDescripcionMatrizR(idTabDesc, dataToRequest)
     .then(res => {
       console.log('response : ', res);
-      history.push("/administracion/evento-riesgo/listar")
+      history.push("/administracion/matriz-riesgo/listar")
     }).catch((error) => {
         console.log('Error al obtener datos: ', error);
     });
   }
 
-
-
-  const macthed = (dataResponse) =>{
-      var nivel1 = {value: dataResponse.tablaLista.id, label: dataResponse.tablaLista.nombre_tabla, nivel2: dataResponse.tablaLista.nivel2, nivel3: dataResponse.tablaLista.nivel3 }
-      var nivel2 = {}
-      var nivel3 = {}
-
-      if(dataResponse.nivel2_id !== null){
-        nivel2 = {value: dataResponse.nivel2_id.id, label: dataResponse.nivel2_id.nombre}
-      }
-      if(dataResponse.nivel3_id !== null){
-        nivel3 = {value: dataResponse.nivel3_id.id, label: dataResponse.nivel3_id.nombre}
-      }
-
+  const matched = (dataResponse) =>{
+      var nivel1 = {value: dataResponse.tablaId.id, label: dataResponse.tablaId.nombreTabla }
     const valores = {
-      nombre: dataResponse.nombre,
-      clave: dataResponse.clave,
-      descripcion: dataResponse.descripcion,
       campoA: dataResponse.campoA,
+      nombre: dataResponse.nombre,
       campoB: dataResponse.campoB,
       campoC: dataResponse.campoC,
       campoD: dataResponse.campoD,
-      tablaLista: nivel1,
-      nivel2_id: (dataResponse.nivel2_id !== null) ? nivel2 : null,
-      nivel3_id: (dataResponse.nivel3_id !== null) ? nivel3 : null
-    }
-    console.log('MATCHEDEDED: ', valores)
+      campoE: dataResponse.campoE,
+      campoF: dataResponse.campoF,
+      campoG: dataResponse.campoG,
 
+      tablaId: nivel1,
+    }
+    console.log('MATCHED: ', valores)
       setformValueToEdit(valores)
   }
 
+
   const getById = async () => {
     setSpin(true)
-
     const idParametro = match.params.id;
-    await getTablaDescripcionId(idParametro)
+    await getTablaDescripcioMatrizId(idParametro)
       .then((response) => {
           console.log("API xxxxx: ", response);
           const res = response.data;
-          macthed(res)
+          matched(res)
         setSpin(false)
-
       }).catch((error) => {
         console.log("Error: ", error);
     });
   }
 
   useEffect(() => {
-    console.log("call")
+    //console.log("call")
     getById();
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -95,15 +80,15 @@ const AdministracionEventoEditar = ( { match } ) => {
       <Fragment>
         <Card>
           <CardHeader>
-            <CardTitle className='float-left h4 pt-2'>Editar Parámetro de Evento de Riesgo</CardTitle>
+            <CardTitle className='float-left h4 pt-2'>Editar Parámetro de Matriz de Riesgo</CardTitle>
           </CardHeader>
           <CardBody className='mt-4'>
             {
-              spin === true
+              spin === true 
               ? <div></div>
               : <Formulario
               initialValuess={formValueToEdit}
-              optionToSelect={{}}
+              //optionToSelect={{}}
               handleOnSubmit={handleOnSubmit}
             />
             }

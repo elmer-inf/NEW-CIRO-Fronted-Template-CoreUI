@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useFormik } from "formik"
 import * as Yup from "yup"
 import { CInputReact } from '../../../../reusable/CInputReact'
-import { FormGroup, Col, Form, Button, Label } from 'reactstrap'
+import { FormGroup, Col, Form, Button, Label, Row } from 'reactstrap'
 import { CSelectReact } from '../../../../reusable/CSelectReact'
 import { getTablaLista, getTablaDescripcionNivel } from '../controller/AdminEventoController';
 import { buildSelectTwo } from '../../../../functions/Function'
@@ -20,9 +20,13 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
     validationSchema: Yup.object().shape(
       {
         tablaLista: Yup.mixed().required('Campo obligatorio'),
-        clave: Yup.string().min(1).max(50).nullable(),
-        nombre: Yup.string().min(2).max(500).required('Campo obligatorio'),
-        descripcion: Yup.string().min(2).max(1000).nullable(),
+        clave: Yup.string().min(1).max(20).nullable(),
+        nombre: Yup.string().min(1).max(1000).required('Campo obligatorio'),
+        descripcion: Yup.string().min(1).max(1000).nullable(),
+        campoA: Yup.string().min(1).max(1000).nullable(),
+        campoB: Yup.string().min(1).max(1000).nullable(),
+        campoC: Yup.string().min(1).max(1000).nullable(),
+        campoD: Yup.string().min(1).max(1000).nullable(),
         nivel2_id: Yup.mixed(),
         nivel3_id: Yup.mixed(),
       }
@@ -73,7 +77,7 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
         //console.log('options : ', options)
         setDataApi(options)
       }).catch((error) => {
-        //console.log('Error: ', error)
+        console.log('Error: ', error)
         //notificationToast('error', Messages.notification.notOk)
       })
   }
@@ -89,6 +93,7 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
     callApi2(idnivel2);
     resetValues();
    }
+   //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.tablaLista])
 
   useEffect(() => {
@@ -97,6 +102,7 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
      const idnivel2 = formik.values.tablaLista.nivel2;
      callApi2(idnivel2);
     }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
    }, [])
 
 
@@ -122,39 +128,16 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
     callApi3(idnivel3);
     resetValues();
    }
+   //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.tablaLista])
-
-
-  // Style Select
-  const customStyles =  {
-    control: (styles,) => ({
-        ...styles,
-        boxShadow: 'none'
-    }),
-    option: (styles, { isDisabled, isSelected }) => {
-      return {
-        ...styles,
-        backgroundColor: isSelected ? '#e79140' : 'white',
-        cursor: isDisabled ? 'not-allowed' : 'default',
-        ':active': {
-            backgroundColor: '#e79140',
-            color: 'white'
-        },
-        ':hover':{
-            backgroundColor: isSelected ? '#e79140' : '#fbf3eb',
-            color: isSelected ? 'white' : '#e79140'
-        }
-      }
-    }
-  }
 
   return (
     <Form onSubmit={formik.handleSubmit} autoComplete="off">
-      <FormGroup row>
-        <Label sm='3' for='tabla'>
+      <FormGroup row className='justify-content-center'>
+        <Label sm='3' lg='3' for='tabla' className='font-weight-bold'>
           Tabla
         </Label>
-        <Col sm='9'>
+        <Col sm='9' lg='5'>
           <CSelectReact
             type={"select"}
             id={'tablaLista'}
@@ -165,7 +148,6 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
             error={formik.errors.tablaLista}
             touched={formik.touched.tablaLista}
             options={tablaListaOptions}
-            //styles={customStyles}
           />
         </Col>
       </FormGroup>
@@ -178,9 +160,17 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
         formik.values.tablaLista.label === 'Canal ASFI' ||
         formik.values.tablaLista.label === 'Proceso' ||
         formik.values.tablaLista.label === 'Moneda' ||
-        formik.values.tablaLista.label === 'Póliza ATC')) ?
-        <FormGroup row>
-          <Label sm='3' for='clave'>
+        formik.values.tablaLista.label === 'Póliza ATC' ||
+        formik.values.tablaLista.label === 'Reputacional' ||
+        formik.values.tablaLista.label === 'Legal' ||
+        formik.values.tablaLista.label === 'Cumplimiento' ||
+        formik.values.tablaLista.label === 'Estratégico' ||
+        formik.values.tablaLista.label === 'Gobierno' ||
+        formik.values.tablaLista.label === 'Fraude' ||
+        formik.values.tablaLista.label === 'Liquidez' ||
+        formik.values.tablaLista.label === 'Operativo')) ?
+        <FormGroup row className='justify-content-center'>
+          <Label sm='3' lg='3' for='clave'>
             {(formik.values.tablaLista.label === 'Área' ||
               formik.values.tablaLista.label === 'Unidad' ||
               formik.values.tablaLista.label === 'Canal ASFI' ||
@@ -189,13 +179,19 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
               formik.values.tablaLista.label === 'Tipo de evento') ? 'Sigla': null }
             {formik.values.tablaLista.label === 'Moneda' ? 'Abreviatura': null }
             {formik.values.tablaLista.label === 'Póliza ATC' ? 'Nro': null }
-
+            {(formik.values.tablaLista.label === 'Reputacional' ||
+              formik.values.tablaLista.label === 'Legal' ||
+              formik.values.tablaLista.label === 'Cumplimiento' ||
+              formik.values.tablaLista.label === 'Estratégico' ||
+              formik.values.tablaLista.label === 'Gobierno' ||
+              formik.values.tablaLista.label === 'Fraude' ||
+              formik.values.tablaLista.label === 'Liquidez' ||
+              formik.values.tablaLista.label === 'Operativo') ? 'Nivel' : null}
           </Label>
-          <Col sm='9'>
+          <Col sm='9' lg='5'>
             <CInputReact
               type={"text"}
               id={'clave'}
-              placeholder={'Clave'}
               value={formik.values.clave}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -207,16 +203,22 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
       : null
       }
 
-
-      <FormGroup row>
-        <Label sm='3' for='nombre'>
-          Nombre
+      <FormGroup row className='justify-content-center'>
+        <Label sm='3' lg='3' for='nombre'>
+        { (formik.values.tablaLista !== null &&
+          ( formik.values.tablaLista.label === 'Reputacional' ||
+            formik.values.tablaLista.label === 'Legal' ||
+            formik.values.tablaLista.label === 'Cumplimiento' ||
+            formik.values.tablaLista.label === 'Estratégico' ||
+            formik.values.tablaLista.label === 'Gobierno' ||
+            formik.values.tablaLista.label === 'Fraude' ||
+            formik.values.tablaLista.label === 'Liquidez' ||
+            formik.values.tablaLista.label === 'Operativo')) ? 'Descriptivo' : 'Nombre' }
         </Label>
-        <Col sm='9'>
+        <Col sm='9' lg='5'>
           <CInputReact
             type={"text"}
             id={'nombre'}
-            placeholder={'Nombre'}
             value={formik.values.nombre}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
@@ -228,23 +230,41 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
 
       { (formik.values.tablaLista !== null &&
         (formik.values.tablaLista.label === 'Categoria de tipo de Evento' ||
-        formik.values.tablaLista.label === 'Efecto de pérdida' ||
-        formik.values.tablaLista.label === 'Impacto')) ?
-        <FormGroup row>
-          <Label sm='3' for='descripcion'>
-            Descripción
+          formik.values.tablaLista.label === 'Efecto de pérdida' ||
+          formik.values.tablaLista.label === 'Impacto' ||
+          formik.values.tablaLista.label === 'Reputacional' ||
+          formik.values.tablaLista.label === 'Estratégico' ||
+          formik.values.tablaLista.label === 'Operativo' ||
+          formik.values.tablaLista.label === 'Legal' ||
+          formik.values.tablaLista.label === 'Cumplimiento' ||
+          formik.values.tablaLista.label === 'Gobierno' ||
+          formik.values.tablaLista.label === 'Fraude' ||
+          formik.values.tablaLista.label === 'Liquidez' ||
+          formik.values.tablaLista.label === 'Proceso')) ?
+        <FormGroup row className='justify-content-center'>
+          <Label sm='3' lg='3' for='descripcion'>
+            {(formik.values.tablaLista.label === 'Categoria de tipo de Evento' ||
+              formik.values.tablaLista.label === 'Efecto de pérdida' ||
+              formik.values.tablaLista.label === 'Impacto' ||
+              formik.values.tablaLista.label === 'Reputacional' ||
+              formik.values.tablaLista.label === 'Estratégico' ||
+              formik.values.tablaLista.label === 'Operativo') ? 'Descripción': null }
+            {(formik.values.tablaLista.label === 'Legal' || formik.values.tablaLista.label === 'Liquidez') ? 'Impacto regulatorio': null }
+            {formik.values.tablaLista.label === 'Cumplimiento' ? 'Impacto de cumplimiento': null }
+            {formik.values.tablaLista.label === 'Gobierno' ? 'Nivel de gobernabilidad #': null }
+            {formik.values.tablaLista.label === 'Fraude' ? 'Importe reportado fraude (USD)': null }
+            {formik.values.tablaLista.label === 'Proceso' ? 'Nivel': null }
           </Label>
-          <Col sm='9'>
+          <Col sm='9' lg='5'>
             <CInputReact
               type={"textarea"}
               id={'descripcion'}
-              placeholder={'Descripción'}
               value={formik.values.descripcion}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               touched={formik.touched.descripcion}
               errors={formik.errors.descripcion}
-              rows={5}
+              rows={3}
             />
           </Col>
         </FormGroup>
@@ -252,20 +272,116 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
       }
 
       { (formik.values.tablaLista !== null &&
+        (formik.values.tablaLista.label === 'Proceso' ||
+          formik.values.tablaLista.label === 'Gobierno' ||
+          formik.values.tablaLista.label === 'Fraude' ||
+          formik.values.tablaLista.label === 'Liquidez')) ?
+        <FormGroup row className='justify-content-center'>
+          <Label sm='3' lg='3' for='clave'>
+            {formik.values.tablaLista.label === 'Proceso' ? 'Valoración': null }
+            {formik.values.tablaLista.label === 'Gobierno' ? 'Nivel de gobernabilidad': null }
+            {formik.values.tablaLista.label === 'Fraude' ? 'Fraude a ventas (USD)': null }
+            {formik.values.tablaLista.label === 'Liquidez' ? 'Liquidez': null }
+          </Label>
+          <Col sm='9' lg='5'>
+            <CInputReact
+              type={"text"}
+              id={'campoA'}
+              value={formik.values.campoA}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              touched={formik.touched.campoA}
+              errors={formik.errors.campoA}
+            />
+          </Col>
+        </FormGroup>
+      : null
+      }
+
+      { (formik.values.tablaLista !== null &&
+        (formik.values.tablaLista.label === 'Gobierno' ||
+          formik.values.tablaLista.label === 'Fraude' ||
+          formik.values.tablaLista.label === 'Liquidez')) ?
+        <FormGroup row className='justify-content-center'>
+          <Label sm='3' lg='3' for='clave'>
+            {formik.values.tablaLista.label === 'Gobierno' ? 'Puntuación Autoevaluación': null }
+            {formik.values.tablaLista.label === 'Fraude' ? 'Importe reportado fraude 2 (USD)': null }
+            {formik.values.tablaLista.label === 'Liquidez' ? 'Capital de trabajo': null }
+          </Label>
+          <Col sm='9' lg='5'>
+            <CInputReact
+              type={"text"}
+              id={'campoB'}
+              value={formik.values.campoB}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              touched={formik.touched.campoB}
+              errors={formik.errors.campoB}
+            />
+          </Col>
+        </FormGroup>
+      : null
+      }
+
+      {(formik.values.tablaLista !== null && formik.values.tablaLista.label === 'Fraude')?
+        <FormGroup row className='justify-content-center'>
+          <Label sm='3' lg='8' for='clave'>
+            {formik.values.tablaLista.label === 'Fraude' ? 'Impacto - severidad': null }
+          </Label>
+          <Col sm='9' lg='8'>
+            <CInputReact
+              type={"textarea"}
+              id={'campoC'}
+              value={formik.values.campoC}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              touched={formik.touched.campoC}
+              errors={formik.errors.campoC}
+              rows={3}
+            />
+          </Col>
+        </FormGroup>
+      : null
+      }
+
+      {(formik.values.tablaLista !== null && formik.values.tablaLista.label === 'Fraude')?
+        <FormGroup row className='justify-content-center'>
+          <Label sm='3' lg='8' for='clave'>
+            {formik.values.tablaLista.label === 'Fraude' ? 'Impacto - severidad 2': null }
+          </Label>
+          <Col sm='9' lg='8'>
+            <CInputReact
+              type={"textarea"}
+              id={'campoD'}
+              value={formik.values.campoD}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              touched={formik.touched.campoD}
+              errors={formik.errors.campoD}
+              rows={3}
+            />
+          </Col>
+        </FormGroup>
+      : null
+      }
+
+      { (formik.values.tablaLista !== null && // PARA NIVEL 2
         (formik.values.tablaLista.label === 'Ciudad' ||
           formik.values.tablaLista.label === 'Unidad' ||
           formik.values.tablaLista.label === 'Sub evento - Basilea' ||
           formik.values.tablaLista.label === 'Procedimiento' ||
-          formik.values.tablaLista.label === 'Tipo de servicio')) ? // Para nivel 2
-        <FormGroup row>
-          <Label sm='3' for='nivel2_id'>
+          formik.values.tablaLista.label === 'Tipo de servicio' ||
+          formik.values.tablaLista.label === 'Sub factor de riesgo')) ?
+        <FormGroup row className='justify-content-center'>
+          <Label sm='3'  lg='3' for='nivel2_id'>
             {formik.values.tablaLista.label === 'Ciudad' ? 'Agencia': null }
             {formik.values.tablaLista.label === 'Unidad' ? 'Área': null }
             {formik.values.tablaLista.label === 'Sub evento - Basilea' ? 'Categoria de tipo de Evento': null }
             {formik.values.tablaLista.label === 'Procedimiento' ? 'Proceso': null }
             {formik.values.tablaLista.label === 'Tipo de servicio' ? 'Operación, producto, servicio': null }
+            {formik.values.tablaLista.label === 'Sub factor de riesgo' ? 'Factor de riesgo': null }
           </Label>
-          <Col sm='9'>
+          <Col sm='9' lg='5'>
             <CSelectReact
               type={"select"}
               id={'nivel2_id'}
@@ -281,56 +397,59 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
         </FormGroup>
       : null }
 
-      { (formik.values.tablaLista !== null &&
+      { (formik.values.tablaLista !== null && // PARA NIVEL 2 Y 3
         (formik.values.tablaLista.label === 'Clase Evento - Basilea' ||
-          formik.values.tablaLista.label === 'Descripción de servicio')) ? // para  nivel 2 y 3
-        <FormGroup row>
-          <Label sm='3' for='nivel2_id'>
-            {formik.values.tablaLista.label === 'Clase Evento - Basilea' ? 'Categoria de tipo de Evento': null }
-            {formik.values.tablaLista.label === 'Descripción de servicio' ? 'Operaciones, productos, servicios': null }
-          </Label>
-          <Col sm='9'>
-            <CSelectReact
-              type={"select"}
-              id={'nivel2_id'}
-              placeholder={'Seleccionar . . . '}
-              value={formik.values.nivel2_id}
-              onChange={formik.setFieldValue}
-              onBlur={formik.setFieldTouched}
-              error={formik.errors.nivel2_id}
-              touched={formik.touched.nivel2_id}
-              options={dataApi2}
-            />
-          </Col>
-
-          <Label sm='3' for='nivel3'>
-            {formik.values.tablaLista.label === 'Clase Evento - Basilea' ? 'Sub evento - Basilea': null }
-            {formik.values.tablaLista.label === 'Descripción de servicio' ? 'Tipo de servicio': null }
-          </Label>
-          <Col sm='9'>
-            <CSelectReact
-              type={"select"}
-              id={'nivel3_id'}
-              placeholder={'Seleccionar . . . '}
-              value={formik.values.nivel3_id}
-              onChange={formik.setFieldValue}
-              onBlur={formik.setFieldTouched}
-              error={formik.errors.nivel3_id}
-              touched={formik.touched.nivel3_id}
-              options={dataApi3}
-            />
-          </Col>
+          formik.values.tablaLista.label === 'Descripción de servicio')) ?
+        <FormGroup>
+          <Row className='justify-content-center'>
+            <Label sm='3'  lg='3' for='nivel2_id'>
+              {formik.values.tablaLista.label === 'Clase Evento - Basilea' ? 'Categoria de tipo de Evento': null }
+              {formik.values.tablaLista.label === 'Descripción de servicio' ? 'Operación, producto, servicio': null }
+            </Label>
+            <Col sm='9' lg='5'>
+              <CSelectReact
+                type={"select"}
+                id={'nivel2_id'}
+                placeholder={'Seleccionar . . . '}
+                value={formik.values.nivel2_id}
+                onChange={formik.setFieldValue}
+                onBlur={formik.setFieldTouched}
+                error={formik.errors.nivel2_id}
+                touched={formik.touched.nivel2_id}
+                options={dataApi2}
+              />
+            </Col>
+          </Row>
+          <Row className='justify-content-center'>
+            <Label sm='3'  lg='3' for='nivel3'>
+              {formik.values.tablaLista.label === 'Clase Evento - Basilea' ? 'Sub evento - Basilea': null }
+              {formik.values.tablaLista.label === 'Descripción de servicio' ? 'Tipo de servicio': null }
+            </Label>
+            <Col sm='9' lg='5'>
+              <CSelectReact
+                type={"select"}
+                id={'nivel3_id'}
+                placeholder={'Seleccionar . . . '}
+                value={formik.values.nivel3_id}
+                onChange={formik.setFieldValue}
+                onBlur={formik.setFieldTouched}
+                error={formik.errors.nivel3_id}
+                touched={formik.touched.nivel3_id}
+                options={dataApi3}
+              />
+            </Col>
+          </Row>
         </FormGroup>
       : null }
-
 
       <FormGroup className='mb-0' row>
-        <Col className='d-flex' md={{ size: 9, offset: 3 }}>
+        <Col className='d-flex justify-content-center'>
           <Button
             className='mr-4 text-white'
             color="primary"
             type="submit"
             disabled={formik.isSubmitting}
+            disabled={(formik.values.tablaLista !== null && formik.values.tablaLista.label === 'Tasa de cambio')? true : false}
           >
             Guardar
           </Button>

@@ -8,8 +8,7 @@ import { Row, Col, Card, CardBody, CardHeader, CardTitle, TabContent, TabPane, N
 import CInputRadio from 'src/reusable/CInputRadio'
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames';
-import { postEventoRiesgo } from './controller/EventoController';
-import { getTablaDescripcionNivel } from './controller/EventoController';
+import { postEventoRiesgo, getTablaDescripcionNivel } from './controller/EventoController';
 import { buildSelectTwo } from 'src/functions/Function'
 
 import { useFormik } from "formik"
@@ -58,59 +57,60 @@ const EventoRiesgoRegistrar = () => {
 
   const formValueInitialDatos = {
     estadoRegistro: '',
-
     fechaIni: '',
     horaIni: '',
     fechaDesc: '',
     horaDesc: '',
-    agenciaId: '',
-    ciudadId: '',
-    areaID: '',
-    unidadId: '',
+    agenciaId: null,
+    ciudadId: null,
+    areaID: null,
+    unidadId: null,
     entidadAfectada: false,
     comercioAfectado: false,
-    entidadId: '',
-    cargoId: '',
+    entidadId: null,
+    cargoId: null,
     estadoReportado: '',
-    fuenteInfId: '',
-    canalAsfiId: '',
+    fuenteInfId: null,
+    canalAsfiId: null,
     descripcion: '',
     descripcionCompleta: ''
   }
 
   const formValueInitialCategoria = {
     codigoInicial: '',
-    subcategorizacionId: '',
+    subcategorizacionId: null,
     trimestre: '',
-    tipoEventoPerdidaId: '',
-    subEventoId: '',
-    claseEventoId: '',
+    tipoEventoPerdidaId: null,
+    subEventoId: null,
+    claseEventoId: null,
+    otros: '',
     detalleEventoCritico: '',
-    factorRiesgoId: '',
-    procesoId: '',
-    procedimientoId: '',
+    factorRiesgoId: null,
+    procesoId: null,
+    procedimientoId: null,
     eventoCritico: '',
 
     lineaNegocio: '',
-    lineaAsfiId: '',
-    operacionId: '',
-    efectoPerdidaId: '',
-    opeProSerId: '',
-    tipoServicioId: '',
-    descServicioId: '',
+    lineaAsfiId: null,
+    operacionId: null,
+    efectoPerdidaId: null,
+    opeProSerId: null,
+    tipoServicioId: null,
+    descServicioId: null,
     riesgoRelacionado: '',
     detalleEstado: ''
   }
 
   const formValueInitialImportes = {
-    monedaId: '',
+    tasaCambioId: null,
+    monedaId: null,
     montoPerdida: '',
     montoPerdidaRiesgo: '',
     gastoAsociado: '',
     montoRecuperado: '',
-    impactoId: '',
+    impactoId: null,
     coberturaSeguro: '',
-    polizaSeguroId: '',
+    polizaSeguroId: null,
     montoRecuperadoSeguro: '',
     recuperacionActivo: '',
     perdidaMercado: '',
@@ -118,16 +118,16 @@ const EventoRiesgoRegistrar = () => {
   }
 
   const formValueInitialRiesgos = {
-    operativoId: '',
-    seguridadId: '',
-    liquidezId: '',
-    lgiId: '',
-    fraudeId: '',
-    legalId: '',
-    reputacionalId: '',
-    cumplimientoId: '',
-    estrategicoId: '',
-    gobiernoId: ''
+    operativoId: null,
+    liquidezId: null,
+    fraudeId: null,
+    legalId: null,
+    reputacionalId: null,
+    cumplimientoId: null,
+    estrategicoId: null,
+    gobiernoId: null
+    /* seguridadId: null,
+    lgiId: null, */
   }
 
   const dataResult = {
@@ -140,7 +140,7 @@ const EventoRiesgoRegistrar = () => {
 
   const [requestData, setRequestData] = useState(dataResult);
   const [activeTab, setActiveTap] = useState('1');
-  const [spin, setSpin] = useState(false);
+  //const [spin, setSpin] = useState(false);
 
   /* manejo de botones siguiente */
   const nextSection = (tab) => {
@@ -177,7 +177,7 @@ const EventoRiesgoRegistrar = () => {
   const fechaD = requestData.fechaDesc;
 
   const handleOnSubmmit = (values) => {
-    setSpin(true);
+    //setSpin(true);
     const dataRequest = setObject(values);
 
     var request = {}

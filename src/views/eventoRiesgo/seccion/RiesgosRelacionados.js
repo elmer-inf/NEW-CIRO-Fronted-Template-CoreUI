@@ -3,26 +3,26 @@ import { ChevronLeft, Save, Delete } from 'react-feather'
 import { Label, FormGroup, Row, Col, Form, Button } from 'reactstrap'
 import { useFormik } from "formik"
 import * as Yup from "yup"
-import { CSelectReact } from '../../../reusable/CSelectReact'
+import { CSelectReact } from 'src/reusable/CSelectReact'
 import { getTablaDescripcionNivel } from '../controller/EventoController';
-import { buildSelectTwo } from '../../../functions/Function'
+import { buildSelectTwo } from 'src/functions/Function'
 
 const RiesgoRelacionado = ({ beforeSection, setObject, initValues, isEdit, handleOnSubmmit, tipoEvento }) => {
-  
+
   const formik = useFormik({
     initialValues: initValues,
     validationSchema: Yup.object().shape(
       {
         operativoId: Yup.mixed().nullable(),
-        seguridadId: Yup.mixed().nullable(),
         liquidezId: Yup.mixed().nullable(),
-        lgiId: Yup.mixed().nullable(),
         fraudeId: Yup.mixed().nullable(),
         legalId: Yup.mixed().nullable(),
         reputacionalId: Yup.mixed().nullable(),
         cumplimientoId: Yup.mixed().nullable(),
         estrategicoId: Yup.mixed().nullable(),
-        gobiernoId: Yup.mixed().nullable(),
+        gobiernoId: Yup.mixed().nullable()
+        /* seguridadId: Yup.mixed().nullable(),
+        lgiId: Yup.mixed().nullable(), */
       }
     ),
 
@@ -30,15 +30,15 @@ const RiesgoRelacionado = ({ beforeSection, setObject, initValues, isEdit, handl
       const data = {
        ...values,
         operativoId:    (values.operativoId !== null) ?     values.operativoId.value : 0,
-        seguridadId:    (values.seguridadId !== null) ?     values.seguridadId.value : 0,
         liquidezId:     (values.liquidezId !== null) ?      values.liquidezId.value : 0,
-        lgiId:          (values.lgiId !== null) ?           values.lgiId.value : 0,
         fraudeId:       (values.fraudeId !== null) ?        values.fraudeId.value : 0,
         legalId:        (values.legalId !== null) ?         values.legalId.value : 0,
         reputacionalId: (values.reputacionalId !== null) ?  values.reputacionalId.value : 0,
         cumplimientoId: (values.cumplimientoId !== null) ?  values.cumplimientoId.value : 0,
         estrategicoId:  (values.estrategicoId !== null) ?   values.estrategicoId.value : 0,
-        gobiernoId:     (values.gobiernoId !== null) ?      values.gobiernoId.value : 0
+        gobiernoId:     (values.gobiernoId !== null) ?      values.gobiernoId.value : 0,
+        /* seguridadId:    (values.seguridadId !== null) ?     values.seguridadId.value : 0,
+        lgiId:          (values.lgiId !== null) ?           values.lgiId.value : 0, */
      }
      console.log('datos que se enviaran SECCION 4:', data)
      handleOnSubmmit(data)
@@ -47,20 +47,111 @@ const RiesgoRelacionado = ({ beforeSection, setObject, initValues, isEdit, handl
 
   /*   P  A  R  A  M  E  T  R  O  S   */
 
-  // Impacto
-  const [dataApiImpacto, setDataApiImpacto] = useState([])
-  const callApiImpacto = (idTablaDes) => {
+  // Reputacional
+  const [dataApiReputacional, setDataApiReputacional] = useState([])
+  const callApiReputacional = (idTablaDes) => {
     getTablaDescripcionNivel(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
-        setDataApiImpacto(options)
+        setDataApiReputacional(options)
+      }).catch((error) => {
+        console.log('Error: ', error)
+      })
+  }
+
+  // Legal
+  const [dataApiLegal, setDataApiLegal] = useState([])
+  const callApiLegal = (idTablaDes) => {
+    getTablaDescripcionNivel(idTablaDes)
+      .then(res => {
+        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
+        setDataApiLegal(options)
+      }).catch((error) => {
+        console.log('Error: ', error)
+      })
+  }
+
+  // Legal
+  const [dataApiCumplimiento, setDataApiCumplimiento] = useState([])
+  const callApiCumplimiento = (idTablaDes) => {
+    getTablaDescripcionNivel(idTablaDes)
+      .then(res => {
+        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
+        setDataApiCumplimiento(options)
+      }).catch((error) => {
+        console.log('Error: ', error)
+      })
+  }
+
+  // Estrategico
+  const [dataApiEstrategico, setDataApiEstrategico] = useState([])
+  const callApiEstrategico = (idTablaDes) => {
+    getTablaDescripcionNivel(idTablaDes)
+      .then(res => {
+        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
+        setDataApiEstrategico(options)
+      }).catch((error) => {
+        console.log('Error: ', error)
+      })
+  }
+
+  // Gobierno
+  const [dataApiGobierno, setDataApiGobierno] = useState([])
+  const callApiGobierno = (idTablaDes) => {
+    getTablaDescripcionNivel(idTablaDes)
+      .then(res => {
+        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
+        setDataApiGobierno(options)
+      }).catch((error) => {
+        console.log('Error: ', error)
+      })
+  }
+
+  // Fraude
+  const [dataApiFraude, setDataApiFraude] = useState([])
+  const callApiFraude = (idTablaDes) => {
+    getTablaDescripcionNivel(idTablaDes)
+      .then(res => {
+        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
+        setDataApiFraude(options)
+      }).catch((error) => {
+        console.log('Error: ', error)
+      })
+  }
+
+  // Liquidez
+  const [dataApiLiquidez, setDataApiLiquidez] = useState([])
+  const callApiLiquidez = (idTablaDes) => {
+    getTablaDescripcionNivel(idTablaDes)
+      .then(res => {
+        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
+        setDataApiLiquidez(options)
+      }).catch((error) => {
+        console.log('Error: ', error)
+      })
+  }
+
+  // Liquidez
+  const [dataApiOperativo, setDataApiOperativo] = useState([])
+  const callApiOperativo = (idTablaDes) => {
+    getTablaDescripcionNivel(idTablaDes)
+      .then(res => {
+        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
+        setDataApiOperativo(options)
       }).catch((error) => {
         console.log('Error: ', error)
       })
   }
 
   useEffect(() => {
-    callApiImpacto(24);
+    callApiReputacional(28);
+    callApiLegal(29);
+    callApiCumplimiento(30);
+    callApiEstrategico(31);
+    callApiGobierno(32);
+    callApiFraude(33);
+    callApiLiquidez(34);
+    callApiOperativo(35);
   }, [])
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
@@ -85,11 +176,11 @@ const RiesgoRelacionado = ({ beforeSection, setObject, initValues, isEdit, handl
               onBlur={formik.setFieldTouched}
               error={formik.errors.operativoId}
               touched={formik.touched.operativoId}
-              options={dataApiImpacto}
+              options={dataApiOperativo}
             />
           </FormGroup>
 
-          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+         {/*  <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
               Seguridad de la información
             </Label>
@@ -102,9 +193,9 @@ const RiesgoRelacionado = ({ beforeSection, setObject, initValues, isEdit, handl
               onBlur={formik.setFieldTouched}
               error={formik.errors.seguridadId}
               touched={formik.touched.seguridadId}
-              options={dataApiImpacto}
+              options={dataApiSeguridad}
             />
-          </FormGroup>
+          </FormGroup> */}
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
@@ -119,11 +210,11 @@ const RiesgoRelacionado = ({ beforeSection, setObject, initValues, isEdit, handl
               onBlur={formik.setFieldTouched}
               error={formik.errors.liquidezId}
               touched={formik.touched.liquidezId}
-              options={dataApiImpacto}
+              options={dataApiLiquidez}
             />
           </FormGroup>
 
-          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+          {/* <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
               LGI FT y/o DP
             </Label>
@@ -136,9 +227,9 @@ const RiesgoRelacionado = ({ beforeSection, setObject, initValues, isEdit, handl
               onBlur={formik.setFieldTouched}
               error={formik.errors.lgiId}
               touched={formik.touched.lgiId}
-              options={dataApiImpacto}
+              options={dataApiLgi}
             />
-          </FormGroup>
+          </FormGroup> */}
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
@@ -153,7 +244,7 @@ const RiesgoRelacionado = ({ beforeSection, setObject, initValues, isEdit, handl
               onBlur={formik.setFieldTouched}
               error={formik.errors.fraudeId}
               touched={formik.touched.fraudeId}
-              options={dataApiImpacto}
+              options={dataApiFraude}
             />
           </FormGroup>
 
@@ -170,7 +261,7 @@ const RiesgoRelacionado = ({ beforeSection, setObject, initValues, isEdit, handl
               onBlur={formik.setFieldTouched}
               error={formik.errors.legalId}
               touched={formik.touched.legalId}
-              options={dataApiImpacto}
+              options={dataApiLegal}
             />
           </FormGroup>
 
@@ -187,7 +278,7 @@ const RiesgoRelacionado = ({ beforeSection, setObject, initValues, isEdit, handl
               onBlur={formik.setFieldTouched}
               error={formik.errors.reputacionalId}
               touched={formik.touched.reputacionalId}
-              options={dataApiImpacto}
+              options={dataApiReputacional}
             />
           </FormGroup>
 
@@ -204,7 +295,7 @@ const RiesgoRelacionado = ({ beforeSection, setObject, initValues, isEdit, handl
               onBlur={formik.setFieldTouched}
               error={formik.errors.cumplimientoId}
               touched={formik.touched.cumplimientoId}
-              options={dataApiImpacto}
+              options={dataApiCumplimiento}
             />
           </FormGroup>
 
@@ -221,7 +312,7 @@ const RiesgoRelacionado = ({ beforeSection, setObject, initValues, isEdit, handl
               onBlur={formik.setFieldTouched}
               error={formik.errors.estrategicoId}
               touched={formik.touched.estrategicoId}
-              options={dataApiImpacto}
+              options={dataApiEstrategico}
             />
           </FormGroup>
 
@@ -238,7 +329,7 @@ const RiesgoRelacionado = ({ beforeSection, setObject, initValues, isEdit, handl
               onBlur={formik.setFieldTouched}
               error={formik.errors.gobiernoId}
               touched={formik.touched.gobiernoId}
-              options={dataApiImpacto}
+              options={dataApiGobierno}
             />
           </FormGroup>
 
