@@ -1,8 +1,8 @@
 import { React, useState, useEffect } from 'react'
 //import ImportesRelacionados from './seccion/ImportesRelacionados'
-//import RiesgosRelacionados from './seccion/RiesgosRelacionados'
 //import CategoriaNegocio from './seccion/CategoriaNegocio'
-import DatosIniciales from './seccionesFormulario/DatosIniciales'
+import DatosIniciales from './seccionesFormulario/DatosInicialesDefinicion'
+import Riesgos from './seccionesFormulario/Riesgos'
 import { FileText, Activity, DollarSign, BarChart2, ChevronRight, AlertTriangle, List, CheckSquare, PieChart } from 'react-feather'
 import { Row, Col, Card, CardBody, CardHeader, CardTitle, TabContent, TabPane, NavLink, NavItem, Nav, FormGroup, Label, } from 'reactstrap';
 import CInputRadio from 'src/reusable/CInputRadio'
@@ -32,28 +32,49 @@ const MatrizRiesgoRegistrar = () => {
   }, [])
 
 
-  const formValueInitialDatos = {
+  const formValueInitialDatosDefinicion = {
 
+    areaId : null,
+    unidadId : null,
+    procesoId : null,
+    procedimientoId : null,
+    duenoCargoId : null,
+    responsableCargoId : null,
+    fechaEvaluacion : '',
+    identificadoId : null,
+
+    definicion : '',
+    causa : '',
+    consecuencia : '',
+    defConcatenado : '',
+    efectoPerdidaId : null,
+    perdidaAsfiId : null,
+    monetario : false,
+    factorRiesgoId: null
+  }
+
+  const formValueInitialRiesgos = {
+    probabilidadId: null,
+    impactoId : null,
+    riesgoInherente : '',
+    valorRiesgoInherente : ''
   }
 
   const formValueInitialCategoria = {
-   
+
   }
 
   const formValueInitialImportes = {
     
   }
 
-  const formValueInitialRiesgos = {
-    
-  }
+ 
 
   const dataResult = {
-    ...formValueInitialDatos,
+    ...formValueInitialDatosDefinicion,
+    ...formValueInitialRiesgos,
     ...formValueInitialCategoria,
     ...formValueInitialImportes,
-    ...formValueInitialRiesgos,
-  
   }
 
   const [requestData, setRequestData] = useState(dataResult);
@@ -122,7 +143,7 @@ const MatrizRiesgoRegistrar = () => {
                 <NavItem>
                   <NavLink className={classnames({ active: activeTab === '1' })}>
                     <span className={activeTab === '1' ? '' : 'd-none'}></span>
-                    <FileText size={25} /><span className='pl-2'>Datos iniciales y definición del riesgo</span>
+                    <FileText size={25} /><span className='pl-2'>Datos iniciales y Definición del riesgo</span>
                     <ChevronRight size={17} className='ml-3 d-none d-xl-inline' style={{ color: 'black', opacity: 0.6 }} />
                   </NavLink>
                 </NavItem>
@@ -130,7 +151,7 @@ const MatrizRiesgoRegistrar = () => {
                 <NavItem>
                   <NavLink className={classnames({ active: activeTab === '2' })}>
                     <span className={activeTab === '2' ? '' : 'd-none'}></span>
-                    <CheckSquare size={25} /><span className='pl-2'>Controles actuales</span>
+                    <BarChart2 size={25} /><span className='pl-2'>Riesgo inherente y residual</span>
                     <ChevronRight size={17} className='ml-3 d-none d-xl-inline' style={{ color: 'black', opacity: 0.6 }} />
                   </NavLink>
                 </NavItem>
@@ -138,7 +159,7 @@ const MatrizRiesgoRegistrar = () => {
                 <NavItem>
                   <NavLink className={classnames({ active: activeTab === '3' })}>
                     <span className={activeTab === '3' ? '' : 'd-none'}></span>
-                    <BarChart2 size={25} /><span className='pl-2'>Riesgo inherente, residual y final</span>
+                    <CheckSquare size={25} /><span className='pl-2'>Controles actuales</span>
                     <ChevronRight size={17} className='ml-3 d-none d-xl-inline' style={{ color: 'black', opacity: 0.6 }} />
                   </NavLink>
                 </NavItem>
@@ -156,22 +177,19 @@ const MatrizRiesgoRegistrar = () => {
                   <DatosIniciales
                     nextSection={nextSection}
                     setObject={setObject}
-                    initValues={formValueInitialDatos}
+                    initValues={formValueInitialDatosDefinicion}
                     //isEdit={false}
-
                   />
                 </TabPane>
                 <TabPane tabId="2">
-                  {/* <CategoriaNegocio
+                  <Riesgos
                     nextSection={nextSection}
                     beforeSection={beforeSection}
                     setObject={setObject}
-                    initValues={formValueInitialCategoria}
-                    tipoEvento={formik.values.tipoEvento}
-                    fechaDesc={fechaD}
+                    initValues={formValueInitialRiesgos}
                     //isEdit={false}
                     //arrayCampoSelected={[]}
-                  /> */}
+                  />
                 </TabPane>
                 <TabPane tabId="3">
                   {/* <ImportesRelacionados
