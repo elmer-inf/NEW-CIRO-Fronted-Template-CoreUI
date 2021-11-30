@@ -34,12 +34,31 @@ export const toBadge = (data,field) =>{
 
 
 export const CFilterText = (props) => {
-    console.log('propos:: ', props)
     return (
         <div>
             <input
                 id={props.possition}
                 type='text'
+                placeholder={props.placeholder}
+                className="filter text-filter form-control"
+                name={props.column.dataField}
+                autoComplete="off"
+                //ref={op => this.op = op}
+                onChange={(e) => { props.onFilter(e.target) }}
+                onClick={props.handleChildClick}
+            />
+        </div>
+
+
+    );
+};
+
+export const CFilterDate = (props) => {
+    return (
+        <div>
+            <input
+                id={props.possition}
+                type='date'
                 placeholder={props.placeholder}
                 className="filter text-filter form-control"
                 name={props.column.dataField}
@@ -66,3 +85,4 @@ export const typeFormatter = (column, colIndex, { sortElement, filterElement }) 
 export const handleChildClick = (e) => {
     e.stopPropagation();
 };
+
