@@ -47,8 +47,8 @@ const AdministracionMatrizRiesgosListar = () => {
     }, {
         dataField: 'campoB',
         text: (labelTabla === 'Probabilidad')?
-                        'PROBABILIDAD': (labelTabla === 'Impacto de Riesgo')?
-                                        'IMPACTO-SEVERIDAD 1' : (labelTabla === 'Controles')?
+                        'PROB CUALITATIVA': (labelTabla === 'Impacto de Riesgo')?
+                                        'IMPACTO CUALITATIVO' : (labelTabla === 'Controles')?
                                                                     'PONDERACION' : '',
         sort: true,
        /*  filter: customFilter(),
@@ -58,8 +58,8 @@ const AdministracionMatrizRiesgosListar = () => {
     }, {
       dataField: 'campoC',
       text: (labelTabla === 'Probabilidad')?
-            'TIEMPO 1': (labelTabla === 'Impacto de Riesgo')?
-                            'IMPACTO-SEVERIDAD 2' : (labelTabla === 'Controles')?
+            'TEMPORALIDAD': (labelTabla === 'Impacto de Riesgo')?
+                            'IMPACTO CUANTITATIVO' : (labelTabla === 'Controles')?
                                                         'RANGO' : '',
       sort: true,
      /*  filter: customFilter(),
@@ -69,8 +69,8 @@ const AdministracionMatrizRiesgosListar = () => {
   }, {
     dataField: 'campoD',
     text: (labelTabla === 'Probabilidad')?
-            'TIEMPO 2': (labelTabla === 'Impacto de Riesgo')?
-                            'IMPACTO-SEVERIDAD 3' : (labelTabla === 'Controles')?
+            'PROB TEMPORALIDAD': (labelTabla === 'Impacto de Riesgo')?
+                            'IMPACTO RESUMEN' : (labelTabla === 'Controles')?
                                                         'PORCENTAJE' : '',
     sort: true,
    /*  filter: customFilter(),
@@ -80,7 +80,7 @@ const AdministracionMatrizRiesgosListar = () => {
   }, {
     dataField: 'campoE',
     text: (labelTabla === 'Impacto de Riesgo')?
-                    'LIMITE INF' : '',
+                    'LIMITE INF ($)' : '',
     sort: true,
    /*  filter: customFilter(),
     filterRenderer: (onFilter, column) =>
@@ -89,7 +89,7 @@ const AdministracionMatrizRiesgosListar = () => {
   }, {
     dataField: 'campoF',
     text: (labelTabla === 'Impacto de Riesgo')?
-                    'LIMITE SUP' : '',
+                    'LIMITE SUP ($)' : '',
     sort: true,
    /*  filter: customFilter(),
     filterRenderer: (onFilter, column) =>

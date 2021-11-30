@@ -240,7 +240,7 @@ const EventoRiesgoListar = () => {
     }
 
     console.log('params:: ', param)
-    console.log('param[echaIni]:: ', param['fechaIni'])
+    console.log('param[fechaIni]:: ', param['fechaIni'])
 
     //delete
     if (param['fechaIni'] === '' || _.isEmpty(param['fechaIni'])) {

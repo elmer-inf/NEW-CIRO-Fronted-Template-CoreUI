@@ -28,6 +28,8 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
       responsableCargoId : Yup.mixed().nullable(),
       fechaEvaluacion : Yup.date().nullable(),
       identificadoId : Yup.mixed().nullable(),
+      otrosAux: Yup.string().nullable(),
+      identificadoOtro : Yup.string().nullable(),
 
       definicion : Yup.string().nullable(),
       causa : Yup.string().nullable(),
@@ -213,7 +215,6 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.procesoId]);
 
-
   // Concatena definicion, causa y consecuencia
   useEffect(() => {
     if(formik.values.definicion !== '' && formik.values.causa !== '' && formik.values.consecuencia !== ''){
@@ -221,6 +222,15 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.definicion, formik.values.causa, formik.values.consecuencia]);
+
+  // Resetea "otros" dependiendo del check
+  const resetOtros = () => { formik.setFieldValue('identificadoOtros', null, false); }
+  useEffect(() => {
+    if(formik.values.otrosAux !== true){
+      resetOtros();
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.otrosAux])
 
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
@@ -411,6 +421,35 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
               options={dataApiIdentificado}
             />
           </FormGroup>
+
+          <FormGroup tag={Col} md='6' lg='3' className='mb-0' style={{position: 'sticky'}}>
+            <CInputCheckbox
+              id={'otrosAux'}
+              type={"checkbox"}
+              value={formik.values.otrosAux}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              label='Otros (Identificado por)'
+            />
+          </FormGroup>
+
+          {formik.values.otrosAux === true ?
+            <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+              <Label className='form-label'>
+                Otros (Identificado por)
+              </Label>
+              <CInputReact
+                type={"text"}
+                id={'identificadoOtros'}
+                placeholder={'Otros'}
+                value={formik.values.identificadoOtros}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                touched={formik.touched.identificadoOtros}
+                errors={formik.errors.identificadoOtros}
+              />
+            </FormGroup>
+          : null}
         </Row>
         <hr/>
         <Row className="pt-2">

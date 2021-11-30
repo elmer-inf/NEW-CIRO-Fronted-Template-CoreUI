@@ -18,7 +18,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
       {
         probabilidadId : Yup.mixed().nullable(),
         impactoId : Yup.mixed().nullable(),
-        riesgoInherente : Yup.string().nullable(),
+        riesgoInherente : Yup.number().positive().nullable(),
         valorRiesgoInherente : Yup.string().nullable(),
 
         // Campos solo para mostrar
@@ -93,13 +93,72 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.impactoId]);
 
+
+  const calculaRiesgo = (prob, imp) =>{
+    var riesgo = 0;
+    if(prob === 1 && (imp === 1 || imp === 2))
+      riesgo = 1
+    if(prob === 2 && imp === 1)
+      riesgo = 1
+
+    if(prob === 1 && imp === 3)
+      riesgo = 2
+    if(prob === 2 && imp === 2)
+      riesgo = 2
+    if(prob === 3 && (imp === 1 || imp === 2))
+      riesgo = 2
+    if(prob === 4 && imp === 1)
+      riesgo = 2
+
+    if(prob === 1 && (imp === 4 || imp === 5))
+      riesgo = 3
+    if(prob === 2 && (imp === 3 || imp === 4))
+      riesgo = 3
+    if(prob === 3 && imp === 3)
+      riesgo = 3
+    if(prob === 4 && (imp === 2 || imp === 3))
+      riesgo = 3
+    if(prob === 5 && (imp === 1 || imp === 2))
+      riesgo = 3
+
+    if(prob === 2 && imp === 5)
+      riesgo = 4
+    if(prob === 3 && (imp === 4 || imp === 5))
+      riesgo = 4
+    if(prob === 4 && imp === 4)
+      riesgo = 4
+    if(prob === 5 && imp === 3)
+      riesgo = 4
+
+    if(prob === 4 && imp === 5)
+      riesgo = 5
+    if(prob === 5 && (imp === 4 || imp === 5))
+      riesgo = 5
+
+    return riesgo
+  }
+
+  // Obtiene el riesgo (Formula entre Probabilidad e impacto)
+
+  const calculoRiesgoInerente = () =>{
+    if(formik.values.probabilidadId !== null && formik.values.impactoId !== null){
+      const prob = parseInt(formik.values.probabilidadId.campoA);
+      const imp = parseInt(formik.values.impactoId.campoA);
+      const riesgo = calculaRiesgo(prob, imp);
+      formik.setFieldValue('riesgoInherente', riesgo, false)
+    }
+  }
+
+  useEffect(() => {
+    calculoRiesgoInerente();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.probabilidadId,formik.values.impactoId]);
+
+
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
   return (
     <Fragment>
-      {/* <div className='content-header'>
-        <h5 className='mb-0'>Categoria</h5>
-      </div> */}
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
         <Row className='pt-4'>
 
@@ -154,7 +213,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
-              Valoración - Probabilidad (Inherente)"
+              Valoración - Probabilidad (Inherente)
             </Label>
             <CInputReact
               type={"text"}
@@ -219,7 +278,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
-              Valoración de Imp. Inherente
+              Valoración - Impacto (Inherente)
             </Label>
             <CInputReact
               type={"text"}
@@ -229,6 +288,38 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
               onBlur={formik.handleBlur}
               touched={formik.touched.impactoValoracion}
               errors={formik.errors.impactoValoracion}
+              disabled={true}
+            />
+          </FormGroup>
+
+          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+            <Label className='form-label text-label'>
+              Riesgo (Inherente)
+            </Label>
+            <CInputReact
+              type={"number"}
+              id={'riesgoInherente'}
+              value={formik.values.riesgoInherente}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              touched={formik.touched.riesgoInherente}
+              errors={formik.errors.riesgoInherente}
+              disabled={true}
+            />
+          </FormGroup>
+
+          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+            <Label className='form-label text-label'>
+              Valoración Riesgo (Inherente)
+            </Label>
+            <CInputReact
+              type={"text"}
+              id={'valorRiesgoInherente'}
+              value={formik.values.valorRiesgoInherente}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              touched={formik.touched.valorRiesgoInherente}
+              errors={formik.errors.valorRiesgoInherente}
               disabled={true}
             />
           </FormGroup>

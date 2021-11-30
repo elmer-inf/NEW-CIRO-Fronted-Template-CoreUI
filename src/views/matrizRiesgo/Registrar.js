@@ -42,6 +42,7 @@ const MatrizRiesgoRegistrar = () => {
     responsableCargoId : null,
     fechaEvaluacion : '',
     identificadoId : null,
+    identificadoOtro : '',
 
     definicion : '',
     causa : '',
@@ -56,8 +57,8 @@ const MatrizRiesgoRegistrar = () => {
   const formValueInitialRiesgos = {
     probabilidadId: null,
     impactoId : null,
-    riesgoInherente : '',
-    valorRiesgoInherente : ''
+    riesgoInherente : 0,
+    valorRiesgoInherente : 0
   }
 
   const formValueInitialCategoria = {
