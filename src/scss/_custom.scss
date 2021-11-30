@@ -283,3 +283,67 @@ body{
   }
 }
  */
+
+
+ 
+
+/**Scroll*/
+
+.react-bootstrap-table {
+  overflow-y: auto;
+  height: 500px;
+  max-height: 1000;
+}
+
+.react-bootstrap-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+/* Just common table stuff. Really. */
+
+.react-bootstrap-table {
+  border-collapse: collapse;
+  width: 100%;
+
+}
+
+th, td {
+  /*padding: 8px 16px;*/
+  padding: 2px 13;
+  min-width: 50px;
+  
+}
+
+th {
+  background: #fff;
+}
+
+
+/*para que no colapse*/
+.sinSalto{
+  white-space: nowrap;
+}
+
+
+/**** Sort icon****/
+
+.dropup .caret, .navbar-fixed-bottom .dropdown .caret {
+  content: "";
+  border-top: 0;
+  border-bottom: 4px dashed;
+  border-bottom: 4px solid\9;
+}
+
+.caret {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 2px;
+  vertical-align: middle;
+  border-top: 4px dashed;
+  border-top: 4px solid\9;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+}

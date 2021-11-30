@@ -14,6 +14,15 @@ export const getEventos = async () => {
     return response
 }
 
+export const getEventosPaging = async (page, size) => {
+    const uri = HOST + 'v1/eventoRiesgo/' + page + '/' + size + '/id:desc';
+    const response = await axios.get(uri);
+
+    return response;
+
+};
+
+
 export const getTablaDescripcionNivel = async (idTabla) => {
     const uri = HOST.concat('v1/tablaDescripcion/listarNivel1/',idTabla)
     const response = await axios.get(uri)
