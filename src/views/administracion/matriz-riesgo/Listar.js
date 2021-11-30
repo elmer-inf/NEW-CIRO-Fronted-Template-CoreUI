@@ -16,7 +16,7 @@ const AdministracionMatrizRiesgosListar = () => {
       dataField: 'id',
       text: 'ID',
       sort: false,
-      hidden: true
+      //hidden: true
     }, {
       dataField: 'campoA',
       text: (labelTabla === 'Probabilidad' || labelTabla === 'Impacto de Riesgo')?
@@ -31,7 +31,8 @@ const AdministracionMatrizRiesgosListar = () => {
         dataField: 'nombre',
         text: (labelTabla === 'Pérdida ASFI' ||
                labelTabla === 'Tipo de control' ||
-               labelTabla === 'Nivel de automatización')?
+               labelTabla === 'Nivel de automatización' ||
+               labelTabla === 'Identificado por')?
               'NOMBRE' : (labelTabla === 'Probabilidad' || labelTabla === 'Impacto de Riesgo')?
                         'DESCRIPTIVO': (labelTabla === 'Normas para control')?
                                         'TITULO DEL DOCUMENTO' :  (labelTabla === 'Controles')?
@@ -85,7 +86,7 @@ const AdministracionMatrizRiesgosListar = () => {
     filterRenderer: (onFilter, column) =>
         <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
     //headerFormatter: typeFormatter
-  },{
+  }, {
     dataField: 'campoF',
     text: (labelTabla === 'Impacto de Riesgo')?
                     'LIMITE SUP' : '',
@@ -94,7 +95,17 @@ const AdministracionMatrizRiesgosListar = () => {
     filterRenderer: (onFilter, column) =>
         <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
     //headerFormatter: typeFormatter
-  },{
+  }, {
+    dataField: 'campoG',
+    text: (labelTabla === 'Impacto de Riesgo')?
+                    '% IMPACTO' : (labelTabla === 'Probabilidad')?
+                                      '% OCURRENCIA' : '',
+    sort: true,
+   /*  filter: customFilter(),
+    filterRenderer: (onFilter, column) =>
+        <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
+    //headerFormatter: typeFormatter
+  }, {
          dataField: 'tablaId.nombreTabla',
          text: 'TABLA',
          sort: true,

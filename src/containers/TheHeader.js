@@ -55,15 +55,19 @@ const TheHeader = () => {
       </CHeaderBrand>
 
       <CHeaderNav className="d-md-down-none mr-auto">
-        {/* <span  style={{letterSpacing: '2px'}} className='text-primary h4 pl-1 pt-2'>
-          SISTEMA DE RIESGOS INTEGRADO
-        </span> */}
-        <CIcon
+        <span className='text-primary h4 pl-1 pt-2'>
+          <b><i>SISTEMA DE GESTION</i></b>
+        </span>
+        <span  style={{color: '#009eb2'}} className='h4 pl-1 pt-2'>
+          <b><i>DE RIESGOS INTEGRALES</i></b>
+        </span>
+
+        {/* <CIcon
           className="c-sidebar-brand-full pl-2"
           src = "/logo/titulo.png"
           name="logo-negative"
           height={20}
-        />
+        /> */}
       </CHeaderNav>
 
       <CHeaderNav className="px-3">

@@ -478,9 +478,9 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
           </FormGroup>
 
           {formik.values.otrosAux === true ?
-            <FormGroup tag={Col} md='6' lg='' className='mb-0'>
+            <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
               <Label className='form-label'>
-                Otros ( Clase evento - Basilea - ASFI)
+                Otros (Clase evento - Basilea - ASFI)
               </Label>
               <CInputReact
                 type={"text"}
@@ -494,8 +494,6 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
               />
             </FormGroup>
           : null}
-
-          
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>

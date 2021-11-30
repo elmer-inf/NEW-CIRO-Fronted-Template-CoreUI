@@ -28,15 +28,6 @@ export const getTablaDescripcionNivel = async (idTabla) => {
     return response
 }
 
-// Registra Matriz de riesgo
-export const postMatrizRiesgo = (data) => {
-    const uri = HOST.concat('v1/matrizRiesgo/registrar')
-    return axios.post(uri, data);
-}
-
-
-/*
-
 export const getTablaDescripcionNivel2 = async (idTabla, idNivel2) => {
 
     const uri = HOST.concat('v1/tablaDescripcion/listarNivel2/',idTabla,'/', idNivel2);
@@ -44,6 +35,21 @@ export const getTablaDescripcionNivel2 = async (idTabla, idNivel2) => {
     const response = await axios.get(uri)
     return response
 }
+
+// Registra Matriz de riesgo
+export const postMatrizRiesgo = (data) => {
+    const uri = HOST.concat('v1/matrizRiesgo/registrar')
+    return axios.post(uri, data);
+}
+
+export const getTablaDescripcionMatrizR = async (idTabla) => { 
+    const uri = HOST.concat('v1/tablaDescripcionMatrizRiesgo/listarNivel1/',idTabla)
+    const response = await axios.get(uri)
+    return response
+}
+
+
+/*
 
 export const getTablaDescripcionNivel3 = async (idTabla, idNivel2, idNivel3) => { 
 

@@ -137,7 +137,8 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
           <Label sm='3'  lg='3' for='nombre'>
             {(formik.values.tablaId.label === 'Pérdida ASFI' ||
               formik.values.tablaId.label === 'Tipo de control' ||
-              formik.values.tablaId.label === 'Nivel de automatización') ? 'Nombre' : null }
+              formik.values.tablaId.label === 'Nivel de automatización' ||
+              formik.values.tablaId.label === 'Identificado por') ? 'Nombre' : null }
             {(formik.values.tablaId.label === 'Probabilidad' ||
               formik.values.tablaId.label === 'Impacto de Riesgo') ? 'Descriptivo' : null }
             {formik.values.tablaId.label === 'Controles' ? 'Descripción': null }
