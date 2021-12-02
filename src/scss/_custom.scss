@@ -192,6 +192,109 @@ body{
   font-size: 12;
 }
 
+// divider
+.divider {
+  .divider-text {
+    color: rgba(black, 1);
+
+    &::before,
+    &::after {
+      border-color: rgba(black, 0.4);
+    }
+  }
+
+  &.divider-dark {
+    .divider-text {
+      &::before,
+      &::after {
+        border-color: rgba(black, 0.4) !important;
+      }
+    }
+  }
+}
+
+
+
+.divider {
+  display: block;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  margin: 1rem 0;
+
+  // divider text display prop
+
+  .divider-text {
+    position: relative;
+    display: inline-block;
+    font-size: 0.9375rem;
+    padding: 0 1rem;
+
+    // divider icon font size
+
+    i,
+    svg {
+      height: 1rem;
+      width: 1rem;
+      font-size: 1rem;
+    }
+
+    // divider border
+
+    &:before,
+    &:after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 9999px;
+      border-top: 1px solid $border-color;
+    }
+
+    // divider spacing
+    &:before {
+      right: 100%;
+    }
+
+    &:after {
+      left: 100%;
+    }
+  }
+
+  // divider positions config
+
+  &.divider-left {
+    .divider-text {
+      float: left;
+      padding-left: 0;
+      &:before {
+        display: none;
+      }
+    }
+  }
+  &.divider-left-center {
+    .divider-text {
+      left: -25%;
+    }
+  }
+
+  &.divider-right {
+    .divider-text {
+      float: right;
+      padding-right: 0;
+      &:after {
+        display: none;
+      }
+    }
+  }
+  &.divider-right-center {
+    .divider-text {
+      right: -25%;
+    }
+  }
+}
+
+
+
 // Table - hover animation
 /* .table-hover-animation {
   table{

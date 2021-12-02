@@ -448,7 +448,7 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
             className='mr-4 text-white'
             color="primary"
             type="submit"
-            disabled={formik.isSubmitting}
+            //disabled={formik.isSubmitting}
             disabled={(formik.values.tablaLista !== null && formik.values.tablaLista.label === 'Tasa de cambio')? true : false}
           >
             Guardar

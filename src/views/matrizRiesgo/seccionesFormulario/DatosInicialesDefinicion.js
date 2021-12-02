@@ -4,11 +4,11 @@ import { Label, FormGroup, Row, Col, Form, Button } from 'reactstrap'
 
 import { useFormik } from "formik"
 import * as Yup from "yup"
-import { CInputReact } from '../../../reusable/CInputReact'
-import { CSelectReact } from '../../../reusable/CSelectReact'
-import  CInputCheckbox  from '../../../reusable/CInputCheckbox'
+import { CInputReact } from 'src/reusable/CInputReact'
+import { CSelectReact } from 'src/reusable/CSelectReact'
+import  CInputCheckbox  from 'src/reusable/CInputCheckbox'
 import { getTablaDescripcionNivel, getTablaDescripcionNivel2, getTablaDescripcionMatrizR } from '../controller/MatrizRiesgoController';
-import { buildSelectTwo } from '../../../functions/Function'
+import { buildSelectTwo } from 'src/functions/Function'
 
 const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
 
@@ -422,7 +422,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
             />
           </FormGroup>
 
-          <FormGroup tag={Col} md='6' lg='3' className='mb-0' style={{position: 'sticky'}}>
+          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <CInputCheckbox
               id={'otrosAux'}
               type={"checkbox"}

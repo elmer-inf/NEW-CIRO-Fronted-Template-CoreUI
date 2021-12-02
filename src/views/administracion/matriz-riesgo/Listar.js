@@ -21,7 +21,8 @@ const AdministracionMatrizRiesgosListar = () => {
       dataField: 'campoA',
       text: (labelTabla === 'Probabilidad' || labelTabla === 'Impacto de Riesgo')?
                         'NIVEL': (labelTabla === 'Normas para control')?
-                        'CODIGO' : '',
+                                  'CODIGO' : (labelTabla === 'Nivel de riesgo inherente')?
+                                              'CALIFICACION' : '',
       sort: true,
      /*  filter: customFilter(),
       filterRenderer: (onFilter, column) =>
@@ -36,7 +37,8 @@ const AdministracionMatrizRiesgosListar = () => {
               'NOMBRE' : (labelTabla === 'Probabilidad' || labelTabla === 'Impacto de Riesgo')?
                         'DESCRIPTIVO': (labelTabla === 'Normas para control')?
                                         'TITULO DEL DOCUMENTO' :  (labelTabla === 'Controles')?
-                                                    'DESCRIPCION' : '',
+                                                    'DESCRIPCION' : (labelTabla === 'Nivel de riesgo inherente')?
+                                                                    'NIVEL' : '',
         sort: true,
         //formatter: columnaVacia
         //hidden : (row) => row.clave == null ? true : false
@@ -49,7 +51,8 @@ const AdministracionMatrizRiesgosListar = () => {
         text: (labelTabla === 'Probabilidad')?
                         'PROB CUALITATIVA': (labelTabla === 'Impacto de Riesgo')?
                                         'IMPACTO CUALITATIVO' : (labelTabla === 'Controles')?
-                                                                    'PONDERACION' : '',
+                                                                    'PONDERACION' : (labelTabla === 'Nivel de riesgo inherente')?
+                                                                                    'DESCRIPTIVO' : '',
         sort: true,
        /*  filter: customFilter(),
         filterRenderer: (onFilter, column) =>
@@ -60,7 +63,8 @@ const AdministracionMatrizRiesgosListar = () => {
       text: (labelTabla === 'Probabilidad')?
             'TEMPORALIDAD': (labelTabla === 'Impacto de Riesgo')?
                             'IMPACTO CUANTITATIVO' : (labelTabla === 'Controles')?
-                                                        'RANGO' : '',
+                                                        'RANGO' : (labelTabla === 'Nivel de riesgo inherente')?
+                                                                   'DESCRIPCION' : '',
       sort: true,
      /*  filter: customFilter(),
       filterRenderer: (onFilter, column) =>
@@ -71,7 +75,8 @@ const AdministracionMatrizRiesgosListar = () => {
     text: (labelTabla === 'Probabilidad')?
             'PROB TEMPORALIDAD': (labelTabla === 'Impacto de Riesgo')?
                             'IMPACTO RESUMEN' : (labelTabla === 'Controles')?
-                                                        'PORCENTAJE' : '',
+                                                        'PORCENTAJE' : (labelTabla === 'Nivel de riesgo inherente')?
+                                                                        'TOLERANCIA AL RIESGO ($)' : '',
     sort: true,
    /*  filter: customFilter(),
     filterRenderer: (onFilter, column) =>
@@ -99,7 +104,8 @@ const AdministracionMatrizRiesgosListar = () => {
     dataField: 'campoG',
     text: (labelTabla === 'Impacto de Riesgo')?
                     '% IMPACTO' : (labelTabla === 'Probabilidad')?
-                                      '% OCURRENCIA' : '',
+                                      '% OCURRENCIA' : (labelTabla === 'Nivel de riesgo inherente')?
+                                                        'TRATAMIENTO' : '',
     sort: true,
    /*  filter: customFilter(),
     filterRenderer: (onFilter, column) =>

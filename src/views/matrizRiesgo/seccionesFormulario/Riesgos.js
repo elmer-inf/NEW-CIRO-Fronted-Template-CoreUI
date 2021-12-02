@@ -6,9 +6,9 @@ import { useFormik } from "formik"
 import * as Yup from "yup"
 import { CInputReact } from 'src/reusable/CInputReact'
 import { CSelectReact } from 'src/reusable/CSelectReact'
-import  CInputCheckbox  from 'src/reusable/CInputCheckbox'
 import { getTablaDescripcionMatrizR } from '../controller/MatrizRiesgoController';
-import { buildSelectTwo } from 'src/functions//Function'
+import { buildSelectTwo } from 'src/functions/Function'
+import { calculaRiesgo } from 'src/functions/FunctionsMatriz'
 
 const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, isEdit}) => {
 
@@ -18,7 +18,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
       {
         probabilidadId : Yup.mixed().nullable(),
         impactoId : Yup.mixed().nullable(),
-        riesgoInherente : Yup.number().positive().nullable(),
+        riesgoInherente : Yup.number().nullable(),
         valorRiesgoInherente : Yup.string().nullable(),
 
         // Campos solo para mostrar
@@ -68,9 +68,22 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
       })
   }
 
+  // Nivel de riesgo inherente
+  const [dataApiRiesgoI, setDataApiRiesgoI] = useState([])
+  const callApiRiesgoI = (idTablaDes) => {
+    getTablaDescripcionMatrizR(idTablaDes)
+      .then(res => {
+        const options = buildSelectTwo(res.data, 'id', 'campoD', true)
+        setDataApiRiesgoI(options)
+      }).catch((error) => {
+        console.log('Error: ', error)
+      })
+  }
+
   useEffect(() => {
     callApiProbabilidad(2);
     callApiImpacto(3);
+    callApiRiesgoI(9);
   }, [])
 
   // Autocompleta Probabilidad inherente, porcentaje y valoracion
@@ -93,59 +106,27 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.impactoId]);
 
-
-  const calculaRiesgo = (prob, imp) =>{
-    var riesgo = 0;
-    if(prob === 1 && (imp === 1 || imp === 2))
-      riesgo = 1
-    if(prob === 2 && imp === 1)
-      riesgo = 1
-
-    if(prob === 1 && imp === 3)
-      riesgo = 2
-    if(prob === 2 && imp === 2)
-      riesgo = 2
-    if(prob === 3 && (imp === 1 || imp === 2))
-      riesgo = 2
-    if(prob === 4 && imp === 1)
-      riesgo = 2
-
-    if(prob === 1 && (imp === 4 || imp === 5))
-      riesgo = 3
-    if(prob === 2 && (imp === 3 || imp === 4))
-      riesgo = 3
-    if(prob === 3 && imp === 3)
-      riesgo = 3
-    if(prob === 4 && (imp === 2 || imp === 3))
-      riesgo = 3
-    if(prob === 5 && (imp === 1 || imp === 2))
-      riesgo = 3
-
-    if(prob === 2 && imp === 5)
-      riesgo = 4
-    if(prob === 3 && (imp === 4 || imp === 5))
-      riesgo = 4
-    if(prob === 4 && imp === 4)
-      riesgo = 4
-    if(prob === 5 && imp === 3)
-      riesgo = 4
-
-    if(prob === 4 && imp === 5)
-      riesgo = 5
-    if(prob === 5 && (imp === 4 || imp === 5))
-      riesgo = 5
-
-    return riesgo
-  }
-
-  // Obtiene el riesgo (Formula entre Probabilidad e impacto)
-
+  // Obtiene el Riesgo inherente y si valoracion (Formula entre Probabilidad e impacto)
   const calculoRiesgoInerente = () =>{
     if(formik.values.probabilidadId !== null && formik.values.impactoId !== null){
       const prob = parseInt(formik.values.probabilidadId.campoA);
       const imp = parseInt(formik.values.impactoId.campoA);
       const riesgo = calculaRiesgo(prob, imp);
       formik.setFieldValue('riesgoInherente', riesgo, false)
+
+      var riesgoString = riesgo.toString();
+      for (let i = 0; i < 5; i++) {
+        if(riesgoString === dataApiRiesgoI[i].campoA)
+          formik.setFieldValue('valorRiesgoInherente', dataApiRiesgoI[i].campoB, false)
+        if(riesgoString === dataApiRiesgoI[i].campoA)
+          formik.setFieldValue('valorRiesgoInherente', dataApiRiesgoI[i].campoB, false)
+        if(riesgoString === dataApiRiesgoI[i].campoA)
+          formik.setFieldValue('valorRiesgoInherente', dataApiRiesgoI[i].campoB, false)
+        if(riesgoString === dataApiRiesgoI[i].campoA)
+          formik.setFieldValue('valorRiesgoInherente', dataApiRiesgoI[i].campoB, false)
+        if(riesgoString === dataApiRiesgoI[i].campoA)
+          formik.setFieldValue('valorRiesgoInherente', dataApiRiesgoI[i].campoB, false)
+      }
     }
   }
 
@@ -153,7 +134,6 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
     calculoRiesgoInerente();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.probabilidadId,formik.values.impactoId]);
-
 
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 

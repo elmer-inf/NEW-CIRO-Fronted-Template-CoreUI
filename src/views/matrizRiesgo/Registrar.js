@@ -1,11 +1,10 @@
 import { React, useState, useEffect } from 'react'
-//import ImportesRelacionados from './seccion/ImportesRelacionados'
-//import CategoriaNegocio from './seccion/CategoriaNegocio'
 import DatosIniciales from './seccionesFormulario/DatosInicialesDefinicion'
 import Riesgos from './seccionesFormulario/Riesgos'
-import { FileText, Activity, DollarSign, BarChart2, ChevronRight, AlertTriangle, List, CheckSquare, PieChart } from 'react-feather'
-import { Row, Col, Card, CardBody, CardHeader, CardTitle, TabContent, TabPane, NavLink, NavItem, Nav, FormGroup, Label, } from 'reactstrap';
-import CInputRadio from 'src/reusable/CInputRadio'
+import Controles from './seccionesFormulario/Controles'
+import Valoracion from './seccionesFormulario/Valoracion'
+import { FileText, BarChart2, ChevronRight, CheckSquare, PieChart } from 'react-feather'
+import { Row, Col, Card, CardBody, CardHeader, CardTitle, TabContent, TabPane, NavLink, NavItem, Nav} from 'reactstrap';
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames';
 import { postMatrizRiesgo, getTablaDescripcionNivel } from './controller/MatrizRiesgoController';
@@ -61,8 +60,9 @@ const MatrizRiesgoRegistrar = () => {
     valorRiesgoInherente : 0
   }
 
-  const formValueInitialCategoria = {
-
+  const formValueInitialControles = {
+    nroControles: '',
+    controles: []
   }
 
   const formValueInitialImportes = {
@@ -74,7 +74,7 @@ const MatrizRiesgoRegistrar = () => {
   const dataResult = {
     ...formValueInitialDatosDefinicion,
     ...formValueInitialRiesgos,
-    ...formValueInitialCategoria,
+    ...formValueInitialControles,
     ...formValueInitialImportes,
   }
 
@@ -152,7 +152,7 @@ const MatrizRiesgoRegistrar = () => {
                 <NavItem>
                   <NavLink className={classnames({ active: activeTab === '2' })}>
                     <span className={activeTab === '2' ? '' : 'd-none'}></span>
-                    <BarChart2 size={25} /><span className='pl-2'>Riesgo inherente y residual</span>
+                    <BarChart2 size={25} /><span className='pl-2'>Riesgo inherente</span>
                     <ChevronRight size={17} className='ml-3 d-none d-xl-inline' style={{ color: 'black', opacity: 0.6 }} />
                   </NavLink>
                 </NavItem>
@@ -192,26 +192,26 @@ const MatrizRiesgoRegistrar = () => {
                     //arrayCampoSelected={[]}
                   />
                 </TabPane>
-                <TabPane tabId="3">
-                  {/* <ImportesRelacionados
+                <TabPane tabId="3"> 
+                  <Controles
                     nextSection={nextSection}
                     beforeSection={beforeSection}
                     setObject={setObject}
-                    initValues={formValueInitialImportes}
+                    initValues={formValueInitialControles}
                     //isEdit={true}
                     //arrayColumnaSelected={[]}
-                  /> */}
+                  />
                 </TabPane>
 
                 <TabPane tabId="4">
-                  {/* <RiesgosRelacionados
+                  <Valoracion
                     beforeSection={beforeSection}
                     initValues={formValueInitialRiesgos}
-                    tipoEvento={formik.values.tipoEvento}
+                    
                     handleOnSubmmit={handleOnSubmmit}
                     //isEdit={true}
                     //arrayColumnaSelected={[]}
-                  /> */}
+                  />
                 </TabPane>
 
               </TabContent>
