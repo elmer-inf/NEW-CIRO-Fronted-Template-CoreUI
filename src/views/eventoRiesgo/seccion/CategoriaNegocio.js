@@ -8,7 +8,7 @@ import { CInputReact } from 'src/reusable/CInputReact'
 import { CSelectReact } from 'src/reusable/CSelectReact'
 import  CInputCheckbox  from 'src/reusable/CInputCheckbox'
 import { getTablaDescripcionNivel, getTablaDescripcionNivel2, getTablaDescripcionNivel3 } from '../controller/EventoController';
-import { buildSelectTwo } from '../../../functions/Function'
+import { buildSelectTwo } from 'src/functions/Function'
 
 const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, isEdit , tipoEvento, fechaDesc}) => {
 
@@ -109,7 +109,6 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
    }
   })
 
- 
 
   /*   P  A  R  A  M  E  T  R  O  S   */
   // Subcategorizaciontipo

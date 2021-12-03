@@ -2,8 +2,9 @@ import { React, useState, useEffect } from 'react'
 import DatosIniciales from './seccionesFormulario/DatosInicialesDefinicion'
 import Riesgos from './seccionesFormulario/Riesgos'
 import Controles from './seccionesFormulario/Controles'
+import Planes from './seccionesFormulario/Planes'
 import Valoracion from './seccionesFormulario/Valoracion'
-import { FileText, BarChart2, ChevronRight, CheckSquare, PieChart } from 'react-feather'
+import { FileText, BarChart2, ChevronRight, CheckSquare, PieChart, Trello, List } from 'react-feather'
 import { Row, Col, Card, CardBody, CardHeader, CardTitle, TabContent, TabPane, NavLink, NavItem, Nav} from 'reactstrap';
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames';
@@ -61,21 +62,24 @@ const MatrizRiesgoRegistrar = () => {
   }
 
   const formValueInitialControles = {
+    controlesTiene : false,
     nroControles: '',
     controles: []
   }
 
-  const formValueInitialImportes = {
-    
+  const formValueInitialPlanes = {
+    planesAccion: [],
+    seguimientoFecha: '',
+    seguimientoObs: '',
+    seguimientoComen: ''
   }
 
- 
 
   const dataResult = {
     ...formValueInitialDatosDefinicion,
     ...formValueInitialRiesgos,
     ...formValueInitialControles,
-    ...formValueInitialImportes,
+    ...formValueInitialPlanes,
   }
 
   const [requestData, setRequestData] = useState(dataResult);
@@ -89,6 +93,8 @@ const MatrizRiesgoRegistrar = () => {
       setActiveTap('3');
     } else if (tab === 3) {
       setActiveTap('4');
+    } else if (tab === 4) {
+      setActiveTap('5');
     }
   }
   /* manejo de botones atras */
@@ -99,6 +105,8 @@ const MatrizRiesgoRegistrar = () => {
       setActiveTap('2');
     } else if (tab === 4) {
       setActiveTap('3');
+    } else if (tab === 5) {
+      setActiveTap('4');
     }
   }
 
@@ -144,31 +152,39 @@ const MatrizRiesgoRegistrar = () => {
                 <NavItem>
                   <NavLink className={classnames({ active: activeTab === '1' })}>
                     <span className={activeTab === '1' ? '' : 'd-none'}></span>
-                    <FileText size={25} /><span className='pl-2'>Datos iniciales y Definición del riesgo</span>
-                    <ChevronRight size={17} className='ml-3 d-none d-xl-inline' style={{ color: 'black', opacity: 0.6 }} />
+                    <FileText size={20} /><span className='pl-2 h6 font-weight-bold'>Datos y Definición</span>
+                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline' style={{ color: 'black', opacity: 0.6 }} />
                   </NavLink>
                 </NavItem>
 
                 <NavItem>
                   <NavLink className={classnames({ active: activeTab === '2' })}>
                     <span className={activeTab === '2' ? '' : 'd-none'}></span>
-                    <BarChart2 size={25} /><span className='pl-2'>Riesgo inherente</span>
-                    <ChevronRight size={17} className='ml-3 d-none d-xl-inline' style={{ color: 'black', opacity: 0.6 }} />
+                    <BarChart2 size={20} /><span className='pl-2 h6 font-weight-bold'>Riesgo inherente</span>
+                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline' style={{ color: 'black', opacity: 0.6 }} />
                   </NavLink>
                 </NavItem>
 
                 <NavItem>
                   <NavLink className={classnames({ active: activeTab === '3' })}>
                     <span className={activeTab === '3' ? '' : 'd-none'}></span>
-                    <CheckSquare size={25} /><span className='pl-2'>Controles actuales</span>
-                    <ChevronRight size={17} className='ml-3 d-none d-xl-inline' style={{ color: 'black', opacity: 0.6 }} />
+                    <Trello size={20} /><span className='pl-2 h6 font-weight-bold'>Controles actuales</span>
+                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline' style={{ color: 'black', opacity: 0.6 }} />
                   </NavLink>
                 </NavItem>
 
                 <NavItem>
                   <NavLink className={classnames({ active: activeTab === '4' })}>
                     <span className={activeTab === '4' ? '' : 'd-none'}></span>
-                    <PieChart size={25} /><span className='pl-2'>Valoración cuantitativa</span>
+                    <List size={20} /><span className='pl-2 h6 font-weight-bold'>Planes de Acción</span>
+                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline' style={{ color: 'black', opacity: 0.6 }} />
+                  </NavLink>
+                </NavItem>
+
+                <NavItem>
+                  <NavLink className={classnames({ active: activeTab === '5' })}>
+                    <span className={activeTab === '5' ? '' : 'd-none'}></span>
+                    <PieChart size={20} /><span className='pl-2 h6 font-weight-bold'>Valoración cuantitativa</span>
                   </NavLink>
                 </NavItem>
               </Nav>
@@ -192,7 +208,7 @@ const MatrizRiesgoRegistrar = () => {
                     //arrayCampoSelected={[]}
                   />
                 </TabPane>
-                <TabPane tabId="3"> 
+                <TabPane tabId="3">
                   <Controles
                     nextSection={nextSection}
                     beforeSection={beforeSection}
@@ -204,10 +220,20 @@ const MatrizRiesgoRegistrar = () => {
                 </TabPane>
 
                 <TabPane tabId="4">
+                  <Planes
+                    nextSection={nextSection}
+                    beforeSection={beforeSection}
+                    initValues={formValueInitialPlanes}
+                    handleOnSubmmit={handleOnSubmmit}
+                    //isEdit={true}
+                    //arrayColumnaSelected={[]}
+                  />
+                </TabPane>
+
+                <TabPane tabId="5">
                   <Valoracion
                     beforeSection={beforeSection}
-                    initValues={formValueInitialRiesgos}
-                    
+                    //initValues={formValueInitialPlanes}
                     handleOnSubmmit={handleOnSubmmit}
                     //isEdit={true}
                     //arrayColumnaSelected={[]}

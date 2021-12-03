@@ -55,9 +55,9 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
     }
     // display form field values on success
     //alert(JSON.stringify(_.omit(data, ['nroControles']), null, 10));
-    console.log('datos que se enviaran SECCION 3:', _.omit(data, ['nroControles']))
+    console.log('datos que se enviaran SECCION 4:', _.omit(data, ['nroControles']))
     setObject(_.omit(data, ['nroControles']));
-    nextSection(3);
+    nextSection(4);
   }
 
   /*   P  A  R  A  M  E  T  R  O  S   */
@@ -118,7 +118,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
     callApiControl(5);
   }, [])
 
-  // Despliegue de dataApi Parametros en options (Select)
+  // Despliegue de dataApi Patametros en options (Select)
   const optionsProcedimiento = () => {
     const deployOption = dataApiProcedimiento.map((item, i) => {
       return (
@@ -345,7 +345,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
               style={{ width: '130px' }}
               className='text-white'
               color="primary"
-              onClick={() => beforeSection(3)}
+              onClick={() => beforeSection(4)}
             >
               <ChevronLeft size={17} className='mr-1'/>
               Atrás

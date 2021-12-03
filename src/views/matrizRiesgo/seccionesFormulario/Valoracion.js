@@ -57,10 +57,6 @@ const RiesgoRelacionado = ({ beforeSection, setObject, initValues, isEdit, handl
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
         <Row className='pt-4'>
 
-         
-
-          
-
         </Row>
 
         <div className='d-flex justify-content-between pt-4'>
