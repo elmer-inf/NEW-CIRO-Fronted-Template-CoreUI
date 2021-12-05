@@ -70,7 +70,7 @@ input[type='radio']:checked:after {
   cursor: pointer;
 }
 
-// Tabs personalizados para eventos de riesgo
+// TABS personalizados
 .nav-tabs .nav-link,
 .nav-tabs .nav-item.show .nav-link{
     font-weight: 600;
@@ -93,7 +93,13 @@ input[type='radio']:checked:after {
 
 .nav-tabs .nav-link:hover, .nav-tabs .nav-link:focus {
     border-color: transparent;
-  }
+}
+
+// Arrow Right para Tab
+.arrow-right-secondary{
+  color: 'black';
+  opacity: 0.6;
+}
 
 //  F U E N T E
 body{
@@ -387,14 +393,12 @@ body{
  */
 
 
- 
-
 /**Scroll*/
 
 .react-bootstrap-table {
   overflow-y: auto;
-  height: 500px;
-  max-height: 1000;
+  min-height: 100px;
+  max-height: 600px;
 }
 
 .react-bootstrap-table thead th {
@@ -415,12 +419,15 @@ th, td {
   /*padding: 8px 16px;*/
   padding: 2px 13;
   min-width: 50px;
-  
+
 }
 
 th {
-  background: #fff;
+  background-color: #ededed;
 }
+
+
+
 
 
 /*para que no colapse*/

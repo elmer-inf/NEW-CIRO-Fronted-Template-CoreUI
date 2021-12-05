@@ -43,16 +43,7 @@ const EventoRiesgoRegistrar = () => {
     initialValues: formValueInitialTipoEvento,
     validationSchema: Yup.object().shape({
       //tipoEvento: Yup.mixed().required('Tipo de Evento de riesgo obligatorio'),
-    }
-    ),
-
-    /*  onSubmit: values => {
-        const data = {
-         ...values,
-       }
-       console.log('Tipo de evento:', data)
-       setObject(data);
-     } */
+    })
   })
 
   const formValueInitialDatos = {
@@ -152,6 +143,7 @@ const EventoRiesgoRegistrar = () => {
       setActiveTap('4');
     }
   }
+
   /* manejo de botones atras */
   const beforeSection = (tab) => {
     if (tab === 2) {
@@ -244,41 +236,33 @@ const EventoRiesgoRegistrar = () => {
                 <Nav tabs className='justify-content-center'>
 
                   <NavItem>
-                    <NavLink
-                      className={classnames({ active: activeTab === '1' })}
-                    >
+                    <NavLink className={classnames({ active: activeTab === '1' })}>
                       <span className={activeTab === '1' ? '' : 'd-none'}></span>
                       <FileText size={25} /><span className='pl-2'>Datos iniciales</span>
-                      <ChevronRight size={17} className='ml-3 d-none d-xl-inline' style={{ color: 'black', opacity: 0.6 }} />
+                      <ChevronRight size={17} className='ml-3 d-none d-xl-inline arrow-right-secondary'/>
                     </NavLink>
                   </NavItem>
 
                   <NavItem>
-                    <NavLink
-                      className={classnames({ active: activeTab === '2' })}
-                    >
+                    <NavLink className={classnames({ active: activeTab === '2' })}>
                       <span className={activeTab === '2' ? '' : 'd-none'}></span>
                       <BarChart2 size={25} /><span className='pl-2'>Categoria y Línea de negocio</span>
-                      <ChevronRight size={17} className='ml-3 d-none d-xl-inline' style={{ color: 'black', opacity: 0.6 }} />
+                      <ChevronRight size={17} className='ml-3 d-none d-xl-inline arrow-right-secondary'/>
                     </NavLink>
                   </NavItem>
 
                   {(formik.values.tipoEvento === 'A')?
                     <NavItem>
-                      <NavLink
-                        className={classnames({ active: activeTab === '3' })}
-                      >
+                      <NavLink className={classnames({ active: activeTab === '3' })}>
                         <span className={activeTab === '3' ? '' : 'd-none'}></span>
                         <DollarSign size={25} /><span className='pl-2'>Importes relacionados</span>
-                        <ChevronRight size={17} className='ml-3 d-none d-xl-inline' style={{ color: 'black', opacity: 0.6 }} />
+                        <ChevronRight size={17} className='ml-3 d-none d-xl-inline arrow-right-secondary'/>
                       </NavLink>
                     </NavItem>
                   : null}
 
                   <NavItem>
-                    <NavLink
-                      className={classnames({ active: activeTab === '4' })}
-                    >
+                    <NavLink className={classnames({ active: activeTab === '4' })}>
                       <span className={activeTab === '4' ? '' : 'd-none'}></span>
                       <Activity size={25} /><span className='pl-2'>Riesgos relacionados</span>
                     </NavLink>
@@ -292,7 +276,6 @@ const EventoRiesgoRegistrar = () => {
                       setObject={setObject}
                       initValues={formValueInitialDatos}
                       //isEdit={false}
-
                     />
                   </TabPane>
                   <TabPane tabId="2">

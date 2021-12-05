@@ -21,7 +21,8 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
         norma: Yup.mixed().nullable(),
         tipo: Yup.mixed().nullable(),
         nivel: Yup.mixed().nullable(),
-        ponderacion: Yup.mixed().nullable()
+        ponderacion: Yup.mixed().nullable(),
+        objetivo: Yup.mixed().nullable()
       })
     ),
     // campos solo para mostrar
@@ -122,7 +123,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
   const optionsProcedimiento = () => {
     const deployOption = dataApiProcedimiento.map((item, i) => {
       return (
-        <option key={i} value={item.value}>{item.label}</option>
+        <option key={i} value={item.label}>{item.label}</option>
       )
     });
     return deployOption;
@@ -131,7 +132,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
   const optionsTipoControl = () => {
     const deployOption = dataApiTipoControl.map((item, i) => {
       return (
-        <option key={i} value={item.value}>{item.label}</option>
+        <option key={i} value={item.label}>{item.label}</option>
       )
     });
     return deployOption;
@@ -140,7 +141,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
   const optionsNivelAuto = () => {
     const deployOption = dataApiNivelAuto.map((item, i) => {
       return (
-        <option key={i} value={item.value}>{item.label}</option>
+        <option key={i} value={item.label}>{item.label}</option>
       )
     });
     return deployOption;
@@ -149,7 +150,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
   const optionsControl = () => {
     const deployOption = dataApiControl.map((item, i) => {
       return (
-        <option key={i} value={item.value}>{item.label}</option>
+        <option key={i} value={item.label}>{item.label}</option>
       )
     });
     return deployOption;

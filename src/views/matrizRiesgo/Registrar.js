@@ -8,32 +8,13 @@ import { FileText, BarChart2, ChevronRight, CheckSquare, PieChart, Trello, List 
 import { Row, Col, Card, CardBody, CardHeader, CardTitle, TabContent, TabPane, NavLink, NavItem, Nav} from 'reactstrap';
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames';
-import { postMatrizRiesgo, getTablaDescripcionNivel } from './controller/MatrizRiesgoController';
-import { buildSelectTwo } from 'src/functions/Function'
+import { postMatrizRiesgo } from './controller/MatrizRiesgoController';
 
 const MatrizRiesgoRegistrar = () => {
 
   const history = useHistory()
 
-  // Tipo de evento
-  const [dataApiTipoEvento, setDataApiTipoEvento] = useState([])
-  const callApiTipoEvento = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
-      .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'clave', false)
-        setDataApiTipoEvento(options)
-      }).catch((error) => {
-        console.log('Error: ', error)
-      })
-  }
-
-  useEffect(() => {
-    callApiTipoEvento(6);
-  }, [])
-
-
   const formValueInitialDatosDefinicion = {
-
     areaId : null,
     unidadId : null,
     procesoId : null,
@@ -68,6 +49,7 @@ const MatrizRiesgoRegistrar = () => {
   }
 
   const formValueInitialPlanes = {
+    nroPlanes: '',
     planesAccion: [],
     seguimientoFecha: '',
     seguimientoObs: '',
@@ -83,7 +65,7 @@ const MatrizRiesgoRegistrar = () => {
   }
 
   const [requestData, setRequestData] = useState(dataResult);
-  const [activeTab, setActiveTap] = useState('1');
+  const [activeTab, setActiveTap] = useState('4');
 
   /* manejo de botones siguiente */
   const nextSection = (tab) => {
@@ -153,7 +135,7 @@ const MatrizRiesgoRegistrar = () => {
                   <NavLink className={classnames({ active: activeTab === '1' })}>
                     <span className={activeTab === '1' ? '' : 'd-none'}></span>
                     <FileText size={20} /><span className='pl-2 h6 font-weight-bold'>Datos y Definición</span>
-                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline' style={{ color: 'black', opacity: 0.6 }} />
+                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary'/>
                   </NavLink>
                 </NavItem>
 
@@ -161,7 +143,7 @@ const MatrizRiesgoRegistrar = () => {
                   <NavLink className={classnames({ active: activeTab === '2' })}>
                     <span className={activeTab === '2' ? '' : 'd-none'}></span>
                     <BarChart2 size={20} /><span className='pl-2 h6 font-weight-bold'>Riesgo inherente</span>
-                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline' style={{ color: 'black', opacity: 0.6 }} />
+                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary'/>
                   </NavLink>
                 </NavItem>
 
@@ -169,7 +151,7 @@ const MatrizRiesgoRegistrar = () => {
                   <NavLink className={classnames({ active: activeTab === '3' })}>
                     <span className={activeTab === '3' ? '' : 'd-none'}></span>
                     <Trello size={20} /><span className='pl-2 h6 font-weight-bold'>Controles actuales</span>
-                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline' style={{ color: 'black', opacity: 0.6 }} />
+                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary'/>
                   </NavLink>
                 </NavItem>
 
@@ -177,7 +159,7 @@ const MatrizRiesgoRegistrar = () => {
                   <NavLink className={classnames({ active: activeTab === '4' })}>
                     <span className={activeTab === '4' ? '' : 'd-none'}></span>
                     <List size={20} /><span className='pl-2 h6 font-weight-bold'>Planes de Acción</span>
-                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline' style={{ color: 'black', opacity: 0.6 }} />
+                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary'/>
                   </NavLink>
                 </NavItem>
 
@@ -198,6 +180,7 @@ const MatrizRiesgoRegistrar = () => {
                     //isEdit={false}
                   />
                 </TabPane>
+
                 <TabPane tabId="2">
                   <Riesgos
                     nextSection={nextSection}
@@ -208,6 +191,7 @@ const MatrizRiesgoRegistrar = () => {
                     //arrayCampoSelected={[]}
                   />
                 </TabPane>
+
                 <TabPane tabId="3">
                   <Controles
                     nextSection={nextSection}
@@ -223,8 +207,8 @@ const MatrizRiesgoRegistrar = () => {
                   <Planes
                     nextSection={nextSection}
                     beforeSection={beforeSection}
+                    setObject={setObject}
                     initValues={formValueInitialPlanes}
-                    handleOnSubmmit={handleOnSubmmit}
                     //isEdit={true}
                     //arrayColumnaSelected={[]}
                   />
@@ -233,8 +217,9 @@ const MatrizRiesgoRegistrar = () => {
                 <TabPane tabId="5">
                   <Valoracion
                     beforeSection={beforeSection}
-                    //initValues={formValueInitialPlanes}
+                    initValues={formValueInitialPlanes}
                     handleOnSubmmit={handleOnSubmmit}
+                    dataPlanesAccion={requestData.planesAccion}
                     //isEdit={true}
                     //arrayColumnaSelected={[]}
                   />

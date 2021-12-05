@@ -1,3 +1,4 @@
+// Calcula Riesgo Inherente mediante Probabilidad e Impacto
 export const calculaRiesgo = (prob, imp) =>{
     var riesgo = 0;
     if(prob === 1 && (imp === 1 || imp === 2))
@@ -39,5 +40,17 @@ export const calculaRiesgo = (prob, imp) =>{
     if(prob === 5 && (imp === 4 || imp === 5))
       riesgo = 5
 
-    return riesgo
+    return riesgo;
+  }
+
+  // Cuenta nro de estados de Planes de accion (En progreso, No iniciado y Concluido)
+  export const countEstadoPlanes = ( array, data) => {
+    var result = array.filter(o => o.estado === data).length;
+    return result;
+  }
+
+  // Calcula Porcentaje de Avance de los planes de accion
+  export const resultAvance = (array) => {
+    var result =  Math.round((countEstadoPlanes(array, 'Concluido')/array.length)*100);
+    return result;
   }

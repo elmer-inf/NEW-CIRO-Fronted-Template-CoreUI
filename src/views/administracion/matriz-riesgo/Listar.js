@@ -33,7 +33,8 @@ const AdministracionMatrizRiesgosListar = () => {
         text: (labelTabla === 'Pérdida ASFI' ||
                labelTabla === 'Tipo de control' ||
                labelTabla === 'Nivel de automatización' ||
-               labelTabla === 'Identificado por')?
+               labelTabla === 'Identificado por' ||
+               labelTabla === 'Estrategia para administrar el riesgo')?
               'NOMBRE' : (labelTabla === 'Probabilidad' || labelTabla === 'Impacto de Riesgo')?
                         'DESCRIPTIVO': (labelTabla === 'Normas para control')?
                                         'TITULO DEL DOCUMENTO' :  (labelTabla === 'Controles')?
