@@ -8,21 +8,21 @@
  */
 import React from 'react';
 //import CSpinnerIcon from './CSpinnerIcon';
-import { FlapperSpinner} from "react-spinners-kit";
+import { ClassicSpinner } from "react-spinners-kit";
 import './style.css';
 //? <div className='spinner' style={{ width: props.width, height: props.height, paddingTop: props.paddingTop }}><CSpinnerIcon /></div >
 
 const CCSpinner = (props) => {
     return (
-        (props.show === true)
-        ? <div className='spinner' style={{ width: props.width, height: props.height, paddingTop: props.paddingTop }}>
-            <FlapperSpinner
-            size={75}
-         // sizeUnit={'1px'}s
-            color={'blue'}
-            backColor={'red'}
-            />
-            </div >
+        (props.show === true)? 
+        <div className='spinner' style={{ width: props.width, height: props.height, paddingTop: props.paddingTop }}>
+            <ClassicSpinner
+            size={50}
+            // sizeUnit={'1px'}s
+            color={'orange'}
+            backColor={'orange'}
+        />
+        </div >
                 : null
 
     );

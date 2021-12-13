@@ -15,7 +15,6 @@ export const getMatricesRiesgo = async () => {
     return response
 }
 
-
 // Evalua matriz de riesgo
 export const putEvaluaEvento = (id, data) => {
     const uri = HOST + 'v1/eventoRiesgo/evaluaEvento/' + id;
@@ -42,11 +41,29 @@ export const postMatrizRiesgo = (data) => {
     return axios.post(uri, data);
 }
 
-export const getTablaDescripcionMatrizR = async (idTabla) => { 
+// Mostrar Matriz de riesgo
+export const getMatrizRiesgoId = async (id) => {
+    const uri = HOST + 'v1/matrizRiesgo/mostrar/' + id;
+    const response = await axios.get(uri);
+    return response;
+};
+
+// Lista parametros Matriz Riesgo
+export const getTablaDescripcionMatrizR = async (idTabla) => {
     const uri = HOST.concat('v1/tablaDescripcionMatrizRiesgo/listarNivel1/',idTabla)
     const response = await axios.get(uri)
     return response
 }
+
+
+
+
+// Ultima observacion de evento
+export const getUltimaObservacion = async (id) => {
+    const uri = HOST + 'v1/observacion/ultimaObservacion/' + id;
+    const response = await axios.get(uri);
+    return response;
+}; 
 
 
 /*
@@ -76,20 +93,5 @@ export const editTablaDescripcion = (id, data) => {
 }
 
 
-
-
-
-// Mostrar evento
-export const getEventoRiesgoId = async (id) => {
-    const uri = HOST + 'v1/eventoRiesgo/mostrar/' + id;
-    const response = await axios.get(uri);
-    return response;
-};
-
-// Ultima observacion de evento
-export const getUltimaObservacion = async (id) => {
-    const uri = HOST + 'v1/observacion/ultimaObservacion/' + id;
-    const response = await axios.get(uri);
-    return response;
-}; */
+*/
 

@@ -77,12 +77,14 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
         (formik.values.tablaId.label === 'Probabilidad' ||
           formik.values.tablaId.label === 'Impacto de Riesgo' ||
           formik.values.tablaId.label === 'Normas para control' ||
-          formik.values.tablaId.label === 'Nivel de riesgo inherente')) ?
+          formik.values.tablaId.label === 'Nivel de riesgo inherente' ||
+          formik.values.tablaId.label === 'Controles')) ?
         <FormGroup row className='justify-content-center'>
           <Label sm='3' lg='3' for='campoA'>
             {(formik.values.tablaId.label === 'Probabilidad' || formik.values.tablaId.label === 'Impacto de Riesgo') ? 'Nivel' : null }
             {formik.values.tablaId.label === 'Normas para control' ? 'Código': null }
             {formik.values.tablaId.label === 'Nivel de riesgo inherente' ? 'Calificación': null }
+            {formik.values.tablaId.label === 'Controles' ? 'Valoración del control': null }
           </Label>
           <Col sm='9' lg='5'>
             <CInputReact
@@ -137,7 +139,7 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
           <Label sm='3' lg='3' for='campoB'>
             {formik.values.tablaId.label === 'Probabilidad' ? 'Probabilidad cualitativa' : null }
             {formik.values.tablaId.label === 'Impacto de Riesgo' ? 'Impacto cualitativo' : null}
-            {formik.values.tablaId.label === 'Controles' ? 'Ponderación': null }
+            {formik.values.tablaId.label === 'Controles' ? 'Descripción 2': null }
             {formik.values.tablaId.label === 'Nivel de riesgo inherente' ? 'Descriptivo': null }
           </Label>
           <Col sm='9' lg='5'>
@@ -165,7 +167,7 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
           <Label sm='3'  lg='3' for='campoC'>
             {formik.values.tablaId.label === 'Probabilidad' ? 'Temporalidad' : null }
             {formik.values.tablaId.label === 'Impacto de Riesgo' ? 'Impacto cuantitativo' : null}
-            {formik.values.tablaId.label === 'Controles' ? 'Rango': null }
+            {formik.values.tablaId.label === 'Controles' ? '% Mitigación del riesgo': null }
             {formik.values.tablaId.label === 'Nivel de riesgo inherente' ? 'Descripción': null }
           </Label>
           <Col sm='9' lg='5'>
@@ -187,13 +189,11 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
       {(formik.values.tablaId !== null &&
         (formik.values.tablaId.label === 'Probabilidad' ||
           formik.values.tablaId.label === 'Impacto de Riesgo' ||
-          formik.values.tablaId.label === 'Controles' ||
           formik.values.tablaId.label === 'Nivel de riesgo inherente')) ?
         <FormGroup row className='justify-content-center'>
           <Label sm='3'  lg='3' for='campoD'>
             {formik.values.tablaId.label === 'Probabilidad' ? 'Prob. temporalidad' : null }
             {formik.values.tablaId.label === 'Impacto de Riesgo' ? 'Impacto resumen' : null}
-            {formik.values.tablaId.label === 'Controles' ? 'Porcentaje': null }
             {formik.values.tablaId.label === 'Nivel de riesgo inherente' ? 'Tolerancia al riesgo (USD)': null }
           </Label>
           <Col sm='9' lg='5'>
@@ -238,11 +238,14 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
       : null}
 
       <Row className='justify-content-center'>
-        {(formik.values.tablaId !== null && formik.values.tablaId.label === 'Impacto de Riesgo') ?
+        {(formik.values.tablaId !== null &&
+          (formik.values.tablaId.label === 'Impacto de Riesgo' ||
+            formik.values.tablaId.label === 'Probabilidad')) ?
           <Col xs='12' lg='4'>
             <Row>
               <Label sm='5' for='campoE'>
                 {formik.values.tablaId.label === 'Impacto de Riesgo' ? 'Límite inferior (USD)' : null}
+                {formik.values.tablaId.label === 'Probabilidad' ? 'Veces al año' : null}
               </Label>
               <Col sm='7'>
                 <CInputReact

@@ -4,23 +4,22 @@ import { Row, Col, FormGroup, Label, Button, } from 'reactstrap'
 import { getTablaDescripcionNivel, getTablaDescripcionMatrizR } from '../controller/MatrizRiesgoController';
 import * as Yup from "yup"
 import { buildSelectTwo } from 'src/functions/Function'
-import { Formik, Form, Field, FieldArray, ErrorMessage, useFormik } from 'formik';
-import { CInputReact } from 'src/reusable/CInputReact'
+import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik';
 
 var _ = require('lodash');
 
-const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValues, isEdit }) => {
+const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdit }) => {
 
   const formik = Yup.object().shape({
       nroPlanes: Yup.string().nullable(),
       planesAccion: Yup.array().of(
         Yup.object().shape({
-          idPlan: Yup.number().nullable(),
+          nroPlan: Yup.number().nullable(),
           estrategia: Yup.string().nullable(),
-          descripcion: Yup.string().required('Campo obligatorio'),
+          descripcion: Yup.string().nullable(),
           cargo: Yup.mixed().nullable(),
-          fechaAccion: Yup.mixed().nullable(),
-          fechaImpl: Yup.mixed().nullable(),
+          fechaAccion: Yup.date().nullable(),
+          fechaImpl: Yup.date().nullable(),
           estado: Yup.mixed().nullable()
         })
       )
@@ -33,7 +32,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
     const previousNumber = parseInt(field.value || '0');
     if (previousNumber < nroPlanes) {
       for (let i = previousNumber; i < nroPlanes; i++) {
-        planesAccion.push({ idPlan: i+1, estrategia: '', descripcion: '', cargo: '', fechaAccion: '', fechaImpl: '', estado: '' });
+        planesAccion.push({ nroPlan: i+1, estrategia: '', descripcion: '', cargo: '', fechaAccion: '', fechaImpl: '', estado: '' });
       }
     } else {
       for (let i = previousNumber; i >= nroPlanes; i--) {
@@ -52,9 +51,9 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
     }
     // display form field values on success
     //alert(JSON.stringify(_.omit(data, ['nroPlanes']), null, 10));
-    console.log('datos que se enviaran SECCION 4:', _.omit(data, ['nroPlanes']))
+    console.log('datos que se enviaran SECCION 5:', _.omit(data, ['nroPlanes']))
     setObject(_.omit(data, ['nroPlanes']));
-    nextSection(4);
+    nextSection(5);
   }
 
   /*   P  A  R  A  M  E  T  R  O  S   */
@@ -148,16 +147,14 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
           {/* {console.log('Valuesdss:', values.planesAccion) */}
           <FieldArray name="planesAccion">
             {() => (values.planesAccion.map((plan, i) => {
-              const planErrors = errors.planesAccion?.length && errors.planesAccion[i] || {};
-              const planTouched = touched.planesAccion?.length && touched.planesAccion[i] || {};
+              const planErrors = (errors.planesAccion?.length && errors.planesAccion[i]) || {};
+              const planTouched = (touched.planesAccion?.length && touched.planesAccion[i]) || {};
               return (
                 <div key={i}>
                   <div className='divider divider-left divider-dark'>
                     <div className='divider-text '><span className='text-label'>Plan de acción {i + 1}</span></div>
                   </div>
                   <Row>
-                    
-
                     <FormGroup tag={Col} md='6' lg='3' className='mb-2'>
                       <Label>Estrategia para Administrar el Riesgo</Label>
                       <Field
@@ -241,7 +238,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
               style={{ width: '130px' }}
               className='text-white'
               color="primary"
-              onClick={() => beforeSection(4)}
+              onClick={() => beforeSection(5)}
             >
               <ChevronLeft size={17} className='mr-1'/>
               Atrás
@@ -275,5 +272,5 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
   )
 }
 
-export default ImportesRelacionados
+export default PlanesAccion
 

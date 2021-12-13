@@ -391,77 +391,79 @@ const EventoRiesgo = ({ match }) => {
                         </Row>
                       </CTabPane>
 
-                      <CTabPane>
-                        <Row className='pt-3'>
-                          <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
-                            <div className='text-label'>Tasa de cambio: </div>
-                            <div className='text-data'>{dataApi.tasaCambioId !== null ? dataApi.tasaCambioId : <i>Sin registro</i>}</div>
-                          </Col>
-                          <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
-                            <div className='text-label'>Moneda: </div>
-                            <div className='text-data'>{dataApi.monedaId !== null ? dataApi.monedaId.nombre : <i>Sin registro</i>}</div>
-                          </Col>
+                      {dataApi.tipoEvento === 'A'?
+                        <CTabPane>
+                          <Row className='pt-3'>
+                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                              <div className='text-label'>Tasa de cambio: </div>
+                              <div className='text-data'>{dataApi.tasaCambioId !== null ? dataApi.tasaCambioId : <i>Sin registro</i>}</div>
+                            </Col>
+                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                              <div className='text-label'>Moneda: </div>
+                              <div className='text-data'>{dataApi.monedaId !== null ? dataApi.monedaId.nombre : <i>Sin registro</i>}</div>
+                            </Col>
 
-                          <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
-                            <div className='text-label'>Monto de pérdida: </div>
-                            <div className='text-data'>{dataApi.montoPerdida !== null ? dataApi.montoPerdida : <i>Sin registro</i>}</div>
-                          </Col>
+                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                              <div className='text-label'>Monto de pérdida: </div>
+                              <div className='text-data'>{dataApi.montoPerdida !== null ? dataApi.montoPerdida : <i>Sin registro</i>}</div>
+                            </Col>
 
-                          <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
-                            <div className='text-label'>Monto de pérdida por riesgo operativo (USD): </div>
-                            <div className='text-data'>{dataApi.montoPerdidaRiesgo !== null ? dataApi.montoPerdidaRiesgo : <i>Sin registro</i>}</div>
-                          </Col>
+                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                              <div className='text-label'>Monto de pérdida por riesgo operativo (USD): </div>
+                              <div className='text-data'>{dataApi.montoPerdidaRiesgo !== null ? dataApi.montoPerdidaRiesgo : <i>Sin registro</i>}</div>
+                            </Col>
 
-                          <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
-                            <div className='text-label'>Gastos asociados: </div>
-                            <div className='text-data'>{dataApi.gastoAsociado !== null ? dataApi.gastoAsociado : <i>Sin registro</i>}</div>
-                          </Col> 
+                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                              <div className='text-label'>Gastos asociados: </div>
+                              <div className='text-data'>{dataApi.gastoAsociado !== null ? dataApi.gastoAsociado : <i>Sin registro</i>}</div>
+                            </Col> 
 
-                          <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
-                            <div className='text-label'>Monto recuperado: </div>
-                            <div className='text-data'>{dataApi.montoRecuperado !== null ? dataApi.montoRecuperado : <i>Sin registro</i>}</div>
-                          </Col>
+                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                              <div className='text-label'>Monto recuperado: </div>
+                              <div className='text-data'>{dataApi.montoRecuperado !== null ? dataApi.montoRecuperado : <i>Sin registro</i>}</div>
+                            </Col>
 
-                          <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
-                            <div className='text-label'>Impacto: </div>
-                            <div className='text-data'>{dataApi.impactoId !== null ? dataApi.impactoId.nombre : <i>Sin registro</i>}</div>
-                          </Col>
+                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                              <div className='text-label'>Impacto: </div>
+                              <div className='text-data'>{dataApi.impactoId !== null ? dataApi.impactoId.nombre : <i>Sin registro</i>}</div>
+                            </Col>
 
-                          <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
-                            <div className='text-label'>Cobertura seguro: </div>
-                            {(dataApi.coberturaSeguro === true)?
-                            <div className='text-data'>Si</div>
-                            :
-                            <div className='text-data'>No</div>
-                            }
-                          </Col>
+                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                              <div className='text-label'>Cobertura seguro: </div>
+                              {(dataApi.coberturaSeguro === true)?
+                              <div className='text-data'>Si</div>
+                              :
+                              <div className='text-data'>No</div>
+                              }
+                            </Col>
 
-                          <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
-                            <div className='text-label'>Póliza de seguro: </div>
-                            <div className='text-data'>{dataApi.polizaSeguroId !== null ? dataApi.polizaSeguroId.nombre : <i>Sin registro</i>}</div>
-                          </Col>
+                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                              <div className='text-label'>Póliza de seguro: </div>
+                              <div className='text-data'>{dataApi.polizaSeguroId !== null ? dataApi.polizaSeguroId.nombre : <i>Sin registro</i>}</div>
+                            </Col>
 
-                          <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
-                            <div className='text-label'>Monto recuperado del seguro: </div>
-                            <div className='text-data'>{dataApi.montoRecuperadoSeguro !== null ? dataApi.montoRecuperadoSeguro : <i>Sin registro</i>}</div>
-                          </Col>
+                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                              <div className='text-label'>Monto recuperado del seguro: </div>
+                              <div className='text-data'>{dataApi.montoRecuperadoSeguro !== null ? dataApi.montoRecuperadoSeguro : <i>Sin registro</i>}</div>
+                            </Col>
 
-                          <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
-                            <div className='text-label'>Recuperación activo: </div>
-                            <div className='text-data'>{dataApi.recuperacionActivo !== null ? dataApi.recuperacionActivo : <i>Sin registro</i>}</div>
-                          </Col>
+                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                              <div className='text-label'>Recuperación activo: </div>
+                              <div className='text-data'>{dataApi.recuperacionActivo !== null ? dataApi.recuperacionActivo : <i>Sin registro</i>}</div>
+                            </Col>
 
-                          <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
-                            <div className='text-label'>Pérdida de valor de mercado: </div>
-                            <div className='text-data'>{dataApi.perdidaMercado !== null ? dataApi.perdidaMercado : <i>Sin registro</i>}</div>
-                          </Col> 
+                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                              <div className='text-label'>Pérdida de valor de mercado: </div>
+                              <div className='text-data'>{dataApi.perdidaMercado !== null ? dataApi.perdidaMercado : <i>Sin registro</i>}</div>
+                            </Col> 
 
-                          <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
-                            <div className='text-label'>Monto total de pérdida: </div>
-                            <div className='text-data'>{dataApi.totalPerdida !== null ? dataApi.totalPerdida : <i>Sin registro</i>}</div>
-                          </Col>
-                        </Row>
-                      </CTabPane>
+                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                              <div className='text-label'>Monto total de pérdida: </div>
+                              <div className='text-data'>{dataApi.totalPerdida !== null ? dataApi.totalPerdida : <i>Sin registro</i>}</div>
+                            </Col>
+                          </Row>
+                        </CTabPane>
+                      : null }
 
                       <CTabPane>
                         <Row className='pt-3'>
@@ -469,20 +471,20 @@ const EventoRiesgo = ({ match }) => {
                             <div className='text-label'>Operativo: </div>
                             <div className='text-data'>{dataApi.operativoId !== null ? dataApi.operativoId.nombre : <i>Sin registro</i>}</div>
                           </Col>
-                          <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                          {/* <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                             <div className='text-label'>Seguridad de la información: </div>
                             <div className='text-data'>{dataApi.seguridadId !== null ? dataApi.seguridadId.nombre : <i>Sin registro</i>}</div>
-                          </Col>
+                          </Col> */}
 
                           <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                             <div className='text-label'>Liquidez y mercado: </div>
                             <div className='text-data'>{dataApi.liquidezId !== null ? dataApi.liquidezId.nombre : <i>Sin registro</i>}</div>
                           </Col>
 
-                          <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                          {/* <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                             <div className='text-label'>LGI FT y/o DP: </div>
                             <div className='text-data'>{dataApi.lgiId !== null ? dataApi.lgiId.nombre : <i>Sin registro</i>}</div>
-                          </Col>
+                          </Col> */}
 
                           <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                             <div className='text-label'>Fraude con medios de pago electrónico: </div>

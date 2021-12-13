@@ -140,8 +140,8 @@ const MatrizRiesgoListar = () => {
   }
 
   const detailsRow = (row) => {
-    console.log("objeto:", row)
-    history.push('/eventoRiesgo/mostrar/' + row.id);
+    //console.log("objeto:", row)
+    history.push('/matrizRiesgo/mostrar/' + row.id);
   }
 
   const editRow = (row) => {
@@ -222,7 +222,7 @@ const MatrizRiesgoListar = () => {
           <Col sm='12'>
             <Card>
             <CardHeader>
-              <CardTitle className='float-left h4 pt-2'>Matrices de Riesgo</CardTitle>
+              <CardTitle className='float-left h4 pt-2'>Matriz de Riesgos</CardTitle>
               <Button color='primary' onClick={redirect} className='float-right mt-1' style={{width: '130px'}}>
                 <span className='text-white'>Registrar</span>
               </Button>

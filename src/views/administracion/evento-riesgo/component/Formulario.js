@@ -159,6 +159,7 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
         formik.values.tablaLista.label === 'Tipo de evento' ||
         formik.values.tablaLista.label === 'Canal ASFI' ||
         formik.values.tablaLista.label === 'Proceso' ||
+        formik.values.tablaLista.label === 'Procedimiento' ||
         formik.values.tablaLista.label === 'Moneda' ||
         formik.values.tablaLista.label === 'Póliza ATC' ||
         formik.values.tablaLista.label === 'Reputacional' ||
@@ -175,6 +176,7 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
               formik.values.tablaLista.label === 'Unidad' ||
               formik.values.tablaLista.label === 'Canal ASFI' ||
               formik.values.tablaLista.label === 'Proceso') ? 'Código': null }
+            {formik.values.tablaLista.label === 'Procedimiento' ? 'Tipo documento': null }
             {(formik.values.tablaLista.label === 'Entidad' ||
               formik.values.tablaLista.label === 'Tipo de evento') ? 'Sigla': null }
             {formik.values.tablaLista.label === 'Moneda' ? 'Abreviatura': null }
@@ -203,30 +205,32 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
       : null
       }
 
-      <FormGroup row className='justify-content-center'>
-        <Label sm='3' lg='3' for='nombre'>
-        { (formik.values.tablaLista !== null &&
-          ( formik.values.tablaLista.label === 'Reputacional' ||
-            formik.values.tablaLista.label === 'Legal' ||
-            formik.values.tablaLista.label === 'Cumplimiento' ||
-            formik.values.tablaLista.label === 'Estratégico' ||
-            formik.values.tablaLista.label === 'Gobierno' ||
-            formik.values.tablaLista.label === 'Fraude' ||
-            formik.values.tablaLista.label === 'Liquidez' ||
-            formik.values.tablaLista.label === 'Operativo')) ? 'Descriptivo' : 'Nombre' }
-        </Label>
-        <Col sm='9' lg='5'>
-          <CInputReact
-            type={"text"}
-            id={'nombre'}
-            value={formik.values.nombre}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            touched={formik.touched.nombre}
-            errors={formik.errors.nombre}
-          />
-        </Col>
-      </FormGroup>
+      {formik.values.tablaLista !== null ?
+        <FormGroup row className='justify-content-center'>
+          <Label sm='3' lg='3' for='nombre'>
+            {formik.values.tablaLista.label === 'Procedimiento' ? 'Código documento' :
+              (formik.values.tablaLista.label === 'Reputacional' ||
+                formik.values.tablaLista.label === 'Legal' ||
+                formik.values.tablaLista.label === 'Cumplimiento' ||
+                formik.values.tablaLista.label === 'Estratégico' ||
+                formik.values.tablaLista.label === 'Gobierno' ||
+                formik.values.tablaLista.label === 'Fraude' ||
+                formik.values.tablaLista.label === 'Liquidez' ||
+                formik.values.tablaLista.label === 'Operativo') ? 'Descriptivo' : 'Nombre' }
+          </Label>
+          <Col sm='9' lg='5'>
+            <CInputReact
+              type={"text"}
+              id={'nombre'}
+              value={formik.values.nombre}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              touched={formik.touched.nombre}
+              errors={formik.errors.nombre}
+            />
+          </Col>
+        </FormGroup>
+      : null}
 
       { (formik.values.tablaLista !== null &&
         (formik.values.tablaLista.label === 'Categoria de tipo de Evento' ||
@@ -240,7 +244,8 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
           formik.values.tablaLista.label === 'Gobierno' ||
           formik.values.tablaLista.label === 'Fraude' ||
           formik.values.tablaLista.label === 'Liquidez' ||
-          formik.values.tablaLista.label === 'Proceso')) ?
+          formik.values.tablaLista.label === 'Proceso' ||
+          formik.values.tablaLista.label === 'Procedimiento')) ?
         <FormGroup row className='justify-content-center'>
           <Label sm='3' lg='3' for='descripcion'>
             {(formik.values.tablaLista.label === 'Categoria de tipo de Evento' ||
@@ -254,6 +259,7 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
             {formik.values.tablaLista.label === 'Gobierno' ? 'Nivel de gobernabilidad #': null }
             {formik.values.tablaLista.label === 'Fraude' ? 'Importe reportado fraude (USD)': null }
             {formik.values.tablaLista.label === 'Proceso' ? 'Nivel': null }
+            {formik.values.tablaLista.label === 'Procedimiento' ? 'Nombre documento': null }
           </Label>
           <Col sm='9' lg='5'>
             <CInputReact
@@ -273,6 +279,7 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
 
       { (formik.values.tablaLista !== null &&
         (formik.values.tablaLista.label === 'Proceso' ||
+          formik.values.tablaLista.label === 'Procedimiento' ||
           formik.values.tablaLista.label === 'Gobierno' ||
           formik.values.tablaLista.label === 'Fraude' ||
           formik.values.tablaLista.label === 'Liquidez')) ?
@@ -282,6 +289,7 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
             {formik.values.tablaLista.label === 'Gobierno' ? 'Nivel de gobernabilidad': null }
             {formik.values.tablaLista.label === 'Fraude' ? 'Fraude a ventas (USD)': null }
             {formik.values.tablaLista.label === 'Liquidez' ? 'Liquidez': null }
+            {formik.values.tablaLista.label === 'Procedimiento' ? 'Proceso': null }
           </Label>
           <Col sm='9' lg='5'>
             <CInputReact
@@ -299,11 +307,13 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
       }
 
       { (formik.values.tablaLista !== null &&
-        (formik.values.tablaLista.label === 'Gobierno' ||
+        (formik.values.tablaLista.label === 'Procedimiento' ||
+          formik.values.tablaLista.label === 'Gobierno' ||
           formik.values.tablaLista.label === 'Fraude' ||
           formik.values.tablaLista.label === 'Liquidez')) ?
         <FormGroup row className='justify-content-center'>
           <Label sm='3' lg='3' for='clave'>
+            {formik.values.tablaLista.label === 'Procedimiento' ? 'Gerencia': null }
             {formik.values.tablaLista.label === 'Gobierno' ? 'Puntuación Autoevaluación': null }
             {formik.values.tablaLista.label === 'Fraude' ? 'Importe reportado fraude 2 (USD)': null }
             {formik.values.tablaLista.label === 'Liquidez' ? 'Capital de trabajo': null }

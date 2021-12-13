@@ -1,7 +1,6 @@
 import { React, Fragment, useState, useEffect} from 'react'
 import { ChevronRight, Delete } from 'react-feather'
 import { Label, FormGroup, Row, Col, Form, Button } from 'reactstrap'
-
 import { useFormik } from "formik"
 import * as Yup from "yup"
 import { CInputReact } from 'src/reusable/CInputReact'
@@ -15,6 +14,23 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   const formik = useFormik({
     initialValues: initValues,
     validationSchema: Yup.object().shape({
+      /* areaId : Yup.mixed().required('Campo obligatorio'),
+      unidadId : Yup.mixed().required('Campo obligatorio'),
+      procesoId : Yup.mixed().required('Campo obligatorio'),
+      // Campos solo para mostrar:
+      macroNombre : Yup.string().nullable(),
+      macroCriticidad : Yup.string().nullable(),
+      macroValoracion : Yup.string().nullable(),
+      // FIN Campos solo para mostrar:
+      procedimientoId : Yup.mixed().required('Campo obligatorio'),
+      duenoCargoId : Yup.mixed().required('Campo obligatorio'),
+      responsableCargoId : Yup.mixed().required('Campo obligatorio'),
+      fechaEvaluacion : Yup.date().required('Campo obligatorio'),
+      identificadoId : Yup.mixed().nullable(),
+      otrosAux: Yup.string().nullable(),
+      identificadoOtro : Yup.string().nullable() */
+
+
       areaId : Yup.mixed().nullable(),
       unidadId : Yup.mixed().nullable(),
       procesoId : Yup.mixed().nullable(),
@@ -29,16 +45,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
       fechaEvaluacion : Yup.date().nullable(),
       identificadoId : Yup.mixed().nullable(),
       otrosAux: Yup.string().nullable(),
-      identificadoOtro : Yup.string().nullable(),
-
-      definicion : Yup.string().nullable(),
-      causa : Yup.string().nullable(),
-      consecuencia : Yup.string().nullable(),
-      defConcatenado : Yup.string().nullable(),
-      efectoPerdidaId : Yup.mixed().nullable(),
-      perdidaAsfiId : Yup.mixed().nullable(),
-      monetario : Yup.mixed().nullable(),
-      factorRiesgoId : Yup.mixed().nullable(),
+      identificadoOtro : Yup.string().nullable()
       }
     ),
 
@@ -54,9 +61,6 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         duenoCargoId : (values.duenoCargoId !== null) ?   values.duenoCargoId.value : 0,
         responsableCargoId : (values.responsableCargoId !== null) ?   values.responsableCargoId.value : 0,
         identificadoId : (values.identificadoId !== null) ?   values.identificadoId.value : 0,
-        efectoPerdidaId : (values.efectoPerdidaId !== null) ?   values.efectoPerdidaId.value : 0,
-        perdidaAsfiId : (values.perdidaAsfiId !== null) ?   values.perdidaAsfiId.value : 0,
-        factorRiesgoId : (values.factorRiesgoId !== null) ?   values.factorRiesgoId.value : 0
       }
       console.log('datos que se enviaran SECCION 1:', data)
       setObject(data);
@@ -95,9 +99,8 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   const callApiMacro = (idTablaDes) => {
     getTablaDescripcionNivel(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'clave', true)
+        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiMacro(options)
-        console.log("options: ", options)
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -108,7 +111,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   const callApiProcedimiento = (idTablaDes, idNivel2) => {
     getTablaDescripcionNivel2(idTablaDes, idNivel2)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
+        const options = buildSelectTwo(res.data, 'id', 'campoA', true)
         setDataApiProcedimiento(options)
       }).catch((error) => {
         console.log('Error: ', error)
@@ -139,50 +142,11 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
       })
   }
 
-  // Efecto de perdida
-  const [dataApiEfectoPerdida, setDataApiEfectoPerdida] = useState([])
-  const callApiEfectoPerdida = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
-      .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', false)
-        setDataApiEfectoPerdida(options)
-      }).catch((error) => {
-        console.log('Error: ', error)
-      })
-  }
-
-  // Perdida ASFi
-  const [dataApiPerdidaAsfi, setDataApiPerdidaAsfi] = useState([])
-  const callApiPerdidaAsfi = (idTablaDes) => {
-    getTablaDescripcionMatrizR(idTablaDes)
-      .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', false)
-        setDataApiPerdidaAsfi(options)
-      }).catch((error) => {
-        console.log('Error: ', error)
-      })
-  }
-
-  // Factor de riesgo operativo
-  const [dataApiFactorRiesgo, setDataApiFactorRiesgo] = useState([])
-  const callApiFactorRiesgo = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
-      .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', false)
-        setDataApiFactorRiesgo(options)
-      }).catch((error) => {
-        console.log('Error: ', error)
-      })
-  }
-
   useEffect(() => {
     callApiArea(3);
     callApiMacro(15);
     callApiCargo(7);
     callApiIdentificado(8)
-    callApiEfectoPerdida(19)
-    callApiPerdidaAsfi(1)
-    callApiFactorRiesgo(26);
   }, [])
 
   // Reset Unidad (nivel 2)
@@ -208,23 +172,15 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   // Autocompleta nombre, criticidad y valoracion de Macroproceso
   useEffect(() => {
     if(formik.values.procesoId !== null){
-      formik.setFieldValue('macroNombre', formik.values.procesoId.nombre, false)
+      formik.setFieldValue('macroNombre', formik.values.procesoId.clave, false)
       formik.setFieldValue('macroCriticidad', formik.values.procesoId.descripcion, false)
       formik.setFieldValue('macroValoracion', formik.values.procesoId.campoA, false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.procesoId]);
 
-  // Concatena definicion, causa y consecuencia
-  useEffect(() => {
-    if(formik.values.definicion !== '' && formik.values.causa !== '' && formik.values.consecuencia !== ''){
-      formik.setFieldValue('defConcatenado', formik.values.definicion + ' DEBIDO A ' + formik.values.causa + ' PUEDE OCASIONAR ' + formik.values.consecuencia, false)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.definicion, formik.values.causa, formik.values.consecuencia]);
-
   // Resetea "otros" dependiendo del check
-  const resetOtros = () => { formik.setFieldValue('identificadoOtros', null, false); }
+  const resetOtros = () => { formik.setFieldValue('identificadoOtro', null, false); }
   useEffect(() => {
     if(formik.values.otrosAux !== true){
       resetOtros();
@@ -258,7 +214,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
-              Unidad
+              Unidad <span className='text-primary h5'><b>*</b></span>
             </Label>
             <CSelectReact
               type={"select"}
@@ -275,7 +231,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
-              Código Macroproceso
+              Macroproceso <span className='text-primary h5'><b>*</b></span>
             </Label>
             <CSelectReact
               type={"select"}
@@ -292,7 +248,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
-              Macroproceso
+              Código Macroproceso
             </Label>
             <CInputReact
               type={"text"}
@@ -308,7 +264,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
-              Proceso
+              Proceso <span className='text-primary h5'><b>*</b></span>
             </Label>
             <CSelectReact
               type={"select"}
@@ -357,7 +313,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
-              Dueño proceso
+              Dueño proceso <span className='text-primary h5'><b>*</b></span>
             </Label>
             <CSelectReact
               type={"select"}
@@ -374,7 +330,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
-              Responsable Unidad a cargo
+              Responsable Unidad a cargo <span className='text-primary h5'><b>*</b></span>
             </Label>
             <CSelectReact
               type={"select"}
@@ -391,7 +347,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
-              Fecha evaluación
+              Fecha evaluación <span className='text-primary h5'><b>*</b></span>
             </Label>
             <CInputReact
               type={"date"}
@@ -440,149 +396,16 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
               </Label>
               <CInputReact
                 type={"text"}
-                id={'identificadoOtros'}
+                id={'identificadoOtro'}
                 placeholder={'Otros'}
-                value={formik.values.identificadoOtros}
+                value={formik.values.identificadoOtro}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                touched={formik.touched.identificadoOtros}
-                errors={formik.errors.identificadoOtros}
+                touched={formik.touched.identificadoOtro}
+                errors={formik.errors.identificadoOtro}
               />
             </FormGroup>
           : null}
-        </Row>
-        <hr/>
-        <Row className="pt-2">
-          <FormGroup tag={Col} md='12' className='mb-0'>
-            <Label className='form-label'>
-              <b>1</b> Definición del Riesgo ¿Qué Riesgos indentifica en su proceso o qué podría salir mal?
-              <span className='text-label'> RIESGO DE</span> (contextualizar qué podría pasar)
-            </Label>
-            <CInputReact
-              type={"textarea"}
-              id={'definicion'}
-              value={formik.values.definicion}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              touched={formik.touched.definicion}
-              errors={formik.errors.definicion}
-              rows={1}
-            />
-          </FormGroup>
-
-          <FormGroup tag={Col} md='12' className='mb-0'>
-            <Label className='form-label'>
-              <b>2</b> Causa del Riesgo o debilidad ¿Cuál es la causa para que ocurra el riesgo?
-              <span className='text-label'> DEBIDO A</span> (causa por la que ocurriría)
-            </Label>
-            <CInputReact
-              type={"textarea"}
-              id={'causa'}
-              value={formik.values.causa}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              touched={formik.touched.causa}
-              errors={formik.errors.causa}
-              rows={1}
-            />
-          </FormGroup>
-
-          <FormGroup tag={Col} md='12' className='mb-0'>
-            <Label className='form-label'>
-              <b>3</b> Consecuencia si es que pasa el Riesgo ¿Qué consecuencias o qué pasaría si ocurre el riesgo?
-              <span className='text-label'> PUEDE OCASIONAR</span> (consecuencia)
-            </Label>
-            <CInputReact
-              type={"textarea"}
-              id={'consecuencia'}
-              value={formik.values.consecuencia}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              touched={formik.touched.consecuencia}
-              errors={formik.errors.consecuencia}
-              rows={1}
-            />
-          </FormGroup>
-
-          <FormGroup tag={Col} md='12' className='mb-0'>
-            <Label className='form-label'>
-              Definición del Riesgo (Riesgo por (<span className='text-label'>EVENTO</span>), debido a (<span className='text-label'>CAUSA</span>), puede ocasionar (<span className='text-label'>IMPACTO</span>))
-            </Label>
-            <CInputReact
-              type={"textarea"}
-              id={'defConcatenado'}
-              value={formik.values.defConcatenado}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              touched={formik.touched.defConcatenado}
-              errors={formik.errors.defConcatenado}
-              rows={2}
-            />
-          </FormGroup>
-
-          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
-            <Label className='form-label'>
-              Tipo de Pérdida
-            </Label>
-            <CSelectReact
-              type={"select"}
-              id={'efectoPerdidaId'}
-              placeholder={'Seleccionar'}
-              value={formik.values.efectoPerdidaId}
-              onChange={formik.setFieldValue}
-              onBlur={formik.setFieldTouched}
-              error={formik.errors.efectoPerdidaId}
-              touched={formik.touched.efectoPerdidaId}
-              options={dataApiEfectoPerdida}
-            />
-          </FormGroup>
-
-          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
-            <Label className='form-label'>
-              Efecto - Impacto ASFI
-            </Label>
-            <CSelectReact
-              type={"select"}
-              id={'perdidaAsfiId'}
-              placeholder={'Seleccionar'}
-              value={formik.values.perdidaAsfiId}
-              onChange={formik.setFieldValue}
-              onBlur={formik.setFieldTouched}
-              error={formik.errors.perdidaAsfiId}
-              touched={formik.touched.perdidaAsfiId}
-              options={dataApiPerdidaAsfi}
-            />
-          </FormGroup>
-
-          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
-            <CInputCheckbox
-              type={"checkbox"}
-              id={'monetario'}
-              value={formik.values.monetario}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              label='Monetario / No monetario'
-            />
-          </FormGroup>
-
-          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
-            <Label className='form-label'>
-              Clasificación Factores de Riesgo
-            </Label>
-            <CSelectReact
-              type={"select"}
-              id={'factorRiesgoId'}
-              placeholder={'Seleccionar'}
-              value={formik.values.factorRiesgoId}
-              onChange={formik.setFieldValue}
-              onBlur={formik.setFieldTouched}
-              error={formik.errors.factorRiesgoId}
-              touched={formik.touched.factorRiesgoId}
-              options={dataApiFactorRiesgo}
-            />
-          </FormGroup>
-
-
         </Row>
 
         <div className='d-flex justify-content-between pt-4'>

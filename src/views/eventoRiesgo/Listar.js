@@ -5,7 +5,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import ActionFormatter from '../../reusable/ActionFormatterEvento';
 import ActionFormatterEvaluar from '../../reusable/ActionFormatterEvaluar';
 import { useHistory } from 'react-router-dom'
-import { putEvaluaEvento, getEventos, getEventosPaging } from './controller/EventoController'
+import { putEvaluaEvento, getEventosPaging } from './controller/EventoController'
 import { pagingInit } from 'src/reusable/variables/Variables';
 import CCSpinner from 'src/reusable/spinner/CCSpinner';
 import CPagination from 'src/reusable/pagination/CPagination';
@@ -201,6 +201,7 @@ const EventoRiesgoListar = () => {
 
   useEffect(() => {
     callApi(pagination.page, pagination.size)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   /* LISTA TABLA DESCRIPCION despendiento de seleccion tabla lista*/

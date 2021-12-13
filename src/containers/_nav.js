@@ -1,5 +1,4 @@
 import React from 'react'
-import CIcon from '@coreui/icons-react'
 //import { Edit, Circle, Calendar } from 'react-feather'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faCalendarMinus, faChartLine } from '@fortawesome/free-solid-svg-icons';

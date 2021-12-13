@@ -370,7 +370,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
             />
           </FormGroup>
 
-          <FormGroup tag={Col} md='6' lg='3' className='mb-0' style={{position: 'sticky'}}>
+          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <CInputCheckbox
               type={"checkbox"}
               id={'comercioAfectado'}
@@ -382,7 +382,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
             />
           </FormGroup>
 
-          <FormGroup tag={Col} md='6' lg='3' className='mb-0' style={{position: 'sticky'}}>
+          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <CInputCheckbox
               type={"checkbox"}
               id={'entidadAfectada'}
@@ -483,7 +483,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
           <FormGroup tag={Col} sm='12' className='mb-0'>
             <Label className='form-label'>
               Descripción <span className='text-primary h5'><b>*</b></span>
-            </Label> 
+            </Label>
             <CInputReact
               type={"textarea"}
               id={'descripcion'}

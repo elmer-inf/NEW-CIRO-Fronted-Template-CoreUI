@@ -188,7 +188,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   const callApiProcedimiento = (idTablaDes, idNivel2) => {
     getTablaDescripcionNivel2(idTablaDes, idNivel2)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
+        const options = buildSelectTwo(res.data, 'id', 'campoA', true)
         setDataApiProcedimiento(options)
       }).catch((error) => {
         console.log('Error: ', error)

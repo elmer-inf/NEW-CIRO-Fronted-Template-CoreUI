@@ -33,7 +33,8 @@ const AdministracionEventoListar = () => {
                                                                                labelTabla === 'Gobierno' ||
                                                                                labelTabla === 'Fraude' ||
                                                                                labelTabla === 'Liquidez' ||
-                                                                               labelTabla === 'Operativo')? 'NIVEL' : '',
+                                                                               labelTabla === 'Operativo')? 'NIVEL' : (labelTabla === 'Procedimiento')?
+                                                                                                                      'TIPO DOC' : '',
         sort: true,
         //formatter: columnaVacia
         //hidden : (row) => row.clave == null ? true : false
@@ -43,14 +44,15 @@ const AdministracionEventoListar = () => {
         //headerFormatter: typeFormatter,
     }, {
         dataField: 'nombre',
-        text: (labelTabla === 'Reputacional' ||
-               labelTabla === 'Legal' ||
-               labelTabla === 'Cumplimiento' ||
-               labelTabla === 'Estratégico' ||
-               labelTabla === 'Gobierno' ||
-               labelTabla === 'Fraude' ||
-               labelTabla === 'Liquidez' ||
-               labelTabla === 'Operativo')? 'DESCRIPTIVO' : 'NOMBRE',
+        text:  (labelTabla === 'Procedimiento')?
+                'CODIGO DOC': (labelTabla === 'Reputacional' ||
+                              labelTabla === 'Legal' ||
+                              labelTabla === 'Cumplimiento' ||
+                              labelTabla === 'Estratégico' ||
+                              labelTabla === 'Gobierno' ||
+                              labelTabla === 'Fraude' ||
+                              labelTabla === 'Liquidez' ||
+                              labelTabla === 'Operativo')? 'DESCRIPTIVO' : 'NOMBRE',
         sort: true,
        /*  filter: customFilter(),
         filterRenderer: (onFilter, column) =>
@@ -65,11 +67,12 @@ const AdministracionEventoListar = () => {
                 labelTabla === 'Estratégico' ||
                 labelTabla === 'Operativo')?
               'DESCRIPCION' : (labelTabla === 'Proceso')?
-                              'NIVEL' : (labelTabla === 'Legal' || labelTabla === 'Liquidez')?
-                                          'IMPACTO REGULATORIO' : (labelTabla === 'Cumplimiento')?
-                                                                  "IMPACTO DE CUMPLIMIENTO" : (labelTabla === 'Gobierno')?
-                                                                                              'NIVEL DE GOB #' : (labelTabla === 'Fraude')?
-                                                                                                                  'Imp reportado ($)' : '',
+                              'NIVEL' :  (labelTabla === 'Procedimiento')?
+                                          'NOMBRE DOC' : (labelTabla === 'Legal' || labelTabla === 'Liquidez')?
+                                                        'IMPACTO REGULATORIO' : (labelTabla === 'Cumplimiento')?
+                                                                                "IMPACTO DE CUMPLIMIENTO" : (labelTabla === 'Gobierno')?
+                                                                                                            'NIVEL DE GOB #' : (labelTabla === 'Fraude')?
+                                                                                                                                'Imp reportado ($)' : '',
         sort: true,
        /*  filter: customFilter(),
         filterRenderer: (onFilter, column) =>
@@ -78,10 +81,11 @@ const AdministracionEventoListar = () => {
     }, {
       dataField: 'campoA',
       text: (labelTabla === 'Proceso')?
-            'VALORACION' : (labelTabla === 'Gobierno')?
-                            'NIVEL DE GOB' : (labelTabla === 'Fraude')?
-                                        'Fraude a ventas ($)' : (labelTabla === 'Liquidez')?
-                                                                "LIQUIDEZ" : '',
+            'VALORACION' : (labelTabla === 'Procedimiento')?
+                            'PROCESO' : (labelTabla === 'Gobierno')?
+                                            'NIVEL DE GOB' : (labelTabla === 'Fraude')?
+                                                        'Fraude a ventas ($)' : (labelTabla === 'Liquidez')?
+                                                                                "LIQUIDEZ" : '',
       sort: true,
      /*  filter: customFilter(),
       filterRenderer: (onFilter, column) =>
@@ -89,10 +93,11 @@ const AdministracionEventoListar = () => {
       //headerFormatter: typeFormatter
     }, {
       dataField: 'campoB',
-      text: (labelTabla === 'Gobierno')?
-                            'PUNTUACION AUTOEVAL' : (labelTabla === 'Fraude')?
-                                        'Imp reportado 2 ($)' : (labelTabla === 'Liquidez')?
-                                                                "CAPITAL DE TRABAJO" : '',
+      text: (labelTabla === 'Procedimiento')?
+            'GERENCIA' : (labelTabla === 'Gobierno')?
+                                  'PUNTUACION AUTOEVAL' : (labelTabla === 'Fraude')?
+                                              'Imp reportado 2 ($)' : (labelTabla === 'Liquidez')?
+                                                                      "CAPITAL DE TRABAJO" : '',
       sort: true,
      /*  filter: customFilter(),
       filterRenderer: (onFilter, column) =>
@@ -195,9 +200,10 @@ const AdministracionEventoListar = () => {
 
   // Style Select
   const customStyles =  {
+    menu: provided => ({ ...provided, zIndex: "9999 !important" }),
     control: (styles,) => ({
         ...styles,
-        boxShadow: 'none'
+        boxShadow: 'none',
     }),
     option: (styles, { isDisabled, isSelected }) => {
       return {

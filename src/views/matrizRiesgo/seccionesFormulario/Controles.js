@@ -9,25 +9,28 @@ import { CInputReact } from 'src/reusable/CInputReact'
 
 var _ = require('lodash');
 
-const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValues, isEdit }) => {
+const Controles = ({ nextSection, beforeSection, setObject, initValues, isEdit }) => {
 
   const formik = Yup.object().shape({
-    controlesTiene: Yup.string().required('Campo obligatorio'),
-    nroControles: Yup.string().nullable('Campo obligatorio'),
-    controles: Yup.array().of(
-      Yup.object().shape({
-        descripcion: Yup.string().required('Campo obligatorio'),
-        formalizado: Yup.string().nullable(),
-        norma: Yup.mixed().nullable(),
-        tipo: Yup.mixed().nullable(),
-        nivel: Yup.mixed().nullable(),
-        ponderacion: Yup.mixed().nullable(),
-        objetivo: Yup.mixed().nullable()
-      })
-    ),
+    controlId: Yup.mixed().required('Campo obligatorio'),
+    controlObjetivo: Yup.mixed().required('Campo obligatorio'),
+    controlComentario:  Yup.string().nullable(),
     // campos solo para mostrar
     controlValoracion: Yup.string().nullable(),
     controlDisminucion: Yup.string().nullable(),
+
+    controlesTiene: Yup.string().required('Campo obligatorio'),
+    nroControles: Yup.string().nullable(),
+    controles: Yup.array().of(
+      Yup.object().shape({
+        nroControl: Yup.number().nullable(),
+        descripcion: Yup.string().nullable(),
+        formalizado: Yup.string().nullable(),
+        norma: Yup.mixed().nullable(),
+        tipo: Yup.mixed().nullable(),
+        nivel: Yup.mixed().nullable()
+      })
+    )
   });
 
   function onChangeControles(e, field, values, setValues) {
@@ -37,7 +40,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
     const previousNumber = parseInt(field.value || '0');
     if (previousNumber < nroControles) {
       for (let i = previousNumber; i < nroControles; i++) {
-        controles.push({ descripcion: '', formalizado: false, norma: '', tipo: '', nivel: '', ponderacion: '', objetivo: '' });
+        controles.push({ nroControl: i+1, descripcion: '', formalizado: false, norma: '', tipo: '', nivel: '' });
       }
     } else {
       for (let i = previousNumber; i >= nroControles; i--) {
@@ -57,7 +60,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
     // display form field values on success
     //alert(JSON.stringify(_.omit(data, ['nroControles']), null, 10));
     console.log('datos que se enviaran SECCION 3:', _.omit(data, ['nroControles']))
-    setObject(_.omit(data, ['nroControles']));
+    setObject(_.omit(data, ['nroControles']), values);
     nextSection(3);
   }
 
@@ -67,7 +70,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
   const callApiProcedimiento = (idTablaDes) => {
     getTablaDescripcionNivel(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', false)
+        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiProcedimiento(options)
       }).catch((error) => {
         console.log('Error: ', error)
@@ -103,7 +106,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
   const callApiControl = (idTablaDes) => {
     getTablaDescripcionMatrizR(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'campoB', true)
+        const options = buildSelectTwo(res.data, 'id', 'campoA', true)
 
 
         setDataApiControl(options)
@@ -123,7 +126,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
   const optionsProcedimiento = () => {
     const deployOption = dataApiProcedimiento.map((item, i) => {
       return (
-        <option key={i} value={item.label}>{item.label}</option>
+        <option key={i} value={item.label + ' - ' + item.descripcion}>{item.label + ' - ' + item.descripcion}</option>
       )
     });
     return deployOption;
@@ -150,7 +153,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
   const optionsControl = () => {
     const deployOption = dataApiControl.map((item, i) => {
       return (
-        <option key={i} value={item.label}>{item.label}</option>
+        <option key={i} value={item.value}>{item.label}</option>
       )
     });
     return deployOption;
@@ -163,37 +166,104 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
       {({ errors, values, touched, setValues }) => (
         <Form>
           <Row className='pt-4'>
+            <Col sm='12' md='12' xl='3'>
+              <Label>Ponderación Control</Label>
+              <Field
+                name='controlId'
+                className={'form-control' + (errors.controlId && touched.controlId ? ' is-invalid' : '')}
+                as={"select"}
+              >
+                <option value="" disabled>Seleccionar</option>
+                {optionsControl()}
+              </Field>
+              <ErrorMessage name="controlId" component="div" className="invalid-feedback" />
+            </Col>
+
+            <Col sm='12' md='12' xl='9'>
+              <Label className='form-label'>
+                Valoración de Control
+              </Label>
+              <CInputReact
+                type={"textarea"}
+                id={'controlValoracion'}
+                value={(values.controlId !== "" && _.find(dataApiControl, ['id', _.toInteger(values.controlId)]) !== null) ? _.find(dataApiControl, ['id', _.toInteger(values.controlId)]).nombre : ""}
+                disabled={true}
+                rows={1}
+              />
+            </Col>
+
+            <Col sm='12' md='6' xl='6'>
+              <Label className='form-label'>
+                % Disminución del control
+              </Label>
+              <CInputReact
+                type={"text"}
+                id={'controlDisminucion'}
+                value={(values.controlId !== "" && _.find(dataApiControl, ['id', _.toInteger(values.controlId)]) !== null) ? _.find(dataApiControl, ['id', _.toInteger(values.controlId)]).campoC : ""}
+                disabled={true}
+              />
+            </Col>
+
+            <Col sm='12' md='6' xl='6'>
+              <Label>Objetivo Control</Label>
+              <Field
+                name='controlObjetivo'
+                className={'form-control' + (errors.controlObjetivo && touched.controlObjetivo ? ' is-invalid' : '')}
+                as={"select"}
+              >
+                <option value="" disabled>Seleccionar</option>
+                <option value="Probabilidad">Probabilidad</option>
+                <option value="Impacto">Impacto</option>
+                <option value="Ambos">Ambos</option>
+              </Field>
+              <ErrorMessage name="controlObjetivo" component="div" className="invalid-feedback" />
+            </Col>
+
+
             <Col sm='12' md='6'>
               <Row>
                 <Label xs='6' md='6' xl='6' className='text-label'>¿Tiene Controles?</Label>
                 <Col xs='6' md='6' xl='6'>
-                  <Field type="radio" name="controlesTiene" value="true" />
+                  <Field type="radio" name="controlesTiene" value="true" className={(errors.controlesTiene && touched.controlesTiene ? ' is-invalid' : '')}/>
                   <Label className='px-3'>Si</Label>
-                  <Field type="radio" name="controlesTiene" value="false" />
+                  <Field type="radio" name="controlesTiene" value="false" className={(errors.controlesTiene && touched.controlesTiene ? ' is-invalid' : '')}/>
                   <Label className='pl-3'>No</Label>
+                  <ErrorMessage name="controlesTiene" component="div" className="invalid-feedback" />
                 </Col>
               </Row>
             </Col>
 
+            {values.controlesTiene === 'false' ?
+              <Col sm='12' md='6'>
+                <Label>Comentario</Label>
+                <Field
+                  name="controlComentario"
+                  as="textarea"
+                  className={'form-control' + (errors.controlComentario && touched.controlComentario ? ' is-invalid' : '')}
+                />
+                <ErrorMessage name="controlComentario" component="div" className="invalid-feedback" />
+              </Col>
+            : null}
+
             {values.controlesTiene === 'true' ?
               <Col sm='12' md='6'>
-              <Row>
-                <Label xs='6' md='6' xl='6' className='text-label'>Nro. de controles</Label>
-                <Col xs='6' md='6' xl='6'>
-                  <Field name="nroControles">
-                    {({ field }) => (
-                      <select {...field} className={'form-control' + (errors.nroControles && touched.nroControles ? ' is-invalid' : '')} onChange={e => onChangeControles(e, field, values, setValues)}>
-                        <option value="" disabled>Seleccionar</option>
-                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i =>
-                          <option key={i} value={i}>{i}</option>
-                        )}
-                      </select>
-                    )}
-                  </Field>
-                  <ErrorMessage name="nroControles" component="div" className="invalid-feedback" />
-                </Col>
-              </Row>
-            </Col>
+                <Row>
+                  <Label xs='6' md='6' xl='6' className='text-label'>Nro. de controles</Label>
+                  <Col xs='6' md='6' xl='6'>
+                    <Field name="nroControles">
+                      {({ field }) => (
+                        <select {...field} className={'form-control' + (errors.nroControles && touched.nroControles ? ' is-invalid' : '')} onChange={e => onChangeControles(e, field, values, setValues)}>
+                          <option value="" disabled>Seleccionar</option>
+                          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i =>
+                            <option key={i} value={i}>{i}</option>
+                          )}
+                        </select>
+                      )}
+                    </Field>
+                    <ErrorMessage name="nroControles" component="div" className="invalid-feedback" />
+                  </Col>
+                </Row>
+              </Col>
             : null}
           </Row>
 
@@ -201,15 +271,15 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
             <FieldArray name="controles">
               {() => (values.controles.map((control, i) => {
                 /* console.log('Console log control: ', control); */
-                const controlErrors = errors.controles?.length && errors.controles[i] || {};
-                const controlTouched = touched.controles?.length && touched.controles[i] || {};
+                const controlErrors = (errors.controles?.length && errors.controles[i]) || {};
+                const controlTouched = (touched.controles?.length && touched.controles[i]) || {};
                 return (
                   <div key={i}>
                     <div className='divider divider-left divider-dark'>
                       <div className='divider-text '><span className='text-label'>Control {i + 1}</span></div>
                     </div>
                     <Row>
-                      <FormGroup tag={Col} md='12' lg='12' className='mb-2'>
+                      <FormGroup tag={Col} md='6' lg='9' className='mb-2'>
                         <Label>Descripción</Label>
                         <Field
                           name={`controles.${i}.descripcion`}
@@ -219,7 +289,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
                         <ErrorMessage name={`controles.${i}.descripcion`} component="div" className="invalid-feedback" />
                       </FormGroup>
 
-                      <FormGroup tag={Col} md='6' lg='2' className='mb-2'>
+                      <FormGroup tag={Col} md='6' lg='3' className='mb-2'>
                         {/* <Field
                           name={`controles.${i}.formalizado`}
                           type="checkbox"
@@ -242,7 +312,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
                         <ErrorMessage name={`controles.${i}.formalizado`} component="div" className="invalid-feedback" />
                       </FormGroup>
 
-                      <FormGroup tag={Col} md='6' lg='4' className='mb-2'>
+                      <FormGroup tag={Col} md='6' lg='6' className='mb-2'>
                         <Label>Norma/procedimiento en la que está formalizado</Label>
                         <Field
                           name={`controles.${i}.norma`}
@@ -279,59 +349,6 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
                           {optionsNivelAuto()}
                         </Field>
                         <ErrorMessage name={`controles.${i}.nivel`} component="div" className="invalid-feedback" />
-                      </FormGroup>
-
-                      <FormGroup tag={Col} md='6' lg='2' className='mb-2'>
-                        <Label>Ponderación Control</Label>
-                        <Field
-                          name={`controles.${i}.ponderacion`}
-                          className={'form-control' + (controlErrors.ponderacion && controlTouched.ponderacion ? ' is-invalid' : '')}
-                          as={"select"}
-                        >
-                          <option value="" disabled>Seleccionar</option>
-                          {optionsControl()}
-                        </Field>
-                        <ErrorMessage name={`controles.${i}.ponderacion`} component="div" className="invalid-feedback" />
-                      </FormGroup>
-
-                      <FormGroup tag={Col} md='6' lg='4' className='mb-0'>
-                        <Label className='form-label'>
-                          Valoración de Control
-                        </Label>
-                        <CInputReact
-                          type={"textarea"}
-                          id={'controlValoracion'}
-                          value={(control.ponderacion !== "" && _.find(dataApiControl, ['id', _.toInteger(control.ponderacion)]) !== null) ? _.find(dataApiControl, ['id', _.toInteger(control.ponderacion)]).nombre : ""}
-                          disabled={true}
-                          rows={2}
-                        />
-                      </FormGroup>
-
-                      <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
-                        <Label className='form-label'>
-                          % Disminución del control
-                        </Label>
-                        <CInputReact
-                          type={"text"}
-                          id={'controlDisminucion'}
-                          value={(control.ponderacion !== "" && _.find(dataApiControl, ['id', _.toInteger(control.ponderacion)]) !== null) ? _.find(dataApiControl, ['id', _.toInteger(control.ponderacion)]).campoD : ""}
-                          disabled={true}
-                        />
-                      </FormGroup>
-
-                      <FormGroup tag={Col} md='6' lg='3' className='mb-2'>
-                        <Label>Objetivo Control</Label>
-                        <Field
-                          name={`controles.${i}.objetivo`}
-                          className={'form-control' + (controlErrors.objetivo && controlTouched.objetivo ? ' is-invalid' : '')}
-                          as={"select"}
-                        >
-                          <option value="" disabled>Seleccionar</option>
-                          <option value="Probabilidad">Probabilidad</option>
-                          <option value="Impacto">Impacto</option>
-                          <option value="Ambos">Ambos</option>
-                        </Field>
-                        <ErrorMessage name={`controles.${i}.objetivo`} component="div" className="invalid-feedback" />
                       </FormGroup>
 
                     </Row>
@@ -380,5 +397,5 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
   )
 }
 
-export default ImportesRelacionados
+export default Controles
 
