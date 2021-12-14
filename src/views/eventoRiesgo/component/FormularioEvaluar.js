@@ -4,11 +4,13 @@ import * as Yup from "yup"
 import { CInputReact } from 'src/reusable/CInputReact'
 import  CInputRadio  from 'src/reusable/CInputRadio'
 import { Row, FormGroup, Col, Form, Button, Label } from 'reactstrap'
-import '../../../reusable/drag-and-drop/drag-and-drop.scss'
+import 'src/reusable/drag-and-drop/drag-and-drop.scss'
 import { ReactSortable } from 'react-sortablejs'
 import { List, AlertTriangle } from 'react-feather'
 
-const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
+var _ = require('lodash');
+
+const FormEvaluaEvento = ({ initialValuess, handleOnSubmit }) => {
 
   // Valores de estado para evaluar evento
   const optionEstadoRegistro = [
@@ -169,7 +171,7 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
         nota: Yup.string().min(1).max(500).required('Campo obligatorio'), */
         listaObservacion: Yup.string().nullable(),
         nota: Yup.string().nullable(),
-        estado: Yup.string().nullable()
+        estado: Yup.string().nullable(),
       }
     ),
 
@@ -189,12 +191,14 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
 
       const data = {
         ...values,
+        modulo: "Evento",
         listaObservacion: (Object.keys(observados).length !== 0) ? cadenaObjeto: null,
       }
       handleOnSubmit(data)
     }
   })
 
+//console.log('observados: ', JSON.stringify(_.map(observados, 'text')) );
 
   return (
     <Form onSubmit={formik.handleSubmit} autoComplete="off">
@@ -366,4 +370,4 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
     </Form>
   )
 }
-export default AdminFormEvento
+export default FormEvaluaEvento

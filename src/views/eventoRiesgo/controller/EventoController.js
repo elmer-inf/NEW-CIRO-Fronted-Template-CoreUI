@@ -17,9 +17,7 @@ export const getEventos = async () => {
 export const getEventosPaging = async (page, size) => {
     const uri = HOST + 'v1/eventoRiesgo/' + page + '/' + size + '/id:desc';
     const response = await axios.get(uri);
-
     return response;
-
 };
 
 

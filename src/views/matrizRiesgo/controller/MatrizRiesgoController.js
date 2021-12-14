@@ -15,12 +15,6 @@ export const getMatricesRiesgo = async () => {
     return response
 }
 
-// Evalua matriz de riesgo
-export const putEvaluaEvento = (id, data) => {
-    const uri = HOST + 'v1/eventoRiesgo/evaluaEvento/' + id;
-    return axios.put(uri, data);
-}
-
 export const getTablaDescripcionNivel = async (idTabla) => {
     const uri = HOST.concat('v1/tablaDescripcion/listarNivel1/',idTabla)
     const response = await axios.get(uri)
@@ -31,6 +25,13 @@ export const getTablaDescripcionNivel2 = async (idTabla, idNivel2) => {
 
     const uri = HOST.concat('v1/tablaDescripcion/listarNivel2/',idTabla,'/', idNivel2);
     //console.log('URIII xxxxxxxx  : ', uri)
+    const response = await axios.get(uri)
+    return response
+}
+
+// Lista parametros Matriz Riesgo
+export const getTablaDescripcionMatrizR = async (idTabla) => {
+    const uri = HOST.concat('v1/tablaDescripcionMatrizRiesgo/listarNivel1/',idTabla)
     const response = await axios.get(uri)
     return response
 }
@@ -48,50 +49,16 @@ export const getMatrizRiesgoId = async (id) => {
     return response;
 };
 
-// Lista parametros Matriz Riesgo
-export const getTablaDescripcionMatrizR = async (idTabla) => {
-    const uri = HOST.concat('v1/tablaDescripcionMatrizRiesgo/listarNivel1/',idTabla)
-    const response = await axios.get(uri)
-    return response
-}
-
-
-
-
-// Ultima observacion de evento
-export const getUltimaObservacion = async (id) => {
-    const uri = HOST + 'v1/observacion/ultimaObservacion/' + id;
-    const response = await axios.get(uri);
-    return response;
-}; 
-
-
-/*
-
-export const getTablaDescripcionNivel3 = async (idTabla, idNivel2, idNivel3) => { 
-
-    const uri = HOST.concat('v1/tablaDescripcion/listarNivel3/',idTabla,'/', idNivel2,'/', idNivel3);
-    //console.log('URIII xxxxxxxx  : ', uri)
-    const response = await axios.get(uri)
-    return response
-}
-
-export const postListDescripcion = (data) => {
-    const uri = HOST.concat('v1/tablaDescripcion/registrar')
-    return axios.post(uri, data);
-}
-
- export const getTablaDescripcionId = async (id) => {
-    const uri = HOST + 'v1/tablaDescripcion/mostrar2/' + id;
-    const response = await axios.get(uri);
-    return response;
-};
-
-export const editTablaDescripcion = (id, data) => {
-    const uri = HOST + 'v1/tablaDescripcion/editar/' + id;
+// Evalua matriz de riesgo
+export const putEvaluaRiesgo = (id, data) => {
+    const uri = HOST + 'v1/matrizRiesgo/evaluaRiesgo/' + id;
     return axios.put(uri, data);
 }
 
 
-*/
-
+// MODIFICARRRRRRRRRRRR
+export const getUltimaObservacion = async (id) => {
+    const uri = HOST + 'v1/observacion/ultimaObservacion/' + id;
+    const response = await axios.get(uri);
+    return response;
+};

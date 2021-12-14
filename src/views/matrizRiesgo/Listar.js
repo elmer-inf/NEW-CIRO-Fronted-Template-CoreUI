@@ -5,7 +5,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import ActionFormatter from '../../reusable/ActionFormatterEvento';
 import ActionFormatterEvaluar from '../../reusable/ActionFormatterEvaluar';
 import { useHistory } from 'react-router-dom'
-import { putEvaluaEvento, getMatricesRiesgo } from './controller/MatrizRiesgoController'
+import { putEvaluaRiesgo, getMatricesRiesgo } from './controller/MatrizRiesgoController'
 
 const MatrizRiesgoListar = () => {
 
@@ -57,16 +57,6 @@ const MatrizRiesgoListar = () => {
          align: 'right', */
          //headerFormatter: typeFormatter
      }, {
-        dataField: 'areaId.nombre',
-        text: 'AREA',
-        sort: true,
-       /*  filter: textFilter({
-            className: 'test-classname',
-            placeholder: 'Buscar',
-        }),
-        align: 'right', */
-        //headerFormatter: typeFormatter
-    }, {
         dataField: 'unidadId.nombre',
         text: 'UNIDAD',
         sort: true,
@@ -140,7 +130,6 @@ const MatrizRiesgoListar = () => {
   }
 
   const detailsRow = (row) => {
-    //console.log("objeto:", row)
     history.push('/matrizRiesgo/mostrar/' + row.id);
   }
 
@@ -150,31 +139,30 @@ const MatrizRiesgoListar = () => {
   }
 
   const actionFormatterEvaluar = (cell, row) => {
-    return <ActionFormatterEvaluar cell={cell} row={row} autorizarFunction={autorizaEvento} descartarFunction={descartaEvento}/>
+    return <ActionFormatterEvaluar cell={cell} row={row} autorizarFunction={autorizaRiesgo} descartarFunction={descartaRiesgo}/>
   }
 
-  const autorizaEvento = (row) => {
+  const autorizaRiesgo = (row) => {
     const data = {
       estadoRegistro: 'Autorizado'
     }
-    console.log('data : ', data)
-    putEvaluaEvento(row.id, data)
+    putEvaluaRiesgo(row.id, data)
     .then(res => {
-      console.log('response : ', res);
+      //console.log('response : ', res);
       window.location.reload(true);
     }).catch((error) => {
         console.log('Error al obtener datos: ', error);
     });
   }
 
-  const descartaEvento = (row) => {
+  const descartaRiesgo = (row) => {
     const data = {
       estadoRegistro: 'Descartado'
     }
     console.log('data : ', data)
-    putEvaluaEvento(row.id, data)
+    putEvaluaRiesgo(row.id, data)
     .then(res => {
-      console.log('response : ', res);
+      //console.log('response : ', res);
       window.location.reload(true);
     }).catch((error) => {
         console.log('Error al obtener datos: ', error);

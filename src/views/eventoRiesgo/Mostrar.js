@@ -62,13 +62,14 @@ const EventoRiesgo = ({ match }) => {
       estadoRegistro: dataEstadoRegistro,
       listaObservacion: '',
       nota: '',
-      estado: ''
+      estado: '',
+      modulo: ''
   }
 
   const handleOnSubmit = (dataToRequest) =>{
     const idEvento = match.params.id
-    console.log('ID evento para evaluar: ', idEvento)
-    console.log('data antes de enviar: ', dataToRequest)
+    //console.log('ID evento para evaluar: ', idEvento)
+    //console.log('data antes de enviar: ', dataToRequest)
     putEvaluaEvento(idEvento, dataToRequest)
     .then(res => {
       console.log('response : ', res);

@@ -2,7 +2,7 @@ import { React, useState, useEffect } from 'react'
 import { FileText, BarChart2, Trello, List, CheckSquare, PieChart, TrendingUp, Percent, X, AlertCircle, Check } from 'react-feather'
 import { Row, Col, Card, CardBody, CardHeader, CardTitle, Badge, Button, ListGroup, ListGroupItem} from 'reactstrap';
 import { CNav, CNavItem, CNavLink, CTabContent, CTabPane, CTabs, CButton, CCollapse, CCard, CModal, CModalBody, CModalHeader, CModalTitle, CBadge, CCallout, CProgress} from '@coreui/react'
-import { getMatrizRiesgoId, getUltimaObservacion, putEvaluaEvento } from './controller/MatrizRiesgoController';
+import { getMatrizRiesgoId, getUltimaObservacion, putEvaluaRiesgo } from './controller/MatrizRiesgoController';
 import FormularioEvaluar from './component/FormularioEvaluar'
 import BootstrapTable from 'react-bootstrap-table-next';
 import { calculaRiesgo, buscaValorLiteralRiesgoI, buscaValorLiteral, reduceProbabilidadImpacto, countEstadoPlanes, resultAvance  } from 'src/functions/FunctionsMatriz'
@@ -134,18 +134,6 @@ const MatrizRiesgo = ({ match }) => {
       })
   }
 
-   // Control (Auxiliar para obtener % disminucion)
-   const [dataApiControl, setDataApiControl] = useState([])
-   const callApiControl = (idTablaDes) => {
-     getTablaDescripcionMatrizR(idTablaDes)
-       .then(res => {
-         const options = buildSelectTwo(res.data, 'id', 'campoA', true)
-         setDataApiControl(options)
-       }).catch((error) => {
-         console.log('Error: ', error)
-       })
-   }
-
    // Probabilidad
   const [dataApiProbabilidad, setDataApiProbabilidad] = useState([])
   const callApiProbabilidad = (idTablaDes) => {
@@ -172,7 +160,6 @@ const MatrizRiesgo = ({ match }) => {
 
   useEffect(() => {
     callApiRiesgoI(9);
-    callApiControl(5);
     callApiProbabilidad(2);
     callApiImpacto(3);
   }, [])
@@ -269,7 +256,7 @@ const MatrizRiesgo = ({ match }) => {
     const idEvento = match.params.id
     console.log('ID evento para evaluar: ', idEvento)
     console.log('data antes de enviar: ', dataToRequest)
-    putEvaluaEvento(idEvento, dataToRequest)
+    putEvaluaRiesgo(idEvento, dataToRequest)
     .then(res => {
       console.log('response : ', res);
       window.location.reload(true);
@@ -895,7 +882,7 @@ const MatrizRiesgo = ({ match }) => {
                       onClick={toggle}
                       className={'mb-1 text-white'}
                       disabled={(dataApi.estadoRegistro === 'Autorizado' ||  dataApi.estadoRegistro === 'Descartado')? true : false}
-                    >Evaluar Evento
+                    >Evaluar Riesgo
                     </CButton>
                     <CCollapse show={collapse}>
                       <CCard className='p-3'>
