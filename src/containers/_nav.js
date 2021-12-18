@@ -1,7 +1,7 @@
 import React from 'react'
 //import { Edit, Circle, Calendar } from 'react-feather'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faCalendarMinus, faChartLine } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faCalendarMinus, faChartLine, faChartBar } from '@fortawesome/free-solid-svg-icons';
 
 const _nav =  [
   {
@@ -38,7 +38,7 @@ const _nav =  [
     _children: [
       {
         _tag: 'CSidebarNavItem',
-        name: 'Lista de Eventos',
+        name: 'Eventos',
         to: '/eventoRiesgo/listar',
       }
     ],
@@ -52,7 +52,7 @@ const _nav =  [
     _children: [
       {
         _tag: 'CSidebarNavItem',
-        name: 'Lista de Matrices',
+        name: 'Riesgos',
         to: '/matrizRiesgo/listar',
       },
       /* {
@@ -62,6 +62,20 @@ const _nav =  [
         //icon: 'cil-circle',
         to: '/eventoRiesgo/registrar',
       } */
+    ],
+  },{
+
+    _tag: 'CSidebarNavDropdown',
+    name: 'Matriz de Oportunidad',
+    route: '/matrizOportunidad',
+    icon: <FontAwesomeIcon style={{ flex: '0 0 56px', marginLeft: '-1rem', fontSize: '18px'}} icon={faChartBar}/>,
+    //icon: <Calendar size={20} className='mr-3'/>,
+    _children: [
+      {
+        _tag: 'CSidebarNavItem',
+        name: 'Oportunidades',
+        to: '/matrizOportunidad/listar',
+      }
     ],
   }
 ]

@@ -49,7 +49,9 @@ const AdministracionMatrizRiesgosRegistrar = React.lazy(() => import('./views/ad
 const AdministracionMatrizRiesgosEditar = React.lazy(() => import('./views/administracion/matriz-riesgo/Editar'));
 
 // Parametrizacion Matriz de oportunidad
-const AdministracionMatrizOportunidad = React.lazy(() => import('./views/administracion/matriz-oportunidad/Listar'));
+const AdministracionMatrizOportunidadListar = React.lazy(() => import('./views/administracion/matriz-oportunidad/Listar'));
+const AdministracionMatrizOportunidadRegistrar = React.lazy(() => import('./views/administracion/matriz-oportunidad/Registrar'));
+const AdministracionMatrizOportunidadEditar = React.lazy(() => import('./views/administracion/matriz-oportunidad/Editar'));
 
 // 1er Modulo: Eventos de riesgo
 const EventoRiesgoListar = React.lazy(() => import('./views/eventoRiesgo/Listar'));
@@ -60,6 +62,11 @@ const EventoRiesgo = React.lazy(() => import('./views/eventoRiesgo/Mostrar'));
 const MatrizRiesgoListar = React.lazy(() => import('./views/matrizRiesgo/Listar'));
 const MatrizRiesgoRegistrar = React.lazy(() => import('./views/matrizRiesgo/Registrar'));
 const MatrizRiesgoMostrar = React.lazy(() => import('./views/matrizRiesgo/Mostrar'));
+
+// 3er Modulo: Matriz de oporunidades
+const MatrizOportunidadListar = React.lazy(() => import('./views/matrizOportunidad/Listar'));
+const MatrizOportunidadRegistrar = React.lazy(() => import('./views/matrizOportunidad/Registrar'));
+const MatrizOportunidadMostrar = React.lazy(() => import('./views/matrizOportunidad/Mostrar'));
 
 
 const routes = [
@@ -114,7 +121,9 @@ const routes = [
   { path: '/administracion/matriz-riesgo/Registrar', name: 'Registrar parámetro de Matriz de riesgo', component: AdministracionMatrizRiesgosRegistrar },
   { path: '/administracion/matriz-riesgo/Editar/:id', name: 'Editar parámetro de Matriz de riesgo', component: AdministracionMatrizRiesgosEditar },
 
-  { path: '/administracion/matriz-oportunidad/Listar', name: 'Matriz de oportunidad', component: AdministracionMatrizOportunidad },
+  { path: '/administracion/matriz-oportunidad/Listar', name: 'Lista de Matriz de oportunidades', component: AdministracionMatrizOportunidadListar },
+  { path: '/administracion/matriz-oportunidad/Registrar', name: 'Registrar Matriz de oportunidad', component: AdministracionMatrizOportunidadRegistrar },
+  { path: '/administracion/matriz-oportunidad/Editar/:id', name: 'Editar parámetro de Matriz de oportunidad', component: AdministracionMatrizOportunidadEditar },
 
   // 1er Modulo: Eventos de riesgo
   { path: '/eventoRiesgo', name: 'Eventos de Riesgo', component: EventoRiesgoListar, exact: true },
@@ -127,6 +136,13 @@ const routes = [
   { path: '/matrizRiesgo/Listar', name: 'Lista de Matriz de riesgos', component: MatrizRiesgoListar },
   { path: '/matrizRiesgo/Registrar', name: 'Registrar Matriz de Riesgo', component: MatrizRiesgoRegistrar },
   { path: '/matrizRiesgo/Mostrar/:id', name: 'Matriz de Riesgo', component: MatrizRiesgoMostrar },
+
+  // 3er Modulo: Matriz de oportunidad
+  { path: '/matrizOportunidad', name: 'Matriz de oportunidad', component: MatrizOportunidadListar, exact: true },
+  { path: '/matrizOportunidad/Listar', name: 'Lista de Matriz de oportunidades', component: MatrizOportunidadListar },
+  { path: '/matrizOportunidad/Registrar', name: 'Registrar Matriz de oportunidad', component: MatrizOportunidadRegistrar },
+  { path: '/matrizOportunidad/Mostrar/:id', name: 'Matriz de oportunidad', component: MatrizOportunidadMostrar },
+
 ];
 
 export default routes;

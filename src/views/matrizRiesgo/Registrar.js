@@ -10,7 +10,7 @@ import { FileText, BarChart2, ChevronRight, CheckSquare, PieChart, Trello, List,
 import { Row, Col, Card, CardBody, CardHeader, CardTitle, TabContent, TabPane, NavLink, NavItem, Nav} from 'reactstrap';
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames';
-import { postMatrizRiesgo } from './controller/MatrizRiesgoController';
+import { postRiesgo } from './controller/RiesgoController';
 
 const MatrizRiesgoRegistrar = () => {
 
@@ -179,7 +179,7 @@ const MatrizRiesgoRegistrar = () => {
 
     console.log('Lo que se enviara en el request: ', dataValues)
 
-    postMatrizRiesgo(dataValues)
+    postRiesgo(dataValues)
     .then(res => {
       if (res.status === 200) {
         console.log('Envio el request: ', res)

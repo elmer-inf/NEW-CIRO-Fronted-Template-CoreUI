@@ -4,10 +4,10 @@ import { Label, FormGroup, Row, Col, Form, Button } from 'reactstrap'
 import { useFormik } from "formik"
 import * as Yup from "yup"
 import { CSelectReact } from 'src/reusable/CSelectReact'
-import { getTablaDescripcionNivel } from '../controller/EventoController';
+import { getTablaDescripcionEventoN1} from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
 import { buildSelectTwo } from 'src/functions/Function'
 
-const RiesgoRelacionado = ({ beforeSection, setObject, initValues, isEdit, handleOnSubmmit, tipoEvento }) => {
+const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit, tipoEvento }) => {
 
   const formik = useFormik({
     initialValues: initValues,
@@ -50,7 +50,7 @@ const RiesgoRelacionado = ({ beforeSection, setObject, initValues, isEdit, handl
   // Reputacional
   const [dataApiReputacional, setDataApiReputacional] = useState([])
   const callApiReputacional = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiReputacional(options)
@@ -62,7 +62,7 @@ const RiesgoRelacionado = ({ beforeSection, setObject, initValues, isEdit, handl
   // Legal
   const [dataApiLegal, setDataApiLegal] = useState([])
   const callApiLegal = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiLegal(options)
@@ -74,7 +74,7 @@ const RiesgoRelacionado = ({ beforeSection, setObject, initValues, isEdit, handl
   // Legal
   const [dataApiCumplimiento, setDataApiCumplimiento] = useState([])
   const callApiCumplimiento = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiCumplimiento(options)
@@ -86,7 +86,7 @@ const RiesgoRelacionado = ({ beforeSection, setObject, initValues, isEdit, handl
   // Estrategico
   const [dataApiEstrategico, setDataApiEstrategico] = useState([])
   const callApiEstrategico = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiEstrategico(options)
@@ -98,7 +98,7 @@ const RiesgoRelacionado = ({ beforeSection, setObject, initValues, isEdit, handl
   // Gobierno
   const [dataApiGobierno, setDataApiGobierno] = useState([])
   const callApiGobierno = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiGobierno(options)
@@ -110,7 +110,7 @@ const RiesgoRelacionado = ({ beforeSection, setObject, initValues, isEdit, handl
   // Fraude
   const [dataApiFraude, setDataApiFraude] = useState([])
   const callApiFraude = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiFraude(options)
@@ -122,7 +122,7 @@ const RiesgoRelacionado = ({ beforeSection, setObject, initValues, isEdit, handl
   // Liquidez
   const [dataApiLiquidez, setDataApiLiquidez] = useState([])
   const callApiLiquidez = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiLiquidez(options)
@@ -134,7 +134,7 @@ const RiesgoRelacionado = ({ beforeSection, setObject, initValues, isEdit, handl
   // Liquidez
   const [dataApiOperativo, setDataApiOperativo] = useState([])
   const callApiOperativo = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiOperativo(options)

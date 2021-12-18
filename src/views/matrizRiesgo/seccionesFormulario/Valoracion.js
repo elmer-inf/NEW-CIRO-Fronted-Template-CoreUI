@@ -4,7 +4,7 @@ import { Label, FormGroup, Row, Col, Form, Button } from 'reactstrap'
 import { useFormik } from "formik"
 import * as Yup from "yup"
 import { CInputReact } from 'src/reusable/CInputReact'
-import { getTablaDescripcionMatrizR } from '../controller/MatrizRiesgoController'
+import { getTablaDescripcionRiesgoN1 } from 'src/views/administracion/matriz-riesgo/controller/AdminRiesgoController';
 import { buildSelectTwo } from 'src/functions/Function'
 
 var _ = require('lodash');
@@ -39,7 +39,7 @@ const Valoracion = ({ beforeSection, initValues, dataAux , dataAux2, isEdit, han
   // Probabilidad
   const [dataApiProbabilidad, setDataApiProbabilidad] = useState([])
   const callApiProbabilidad = (idTablaDes) => {
-    getTablaDescripcionMatrizR(idTablaDes)
+    getTablaDescripcionRiesgoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'campoD', true)
         setDataApiProbabilidad(options)

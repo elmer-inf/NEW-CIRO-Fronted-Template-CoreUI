@@ -217,6 +217,15 @@ body{
       }
     }
   }
+
+  &.divider-primary {
+    .divider-text {
+      &::before,
+      &::after {
+        border: 1px solid rgba(#ff9f44, 0.3) !important;
+      }
+    }
+  }
 }
 
 

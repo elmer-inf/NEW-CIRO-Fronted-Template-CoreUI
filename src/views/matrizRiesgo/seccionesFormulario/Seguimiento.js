@@ -12,30 +12,28 @@ const SeguimientoRiesgos = ({ nextSection, beforeSection, setObject, initValues,
 
   const columns = [
     {
-      dataField: 'nroPlan',
-      text: 'Plan',
+        dataField: 'nroPlan',
+        text: 'Plan',
     }, {
         dataField: 'estrategia',
         text: 'Estrategia',
     }, {
         dataField: 'descripcion',
         text: 'Descripción',
-        style: { whiteSpace: 'nowrap' },
     }, {
         dataField: 'cargo',
         text: 'Cargo',
     }, {
         dataField: 'fechaAccion',
         text: 'Fecha acción',
-        sort: true,
+        style: { whiteSpace: 'nowrap' },
     }, {
-         dataField: 'fechaImpl',
-         text: 'Fecha implementación',
-         sort: true,
+        dataField: 'fechaImpl',
+        text: 'Fecha implementación',
+        style: { whiteSpace: 'nowrap' },
      }, {
         dataField: 'estado',
         text: 'Estado',
-        sort: true,
         formatter: colorEstado,
     }
   ]
@@ -81,7 +79,7 @@ const SeguimientoRiesgos = ({ nextSection, beforeSection, setObject, initValues,
   return (
     <Fragment>
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
-        <Row className='pt-4'>
+        <Row className='pt-4 table-hover-animation'>
           <Col xs='12'>
             <BootstrapTable
               classes= {'table-hover-animation mt-2'}

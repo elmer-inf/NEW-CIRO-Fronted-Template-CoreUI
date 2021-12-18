@@ -1,44 +1,46 @@
 import axios from 'axios'
-import { HOSTURI } from '../../../../config'
-//import AuthService from 'src/views/authentication/AuthService';
+import { HOSTURI } from 'src/config'
 
 const HOST = HOSTURI.endpoint_ciro
-//const Auth = new AuthService();
-//const header = Auth.getHeader();
 
-//console.log('new header: ', header)
-
-export const getTablaLista = async () => { 
+export const getTablaListaEvento = async () => {
     const uri = HOST.concat('v1/tablaLista/listar')
     const response = await axios.get(uri)
     return response
 }
 
-export const getTablaDescripcionNivel = async (idTabla) => { 
+
+export const getTablaDescripcionEventoN1 = async (idTabla) => {
     const uri = HOST.concat('v1/tablaDescripcion/listarNivel1/',idTabla)
     const response = await axios.get(uri)
     return response
 }
 
-export const getTablaDescripcionNivel2 = async (idTabla, idNivel2) => { 
+export const getTablaDescripcionEventoN2 = async (idTabla, idNivel2) => {
     const uri = HOST.concat('v1/tablaDescripcion/listarNivel2/',idTabla,'/', idNivel2);
     console.log('URIII  : ', uri)
     const response = await axios.get(uri)
     return response
 }
 
- export const postListDescripcion = (data) => {
+export const getTablaDescripcionEventoN3 = async (idTabla, idNivel2, idNivel3) => { 
+    const uri = HOST.concat('v1/tablaDescripcion/listarNivel3/',idTabla,'/', idNivel2,'/', idNivel3);
+    const response = await axios.get(uri)
+    return response
+}
+
+ export const postTablaDescripcionEvento = (data) => {
     const uri = HOST.concat('v1/tablaDescripcion/registrar')
     return axios.post(uri, data);
 }
 
- export const getTablaDescripcionId = async (id) => {
+ export const getTablaDescripcionEventoId = async (id) => {
     const uri = HOST + 'v1/tablaDescripcion/mostrar2/' + id;
     const response = await axios.get(uri);
     return response;
 };
 
-export const editTablaDescripcion = (id, data) => {
+export const putTablaDescripcionEventoId = (id, data) => {
     const uri = HOST + 'v1/tablaDescripcion/editar/' + id;
     return axios.put(uri, data);
 }

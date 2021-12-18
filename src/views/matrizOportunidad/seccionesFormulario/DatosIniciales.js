@@ -5,9 +5,8 @@ import { useFormik } from "formik"
 import * as Yup from "yup"
 import { CInputReact } from 'src/reusable/CInputReact'
 import { CSelectReact } from 'src/reusable/CSelectReact'
-import  CInputCheckbox  from 'src/reusable/CInputCheckbox'
-import { getTablaDescripcionRiesgoN1 } from 'src/views/administracion/matriz-riesgo/controller/AdminRiesgoController';
 import { getTablaDescripcionEventoN1, getTablaDescripcionEventoN2 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController'
+import { getTablaDescripcionOportunidadN1, getTablaDescripcionOportunidadN2 } from 'src/views/administracion/matriz-oportunidad/controller/AdminOportunidadController';
 import { buildSelectTwo } from 'src/functions/Function'
 
 const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
@@ -15,38 +14,30 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   const formik = useFormik({
     initialValues: initValues,
     validationSchema: Yup.object().shape({
-      /* areaId : Yup.mixed().required('Campo obligatorio'),
-      unidadId : Yup.mixed().required('Campo obligatorio'),
-      procesoId : Yup.mixed().required('Campo obligatorio'),
+      /* areaId : Yup.mixed().required("Campo obligatorio"),
+      unidadId : Yup.mixed().required("Campo obligatorio"),
+      procesoId : Yup.mixed().required("Campo obligatorio"),
+      procedimientoId : Yup.mixed().required("Campo obligatorio"),
+      duenoCargoId : Yup.mixed().required("Campo obligatorio"),
+      responsableCargoId : Yup.mixed().required("Campo obligatorio"),
+      fechaEvaluacion : Yup.date().required("Campo obligatorio"),
+      fodaId : Yup.mixed().nullable(),
+      fodaDesccripcionId: Yup.mixed().nullable(),
       // Campos solo para mostrar:
-      macroNombre : Yup.string().nullable(),
-      macroCriticidad : Yup.string().nullable(),
-      macroValoracion : Yup.string().nullable(),
-      // FIN Campos solo para mostrar:
-      procedimientoId : Yup.mixed().required('Campo obligatorio'),
-      duenoCargoId : Yup.mixed().required('Campo obligatorio'),
-      responsableCargoId : Yup.mixed().required('Campo obligatorio'),
-      fechaEvaluacion : Yup.date().required('Campo obligatorio'),
-      identificadoId : Yup.mixed().nullable(),
-      otrosAux: Yup.string().nullable(),
-      identificadoOtro : Yup.string().nullable() */
+      macroNombre : Yup.string().nullable(), */
 
 
       areaId : Yup.mixed().nullable(),
       unidadId : Yup.mixed().nullable(),
       procesoId : Yup.mixed().nullable(),
-      // Campos solo para mostrar:
-      macroNombre : Yup.string().nullable(),
-      macroCriticidad : Yup.string().nullable(),
-      macroValoracion : Yup.string().nullable(),
-      // FIN Campos solo para mostrar:
       procedimientoId : Yup.mixed().nullable(),
       duenoCargoId : Yup.mixed().nullable(),
       responsableCargoId : Yup.mixed().nullable(),
       fechaEvaluacion : Yup.date().nullable(),
-      identificadoId : Yup.mixed().nullable(),
-      otrosAux: Yup.string().nullable(),
-      identificadoOtro : Yup.string().nullable()
+      fodaId : Yup.mixed().nullable(),
+      fodaDescripcionId: Yup.mixed().nullable(),
+      // Campos solo para mostrar:
+      macroNombre : Yup.string().nullable(),
       }
     ),
 
@@ -55,13 +46,14 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         ...values,
         estadoRegistro: 'Pendiente',
 
-        areaId : (values.areaId !== null) ?   values.areaId.value : 0,
-        unidadId : (values.unidadId !== null) ?   values.unidadId.value : 0,
-        procesoId : (values.procesoId !== null) ?   values.procesoId.value : 0,
-        procedimientoId : (values.procedimientoId !== null) ?   values.procedimientoId.value : 0,
+        areaId : (values.areaId !== null) ? values.areaId.value : 0,
+        unidadId : (values.unidadId !== null) ? values.unidadId.value : 0,
+        procesoId : (values.procesoId !== null) ? values.procesoId.value : 0,
+        procedimientoId : (values.procedimientoId !== null) ? values.procedimientoId.value : 0,
         duenoCargoId : (values.duenoCargoId !== null) ?   values.duenoCargoId.value : 0,
-        responsableCargoId : (values.responsableCargoId !== null) ?   values.responsableCargoId.value : 0,
-        identificadoId : (values.identificadoId !== null) ?   values.identificadoId.value : 0,
+        responsableCargoId : (values.responsableCargoId !== null) ? values.responsableCargoId.value : 0,
+        fodaId : (values.fodaId !== null) ?   values.fodaId.value : 0,
+        fodaDescripcionId : (values.fodaDescripcionId !== null) ? values.fodaDescripcionId.value : 0,
       }
       console.log('datos que se enviaran SECCION 1:', data)
       setObject(data);
@@ -131,23 +123,35 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
       })
   }
 
-  // Identificado por
-  const [dataApiIdentificado, setDataApiIdentificado] = useState([])
-  const callApiIdentificado = (idTablaDes) => {
-    getTablaDescripcionRiesgoN1(idTablaDes)
+  // FODA Nivel 1
+  const [dataApiFoda, setDataApiFoda] = useState([])
+  const callApiFoda = (idTablaDes) => {
+    getTablaDescripcionOportunidadN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
-        setDataApiIdentificado(options)
+        setDataApiFoda(options)
+      }).catch((error) => {
+        console.log('Error: ', error)
+      })
+  }
+
+  // FODA descripcion Nivel 2, depende de FODA
+  const [dataApiFodaDesc, setDataApiFodaDesc] = useState([])
+  const callApiFodaDesc = (idTablaDes, idNivel2) => {
+    getTablaDescripcionOportunidadN2(idTablaDes, idNivel2)
+      .then(res => {
+        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
+        setDataApiFodaDesc(options)
       }).catch((error) => {
         console.log('Error: ', error)
       })
   }
 
   useEffect(() => {
+    callApiFoda(1)
     callApiArea(3);
     callApiMacro(15);
     callApiCargo(7);
-    callApiIdentificado(8)
   }, [])
 
   // Reset Unidad (nivel 2)
@@ -170,24 +174,23 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.procesoId])
 
-  // Autocompleta nombre, criticidad y valoracion de Macroproceso
+   // Reset FODA descripcion (nivel 2)
+   const resetFodaDescripcion = () => { formik.setFieldValue('fodaDescripcionId', null, false);}
+   useEffect(() => {
+    if(formik.values.fodaId !== null){
+      callApiFodaDesc(2, formik.values.fodaId.value);
+      resetFodaDescripcion();
+    }
+     //eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [formik.values.fodaId])
+
+  // Autocompleta codigo de Macroproceso
   useEffect(() => {
     if(formik.values.procesoId !== null){
       formik.setFieldValue('macroNombre', formik.values.procesoId.clave, false)
-      formik.setFieldValue('macroCriticidad', formik.values.procesoId.descripcion, false)
-      formik.setFieldValue('macroValoracion', formik.values.procesoId.campoA, false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.procesoId]);
-
-  // Resetea "otros" dependiendo del check
-  const resetOtros = () => { formik.setFieldValue('identificadoOtro', null, false); }
-  useEffect(() => {
-    if(formik.values.otrosAux !== true){
-      resetOtros();
-    }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.otrosAux])
 
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
@@ -282,38 +285,6 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
-              Criticidad (Precalificación)
-            </Label>
-            <CInputReact
-              type={"text"}
-              id={'macroCriticidad'}
-              value={formik.values.macroCriticidad}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              touched={formik.touched.macroCriticidad}
-              errors={formik.errors.macroCriticidad}
-              disabled={true}
-            />
-          </FormGroup>
-
-          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
-            <Label className='form-label'>
-              Valoración Precalificación
-            </Label>
-            <CInputReact
-              type={"text"}
-              id={'macroValoracion'}
-              value={formik.values.macroValoracion}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              touched={formik.touched.macroValoracion}
-              errors={formik.errors.macroValoracion}
-              disabled={true}
-            />
-          </FormGroup>
-
-          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
-            <Label className='form-label'>
               Dueño proceso <span className='text-primary h5'><b>*</b></span>
             </Label>
             <CSelectReact
@@ -364,49 +335,37 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
-              Identificado por:
+              FODA:
             </Label>
             <CSelectReact
               type={"select"}
-              id={'identificadoId'}
+              id={'fodaId'}
               placeholder={'Seleccionar'}
-              value={formik.values.identificadoId}
+              value={formik.values.fodaId}
               onChange={formik.setFieldValue}
               onBlur={formik.setFieldTouched}
-              error={formik.errors.identificadoId}
-              touched={formik.touched.identificadoId}
-              options={dataApiIdentificado}
+              error={formik.errors.fodaId}
+              touched={formik.touched.fodaId}
+              options={dataApiFoda}
             />
           </FormGroup>
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
-            <CInputCheckbox
-              id={'otrosAux'}
-              type={"checkbox"}
-              value={formik.values.otrosAux}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              label='Otros (Identificado por)'
+            <Label className='form-label'>
+              Detalle FODA:
+            </Label>
+            <CSelectReact
+              type={"select"}
+              id={'fodaDescripcionId'}
+              placeholder={'Seleccionar'}
+              value={formik.values.fodaDescripcionId}
+              onChange={formik.setFieldValue}
+              onBlur={formik.setFieldTouched}
+              error={formik.errors.fodaDescripcionId}
+              touched={formik.touched.fodaDescripcionId}
+              options={dataApiFodaDesc}
             />
           </FormGroup>
-
-          {formik.values.otrosAux === true ?
-            <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
-              <Label className='form-label'>
-                Otros (Identificado por)
-              </Label>
-              <CInputReact
-                type={"text"}
-                id={'identificadoOtro'}
-                placeholder={'Otros'}
-                value={formik.values.identificadoOtro}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                touched={formik.touched.identificadoOtro}
-                errors={formik.errors.identificadoOtro}
-              />
-            </FormGroup>
-          : null}
         </Row>
 
         <div className='d-flex justify-content-between pt-4'>
@@ -414,8 +373,6 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
               style={{width: '130px'}}
               color="primary"
               outline
-              // onClick={(e) => { redirect(e) }}
-              //href="#/administracion/formularios"
             >
               Cancelar
           </Button>
@@ -440,7 +397,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
           </Button>
         </div>
 
-      </Form> 
+      </Form>
     </Fragment>
   )
 }

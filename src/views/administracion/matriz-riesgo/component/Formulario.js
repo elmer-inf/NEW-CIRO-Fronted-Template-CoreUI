@@ -4,7 +4,7 @@ import * as Yup from "yup"
 import { CInputReact } from 'src/reusable/CInputReact'
 import { FormGroup, Row, Col, Form, Button, Label } from 'reactstrap'
 import { CSelectReact } from 'src/reusable/CSelectReact'
-import { getTablaListaMatrizR } from '../controller/AdminMatrizRController';
+import { getTablaListaRiesgo } from '../controller/AdminRiesgoController';
 import { buildSelectTwo } from 'src/functions/Function'
 
 const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
@@ -40,7 +40,7 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
   const [tablaListaOptions, setTablaListaOptions] = useState([])
 
   const callApi = () => {
-    getTablaListaMatrizR()
+    getTablaListaRiesgo()
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombreTabla', true)
         setTablaListaOptions(options)

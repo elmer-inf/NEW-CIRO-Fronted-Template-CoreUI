@@ -7,7 +7,7 @@ import * as Yup from "yup"
 import { CInputReact } from 'src/reusable/CInputReact'
 import { CSelectReact } from 'src/reusable/CSelectReact'
 import  CInputCheckbox  from 'src/reusable/CInputCheckbox'
-import { getTablaDescripcionNivel, getTablaDescripcionNivel2, getTablaDescripcionNivel3 } from '../controller/EventoController';
+import { getTablaDescripcionEventoN1, getTablaDescripcionEventoN2, getTablaDescripcionEventoN3 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
 import { buildSelectTwo } from 'src/functions/Function'
 
 const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, isEdit , tipoEvento, fechaDesc}) => {
@@ -114,7 +114,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   // Subcategorizaciontipo
   const [dataApiSubcat, setDataApiSubcat] = useState([])
   const callApiSubcat = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiSubcat(options)
@@ -126,7 +126,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   // Tipo de evento de pérdida
   const [dataApiTipoEvento, setDataApiTipo] = useState([])
   const callApiTipoEvento = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiTipo(options)
@@ -138,7 +138,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   // Sub evento - Basilea (Nivel 2), depende de tipo de evento
   const [dataApiSubevento, setDataApiSubevento] = useState([])
   const callApiSubevento = (idTablaDes, idNivel2) => {
-    getTablaDescripcionNivel2(idTablaDes, idNivel2)
+    getTablaDescripcionEventoN2(idTablaDes, idNivel2)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiSubevento(options)
@@ -150,7 +150,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   // Clase evento - Basilea (Nivel 3), depende de Subevento
   const [dataApiClaseEvento, setDataApiClaseEvento] = useState([])
   const callApiClaseEvento = (idTablaDes, idNivel2, idNivel3) => {
-    getTablaDescripcionNivel3(idTablaDes, idNivel2, idNivel3)
+    getTablaDescripcionEventoN3(idTablaDes, idNivel2, idNivel3)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiClaseEvento(options)
@@ -162,7 +162,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   // Factor de riesgo operativo
   const [dataApiFactorRiesgo, setDataApiFactorRiesgo] = useState([])
   const callApiFactorRiesgo = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiFactorRiesgo(options)
@@ -174,7 +174,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   // Proceso
   const [dataApiProceso, setDataApiProceso] = useState([])
   const callApiProceso = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiProceso(options)
@@ -186,7 +186,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   // Procedimiento (Nivel 2), depende de proceso
   const [dataApiProcedimiento, setDataApiProcedimiento] = useState([])
   const callApiProcedimiento = (idTablaDes, idNivel2) => {
-    getTablaDescripcionNivel2(idTablaDes, idNivel2)
+    getTablaDescripcionEventoN2(idTablaDes, idNivel2)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'campoA', true)
         setDataApiProcedimiento(options)
@@ -210,7 +210,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   // Linea de negocio ASFI
   const [dataApiLineaAsfi, setDataApiLineaAsfi] = useState([])
   const callApiLineaAsfi = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiLineaAsfi(options)
@@ -222,7 +222,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   // Operaciones ASFI
   const [dataApiOperacion, setDataApiOperacion] = useState([])
   const callApiOperacion = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiOperacion(options)
@@ -234,7 +234,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   // Efecto de perdida
   const [dataApiEfectoPerdida, setDataApiEfectoPerdida] = useState([])
   const callApiEfectoPerdida = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiEfectoPerdida(options)
@@ -253,7 +253,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   // Operación, producto o servicio afectado
   const [dataApiOpeProSer, setDataApiOpeProSer] = useState([])
   const callApiOpeProSer = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiOpeProSer(options)
@@ -265,7 +265,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   // Tipo de servicio (Nivel 2), depende de Operación, producto o servicio
   const [dataApiTipoServicio, setDataApiTipoServicio] = useState([])
   const callApiTipoServicio = (idTablaDes, idNivel2) => {
-    getTablaDescripcionNivel2(idTablaDes, idNivel2)
+    getTablaDescripcionEventoN2(idTablaDes, idNivel2)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiTipoServicio(options)
@@ -277,7 +277,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   // Descripción de servicio (Nivel 3), depende de Tipo de servicio
   const [dataApiServicioDesc, setDataApiServicioDesc] = useState([])
   const callApiServicioDesc = (idTablaDes, idNivel2, idNivel3) => {
-    getTablaDescripcionNivel3(idTablaDes, idNivel2, idNivel3)
+    getTablaDescripcionEventoN3(idTablaDes, idNivel2, idNivel3)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiServicioDesc(options)

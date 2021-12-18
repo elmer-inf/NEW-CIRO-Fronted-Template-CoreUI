@@ -2,8 +2,8 @@ import React, { Fragment, useState, useEffect } from 'react'
 import { Card, CardHeader, CardBody, CardTitle, Button, Col, Row } from 'reactstrap'
 import { CBadge } from '@coreui/react'
 import BootstrapTable from 'react-bootstrap-table-next';
-import ActionFormatter from '../../reusable/ActionFormatterEvento';
-import ActionFormatterEvaluar from '../../reusable/ActionFormatterEvaluar';
+import ActionFormatter from 'src/reusable/ActionFormatterEvento';
+import ActionFormatterEvaluar from 'src/reusable/ActionFormatterEvaluar';
 import { useHistory } from 'react-router-dom'
 import { putEvaluaEvento, getEventosPaging } from './controller/EventoController'
 import { pagingInit } from 'src/reusable/variables/Variables';
@@ -203,24 +203,6 @@ const EventoRiesgoListar = () => {
     callApi(pagination.page, pagination.size)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  /* LISTA TABLA DESCRIPCION despendiento de seleccion tabla lista*/
-  //const [dataApi, setDAtaApi] = useState([])
-  /*   const handleSelectOnChange = (result) => {
-      console.log('select:  ', result)
-      getTablaDescripcion(result.value);
-    }
-  
-    const getTablaDescripcion = (idTabla) => {
-      getTablaDescripcionNivel(idTabla)
-      .then(res => {
-        console.log('nivel 1: ', res.data)
-        setDAtaApi(res.data)
-      }).catch((error) => {
-        console.log('Error: ', error)
-        //notificationToast('error', Messages.notification.notOk)
-      })
-    } */
 
 
   // search by columns

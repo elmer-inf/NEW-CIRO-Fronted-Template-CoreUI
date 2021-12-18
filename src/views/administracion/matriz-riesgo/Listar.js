@@ -4,7 +4,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import ActionFormatter from 'src/reusable/ActionFormatter';
 import Select from 'react-select'
 import { useHistory } from 'react-router-dom'
-import { getTablaListaMatrizR, getTablaDescripcionMatrizR } from './controller/AdminMatrizRController'
+import { getTablaListaRiesgo, getTablaDescripcionRiesgoN1 } from './controller/AdminRiesgoController'
 import { buildSelectTwo } from 'src/functions/Function'
 
 const AdministracionMatrizRiesgosListar = () => {
@@ -155,7 +155,7 @@ const AdministracionMatrizRiesgosListar = () => {
   }
   /* LISTA TABLA LISTA */
   const callApi = () => {
-    getTablaListaMatrizR()
+    getTablaListaRiesgo()
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombreTabla', false)
         //console.log('El response de tabla: ', res.data)
@@ -181,7 +181,7 @@ const AdministracionMatrizRiesgosListar = () => {
   }
 
   const getTablaDescripcion = (idTabla) => {
-    getTablaDescripcionMatrizR(idTabla)
+    getTablaDescripcionRiesgoN1(idTabla)
     .then(res => {
       //console.log('nivel 1: ', res.data)
       setDAtaApi(res.data)

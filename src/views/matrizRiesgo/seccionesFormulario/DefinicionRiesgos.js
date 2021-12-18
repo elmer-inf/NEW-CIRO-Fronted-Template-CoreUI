@@ -6,7 +6,8 @@ import * as Yup from "yup"
 import { CInputReact } from 'src/reusable/CInputReact'
 import { CSelectReact } from 'src/reusable/CSelectReact'
 import  CInputCheckbox  from 'src/reusable/CInputCheckbox'
-import { getTablaDescripcionMatrizR, getTablaDescripcionNivel } from '../controller/MatrizRiesgoController';
+import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController'
+import { getTablaDescripcionRiesgoN1 } from 'src/views/administracion/matriz-riesgo/controller/AdminRiesgoController';
 import { buildSelectTwo } from 'src/functions/Function'
 import { calculaRiesgo, buscaValorLiteralRiesgoI } from 'src/functions/FunctionsMatriz'
 
@@ -83,7 +84,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
   // Efecto de perdida
   const [dataApiEfectoPerdida, setDataApiEfectoPerdida] = useState([])
   const callApiEfectoPerdida = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiEfectoPerdida(options)
@@ -95,7 +96,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
   // Perdida ASFi
   const [dataApiPerdidaAsfi, setDataApiPerdidaAsfi] = useState([])
   const callApiPerdidaAsfi = (idTablaDes) => {
-    getTablaDescripcionMatrizR(idTablaDes)
+    getTablaDescripcionRiesgoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiPerdidaAsfi(options)
@@ -107,7 +108,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
   // Factor de riesgo operativo
   const [dataApiFactorRiesgo, setDataApiFactorRiesgo] = useState([])
   const callApiFactorRiesgo = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiFactorRiesgo(options)
@@ -119,7 +120,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
   // Probabilidad
   const [dataApiProbabilidad, setDataApiProbabilidad] = useState([])
   const callApiProbabilidad = (idTablaDes) => {
-    getTablaDescripcionMatrizR(idTablaDes)
+    getTablaDescripcionRiesgoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'campoD', true)
         setDataApiProbabilidad(options)
@@ -131,7 +132,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
   // Impacto de riesgo
   const [dataApiImpacto, setDataApiImpacto] = useState([])
   const callApiImpacto = (idTablaDes) => {
-    getTablaDescripcionMatrizR(idTablaDes)
+    getTablaDescripcionRiesgoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'campoD', true)
         setDataApiImpacto(options)
@@ -143,7 +144,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
   // Nivel de riesgo inherente
   const [dataApiRiesgoI, setDataApiRiesgoI] = useState([])
   const callApiRiesgoI = (idTablaDes) => {
-    getTablaDescripcionMatrizR(idTablaDes)
+    getTablaDescripcionRiesgoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'campoD', true)
         setDataApiRiesgoI(options)

@@ -1,7 +1,8 @@
 import { React, useState, useEffect } from 'react'
 import { ChevronLeft, ChevronRight, Delete } from 'react-feather'
 import { Row, Col, FormGroup, Label, Button, } from 'reactstrap'
-import { getTablaDescripcionNivel, getTablaDescripcionMatrizR } from '../controller/MatrizRiesgoController';
+import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
+import { getTablaDescripcionRiesgoN1 } from 'src/views/administracion/matriz-riesgo/controller/AdminRiesgoController';
 import * as Yup from "yup"
 import { buildSelectTwo } from 'src/functions/Function'
 import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik';
@@ -68,7 +69,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, isEdit }
   // Procedimiento
   const [dataApiProcedimiento, setDataApiProcedimiento] = useState([])
   const callApiProcedimiento = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiProcedimiento(options)
@@ -80,7 +81,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, isEdit }
   // Tipo Control
   const [dataApiTipoControl, setDataApiTipoControl] = useState([])
   const callApiTipoControl = (idTablaDes) => {
-    getTablaDescripcionMatrizR(idTablaDes)
+    getTablaDescripcionRiesgoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiTipoControl(options)
@@ -92,7 +93,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, isEdit }
   // Nivel de Automatización
   const [dataApiNivelAuto, setDataApiNivelAuto] = useState([])
   const callApiNivelAuto = (idTablaDes) => {
-    getTablaDescripcionMatrizR(idTablaDes)
+    getTablaDescripcionRiesgoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiNivelAuto(options)
@@ -104,11 +105,9 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, isEdit }
   // Control
   const [dataApiControl, setDataApiControl] = useState([])
   const callApiControl = (idTablaDes) => {
-    getTablaDescripcionMatrizR(idTablaDes)
+    getTablaDescripcionRiesgoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'campoA', true)
-
-
         setDataApiControl(options)
       }).catch((error) => {
         console.log('Error: ', error)

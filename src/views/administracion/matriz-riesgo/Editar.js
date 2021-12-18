@@ -2,7 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react'
 import { Card, CardHeader, CardTitle, CardBody } from 'reactstrap'
 import { useHistory } from 'react-router-dom'
 import Formulario from './component/Formulario'
-import { editTablaDescripcionMatrizR, getTablaDescripcioMatrizId } from './controller/AdminMatrizRController'
+import { putTablaDescripcionRiesgo, getTablaDescripcionRiesgoId } from './controller/AdminRiesgoController'
 
 const AdministracionEventoEditar = ( { match } ) => {
 
@@ -26,7 +26,7 @@ const AdministracionEventoEditar = ( { match } ) => {
   const handleOnSubmit = (dataToRequest) => {
     console.log('data que se edita: ', dataToRequest)
     const idTabDesc = match.params.id;
-    editTablaDescripcionMatrizR(idTabDesc, dataToRequest)
+    putTablaDescripcionRiesgo(idTabDesc, dataToRequest)
     .then(res => {
       console.log('response : ', res);
       history.push("/administracion/matriz-riesgo/listar")
@@ -57,7 +57,7 @@ const AdministracionEventoEditar = ( { match } ) => {
   const getById = async () => {
     setSpin(true)
     const idParametro = match.params.id;
-    await getTablaDescripcioMatrizId(idParametro)
+    await getTablaDescripcionRiesgoId(idParametro)
       .then((response) => {
           console.log("API xxxxx: ", response);
           const res = response.data;

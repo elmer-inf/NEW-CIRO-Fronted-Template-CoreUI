@@ -4,11 +4,11 @@ import { Label, FormGroup, Row, Col, Form, Button } from 'reactstrap'
 
 import { useFormik } from "formik"
 import * as Yup from "yup"
-import { CInputReact } from '../../../reusable/CInputReact'
-import { CSelectReact } from '../../../reusable/CSelectReact'
-import  CInputRadio  from '../../../reusable/CInputRadio'
-import { getTablaDescripcionNivel } from '../controller/EventoController';
-import { buildSelectTwo } from '../../../functions/Function'
+import { CInputReact } from 'src/reusable/CInputReact'
+import { CSelectReact } from 'src/reusable/CSelectReact'
+import  CInputRadio  from 'src/reusable/CInputRadio'
+import { getTablaDescripcionEventoN1} from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
+import { buildSelectTwo } from 'src/functions/Function'
 
 const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValues, isEdit }) => {
 
@@ -65,7 +65,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
 
   const [dataApiTasaCambio, setDataApiTasaCambio] = useState('')
   const callApiTasaCambio = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         //console.log('tasa cambio: ', options)
@@ -79,7 +79,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
   // Moneda
   const [dataApiMoneda, setDataApiMoneda] = useState([])
   const callApiMoneda = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'clave', true)
         setDataApiMoneda(options)
@@ -91,7 +91,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
   // Impacto
   const [dataApiImpacto, setDataApiImpacto] = useState([])
   const callApiImpacto = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiImpacto(options)
@@ -103,7 +103,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
   // Poliza
   const [dataApiPoliza, setDataApiPoliza] = useState([])
   const callApiPoliza = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiPoliza(options)

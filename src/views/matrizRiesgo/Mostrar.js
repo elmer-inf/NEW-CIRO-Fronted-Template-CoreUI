@@ -2,12 +2,12 @@ import { React, useState, useEffect } from 'react'
 import { FileText, BarChart2, Trello, List, CheckSquare, PieChart, TrendingUp, Percent, X, AlertCircle, Check } from 'react-feather'
 import { Row, Col, Card, CardBody, CardHeader, CardTitle, Badge, Button, ListGroup, ListGroupItem} from 'reactstrap';
 import { CNav, CNavItem, CNavLink, CTabContent, CTabPane, CTabs, CButton, CCollapse, CCard, CModal, CModalBody, CModalHeader, CModalTitle, CBadge, CCallout, CProgress} from '@coreui/react'
-import { getMatrizRiesgoId, getUltimaObservacion, putEvaluaRiesgo } from './controller/MatrizRiesgoController';
+import { getRiesgoId, getUltimaObservacion, putEvaluaRiesgo } from './controller/RiesgoController';
+import { getTablaDescripcionRiesgoN1 } from 'src/views/administracion/matriz-riesgo/controller/AdminRiesgoController';
 import FormularioEvaluar from './component/FormularioEvaluar'
 import BootstrapTable from 'react-bootstrap-table-next';
 import { calculaRiesgo, buscaValorLiteralRiesgoI, buscaValorLiteral, reduceProbabilidadImpacto, countEstadoPlanes, resultAvance  } from 'src/functions/FunctionsMatriz'
 import { buildSelectTwo } from 'src/functions/Function'
-import { getTablaDescripcionMatrizR } from './controller/MatrizRiesgoController';
 
 var _ = require('lodash');
 
@@ -110,7 +110,7 @@ const MatrizRiesgo = ({ match }) => {
 
   const getById = async () => {
     const idEvento = match.params.id;
-    await getMatrizRiesgoId(idEvento)
+    await getRiesgoId(idEvento)
     .then((response) => {
       const res = response.data;
       console.log('Res : ', res);
@@ -125,7 +125,7 @@ const MatrizRiesgo = ({ match }) => {
   // Nivel de riesgosinherente Aux
   const [dataApiRiesgoI, setDataApiRiesgoI] = useState([])
   const callApiRiesgoI = (idTablaDes) => {
-    getTablaDescripcionMatrizR(idTablaDes)
+    getTablaDescripcionRiesgoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'campoD', true)
         setDataApiRiesgoI(options)
@@ -137,7 +137,7 @@ const MatrizRiesgo = ({ match }) => {
    // Probabilidad
   const [dataApiProbabilidad, setDataApiProbabilidad] = useState([])
   const callApiProbabilidad = (idTablaDes) => {
-    getTablaDescripcionMatrizR(idTablaDes)
+    getTablaDescripcionRiesgoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'campoD', true)
         setDataApiProbabilidad(options)
@@ -149,7 +149,7 @@ const MatrizRiesgo = ({ match }) => {
   // Impacto de riesgo
   const [dataApiImpacto, setDataApiImpacto] = useState([])
   const callApiImpacto = (idTablaDes) => {
-    getTablaDescripcionMatrizR(idTablaDes)
+    getTablaDescripcionRiesgoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'campoD', true)
         setDataApiImpacto(options)
@@ -220,11 +220,11 @@ const MatrizRiesgo = ({ match }) => {
   const [dataUltimaObservacion, setDataUltimaObs] = useState({})
 
   const getByIdObservacion = async () => {
-    const idEvento = match.params.id;
-    await getUltimaObservacion(idEvento)
+    const idRiesgo = match.params.id;
+    await getUltimaObservacion(idRiesgo)
     .then((response) => {
       const res = response.data;
-      console.log('Datos ultima observacion : ', res);
+      //console.log('Datos ultima observacion : ', res);
       setDataUltimaObs(res)
     }).catch((error) => {
       console.log("Error: ", error);
@@ -270,7 +270,7 @@ const MatrizRiesgo = ({ match }) => {
   const dataListaObservaciones = listaObservaciones.split(',');
 
   return (
-    <div>
+    <div className='table-hover-animation'>
       {
         (!_.isEmpty(dataApi))?
           <div>
@@ -596,7 +596,7 @@ const MatrizRiesgo = ({ match }) => {
                           {dataApi.controlesTiene === true?
                             <Col xs='12' className='pt-2'>
                               <BootstrapTable
-                                classes= {'table-hover-animation list mt-2'}
+                                classes= {'table-hover-animation mt-2'}
                                 bootstrap4={true}
                                 sort={ { dataField: 'nroControl', order: 'asc' } }
                                 noDataIndication={'No hay registros de Controles actuales'}
@@ -658,7 +658,7 @@ const MatrizRiesgo = ({ match }) => {
                         <Row className='pt-3'>
                           <Col xs='12' className='pt-2'>
                             <BootstrapTable
-                              classes= {'table-hover-animation list mt-2'}
+                              classes= {'table-hover-animation mt-2'}
                               bootstrap4={true}
                               sort={ { dataField: 'nroPlan', order: 'asc' } }
                               noDataIndication={'No hay registros de Planes de acción'}
@@ -679,7 +679,7 @@ const MatrizRiesgo = ({ match }) => {
                         <Row className='pt-3'>
                           <Col xs='12' className='pt-2'>
                             <BootstrapTable
-                              classes= {'table-hover-animation list mt-2'}
+                              classes= {'table-hover-animation mt-2'}
                               bootstrap4={true}
                               sort={ { dataField: 'nroPlan', order: 'asc' } }
                               noDataIndication={'No hay registros de Planes de acción'}

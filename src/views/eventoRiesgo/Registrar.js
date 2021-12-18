@@ -8,7 +8,8 @@ import { Row, Col, Card, CardBody, CardHeader, CardTitle, TabContent, TabPane, N
 import CInputRadio from 'src/reusable/CInputRadio'
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames';
-import { postEventoRiesgo, getTablaDescripcionNivel } from './controller/EventoController';
+import { getTablaDescripcionEventoN1} from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
+import { postEventoRiesgo } from './controller/EventoController';
 import { buildSelectTwo } from 'src/functions/Function'
 
 import { useFormik } from "formik"
@@ -21,7 +22,7 @@ const EventoRiesgoRegistrar = () => {
   // Tipo de evento
   const [dataApiTipoEvento, setDataApiTipoEvento] = useState([])
   const callApiTipoEvento = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'clave', false)
         setDataApiTipoEvento(options)

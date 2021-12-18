@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { useFormik } from "formik"
 import * as Yup from "yup"
-import { CInputReact } from '../../../../reusable/CInputReact'
+import { CInputReact } from 'src/reusable/CInputReact'
 import { FormGroup, Col, Form, Button, Label, Row } from 'reactstrap'
-import { CSelectReact } from '../../../../reusable/CSelectReact'
-import { getTablaLista, getTablaDescripcionNivel } from '../controller/AdminEventoController';
-import { buildSelectTwo } from '../../../../functions/Function'
+import { CSelectReact } from 'src/reusable/CSelectReact'
+import { getTablaListaEvento, getTablaDescripcionEventoN1 } from '../controller/AdminEventoController';
+import { buildSelectTwo } from 'src/functions/Function'
 
 /**
  * @param handleOnSubmit : function 
@@ -49,7 +49,7 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
   const [tablaListaOptions, setTablaListaOptions] = useState([])
 
   const callApi = () => {
-    getTablaLista()
+    getTablaListaEvento()
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre_tabla', true)
         //console.log('El response de tabla: ', res.data)
@@ -70,7 +70,7 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
   const [dataApi2, setDataApi] = useState([])
 
   const callApi2 = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         //console.log('El response de tabla call api 2: ', res.data)
@@ -110,7 +110,7 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
   const [dataApi3, setDataApi3] = useState([])
 
   const callApi3 = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         //console.log('El response de tabla: ', res.data)

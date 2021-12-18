@@ -1,12 +1,12 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import { Card, CardHeader, CardBody, CardTitle, Button, Col, Label, Row} from 'reactstrap'
 import BootstrapTable from 'react-bootstrap-table-next';
-import ActionFormatter from '../../../reusable/ActionFormatter';
+import ActionFormatter from 'src/reusable/ActionFormatter';
 
 import Select from 'react-select'
 import { useHistory } from 'react-router-dom'
-import { getTablaDescripcionNivel, getTablaLista } from './controller/AdminEventoController'
-import { buildSelectTwo } from '../../../functions/Function'
+import { getTablaDescripcionEventoN1, getTablaListaEvento } from './controller/AdminEventoController'
+import { buildSelectTwo } from 'src/functions/Function'
 import { Plus } from 'react-feather';
 
 const AdministracionEventoListar = () => {
@@ -162,7 +162,7 @@ const AdministracionEventoListar = () => {
   }
   /* LISTA TABLA LISTA */
   const callApi = () => {
-    getTablaLista()
+    getTablaListaEvento()
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre_tabla', false)
         //console.log('El response de tabla: ', res.data)
@@ -188,7 +188,7 @@ const AdministracionEventoListar = () => {
   }
 
   const getTablaDescripcion = (idTabla) => {
-    getTablaDescripcionNivel(idTabla)
+    getTablaDescripcionEventoN1(idTabla)
     .then(res => {
       //console.log('nivel 1: ', res.data)
       setDAtaApi(res.data)

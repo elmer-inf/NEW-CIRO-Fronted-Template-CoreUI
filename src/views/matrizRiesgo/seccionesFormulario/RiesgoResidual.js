@@ -4,7 +4,7 @@ import { Label, FormGroup, Row, Col, Form, Button } from 'reactstrap'
 import { useFormik } from "formik"
 import * as Yup from "yup"
 import { CInputReact } from 'src/reusable/CInputReact'
-import { getTablaDescripcionMatrizR } from '../controller/MatrizRiesgoController';
+import { getTablaDescripcionRiesgoN1 } from 'src/views/administracion/matriz-riesgo/controller/AdminRiesgoController';
 import { buildSelectTwo } from 'src/functions/Function'
 import { buscaValorLiteral, buscaValorLiteralRiesgoI, calculaRiesgo, reduceProbabilidadImpacto } from 'src/functions/FunctionsMatriz'
 
@@ -39,7 +39,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, d
   // Probabilidad
   const [dataApiProbabilidad, setDataApiProbabilidad] = useState([])
   const callApiProbabilidad = (idTablaDes) => {
-    getTablaDescripcionMatrizR(idTablaDes)
+    getTablaDescripcionRiesgoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'campoD', true)
         setDataApiProbabilidad(options)
@@ -51,7 +51,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, d
   // Impacto de riesgo
   const [dataApiImpacto, setDataApiImpacto] = useState([])
   const callApiImpacto = (idTablaDes) => {
-    getTablaDescripcionMatrizR(idTablaDes)
+    getTablaDescripcionRiesgoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'campoD', true)
         setDataApiImpacto(options)
@@ -63,7 +63,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, d
   // Nivel de riesgo inherente
   const [dataApiRiesgoI, setDataApiRiesgoI] = useState([])
   const callApiRiesgoI = (idTablaDes) => {
-    getTablaDescripcionMatrizR(idTablaDes)
+    getTablaDescripcionRiesgoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'campoD', true)
         setDataApiRiesgoI(options)
@@ -75,7 +75,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, d
   // Control (Auxiliar para obtener % disminucion)
   const [dataApiControl, setDataApiControl] = useState([])
   const callApiControl = (idTablaDes) => {
-    getTablaDescripcionMatrizR(idTablaDes)
+    getTablaDescripcionRiesgoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'campoA', true)
         setDataApiControl(options)

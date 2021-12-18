@@ -2,7 +2,7 @@ import { Fragment } from 'react'
 import { Card, CardHeader, CardTitle, CardBody} from 'reactstrap'
 import { useHistory } from 'react-router-dom'
 import Formulario from './component/Formulario'
-import { postListDescripcion } from './controller/AdminEventoController'
+import { postTablaDescripcionEvento } from './controller/AdminEventoController'
 
 const AdministracionEventoRegistrar = () => {
 
@@ -21,7 +21,7 @@ const AdministracionEventoRegistrar = () => {
   }
 
   const handleOnSubmit = (dataToRequest) =>{
-    postListDescripcion(dataToRequest)
+    postTablaDescripcionEvento(dataToRequest)
     .then(response => {
       console.log('Envio el request : ', response);
       history.push("/administracion/evento-riesgo/listar")

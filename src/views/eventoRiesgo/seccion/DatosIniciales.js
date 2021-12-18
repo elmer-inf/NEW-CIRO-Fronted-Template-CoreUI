@@ -4,11 +4,11 @@ import { Label, FormGroup, Row, Col, Form, Button } from 'reactstrap'
 
 import { useFormik } from "formik"
 import * as Yup from "yup"
-import { CInputReact } from '../../../reusable/CInputReact'
-import { CSelectReact } from '../../../reusable/CSelectReact'
-import  CInputCheckbox  from '../../../reusable/CInputCheckbox'
-import { getTablaDescripcionNivel, getTablaDescripcionNivel2 } from '../controller/EventoController';
-import { buildSelectTwo } from '../../../functions/Function'
+import { CInputReact } from 'src/reusable/CInputReact'
+import { CSelectReact } from 'src/reusable/CSelectReact'
+import  CInputCheckbox  from 'src/reusable/CInputCheckbox'
+import { getTablaDescripcionEventoN1, getTablaDescripcionEventoN2 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
+import { buildSelectTwo } from 'src/functions/Function'
 
 const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
 
@@ -82,7 +82,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   /* Agencia */
   const [dataApiAgencia, setDataApiAgencia] = useState([])
   const callApiAgencia = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiAgencia(options)
@@ -94,7 +94,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   /* Ciudad (Nivel 2), depende de agencia */
   const [dataApiCiudad, setDataApiCiudad] = useState([])
   const callApiCiudad = (idTablaDes, idNivel2) => {
-    getTablaDescripcionNivel2(idTablaDes, idNivel2)
+    getTablaDescripcionEventoN2(idTablaDes, idNivel2)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiCiudad(options)
@@ -106,7 +106,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   // Area
   const [dataApiArea, setDataApiArea] = useState([])
   const callApiArea = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiArea(options)
@@ -118,7 +118,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   // Unidad (Nivel 2), depende de area 
   const [dataApiUnidad, setDataApiUnidad] = useState([])
   const callApiUnidad = (idTablaDes, idNivel2) => {
-    getTablaDescripcionNivel2(idTablaDes, idNivel2)
+    getTablaDescripcionEventoN2(idTablaDes, idNivel2)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiUnidad(options)
@@ -130,7 +130,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   // Entidades
   const [dataApiEntidad, setDataApiEntidad] = useState([])
   const callApiEntidad = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiEntidad(options)
@@ -142,7 +142,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   // Tipo de evento
   /* const [dataApiTipoEvento, setDataApiTipoEvento] = useState([])
   const callApiTipoEvento = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'clave', false)
         setDataApiTipoEvento(options)
@@ -154,7 +154,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   // Cargos
   const [dataApiCargo, setDataApiCargo] = useState([])
   const callApiCargo = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiCargo(options)
@@ -172,7 +172,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   // Fuente de informacion
   const [dataApiFuente, setDataApiFuente] = useState([])
   const callApiFuente = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiFuente(options)
@@ -184,7 +184,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   // Canal Asfi
   const [dataApiCanal, setDataApiCanal] = useState([])
   const callApiCanal = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiCanal(options)

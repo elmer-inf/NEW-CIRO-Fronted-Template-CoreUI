@@ -1,13 +1,13 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import { Card, CardHeader, CardBody, CardTitle, Button, Col, Row} from 'reactstrap'
-import { CBadge } from '@coreui/react'
+import {CBadge} from '@coreui/react'
 import BootstrapTable from 'react-bootstrap-table-next';
 import ActionFormatter from 'src/reusable/ActionFormatterEvento';
 import ActionFormatterEvaluar from 'src/reusable/ActionFormatterEvaluar';
 import { useHistory } from 'react-router-dom'
-import { putEvaluaRiesgo, getRiesgos } from './controller/RiesgoController'
+import { putEvaluaOportunidad, getOportunidades } from './controller/OportunidadController'
 
-const MatrizRiesgoListar = () => {
+const MatrizOportunidadListar = () => {
 
   const history = useHistory()
 
@@ -130,7 +130,7 @@ const MatrizRiesgoListar = () => {
   }
 
   const detailsRow = (row) => {
-    history.push('/matrizRiesgo/mostrar/' + row.id);
+    history.push('/matrizOportunidad/mostrar/' + row.id);
   }
 
   const editRow = (row) => {
@@ -139,14 +139,14 @@ const MatrizRiesgoListar = () => {
   }
 
   const actionFormatterEvaluar = (cell, row) => {
-    return <ActionFormatterEvaluar cell={cell} row={row} autorizarFunction={autorizaRiesgo} descartarFunction={descartaRiesgo}/>
+    return <ActionFormatterEvaluar cell={cell} row={row} autorizarFunction={autorizaOportunidad} descartarFunction={descartaOportunidad}/>
   }
 
-  const autorizaRiesgo = (row) => {
+  const autorizaOportunidad = (row) => {
     const data = {
       estadoRegistro: 'Autorizado'
     }
-    putEvaluaRiesgo(row.id, data)
+    putEvaluaOportunidad(row.id, data)
     .then(res => {
       //console.log('response : ', res);
       window.location.reload(true);
@@ -155,14 +155,14 @@ const MatrizRiesgoListar = () => {
     });
   }
 
-  const descartaRiesgo = (row) => {
+  const descartaOportunidad = (row) => {
     const data = {
       estadoRegistro: 'Descartado'
     }
     console.log('data : ', data)
-    putEvaluaRiesgo(row.id, data)
+    putEvaluaOportunidad(row.id, data)
     .then(res => {
-      console.log('response : ', res);
+      //console.log('response : ', res);
       window.location.reload(true);
     }).catch((error) => {
         console.log('Error al obtener datos: ', error);
@@ -170,13 +170,13 @@ const MatrizRiesgoListar = () => {
   }
 
    /* LISTA TABLA LISTA */
-  const [listaMatrices, setListaMatrices] = useState([])
+  const [listaOportunidades, setListaOportunidades] = useState([])
 
   const callApi = () => {
-    getRiesgos()
+    getOportunidades()
     .then(res => {
       //console.log('El response de tabla: ', res.data)
-      setListaMatrices(res.data)
+      setListaOportunidades(res.data)
     }).catch((error) => {
       console.log('Error: ', error)
     })
@@ -186,23 +186,6 @@ const MatrizRiesgoListar = () => {
     callApi()
   }, [])
 
-  /* LISTA TABLA DESCRIPCION despendiento de seleccion tabla lista*/
-  //const [dataApi, setDAtaApi] = useState([])
-/*   const handleSelectOnChange = (result) => {
-    console.log('select:  ', result)
-    getTablaDescripcion(result.value);
-  }
-
-  const getTablaDescripcion = (idTabla) => {
-    getTablaDescripcionNivel(idTabla)
-    .then(res => {
-      console.log('nivel 1: ', res.data)
-      setDAtaApi(res.data)
-    }).catch((error) => {
-      console.log('Error: ', error)
-      //notificationToast('error', Messages.notification.notOk)
-    })
-  } */
   return (
     <div id='' className='table-hover-animation'>
       <Fragment>
@@ -222,7 +205,7 @@ const MatrizRiesgoListar = () => {
                   sort={ { dataField: 'id', order: 'desc' } }
                   noDataIndication={'No se encontraron resultados'}
                   keyField='id'
-                  data={listaMatrices}
+                  data={listaOportunidades}
                   columns={columns}
                   bordered={false}
                   striped={true}
@@ -240,4 +223,4 @@ const MatrizRiesgoListar = () => {
   )
 }
 
-export default MatrizRiesgoListar
+export default MatrizOportunidadListar

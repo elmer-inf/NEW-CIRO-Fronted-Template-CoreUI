@@ -1,7 +1,8 @@
 import { React, useState, useEffect } from 'react'
 import { ChevronLeft, ChevronRight, Delete } from 'react-feather'
 import { Row, Col, FormGroup, Label, Button, } from 'reactstrap'
-import { getTablaDescripcionNivel, getTablaDescripcionMatrizR } from '../controller/MatrizRiesgoController';
+import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController'
+import { getTablaDescripcionRiesgoN1 } from 'src/views/administracion/matriz-riesgo/controller/AdminRiesgoController'
 import * as Yup from "yup"
 import { buildSelectTwo } from 'src/functions/Function'
 import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik';
@@ -25,7 +26,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
       )
   });
 
-  function onChangeControles(e, field, values, setValues) {
+  function onChangePlanes(e, field, values, setValues) {
     // update dynamic form
     const planesAccion = [...values.planesAccion];
     const nroPlanes = e.target.value || 0;
@@ -60,7 +61,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
   // Estrategia para Administrar el Riesgo
   const [dataApiEstrategia, setDataApiEstrategia] = useState([])
   const callApiEstrategia = (idTablaDes) => {
-    getTablaDescripcionMatrizR(idTablaDes)
+    getTablaDescripcionRiesgoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiEstrategia(options)
@@ -72,7 +73,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
    // Cargo
    const [dataApiCargo, setDataApiCargo] = useState([])
    const callApiCargo = (idTablaDes) => {
-     getTablaDescripcionNivel(idTablaDes)
+     getTablaDescripcionEventoN1(idTablaDes)
        .then(res => {
          const options = buildSelectTwo(res.data, 'id', 'nombre', false)
          setDataApiCargo(options)
@@ -83,8 +84,10 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
 
   useEffect(() => {
     callApiCargo(7);
-    callApiEstrategia(10);
+    callApiEstrategia(4);
   }, [])
+
+  console.log('options: ', dataApiEstrategia);
 
   // Despliegue de dataApi Patametros en options (Select)
   const optionsEstrategia = () => {
@@ -131,7 +134,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
                 <Col xs='6' md='6' xl='6'>
                   <Field name="nroPlanes">
                     {({ field }) => (
-                      <select {...field} className={'form-control' + (errors.nroPlanes && touched.nroPlanes ? ' is-invalid' : '')} onChange={e => onChangeControles(e, field, values, setValues)}>
+                      <select {...field} className={'form-control' + (errors.nroPlanes && touched.nroPlanes ? ' is-invalid' : '')} onChange={e => onChangePlanes(e, field, values, setValues)}>
                         <option value="" disabled>Seleccionar</option>
                         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i =>
                           <option key={i} value={i}>{i}</option>
