@@ -75,6 +75,8 @@ const FormEvaluaRiesgo = ({ initialValuess, handleOnSubmit }) => {
       text: 'Objetivo Control'
     },{
       text: '¿Tiene Controles?'
+    },{
+      text: 'Lista de Controles'
     }
   ]
   const data5 = [
@@ -90,7 +92,7 @@ const FormEvaluaRiesgo = ({ initialValuess, handleOnSubmit }) => {
   ]
   const data6 = [
     {
-      text: 'Planes de acción'
+      text: 'Lista de Planes de acción'
     }
   ]
   const data7 = [

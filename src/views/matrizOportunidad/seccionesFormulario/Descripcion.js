@@ -85,10 +85,7 @@ const Descripcion = ({ nextSection, beforeSection, setObject, initValues, isEdit
   return (
     <Fragment>
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
-        <div className='divider divider-left divider-dark pt-3'>
-          <div className='divider-text'><span className='text-label'>Definición del Riesgo</span></div>
-        </div>
-        <Row className="pt-1">
+        <Row className="pt-4">
           <FormGroup tag={Col} md='12' className='mb-0'>
             <Label className='form-label'>
               <b>1</b> Definición de Oportunidad ¿Qué Oportunidad indentifica en el entorno interno y externo?

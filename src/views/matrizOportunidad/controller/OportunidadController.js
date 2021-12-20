@@ -26,7 +26,7 @@ export const putEvaluaOportunidad = (id, data) => {
 }
 
 export const getUltimaObservacion = async (id) => {
-    const uri = HOST + 'v1/observacion/ultimaObservacionRiesgo/' + id;
+    const uri = HOST + 'v1/observacion/ultimaObservacionOportunidad/' + id;
     const response = await axios.get(uri);
     return response;
 };

@@ -35,95 +35,66 @@ const FormEvaluaRiesgo = ({ initialValuess, handleOnSubmit }) => {
     },{
       text: 'Fecha evaluación'
     },{
-      text: 'Identificado por'
+      text: 'FODA'
+    },{
+      text: 'Detalle FODA'
     }
   ]
   const data2 = [
     {
-      text: 'Definición del Riesgo'
+      text: 'Definición de la Oportunidad'
     },{
-      text: 'Causa del Riesgo o debilidad'
+      text: 'Causa de la Oportunidad'
     },{
-      text: 'Consecuencia si es que pasa el Riesgo'
+      text: 'Consecuencia si es que ocurre la Oportunidad'
     },{
-      text: 'Definición del Riesgo (concatenación)'
+      text: 'Definición de la Oportunidad (concatenación)'
     },{
-      text: 'Tipo de Pérdida'
+      text: 'Clasificación Factores'
     },{
-      text: 'Efecto - Impacto ASFI'
-    },{
-      text: 'Monetario / No monetario'
-    },{
-      text: 'Clasificación Factores de Riesgo'
+      text: 'Grupo de Interés Relacionado'
     }
   ]
   const data3 = [
     {
-      text: 'Probabilidad - Cuán probable es que el riesgo ocurra'
+      text: 'Probabilidad - Cuán probable es que la Oportunidad ocurra'
     },{
-      text: 'Impacto - Monetario o no monerario'
+      text: 'Impacto Oportunidad Cualitativo'
     },{
-      text: 'Riesgo (Inherente)'
+      text: 'Nivel Oportunidad'
     },{
-      text: 'Valoración Riesgo (Inherente)',
+      text: 'Valoración Oportunidad',
     }
   ]
   const data4 = [
     {
-      text: 'Ponderación Control'
-    },{
-      text: 'Objetivo Control'
+      text: 'Ponderación Control/Fortaleza'
     },{
       text: '¿Tiene Controles?'
+    },{
+      text: 'Lista de Controles'
     }
   ]
+
   const data5 = [
     {
-      text: 'Probabilidad (Residual)'
-    },{
-      text: 'Impacto (Residual)'
-    },{
-      text: 'Riesgo (Residual)'
-    },{
-      text: 'Valoración Riesgo (Residual)'
+      text: 'Lista de Planes de acción'
     }
   ]
   const data6 = [
     {
-      text: 'Planes de acción'
-    }
-  ]
-  const data7 = [
-    {
-      text: 'Fecha Seguimiento'
-    },{
-      text: 'Observaciones a tareas propuestas'
-    },{
-      text: 'Comentarios tareas en Proceso'
-    }
-  ]
-  const data8 = [
-    {
-      text: 'Criterio para la valoración de Impacto'
-    },{
-      text: 'Criterio de cálculo Probabilidad'
-    },{
-      text: 'Impacto por cada vez que ocurre el evento (USD)'
-    },{
-      text: 'Monto Riesgo de Pérdida (Anual)'
+      text: 'Seguimiento de Planes de acción'
     }
   ]
 
   const dataObservados = []
 
   const [datosIniciales, setList] = useState(data1)
-  const [datosDefinicion, setList2] = useState(data2)
-  const [datosRiesgoI, setList3] = useState(data3)
+  const [datosDescripcion, setList2] = useState(data2)
+  const [datosOportunidad, setList3] = useState(data3)
   const [datosControles, setList4] = useState(data4)
-  const [datosRiesgoR, setList5] = useState(data5)
-  const [datosPlanes, setList6] = useState(data6)
-  const [datosSeguimiento, setList7] = useState(data7)
-  const [datosValoracion, setList8] = useState(data8)
+  const [datosPlanes, setList5] = useState(data5)
+  const [datosSeguimiento, setList6] = useState(data6)
   const [observados, setListObservados] = useState(dataObservados)
 
   const formik = useFormik({
@@ -155,17 +126,12 @@ const FormEvaluaRiesgo = ({ initialValuess, handleOnSubmit }) => {
 
       const data = {
         ...values,
-        modulo: "Riesgo",
+        modulo: "Oportunidad",
         listaObservacion: (Object.keys(observados).length !== 0) ? cadenaObjeto: null,
       }
       handleOnSubmit(data)
     }
   })
-
-  /* function vaciarObservados(){
-    dataObservados.splice(0, dataObservados.length);
-  } */
-
 
   return (
     <Form onSubmit={formik.handleSubmit} autoComplete="off">
@@ -185,7 +151,7 @@ const FormEvaluaRiesgo = ({ initialValuess, handleOnSubmit }) => {
         <div>
           {/* L I S T A  D E  C A M P O S */}
           <Row>
-            <Col xs='6' xl='3' className='pt-2'>
+            <Col xs='6' xl='4' className='pt-2'>
               <div className='my-1 font-weight-bold'><List size={15}/> Datos iniciales</div>
               <ReactSortable
                 className='list-group list-group-flush sortable'
@@ -205,18 +171,18 @@ const FormEvaluaRiesgo = ({ initialValuess, handleOnSubmit }) => {
                 })}
               </ReactSortable>
             </Col>
-            <Col xs='6' xl='3' className='pt-2'>
-              <div className='my-1 font-weight-bold'><List size={15}/> Definición del Riesgo</div>
+            <Col xs='6' xl='4' className='pt-2'>
+              <div className='my-1 font-weight-bold'><List size={15}/> Descripción</div>
               <ReactSortable
                 //tag='ul'
                 className='list-group list-group-flush sortable'
                 sort={false}
                 group='group2'
-                list={datosDefinicion}
+                list={datosDescripcion}
                 setList={setList2}
                 style={{cursor: 'grab'}}
               >
-                {datosDefinicion.map(item => {
+                {datosDescripcion.map(item => {
                   return (
                     <div className='draggable' key={item.text}>
                       <small>- {item.text}</small>
@@ -226,17 +192,17 @@ const FormEvaluaRiesgo = ({ initialValuess, handleOnSubmit }) => {
                 })}
               </ReactSortable>
             </Col>
-            <Col xs='6' xl='3' className='pt-2'>
-              <div className='my-1 font-weight-bold'><List size={15}/> Riesgo inherente</div>
+            <Col xs='6' xl='4' className='pt-2'>
+              <div className='my-1 font-weight-bold'><List size={15}/> Oportunidad</div>
               <ReactSortable
                 className='list-group list-group-flush sortable'
                 sort={false}
                 group='group3'
-                list={datosRiesgoI}
+                list={datosOportunidad}
                 setList={setList3}
                 style={{cursor: 'grab'}}
               >
-                {datosRiesgoI.map(item => {
+                {datosOportunidad.map(item => {
                   return (
                     <div className='draggable' key={item.text}>
                       <small>- {item.text}</small>
@@ -246,8 +212,8 @@ const FormEvaluaRiesgo = ({ initialValuess, handleOnSubmit }) => {
                 })}
               </ReactSortable>
             </Col>
-            <Col xs='6' xl='3' className='pt-2'>
-              <div className='my-1 font-weight-bold'><List size={15}/> Controles actuales</div>
+            <Col xs='6' xl='4' className='pt-2'>
+              <div className='my-1 font-weight-bold'><List size={15}/> Controles/Fortalezas actuales</div>
               <ReactSortable
                 className='list-group list-group-flush sortable'
                 sort={false}
@@ -266,34 +232,14 @@ const FormEvaluaRiesgo = ({ initialValuess, handleOnSubmit }) => {
                 })}
               </ReactSortable>
             </Col>
-            <Col xs='6' xl='3' className='pt-2'>
-              <div className='my-1 font-weight-bold'><List size={15}/> Riesgo residual</div>
-              <ReactSortable
-                className='list-group list-group-flush sortable'
-                sort={false}
-                group='group5'
-                list={datosRiesgoR}
-                setList={setList5}
-                style={{cursor: 'grab'}}
-              >
-                {datosRiesgoR.map(item => {
-                  return (
-                    <div className='draggable' key={item.text}>
-                      <small>- {item.text}</small>
-                      <hr className='my-0'/>
-                    </div>
-                  )
-                })}
-              </ReactSortable>
-            </Col>
-            <Col xs='6' xl='3' className='pt-2'>
+            <Col xs='6' xl='4' className='pt-2'>
               <div className='my-1 font-weight-bold'><List size={15}/> Planes de Acción</div>
               <ReactSortable
                 className='list-group list-group-flush sortable'
                 sort={false}
-                group='group6'
+                group='group5'
                 list={datosPlanes}
-                setList={setList6}
+                setList={setList5}
                 style={{cursor: 'grab'}}
               >
                 {datosPlanes.map(item => {
@@ -306,37 +252,17 @@ const FormEvaluaRiesgo = ({ initialValuess, handleOnSubmit }) => {
                 })}
               </ReactSortable>
             </Col>
-            <Col xs='6' xl='3' className='pt-2'>
+            <Col xs='6' xl='4' className='pt-2'>
               <div className='my-1 font-weight-bold'><List size={15}/> Seguimiento</div>
               <ReactSortable
                 className='list-group list-group-flush sortable'
                 sort={false}
-                group='group7'
+                group='group6'
                 list={datosSeguimiento}
-                setList={setList7}
+                setList={setList6}
                 style={{cursor: 'grab'}}
               >
                 {datosSeguimiento.map(item => {
-                  return (
-                    <div className='draggable' key={item.text}>
-                      <small>- {item.text}</small>
-                      <hr className='my-0'/>
-                    </div>
-                  )
-                })}
-              </ReactSortable>
-            </Col>
-            <Col xs='6' xl='3' className='pt-2'>
-              <div className='my-1 font-weight-bold'><List size={15}/> Valoración cuantitativa</div>
-              <ReactSortable
-                className='list-group list-group-flush sortable'
-                sort={false}
-                group='group8'
-                list={datosValoracion}
-                setList={setList8}
-                style={{cursor: 'grab'}}
-              >
-                {datosValoracion.map(item => {
                   return (
                     <div className='draggable' key={item.text}>
                       <small>- {item.text}</small>
@@ -356,7 +282,7 @@ const FormEvaluaRiesgo = ({ initialValuess, handleOnSubmit }) => {
                 <ReactSortable
                   //tag='ul'
                   className='list-group list-group-flush sortable'
-                  group={{ name: 'shared-badge-group', put: ['group1', 'group2', 'group3', 'group4', 'group5', 'group6', 'group7', 'group8'] }}
+                  group={{ name: 'shared-badge-group', put: ['group1', 'group2', 'group3', 'group4', 'group5', 'group6'] }}
                   list={observados}
                   setList={setListObservados}
                   style={{cursor: 'grab'}}

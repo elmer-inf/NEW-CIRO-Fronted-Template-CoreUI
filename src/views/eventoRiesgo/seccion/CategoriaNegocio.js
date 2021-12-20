@@ -109,7 +109,6 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
    }
   })
 
-
   /*   P  A  R  A  M  E  T  R  O  S   */
   // Subcategorizaciontipo
   const [dataApiSubcat, setDataApiSubcat] = useState([])
@@ -188,7 +187,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   const callApiProcedimiento = (idTablaDes, idNivel2) => {
     getTablaDescripcionEventoN2(idTablaDes, idNivel2)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'campoA', true)
+        const options = buildSelectTwo(res.data, 'id', 'descripcion', true)
         setDataApiProcedimiento(options)
       }).catch((error) => {
         console.log('Error: ', error)

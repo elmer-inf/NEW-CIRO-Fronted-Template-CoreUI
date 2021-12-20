@@ -90,7 +90,7 @@ const Oportunidad = ({ nextSection, beforeSection, setObject, initValues, isEdit
     callApiTratamiento(5)
   }, [])
 
-  // Autocompleta Probabilidad inherente, porcentaje y valoracion
+  // Autocompleta Probabilidad, porcentaje y valoracion
   useEffect(() => {
     if(formik.values.probabilidadId !== null){
       formik.setFieldValue('probNivel', formik.values.probabilidadId.campoA, false)
@@ -100,7 +100,7 @@ const Oportunidad = ({ nextSection, beforeSection, setObject, initValues, isEdit
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.probabilidadId]);
 
-  // Autocompleta Impacto inherente, porcentaje y valoracion
+  // Autocompleta Impacto, porcentaje y valoracion
   useEffect(() => {
     if(formik.values.impactoOporId !== null){
       formik.setFieldValue('impactoNivel', formik.values.impactoOporId.campoA, false)
@@ -110,7 +110,7 @@ const Oportunidad = ({ nextSection, beforeSection, setObject, initValues, isEdit
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.impactoOporId]);
 
-  // Obtiene el Riesgo inherente y si valoracion (Formula entre Probabilidad e impacto)
+  // Obtiene el Riesgo y si valoracion (Formula entre Probabilidad e impacto)
   const calculoRiesgoInerente = () =>{
     if(formik.values.probabilidadId !== null && formik.values.impactoOporId !== null){
       const prob = parseInt(formik.values.probabilidadId.campoA);

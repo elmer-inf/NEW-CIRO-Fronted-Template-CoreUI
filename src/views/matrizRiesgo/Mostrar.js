@@ -109,8 +109,8 @@ const MatrizRiesgo = ({ match }) => {
   }
 
   const getById = async () => {
-    const idEvento = match.params.id;
-    await getRiesgoId(idEvento)
+    const idRiesgo = match.params.id;
+    await getRiesgoId(idRiesgo)
     .then((response) => {
       const res = response.data;
       console.log('Res : ', res);
@@ -249,14 +249,15 @@ const MatrizRiesgo = ({ match }) => {
       estadoRegistro: dataEstadoRegistro,
       listaObservacion: '',
       nota: '',
-      estado: ''
+      estado: '',
+      modulo: ''
   }
 
   const handleOnSubmit = (dataToRequest) =>{
-    const idEvento = match.params.id
-    console.log('ID evento para evaluar: ', idEvento)
+    const idRiesgo = match.params.id
+    console.log('ID Riesgo para evaluar: ', idRiesgo)
     console.log('data antes de enviar: ', dataToRequest)
-    putEvaluaRiesgo(idEvento, dataToRequest)
+    putEvaluaRiesgo(idRiesgo, dataToRequest)
     .then(res => {
       console.log('response : ', res);
       window.location.reload(true);
@@ -401,7 +402,7 @@ const MatrizRiesgo = ({ match }) => {
 
                           <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                             <div className='text-label'>Proceso: </div>
-                            <div className='text-data'>{dataApi.procedimientoId !== null ? dataApi.procedimientoId.nombre : <i>Sin registro</i>}</div>
+                            <div className='text-data'>{dataApi.procedimientoId !== null ? dataApi.procedimientoId.campoA : <i>Sin registro</i>}</div>
                           </Col>
 
                           <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
