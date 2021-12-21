@@ -362,7 +362,10 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         <h5 className='mb-0'>Categoria</h5>
       </div> */}
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
-        <Row className='pt-4'>
+        <div className='divider divider-left divider-dark pt-2'>
+          <div className='divider-text'><span className='text-label'>Categoria</span></div>
+        </div>
+        <Row>
           <FormGroup tag={Col} md='6' lg='3'>
             <Label className='form-label'>
               Código inicial
@@ -577,8 +580,10 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
             />
           </FormGroup>
         </Row>
-       <hr/>
-        <Row className="pt-2">
+        <div className='divider divider-left divider-dark pt-2'>
+          <div className='divider-text'><span className='text-label'>Línea de negocio</span></div>
+        </div>
+        <Row>
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
               Línea de negocio <span className='text-primary h5'><b>*</b></span>

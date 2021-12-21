@@ -81,7 +81,28 @@ const EventoRiesgo = ({ match }) => {
 
   // Lista las observaciones
   const listaObservaciones = String(dataUltimaObservacion.listaObservacion);
-  const dataListaObservaciones = listaObservaciones.split(','); 
+  const dataListaObservaciones = listaObservaciones.split(',');
+
+  // Calcula "Monto de perdida" en bs en "Valor contable - monto perdida"
+  const calculaCambio = ()=>{
+    var result = 0;
+    if (dataApi.monedaId !== null && (dataApi.monedaId.clave === 'BOB' || dataApi.monedaId.clave === 'Bs')) {
+      result = dataApi.montoPerdida;
+    } else {
+      if (dataApi.monedaId !== null && (dataApi.monedaId.clave === 'USD' || dataApi.monedaId.clave === '$')) {
+        result = dataApi.montoPerdida * dataApi.tasaCambioId;
+      } else {
+        result = 0;
+      }
+    }
+    return result;
+  }
+
+  // Calcula Monto total recuperado
+  const totalRecuperado = ()=>{
+    var suma = 0;
+    return suma = dataApi.montoRecuperado + dataApi.gastoAsociado + dataApi.montoRecuperadoSeguro
+  }
 
   return (
     <div>
@@ -295,12 +316,12 @@ const EventoRiesgo = ({ match }) => {
 
                           <Col xs='12' md='6' className='pt-2'>
                             <div className='text-label'>Descripción: </div>
-                            <div className='text-data'>{dataApi.descripcion !== null ? dataApi.descripcion : <i>Sin registro</i>}</div>
+                            <div className='text-data'>{dataApi.descripcion !== '' ? dataApi.descripcion : <i>Sin registro</i>}</div>
                           </Col>
 
                           <Col xs='12' md='6' className='pt-2'>
                             <div className='text-label'>Descripción completa: </div>
-                            <div className='text-data'>{dataApi.descripcionCompleta !== null ? dataApi.descripcionCompleta : <i>Sin registro</i>}</div>
+                            <div className='text-data'>{dataApi.descripcionCompleta !== '' ? dataApi.descripcionCompleta : <i>Sin registro</i>}</div>
                           </Col>
                         </Row>
                       </CTabPane>
@@ -318,8 +339,8 @@ const EventoRiesgo = ({ match }) => {
                           </Col>
 
                           <Col xs='12' md='12' className='pt-2'>
-                            <div className='text-label'>detalle del plan: </div>
-                            <div className='text-data'>{dataApi.detallePlan !== null ? dataApi.detallePlan : <i>Sin registro</i>}</div>
+                            <div className='text-label'>Detalle del plan: </div>
+                            <div className='text-data'>{dataApi.detallePlan !== '' ? dataApi.detallePlan : <i>Sin registro</i>}</div>
                           </Col>
 
                           <Col xs='12' sm='6' className='pt-2'>
@@ -334,7 +355,7 @@ const EventoRiesgo = ({ match }) => {
 
                           <Col xs='12' md='6' className='pt-2'>
                             <div className='text-label'>Descripción del estado: </div>
-                            <div className='text-data'>{dataApi.descripcionEstado !== null ? dataApi.descripcionEstado : <i>Sin registro</i>}</div>
+                            <div className='text-data'>{dataApi.descripcionEstado !== '' ? dataApi.descripcionEstado : <i>Sin registro</i>}</div>
                           </Col>
                         </Row>
                       </CTabPane>
@@ -343,7 +364,7 @@ const EventoRiesgo = ({ match }) => {
                         <Row className='pt-3'>
                           <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                             <div className='text-label'>Código inicial: </div>
-                            <div className='text-data'>{dataApi.codigoInicial !== null ? dataApi.codigoInicial : <i>Sin registro</i>}</div>
+                            <div className='text-data'>{dataApi.codigoInicial !== '' ? dataApi.codigoInicial : <i>Sin registro</i>}</div>
                           </Col>
                           <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                             <div className='text-label'>Sub categorización: </div>
@@ -352,7 +373,7 @@ const EventoRiesgo = ({ match }) => {
 
                           <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                             <div className='text-label'>Trimestre: </div>
-                            <div className='text-data'>{dataApi.trimestre !== null ? dataApi.trimestre : <i>Sin registro</i>}</div>
+                            <div className='text-data'>{dataApi.trimestre !== '' ? dataApi.trimestre : <i>Sin registro</i>}</div>
                           </Col>
 
                           <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
@@ -378,7 +399,7 @@ const EventoRiesgo = ({ match }) => {
 
                           <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                             <div className='text-label'>Detalle evento crítico: </div>
-                            <div className='text-data'>{dataApi.detalleEventoCritico !== null ? dataApi.detalleEventoCritico : <i>Sin registro</i>}</div>
+                            <div className='text-data'>{dataApi.detalleEventoCritico !== '' ? dataApi.detalleEventoCritico : <i>Sin registro</i>}</div>
                           </Col>
 
                           <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
@@ -446,7 +467,7 @@ const EventoRiesgo = ({ match }) => {
 
                           <Col xs='12' md='6' className='pt-2'>
                             <div className='text-label'>Detalle estado del evento: </div>
-                            <div className='text-data'>{dataApi.detalleEstado !== null ? dataApi.detalleEstado : <i>Sin registro</i>}</div>
+                            <div className='text-data'>{dataApi.detalleEstado !== '' ? dataApi.detalleEstado : <i>Sin registro</i>}</div>
                           </Col>
                         </Row>
                       </CTabPane>
@@ -469,8 +490,10 @@ const EventoRiesgo = ({ match }) => {
                             </Col>
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
-                              <div className='text-label'>Monto de pérdida por riesgo operativo (USD): </div>
-                              <div className='text-data'>{dataApi.montoPerdidaRiesgo !== null ? dataApi.montoPerdidaRiesgo : <i>Sin registro</i>}</div>
+                              <div className='text-label'>Valor contable - Monto de pérdida (BOB){/* Monto de pérdida por riesgo operativo (USD) */}: </div>
+                              <div className='text-data'>
+                                {calculaCambio()}
+                              </div>
                             </Col>
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
@@ -515,11 +538,20 @@ const EventoRiesgo = ({ match }) => {
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Pérdida de valor de mercado: </div>
                               <div className='text-data'>{dataApi.perdidaMercado !== null ? dataApi.perdidaMercado : <i>Sin registro</i>}</div>
-                            </Col> 
+                            </Col>
+
+                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                              <div className='text-label'>Monto total recuperado: </div>
+                              <div className='text-data'>
+                                {totalRecuperado()}
+                              </div>
+                            </Col>
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Monto total de pérdida: </div>
-                              <div className='text-data'>{dataApi.totalPerdida !== null ? dataApi.totalPerdida : <i>Sin registro</i>}</div>
+                              <div className='text-data'>
+                                {calculaCambio() - (totalRecuperado())}
+                              </div>
                             </Col>
                           </Row>
                         </CTabPane>

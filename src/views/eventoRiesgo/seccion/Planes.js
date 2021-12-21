@@ -184,6 +184,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
         <div className='d-flex justify-content-between pt-4'>
           <Button
               style={{width: '130px'}}
+              className='text-white'
               color="primary"
               onClick={() => beforeSection(2)}
             >

@@ -1,11 +1,3 @@
-/**
- * Sistema de Promociones.
- * @author GTIC
- * @copyright (c) 2021, ATC - Red Enlace
- * @developer Abel William Copa.
- * @EndOfDevelopment Septiembre 2021
- * @LastUpdate  30/08/2021 By Abel William Copa.
- */
 import React, { useState } from 'react'
 import { AiOutlineDoubleLeft,AiOutlineLeft, AiOutlineDoubleRight,AiOutlineRight } from "react-icons/ai";
 

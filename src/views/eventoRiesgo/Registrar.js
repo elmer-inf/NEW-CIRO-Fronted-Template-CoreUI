@@ -119,6 +119,7 @@ const EventoRiesgoRegistrar = () => {
     montoRecuperadoSeguro: '',
     recuperacionActivo: '',
     perdidaMercado: '',
+    totalPerdida: '',
     totalPerdida: ''
   }
 

@@ -43,23 +43,6 @@ const EventoRiesgoListar = () => {
         <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
       headerFormatter: typeFormatter,
     }, {
-      dataField: 'tipoEvento',
-      text: 'TIPO',
-      sort: true,
-      filter: customFilter(),
-      filterRenderer: (onFilter, column) =>
-        <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
-      headerFormatter: typeFormatter,
-    }, {
-      dataField: 'fechaIni',
-      text: 'FECHA INICIO',
-      sort: true,
-      filter: customFilter(),
-      filterRenderer: (onFilter, column) =>
-        <CFilterDate placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
-      headerFormatter: typeFormatter,
-      align: 'right',
-    }, {
       dataField: 'fechaDesc',
       text: 'FECHA DESC',
       sort: true,
@@ -68,18 +51,43 @@ const EventoRiesgoListar = () => {
         <CFilterDate placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
       headerFormatter: typeFormatter,
       align: 'right',
-
     }, {
-      dataField: 'areaID.nombre',
-      text: 'AREA',
+      dataField: 'fechaFin',
+      text: 'FECHA FIN',
+      sort: true,
+      filter: customFilter(),
+      filterRenderer: (onFilter, column) =>
+        <CFilterDate placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
+      headerFormatter: typeFormatter,
+      align: 'right',
+
+    },/*  {
+      dataField: 'descripcionCompleta',
+      text: 'DESCRIPCION',
+      sort: true,
+      filter: customFilter(),
+      filterRenderer: (onFilter, column) =>
+        <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
+      headerFormatter: typeFormatter,
+    }, */ {
+      dataField: 'tipoEvento',
+      text: 'TIPO',
       sort: true,
       filter: customFilter(),
       filterRenderer: (onFilter, column) =>
         <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
       headerFormatter: typeFormatter,
     }, {
-      dataField: 'cargoId.nombre',
-      text: 'CARGO INVOLUCRADO',
+      dataField: 'factorRiesgoId.nombre',
+      text: 'FACTOR RIESGO',
+      sort: true,
+      filter: customFilter(),
+      filterRenderer: (onFilter, column) =>
+        <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
+      headerFormatter: typeFormatter,
+    }, {
+      dataField: 'procesoId.nombre',
+      text: 'MACROPROCESO',
       sort: true,
       filter: customFilter(),
       filterRenderer: (onFilter, column) =>
