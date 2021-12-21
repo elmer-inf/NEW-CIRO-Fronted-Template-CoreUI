@@ -7,5 +7,4 @@
  * @LastUpdate   By Abel William Copa.
  */
  const appConfig = window.globalConfig
- console.log('HOST: ', appConfig)
 export const HOSTURI = appConfig 
