@@ -50,7 +50,7 @@ const AdministracionMatrizOEditar = ( { match } ) => {
       tablaId: nivel1,
       nivel2Id: (dataResponse.nivel2Id !== null) ? nivel2 : null,
     }
-    console.log('MATCHEDEDED: ', valores)
+    //console.log('MATCHEDEDED: ', valores)
     setformValueToEdit(valores)
   }
 

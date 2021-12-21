@@ -59,7 +59,7 @@ const AdministracionEventoEditar = ( { match } ) => {
     const idParametro = match.params.id;
     await getTablaDescripcionRiesgoId(idParametro)
       .then((response) => {
-          console.log("API xxxxx: ", response);
+          //console.log("API xxxxx: ", response);
           const res = response.data;
           matched(res)
         setSpin(false)

@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react'
-import { Card, CardHeader, CardBody, CardTitle, Button, Col, Label, Row} from 'reactstrap'
+import { Card, CardHeader, CardBody, CardTitle, Button, Col, Label, Row } from 'reactstrap'
 import BootstrapTable from 'react-bootstrap-table-next';
 import ActionFormatter from 'src/reusable/ActionFormatter';
 
@@ -19,123 +19,123 @@ const AdministracionEventoListar = () => {
       text: 'ID',
       sort: false,
       //hidden: true
-    },{
-        dataField: 'clave',
-        text: (labelTabla === 'Área' || labelTabla === 'Unidad' || labelTabla === 'Proceso')?
-              'CODIGO' : (labelTabla === 'Entidad' || labelTabla === 'Tipo de evento')?
-                          'SIGLA' : /* (labelTabla === 'Canal ASFI')?
-                                      'CODIGO' : */   (labelTabla === 'Moneda')?
-                                                      'ABREVIATURA' : (labelTabla === 'Póliza ATC')?
-                                                                      'NRO' : (labelTabla === 'Reputacional' ||
-                                                                               labelTabla === 'Legal' ||
-                                                                               labelTabla === 'Cumplimiento' ||
-                                                                               labelTabla === 'Estratégico' ||
-                                                                               labelTabla === 'Gobierno' ||
-                                                                               labelTabla === 'Fraude' ||
-                                                                               labelTabla === 'Liquidez' ||
-                                                                               labelTabla === 'Operativo')? 'NIVEL' : (labelTabla === 'Procedimiento')?
-                                                                                                                      'TIPO DOC' : '',
-        sort: true,
-        //formatter: columnaVacia
-        //hidden : (row) => row.clave == null ? true : false
-       /*  filter: customFilter(),
-        filterRenderer: (onFilter, column) =>
-            <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
-        //headerFormatter: typeFormatter,
     }, {
-        dataField: 'nombre',
-        text:  (labelTabla === 'Procedimiento')?
-                'CODIGO DOC': (labelTabla === 'Reputacional' ||
-                              labelTabla === 'Legal' ||
-                              labelTabla === 'Cumplimiento' ||
-                              labelTabla === 'Estratégico' ||
-                              labelTabla === 'Gobierno' ||
-                              labelTabla === 'Fraude' ||
-                              labelTabla === 'Liquidez' ||
-                              labelTabla === 'Operativo')? 'DESCRIPTIVO' : 'NOMBRE',
-        sort: true,
-       /*  filter: customFilter(),
-        filterRenderer: (onFilter, column) =>
-            <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
-        //headerFormatter: typeFormatter
-    }, {
-        dataField: 'descripcion',
-        text: (labelTabla === 'Categoria de tipo de Evento' ||
-                labelTabla === 'Efecto de pérdida' ||
-                labelTabla === 'Impacto' ||
-                labelTabla === 'Reputacional' ||
+      dataField: 'clave',
+      text: (labelTabla === 'Área' || labelTabla === 'Unidad' || labelTabla === 'Proceso') ?
+        'CODIGO' : (labelTabla === 'Entidad' || labelTabla === 'Tipo de evento') ?
+          'SIGLA' : /* (labelTabla === 'Canal ASFI')?
+                                      'CODIGO' : */   (labelTabla === 'Moneda') ?
+            'ABREVIATURA' : (labelTabla === 'Póliza ATC') ?
+              'NRO' : (labelTabla === 'Reputacional' ||
+                labelTabla === 'Legal' ||
+                labelTabla === 'Cumplimiento' ||
                 labelTabla === 'Estratégico' ||
-                labelTabla === 'Operativo')?
-              'DESCRIPCION' : (labelTabla === 'Proceso')?
-                              'NIVEL' :  (labelTabla === 'Procedimiento')?
-                                          'NOMBRE DOC' : (labelTabla === 'Legal' || labelTabla === 'Liquidez')?
-                                                        'IMPACTO REGULATORIO' : (labelTabla === 'Cumplimiento')?
-                                                                                "IMPACTO DE CUMPLIMIENTO" : (labelTabla === 'Gobierno')?
-                                                                                                            'NIVEL DE GOB #' : (labelTabla === 'Fraude')?
-                                                                                                                                'Imp reportado ($)' : '',
-        sort: true,
-       /*  filter: customFilter(),
-        filterRenderer: (onFilter, column) =>
-            <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
-        //headerFormatter: typeFormatter
+                labelTabla === 'Gobierno' ||
+                labelTabla === 'Fraude' ||
+                labelTabla === 'Liquidez' ||
+                labelTabla === 'Operativo') ? 'NIVEL' : (labelTabla === 'Procedimiento') ?
+                'TIPO DOC' : '',
+      sort: true,
+      //formatter: columnaVacia
+      //hidden : (row) => row.clave == null ? true : false
+      /*  filter: customFilter(),
+       filterRenderer: (onFilter, column) =>
+           <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
+      //headerFormatter: typeFormatter,
+    }, {
+      dataField: 'nombre',
+      text: (labelTabla === 'Procedimiento') ?
+        'CODIGO DOC' : (labelTabla === 'Reputacional' ||
+          labelTabla === 'Legal' ||
+          labelTabla === 'Cumplimiento' ||
+          labelTabla === 'Estratégico' ||
+          labelTabla === 'Gobierno' ||
+          labelTabla === 'Fraude' ||
+          labelTabla === 'Liquidez' ||
+          labelTabla === 'Operativo') ? 'DESCRIPTIVO' : 'NOMBRE',
+      sort: true,
+      /*  filter: customFilter(),
+       filterRenderer: (onFilter, column) =>
+           <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
+      //headerFormatter: typeFormatter
+    }, {
+      dataField: 'descripcion',
+      text: (labelTabla === 'Categoria de tipo de Evento' ||
+        labelTabla === 'Efecto de pérdida' ||
+        labelTabla === 'Impacto' ||
+        labelTabla === 'Reputacional' ||
+        labelTabla === 'Estratégico' ||
+        labelTabla === 'Operativo') ?
+        'DESCRIPCION' : (labelTabla === 'Proceso') ?
+          'NIVEL' : (labelTabla === 'Procedimiento') ?
+            'NOMBRE DOC' : (labelTabla === 'Legal' || labelTabla === 'Liquidez') ?
+              'IMPACTO REGULATORIO' : (labelTabla === 'Cumplimiento') ?
+                "IMPACTO DE CUMPLIMIENTO" : (labelTabla === 'Gobierno') ?
+                  'NIVEL DE GOB #' : (labelTabla === 'Fraude') ?
+                    'Imp reportado ($)' : '',
+      sort: true,
+      /*  filter: customFilter(),
+       filterRenderer: (onFilter, column) =>
+           <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
+      //headerFormatter: typeFormatter
     }, {
       dataField: 'campoA',
-      text: (labelTabla === 'Proceso')?
-            'VALORACION' : (labelTabla === 'Procedimiento')?
-                            'PROCESO' : (labelTabla === 'Gobierno')?
-                                            'NIVEL DE GOB' : (labelTabla === 'Fraude')?
-                                                        'Fraude a ventas ($)' : (labelTabla === 'Liquidez')?
-                                                                                "LIQUIDEZ" : '',
+      text: (labelTabla === 'Proceso') ?
+        'VALORACION' : (labelTabla === 'Procedimiento') ?
+          'PROCESO' : (labelTabla === 'Gobierno') ?
+            'NIVEL DE GOB' : (labelTabla === 'Fraude') ?
+              'Fraude a ventas ($)' : (labelTabla === 'Liquidez') ?
+                "LIQUIDEZ" : '',
       sort: true,
-     /*  filter: customFilter(),
-      filterRenderer: (onFilter, column) =>
-          <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
+      /*  filter: customFilter(),
+       filterRenderer: (onFilter, column) =>
+           <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
       //headerFormatter: typeFormatter
     }, {
       dataField: 'campoB',
-      text: (labelTabla === 'Procedimiento')?
-            'GERENCIA' : (labelTabla === 'Gobierno')?
-                                  'PUNTUACION AUTOEVAL' : (labelTabla === 'Fraude')?
-                                              'Imp reportado 2 ($)' : (labelTabla === 'Liquidez')?
-                                                                      "CAPITAL DE TRABAJO" : '',
+      text: (labelTabla === 'Procedimiento') ?
+        'GERENCIA' : (labelTabla === 'Gobierno') ?
+          'PUNTUACION AUTOEVAL' : (labelTabla === 'Fraude') ?
+            'Imp reportado 2 ($)' : (labelTabla === 'Liquidez') ?
+              "CAPITAL DE TRABAJO" : '',
       sort: true,
-     /*  filter: customFilter(),
-      filterRenderer: (onFilter, column) =>
-          <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
+      /*  filter: customFilter(),
+       filterRenderer: (onFilter, column) =>
+           <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
       //headerFormatter: typeFormatter
     }, {
       dataField: 'campoC',
-      text: (labelTabla === 'Fraude')? "IMPACTO - SEVERIDAD" : '',
+      text: (labelTabla === 'Fraude') ? "IMPACTO - SEVERIDAD" : '',
       sort: true,
-     /*  filter: customFilter(),
-      filterRenderer: (onFilter, column) =>
-          <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
+      /*  filter: customFilter(),
+       filterRenderer: (onFilter, column) =>
+           <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
       //headerFormatter: typeFormatter
     }, {
       dataField: 'campoD',
-      text: (labelTabla === 'Fraude')? "IMPACTO - SEVERIDAD 2" : '',
+      text: (labelTabla === 'Fraude') ? "IMPACTO - SEVERIDAD 2" : '',
       sort: true,
-     /*  filter: customFilter(),
-      filterRenderer: (onFilter, column) =>
-          <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
+      /*  filter: customFilter(),
+       filterRenderer: (onFilter, column) =>
+           <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
       //headerFormatter: typeFormatter
     }, {
-         dataField: 'tablaLista.nombre_tabla',
-         text: 'TABLA',
-         sort: true,
-     }
+      dataField: 'tablaLista.nombre_tabla',
+      text: 'TABLA',
+      sort: true,
+    }
      /* {
       dataField: 'tablaLista.nivel2',
       text: (tablaLista.nivel2 === 1)?
               'Agencia' : (tablaLista.nivel2 === 3)?
                           'Área' : '',
       sort: true,
-     } */,{
-        dataField: 'acciones',
-        text: 'ACCIONES',
-        headerAlign: 'center',
-        style: { textAlign: 'center' },
-        formatter: (cell, row) => actionFormatter(cell, row)
+     } */, {
+      dataField: 'acciones',
+      text: 'ACCIONES',
+      headerAlign: 'center',
+      style: { textAlign: 'center' },
+      formatter: (cell, row) => actionFormatter(cell, row)
     }
   ]
 
@@ -150,7 +150,8 @@ const AdministracionEventoListar = () => {
   }
   const editRow = (row) => {
     console.log(row)
-    history.push('./editar/' + row.id);
+    //history.push('./editar/' + row.id);
+    history.push('/administracion/evento-riesgo/Editar/' + row.id);
   }
 
   const [tablaListaOptions, setTablaListaOptions] = useState([])
@@ -189,21 +190,21 @@ const AdministracionEventoListar = () => {
 
   const getTablaDescripcion = (idTabla) => {
     getTablaDescripcionEventoN1(idTabla)
-    .then(res => {
-      //console.log('nivel 1: ', res.data)
-      setDAtaApi(res.data)
-    }).catch((error) => {
-      console.log('Error: ', error)
-      //notificationToast('error', Messages.notification.notOk)
-    })
+      .then(res => {
+        //console.log('nivel 1: ', res.data)
+        setDAtaApi(res.data)
+      }).catch((error) => {
+        console.log('Error: ', error)
+        //notificationToast('error', Messages.notification.notOk)
+      })
   }
 
   // Style Select
-  const customStyles =  {
+  const customStyles = {
     menu: provided => ({ ...provided, zIndex: "9999 !important" }),
     control: (styles,) => ({
-        ...styles,
-        boxShadow: 'none',
+      ...styles,
+      boxShadow: 'none',
     }),
     option: (styles, { isDisabled, isSelected }) => {
       return {
@@ -211,12 +212,12 @@ const AdministracionEventoListar = () => {
         backgroundColor: isSelected ? '#e79140' : 'white',
         cursor: isDisabled ? 'not-allowed' : 'default',
         ':active': {
-            backgroundColor: '#e79140',
-            color: 'white'
+          backgroundColor: '#e79140',
+          color: 'white'
         },
-        ':hover':{
-            backgroundColor: isSelected ? '#e79140' : '#fbf3eb',
-            color: isSelected ? 'white' : '#e79140'
+        ':hover': {
+          backgroundColor: isSelected ? '#e79140' : '#fbf3eb',
+          color: isSelected ? 'white' : '#e79140'
         }
       }
     }
@@ -229,8 +230,8 @@ const AdministracionEventoListar = () => {
         <Card>
           <CardHeader>
             <CardTitle className='float-left h4 pt-2'>Listado de Parámetros de Eventos de Riesgo</CardTitle>
-            <Button color='primary' onClick={redirect} className='float-right mt-1 text-white' style={{width: '130px'}}>
-            <Plus size={15} className='mr-2'/><span>Registrar</span>
+            <Button color='primary' onClick={redirect} className='float-right mt-1 text-white' style={{ width: '130px' }}>
+              <Plus size={15} className='mr-2' /><span>Registrar</span>
             </Button>
           </CardHeader>
           <CardBody>
@@ -246,23 +247,24 @@ const AdministracionEventoListar = () => {
                   classNamePrefix='select'
                   options={tablaListaOptions}
                   isLoading={true}
+                  //isClearable={true}
                   styles={customStyles}
                   theme={theme => ({
-                      ...theme,
-                      borderRadius: 5,
-                      colors: {
-                          ...theme.colors,
-                          primary: '#e79140'
-                      }
+                    ...theme,
+                    borderRadius: 5,
+                    colors: {
+                      ...theme.colors,
+                      primary: '#e79140'
+                    }
                   })}
                 />
               </Col>
             </Row>
 
             <BootstrapTable
-              classes= {'table-hover-animation mt-5'}
+              classes={'table-hover-animation mt-5'}
               bootstrap4={true}
-              sort={ { dataField: 'id', order: 'asc' } }
+              sort={{ dataField: 'id', order: 'asc' }}
               noDataIndication={'No se encontraron resultados'}
               keyField='id'
               data={dataApi}
@@ -272,7 +274,7 @@ const AdministracionEventoListar = () => {
               hover={false}
               condensed={false}
               wrapperClasses="table-responsive"
-              //filter={filterFactory()}
+            //filter={filterFactory()}
             />
           </CardBody>
         </Card>
