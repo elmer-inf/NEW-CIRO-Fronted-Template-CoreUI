@@ -89,7 +89,16 @@ const EventoRiesgoListar = () => {
       dataField: 'estadoRegistro',
       text: 'ESTADO',
       sort: true,
-      formatter: colorEstado,
+      formatter: colorEstadoRegistro,
+      filter: customFilter(),
+      filterRenderer: (onFilter, column) =>
+        <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
+      headerFormatter: typeFormatter,
+    }, {
+      dataField: 'estadoEvento',
+      text: 'EVENTO',
+      sort: true,
+      formatter: colorEstadoEvento,
       filter: customFilter(),
       filterRenderer: (onFilter, column) =>
         <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
@@ -109,7 +118,7 @@ const EventoRiesgoListar = () => {
     }
   ]
 
-  function colorEstado(cell, row) {
+  function colorEstadoRegistro(cell) {
     if (cell === 'Observado') {
       return (
         <CBadge className="mr-1 px-2 py-1 badge-danger-light">{cell}</CBadge>
@@ -128,6 +137,19 @@ const EventoRiesgoListar = () => {
     if (cell === 'Descartado') {
       return (
         <CBadge className="mr-1 px-2 py-1 badge-danger">{cell}</CBadge>
+      );
+    }
+  }
+
+  function colorEstadoEvento(cell) {
+    if (cell === 'Solucionado') {
+      return (
+        <CBadge className="mr-1 px-2 py-1 badge-success">{cell}</CBadge>
+      );
+    }
+    if (cell === 'Seguimiento') {
+      return (
+        <CBadge className="mr-1 px-2 py-1 badge-warning">{cell}</CBadge>
       );
     }
   }

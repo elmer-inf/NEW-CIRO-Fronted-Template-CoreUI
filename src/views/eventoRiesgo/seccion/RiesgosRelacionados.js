@@ -40,7 +40,7 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
         /* seguridadId:    (values.seguridadId !== null) ?     values.seguridadId.value : 0,
         lgiId:          (values.lgiId !== null) ?           values.lgiId.value : 0, */
      }
-     console.log('datos que se enviaran SECCION 4:', data)
+     console.log('datos que se enviaran SECCION 5:', data)
      handleOnSubmmit(data)
    }
   })
@@ -340,7 +340,7 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
             style={{width: '130px'}}
             className='text-white'
             color="primary"
-            onClick={() => (tipoEvento ==='A')? beforeSection(4) : beforeSection(3) }
+            onClick={() => (tipoEvento ==='A')? beforeSection(5) : beforeSection(4) }
           >
             <ChevronLeft size={17} className='mr-1'/>
             Atrás
@@ -361,8 +361,6 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
             color="primary"
             type="submit"
             disabled={formik.isSubmitting}
-            //onClick={() => onSubmmit()}
-            //disabled={!columnasList.length > 0}
           >
             <Save size={17} className='mr-2'/>
             GUARDAR

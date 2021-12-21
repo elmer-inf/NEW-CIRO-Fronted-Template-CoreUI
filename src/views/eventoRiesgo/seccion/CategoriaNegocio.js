@@ -99,13 +99,13 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
 
         trimestre: trimestreGenerado
      }
-      console.log('datos que se enviaran SECCION 2:', data)
+      console.log('datos que se enviaran SECCION 3:', data)
       setObject(data);
 
       if (tipoEvento ==='A')
-        nextSection(2);
-      else
         nextSection(3);
+      else
+        nextSection(4);
    }
   })
 
@@ -738,7 +738,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
             style={{width: '130px'}}
             className='text-white'
             color="primary"
-            onClick={() => beforeSection(2)}
+            onClick={() => beforeSection(3)}
           >
             <ChevronLeft size={17} className='mr-1'/>
             Atrás

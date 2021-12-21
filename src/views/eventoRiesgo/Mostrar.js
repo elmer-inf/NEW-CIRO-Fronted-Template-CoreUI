@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from 'react'
-import { FileText, Activity, DollarSign, BarChart2 } from 'react-feather'
+import { FileText, Activity, DollarSign, BarChart2, CheckSquare } from 'react-feather'
 import { Row, Col, Card, CardBody, CardHeader, CardTitle, Badge, Button, ListGroup, ListGroupItem} from 'reactstrap';
 import { CNav, CNavItem, CNavLink, CTabContent, CTabPane, CTabs, CButton, CCollapse, CCard, CModal, CModalBody, CModalHeader, CModalTitle} from '@coreui/react'
 import { getEventoRiesgoId, getUltimaObservacion, putEvaluaEvento } from './controller/EventoController';
@@ -115,8 +115,8 @@ const EventoRiesgo = ({ match }) => {
                     </Button>
                   : null}
 
-                  <CModal 
-                    show={danger} 
+                  <CModal
+                    show={danger}
                     onClose={() => setDanger(!danger)}
                     color="danger"
                   >
@@ -143,8 +143,16 @@ const EventoRiesgo = ({ match }) => {
                     {/* <CModalFooter> */}
                     {/* </CModalFooter> */}
                   </CModal>
-
                 </CardTitle>
+                <span className='float-right'>
+                  {(dataApi.estadoEvento === 'Solucionado')?
+                    <Badge className='mt-2 py-2 px-3 h6 font-weight-bold badge-success'>{dataApi.estadoEvento}</Badge>
+                  : null}
+
+                  {(dataApi.estadoEvento === 'Seguimiento')?
+                    <Badge className="mt-2 py-2 px-3 h6 font-weight-bold badge-warning">{dataApi.estadoEvento}</Badge>
+                  :null}
+                </span>
               </CardHeader>
               <CardBody>
                 <Row>
@@ -160,26 +168,33 @@ const EventoRiesgo = ({ match }) => {
                     <CNav variant="tabs" className='justify-content-center'>
                       <CNavItem>
                         <CNavLink>
-                          <FileText size={25}/><span className='pl-2 pr-3'>Datos iniciales</span>
+                          <FileText size={20}/><span className='pl-1 pr-2 h6 font-weight-bold'>Datos iniciales</span>
                         </CNavLink>
                       </CNavItem>
+
                       <CNavItem>
                         <CNavLink>
-                          <BarChart2 size={25}/><span className='pl-2 pr-3'>Categoria y Línea de negocio</span>
+                          <CheckSquare size={20}/><span className='pl-1 pr-2 h6 font-weight-bold'>Planes de acción</span>
+                        </CNavLink>
+                      </CNavItem>
+
+                      <CNavItem>
+                        <CNavLink>
+                          <BarChart2 size={20}/><span className='pl-1 pr-2 h6 font-weight-bold'>Categoria y Línea de negocio</span>
                         </CNavLink>
                       </CNavItem>
 
                       {(dataApi.tipoEvento === 'A')?
                         <CNavItem>
                           <CNavLink>
-                            <DollarSign size={25}/><span className='pl-2 pr-3'>Importes relacionados</span>
+                            <DollarSign size={20}/><span className='pl-1 pr-2 h6 font-weight-bold'>Importes relacionados</span>
                           </CNavLink>
                         </CNavItem>
                       :null}
 
                       <CNavItem>
                         <CNavLink>
-                          <Activity size={25}/><span className='pl-2'>Riesgos relacionados</span>
+                          <Activity size={20}/><span className='pl-1 h6 font-weight-bold'>Riesgos relacionados</span>
                         </CNavLink>
                       </CNavItem>
                     </CNav>
@@ -187,11 +202,12 @@ const EventoRiesgo = ({ match }) => {
                       <CTabPane>
                         <Row className='pt-3'>
                           <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
-                            <div className='text-label'>Fecha Inicio: </div>
+                            <div className='text-label'>Fecha inicio: </div>
                             <div className='text-data'>{dataApi.fechaIni !== null ? dataApi.fechaIni : <i>Sin registro</i>}</div>
                           </Col>
+
                           <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
-                            <div className='text-label'>Hora Inicio: </div>
+                            <div className='text-label'>Hora inicio: </div>
                             <div className='text-data'>{dataApi.horaIni !== null ? dataApi.horaIni : <i>Sin registro</i>}</div>
                           </Col>
 
@@ -203,6 +219,15 @@ const EventoRiesgo = ({ match }) => {
                           <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                             <div className='text-label'>Hora descubrimiento: </div>
                             <div className='text-data'>{dataApi.horaDesc !== null ? dataApi.horaDesc : <i>Sin registro</i>}</div>
+                          </Col>
+
+                          <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                            <div className='text-label'>Fecha fin: </div>
+                            <div className='text-data'>{dataApi.fechaFin !== null ? dataApi.fechaFin : <i>Sin registro</i>}</div>
+                          </Col>
+                          <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                            <div className='text-label'>Hora fin: </div>
+                            <div className='text-data'>{dataApi.horaFin !== null ? dataApi.horaFin : <i>Sin registro</i>}</div>
                           </Col>
 
                           <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
@@ -276,6 +301,40 @@ const EventoRiesgo = ({ match }) => {
                           <Col xs='12' md='6' className='pt-2'>
                             <div className='text-label'>Descripción completa: </div>
                             <div className='text-data'>{dataApi.descripcionCompleta !== null ? dataApi.descripcionCompleta : <i>Sin registro</i>}</div>
+                          </Col>
+                        </Row>
+                      </CTabPane>
+
+                      <CTabPane>
+                        <Row className='pt-3'>
+                          <Col xs='12' sm='6' className='pt-2'>
+                            <div className='text-label'>Gerencia responsable: </div>
+                            <div className='text-data'>{dataApi.areaResponsableId !== null ? dataApi.areaResponsableId.nombre : <i>Sin registro</i>}</div>
+                          </Col>
+
+                          <Col xs='12' sm='6' className='pt-2'>
+                            <div className='text-label'>Cargo responsable: </div>
+                            <div className='text-data'>{dataApi.cargoResponsableId !== null ? dataApi.cargoResponsableId.nombre : <i>Sin registro</i>}</div>
+                          </Col>
+
+                          <Col xs='12' md='12' className='pt-2'>
+                            <div className='text-label'>detalle del plan: </div>
+                            <div className='text-data'>{dataApi.detallePlan !== null ? dataApi.detallePlan : <i>Sin registro</i>}</div>
+                          </Col>
+
+                          <Col xs='12' sm='6' className='pt-2'>
+                            <div className='text-label'>Fecha fin del plan: </div>
+                            <div className='text-data'>{dataApi.fechaFinPlan !== null ? dataApi.fechaFinPlan : <i>Sin registro</i>}</div>
+                          </Col>
+
+                          <Col xs='12' sm='6' className='pt-2'>
+                            <div className='text-label'>Estado: </div>
+                            <div className='text-data'>{dataApi.estadoPlan !== null ? dataApi.estadoPlan : <i>Sin registro</i>}</div>
+                          </Col>
+
+                          <Col xs='12' md='6' className='pt-2'>
+                            <div className='text-label'>Descripción del estado: </div>
+                            <div className='text-data'>{dataApi.descripcionEstado !== null ? dataApi.descripcionEstado : <i>Sin registro</i>}</div>
                           </Col>
                         </Row>
                       </CTabPane>

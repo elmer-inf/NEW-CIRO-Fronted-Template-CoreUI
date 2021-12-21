@@ -190,6 +190,23 @@ body{
   font-size: 12;
 }
 
+.badge-success{
+  background-color:#2bc871;
+  color: #fff;
+  box-shadow: 0 0px 5px 0 rgba(#2bc871, 0.6);
+  font-size: 12;
+  border-radius: 15px;
+}
+
+.badge-warning{
+  background-color:#e79140;
+  color: #fff;
+  box-shadow: 0 0px 5px 0 rgba(#e79140, 0.6);
+  font-size: 12;
+  border-radius: 15px;
+}
+
+
 // DIVIDER
 .divider {
   .divider-text {

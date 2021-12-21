@@ -53,9 +53,9 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
         impactoId:      (values.impactoId !== null) ?       values.impactoId.value : 0,
         polizaSeguroId: (values.polizaSeguroId !== null) ?  values.polizaSeguroId.value : 0
      }
-      console.log('datos que se enviaran SECCION 3:', data)
+      console.log('datos que se enviaran SECCION 4:', data)
       setObject(data);
-      nextSection(3);
+      nextSection(4);
    }
   })
 
@@ -361,7 +361,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
             style={{width: '130px'}}
             className='text-white'
             color="primary"
-            onClick={() => beforeSection(3)}
+            onClick={() => beforeSection(4)}
           >
             <ChevronLeft size={17} className='mr-1'/>
             Atrás

@@ -19,6 +19,8 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         horaIni: Yup.string().required('Campo obligatorio'),
         fechaDesc: Yup.date().required('Campo obligatorio'),
         horaDesc: Yup.string().required('Campo obligatorio'),
+        fechaFin: Yup.date().nullable(),
+        horaFin: Yup.string().nullable(),
         agenciaId: Yup.mixed().nullable(),
         ciudadId: Yup.mixed().nullable(),
         areaID:  Yup.mixed().required('Campo obligatorio'),
@@ -37,6 +39,8 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         horaIni: Yup.string().nullable(),
         fechaDesc: Yup.date().nullable(),
         horaDesc: Yup.string().nullable(),
+        fechaFin: Yup.date().nullable(),
+        horaFin: Yup.string().nullable(),
         agenciaId: Yup.mixed().nullable(),
         ciudadId: Yup.mixed().nullable(),
         areaID:  Yup.mixed().nullable(),
@@ -57,9 +61,11 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
        const data = {
         ...values,
         estadoRegistro: 'Pendiente',
+        estadoEvento: (values.horaFin !== null && values.fechaFin !== null) ? 'Solucionado': 'Seguimiento',
 
-        horaIni:    (values.horaIni !== null) ?  values.horaIni + ':00': null,
-        horaDesc:   (values.horaDesc !== null) ?  values.horaDesc + ':00': null,
+        horaIni:    (values.horaIni !== null) ?  values.horaIni + ':00' : null,
+        horaDesc:   (values.horaDesc !== null) ?  values.horaDesc + ':00' : null,
+        horaFin:   (values.horaFin !== null) ?  values.horaFin + ':00' : null,
 
         agenciaId:  (values.agenciaId !== null) ?   values.agenciaId.value : 0,
         ciudadId:   (values.ciudadId !== null) ?    values.ciudadId.value : 0,
@@ -139,17 +145,6 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
       })
   }
 
-  // Tipo de evento
-  /* const [dataApiTipoEvento, setDataApiTipoEvento] = useState([])
-  const callApiTipoEvento = (idTablaDes) => {
-    getTablaDescripcionEventoN1(idTablaDes)
-      .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'clave', false)
-        setDataApiTipoEvento(options)
-      }).catch((error) => {
-        console.log('Error: ', error)
-      })
-  } */
 
   // Cargos
   const [dataApiCargo, setDataApiCargo] = useState([])
@@ -197,7 +192,6 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
     callApiAgencia(1);
     callApiArea(3);
     callApiEntidad(5);
-    //callApiTipoEvento(6);
     callApiCargo(7);
     callApiFuente(8);
     callApiCanal(9);
@@ -229,6 +223,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.entidadAfectada])
+
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
   return (
@@ -239,7 +234,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
         <Row className='pt-4'>
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
-            <Label className='form-label'> 
+            <Label className='form-label'>
               Fecha Inicio <span className='text-primary h5'><b>*</b></span>
             </Label>
             <CInputReact
@@ -299,6 +294,38 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
               onBlur={formik.handleBlur}
               touched={formik.touched.horaDesc}
               errors={formik.errors.horaDesc}
+            />
+          </FormGroup>
+
+          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+            <Label className='form-label'>
+              Fecha Fin
+            </Label>
+            <CInputReact
+              type={"date"}
+              id={'fechaFin'}
+              placeholder={'Fecha Fin'}
+              value={formik.values.fechaFin}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              touched={formik.touched.fechaFin}
+              errors={formik.errors.fechaFin}
+            />
+          </FormGroup>
+
+          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+            <Label className='form-label'>
+              Hora Fin
+            </Label>
+            <CInputReact
+              type={"time"}
+              id={'horaFin'}
+              placeholder={'Hora Fin'}
+              value={formik.values.horaFin}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              touched={formik.touched.horaFin}
+              errors={formik.errors.horaFin}
             />
           </FormGroup>
 

@@ -3,7 +3,8 @@ import ImportesRelacionados from './seccion/ImportesRelacionados'
 import RiesgosRelacionados from './seccion/RiesgosRelacionados'
 import CategoriaNegocio from './seccion/CategoriaNegocio'
 import DatosIniciales from './seccion/DatosIniciales'
-import { FileText, Activity, DollarSign, BarChart2, ChevronRight, AlertTriangle } from 'react-feather'
+import Planes from './seccion/Planes'
+import { FileText, Activity, DollarSign, BarChart2, ChevronRight, AlertTriangle, CheckSquare } from 'react-feather'
 import { Row, Col, Card, CardBody, CardHeader, CardTitle, TabContent, TabPane, NavLink, NavItem, Nav, FormGroup, Label, } from 'reactstrap';
 import CInputRadio from 'src/reusable/CInputRadio'
 import { useHistory } from 'react-router-dom'
@@ -49,10 +50,13 @@ const EventoRiesgoRegistrar = () => {
 
   const formValueInitialDatos = {
     estadoRegistro: '',
+    estadoEvento: '',
     fechaIni: '',
-    horaIni: '',
+    horaIni: null,
     fechaDesc: '',
-    horaDesc: '',
+    horaDesc: null,
+    fechaFin: null,
+    horaFin: null,
     agenciaId: null,
     ciudadId: null,
     areaID: null,
@@ -66,6 +70,15 @@ const EventoRiesgoRegistrar = () => {
     canalAsfiId: null,
     descripcion: '',
     descripcionCompleta: ''
+  }
+
+  const formValueInitialPlanes ={
+    areaResponsableId: null,
+    cargoResponsableId: null,
+    detallePlan: '',
+    fechaFinPlan: '',
+    descripcionEstado: '',
+    estadoPlan: null
   }
 
   const formValueInitialCategoria = {
@@ -124,6 +137,7 @@ const EventoRiesgoRegistrar = () => {
 
   const dataResult = {
     ...formValueInitialDatos,
+    ...formValueInitialPlanes,
     ...formValueInitialCategoria,
     ...formValueInitialImportes,
     ...formValueInitialRiesgos,
@@ -142,6 +156,8 @@ const EventoRiesgoRegistrar = () => {
       setActiveTap('3');
     } else if (tab === 3) {
       setActiveTap('4');
+    } else if (tab === 4) {
+      setActiveTap('5');
     }
   }
 
@@ -153,6 +169,8 @@ const EventoRiesgoRegistrar = () => {
       setActiveTap('2');
     } else if (tab === 4) {
       setActiveTap('3');
+    } else if (tab === 5) {
+      setActiveTap('4');
     }
   }
 
@@ -239,33 +257,41 @@ const EventoRiesgoRegistrar = () => {
                   <NavItem>
                     <NavLink className={classnames({ active: activeTab === '1' })}>
                       <span className={activeTab === '1' ? '' : 'd-none'}></span>
-                      <FileText size={25} /><span className='pl-2'>Datos iniciales</span>
-                      <ChevronRight size={17} className='ml-3 d-none d-xl-inline arrow-right-secondary'/>
+                      <FileText size={20} /><span className='pl-2 h6 font-weight-bold'>Datos iniciales</span>
+                      <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary'/>
                     </NavLink>
                   </NavItem>
 
                   <NavItem>
                     <NavLink className={classnames({ active: activeTab === '2' })}>
                       <span className={activeTab === '2' ? '' : 'd-none'}></span>
-                      <BarChart2 size={25} /><span className='pl-2'>Categoria y Línea de negocio</span>
-                      <ChevronRight size={17} className='ml-3 d-none d-xl-inline arrow-right-secondary'/>
+                      <CheckSquare size={20} /><span className='pl-2 h6 font-weight-bold'>Planes de acción</span>
+                      <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary'/>
+                    </NavLink>
+                  </NavItem>
+
+                  <NavItem>
+                    <NavLink className={classnames({ active: activeTab === '3' })}>
+                      <span className={activeTab === '3' ? '' : 'd-none'}></span>
+                      <BarChart2 size={20} /><span className='pl-2 h6 font-weight-bold'>Categoria y Línea de negocio</span>
+                      <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary'/>
                     </NavLink>
                   </NavItem>
 
                   {(formik.values.tipoEvento === 'A')?
                     <NavItem>
-                      <NavLink className={classnames({ active: activeTab === '3' })}>
-                        <span className={activeTab === '3' ? '' : 'd-none'}></span>
-                        <DollarSign size={25} /><span className='pl-2'>Importes relacionados</span>
-                        <ChevronRight size={17} className='ml-3 d-none d-xl-inline arrow-right-secondary'/>
+                      <NavLink className={classnames({ active: activeTab === '4' })}>
+                        <span className={activeTab === '4' ? '' : 'd-none'}></span>
+                        <DollarSign size={20} /><span className='pl-2 h6 font-weight-bold'>Importes relacionados</span>
+                        <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary'/>
                       </NavLink>
                     </NavItem>
                   : null}
 
                   <NavItem>
-                    <NavLink className={classnames({ active: activeTab === '4' })}>
-                      <span className={activeTab === '4' ? '' : 'd-none'}></span>
-                      <Activity size={25} /><span className='pl-2'>Riesgos relacionados</span>
+                    <NavLink className={classnames({ active: activeTab === '5' })}>
+                      <span className={activeTab === '5' ? '' : 'd-none'}></span>
+                      <Activity size={20} /><span className='pl-2 h6 font-weight-bold'>Riesgos relacionados</span>
                     </NavLink>
                   </NavItem>
                 </Nav>
@@ -276,10 +302,19 @@ const EventoRiesgoRegistrar = () => {
                       nextSection={nextSection}
                       setObject={setObject}
                       initValues={formValueInitialDatos}
-                      //isEdit={false}
                     />
                   </TabPane>
+
                   <TabPane tabId="2">
+                    <Planes
+                      nextSection={nextSection}
+                      beforeSection={beforeSection}
+                      setObject={setObject}
+                      initValues={formValueInitialPlanes}
+                    />
+                  </TabPane>
+
+                  <TabPane tabId="3">
                     <CategoriaNegocio
                       nextSection={nextSection}
                       beforeSection={beforeSection}
@@ -287,29 +322,24 @@ const EventoRiesgoRegistrar = () => {
                       initValues={formValueInitialCategoria}
                       tipoEvento={formik.values.tipoEvento}
                       fechaDesc={fechaD}
-                      //isEdit={false}
-                      //arrayCampoSelected={[]}
                     />
                   </TabPane>
-                  <TabPane tabId="3">
+
+                  <TabPane tabId="4">
                     <ImportesRelacionados
                       nextSection={nextSection}
                       beforeSection={beforeSection}
                       setObject={setObject}
                       initValues={formValueInitialImportes}
-                      //isEdit={true}
-                      //arrayColumnaSelected={[]}
                     />
                   </TabPane>
 
-                  <TabPane tabId="4">
+                  <TabPane tabId="5">
                     <RiesgosRelacionados
                       beforeSection={beforeSection}
                       initValues={formValueInitialRiesgos}
                       tipoEvento={formik.values.tipoEvento}
                       handleOnSubmmit={handleOnSubmmit}
-                      //isEdit={true}
-                      //arrayColumnaSelected={[]}
                     />
                   </TabPane>
 
