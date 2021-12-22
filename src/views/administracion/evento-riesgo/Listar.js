@@ -18,23 +18,23 @@ const AdministracionEventoListar = () => {
       dataField: 'id',
       text: 'ID',
       sort: false,
-      //hidden: true
+      hidden: true
     }, {
       dataField: 'clave',
-      text: (labelTabla === 'Área' || labelTabla === 'Unidad' || labelTabla === 'Proceso') ?
+      text: (labelTabla === 'Área' || labelTabla === 'Unidad' || labelTabla === 'Macroproceso') ?
         'CODIGO' : (labelTabla === 'Entidad' || labelTabla === 'Tipo de evento') ?
-          'SIGLA' : /* (labelTabla === 'Canal ASFI')?
-                                      'CODIGO' : */   (labelTabla === 'Moneda') ?
+          'SIGLA' : (labelTabla === 'Moneda') ?
             'ABREVIATURA' : (labelTabla === 'Póliza ATC') ?
               'NRO' : (labelTabla === 'Reputacional' ||
-                labelTabla === 'Legal' ||
-                labelTabla === 'Cumplimiento' ||
-                labelTabla === 'Estratégico' ||
-                labelTabla === 'Gobierno' ||
-                labelTabla === 'Fraude' ||
-                labelTabla === 'Liquidez' ||
-                labelTabla === 'Operativo') ? 'NIVEL' : (labelTabla === 'Procedimiento') ?
-                'TIPO DOC' : '',
+                      labelTabla === 'Legal' ||
+                      labelTabla === 'Cumplimiento' ||
+                      labelTabla === 'Estratégico' ||
+                      labelTabla === 'Gobierno' ||
+                      labelTabla === 'Fraude' ||
+                      labelTabla === 'Liquidez' ||
+                      labelTabla === 'Operativo') ? 'NIVEL' : (labelTabla === 'Proceso') ?
+                      'TIPO DOC' : (labelTabla === 'Seguridad de la información') ?
+                                  'CALIFICACION' : '',
       sort: true,
       //formatter: columnaVacia
       //hidden : (row) => row.clave == null ? true : false
@@ -44,7 +44,7 @@ const AdministracionEventoListar = () => {
       //headerFormatter: typeFormatter,
     }, {
       dataField: 'nombre',
-      text: (labelTabla === 'Procedimiento') ?
+      text: (labelTabla === 'Proceso') ?
         'CODIGO DOC' : (labelTabla === 'Reputacional' ||
           labelTabla === 'Legal' ||
           labelTabla === 'Cumplimiento' ||
@@ -52,7 +52,10 @@ const AdministracionEventoListar = () => {
           labelTabla === 'Gobierno' ||
           labelTabla === 'Fraude' ||
           labelTabla === 'Liquidez' ||
-          labelTabla === 'Operativo') ? 'DESCRIPTIVO' : 'NOMBRE',
+          labelTabla === 'Operativo' ||
+          labelTabla === 'Seguridad de la información') ?
+            'DESCRIPTIVO' : (labelTabla === 'Recuperación activo') ?
+                  'DESCRIPCION' : 'NOMBRE',
       sort: true,
       /*  filter: customFilter(),
        filterRenderer: (onFilter, column) =>
@@ -65,9 +68,10 @@ const AdministracionEventoListar = () => {
         labelTabla === 'Impacto' ||
         labelTabla === 'Reputacional' ||
         labelTabla === 'Estratégico' ||
-        labelTabla === 'Operativo') ?
-        'DESCRIPCION' : (labelTabla === 'Proceso') ?
-          'NIVEL' : (labelTabla === 'Procedimiento') ?
+        labelTabla === 'Operativo' ||
+        labelTabla === 'Seguridad de la información') ?
+        'DESCRIPCION' : (labelTabla === 'Macroproceso') ?
+          'NIVEL' : (labelTabla === 'Proceso') ?
             'NOMBRE DOC' : (labelTabla === 'Legal' || labelTabla === 'Liquidez') ?
               'IMPACTO REGULATORIO' : (labelTabla === 'Cumplimiento') ?
                 "IMPACTO DE CUMPLIMIENTO" : (labelTabla === 'Gobierno') ?
@@ -80,12 +84,13 @@ const AdministracionEventoListar = () => {
       //headerFormatter: typeFormatter
     }, {
       dataField: 'campoA',
-      text: (labelTabla === 'Proceso') ?
-        'VALORACION' : (labelTabla === 'Procedimiento') ?
+      text: (labelTabla === 'Macroproceso') ?
+        'VALORACION' : (labelTabla === 'Proceso') ?
           'PROCESO' : (labelTabla === 'Gobierno') ?
             'NIVEL DE GOB' : (labelTabla === 'Fraude') ?
               'Fraude a ventas ($)' : (labelTabla === 'Liquidez') ?
-                "LIQUIDEZ" : '',
+                'LIQUIDEZ' : (labelTabla === 'Seguridad de la información')?
+                  'PLAZO HASTA' : '',
       sort: true,
       /*  filter: customFilter(),
        filterRenderer: (onFilter, column) =>
@@ -93,7 +98,7 @@ const AdministracionEventoListar = () => {
       //headerFormatter: typeFormatter
     }, {
       dataField: 'campoB',
-      text: (labelTabla === 'Procedimiento') ?
+      text: (labelTabla === 'Proceso') ?
         'GERENCIA' : (labelTabla === 'Gobierno') ?
           'PUNTUACION AUTOEVAL' : (labelTabla === 'Fraude') ?
             'Imp reportado 2 ($)' : (labelTabla === 'Liquidez') ?
@@ -114,6 +119,23 @@ const AdministracionEventoListar = () => {
     }, {
       dataField: 'campoD',
       text: (labelTabla === 'Fraude') ? "IMPACTO - SEVERIDAD 2" : '',
+      sort: true,
+      /*  filter: customFilter(),
+       filterRenderer: (onFilter, column) =>
+           <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
+      //headerFormatter: typeFormatter
+    }, {
+      dataField: 'codigoAsfi',
+      text: (labelTabla === 'Ciudad' ||
+              labelTabla === 'Tipo de evento' ||
+              labelTabla === 'Canal ASFI' ||
+              labelTabla === 'Clase Evento - Basilea' ||
+              labelTabla === 'Factor de riesgo' ||
+              labelTabla === 'Proceso' ||
+              labelTabla === 'Línea de negocio ASFI' ||
+              labelTabla === 'Operaciones ASFI' ||
+              labelTabla === 'Moneda' ||
+              labelTabla === 'Recuperación activo') ? "COD ASFI" : '',
       sort: true,
       /*  filter: customFilter(),
        filterRenderer: (onFilter, column) =>

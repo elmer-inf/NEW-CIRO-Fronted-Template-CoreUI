@@ -8,7 +8,7 @@ import 'src/reusable/drag-and-drop/drag-and-drop.scss'
 import { ReactSortable } from 'react-sortablejs'
 import { List, AlertTriangle } from 'react-feather'
 
-var _ = require('lodash');
+/* var _ = require('lodash'); */
 
 const FormEvaluaEvento = ({ initialValuess, handleOnSubmit }) => {
 

@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from 'react'
-import { FileText, BarChart2, Trello, List, CheckSquare, PieChart, TrendingUp, Percent, X, AlertCircle, Check, Columns } from 'react-feather'
+import { FileText, BarChart2, Trello, CheckSquare, Percent, X, AlertCircle, Check, Columns } from 'react-feather'
 import { Row, Col, Card, CardBody, CardHeader, CardTitle, Badge, Button, ListGroup, ListGroupItem} from 'reactstrap';
 import { CNav, CNavItem, CNavLink, CTabContent, CTabPane, CTabs, CButton, CCollapse, CCard, CModal, CModalBody, CModalHeader, CModalTitle, CBadge, CCallout, CProgress} from '@coreui/react'
 import { getOportunidadId, getUltimaObservacion, putEvaluaOportunidad } from './controller/OportunidadController';

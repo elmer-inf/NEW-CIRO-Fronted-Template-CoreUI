@@ -120,7 +120,7 @@ const EventoRiesgoRegistrar = () => {
     recuperacionActivo: '',
     perdidaMercado: '',
     totalPerdida: '',
-    totalPerdida: ''
+    totalRecuperado: ''
   }
 
   const formValueInitialRiesgos = {

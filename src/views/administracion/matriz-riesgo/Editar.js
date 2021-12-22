@@ -53,7 +53,6 @@ const AdministracionEventoEditar = ( { match } ) => {
       setformValueToEdit(valores)
   }
 
-
   const getById = async () => {
     setSpin(true)
     const idParametro = match.params.id;
@@ -84,13 +83,13 @@ const AdministracionEventoEditar = ( { match } ) => {
           </CardHeader>
           <CardBody className='mt-4'>
             {
-              spin === true 
+              spin === true
               ? <div></div>
               : <Formulario
-              initialValuess={formValueToEdit}
-              //optionToSelect={{}}
-              handleOnSubmit={handleOnSubmit}
-            />
+                  initialValuess={formValueToEdit}
+                  //optionToSelect={{}}
+                  handleOnSubmit={handleOnSubmit}
+                />
             }
           </CardBody>
         </Card>

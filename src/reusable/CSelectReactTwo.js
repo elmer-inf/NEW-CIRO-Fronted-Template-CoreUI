@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormGroup, Label, FormFeedback } from 'reactstrap';
+import { FormGroup, FormFeedback } from 'reactstrap';
 import Select from 'react-select';
 
 export const CSelectReactTwo = (props) => {

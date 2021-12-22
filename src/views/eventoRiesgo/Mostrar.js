@@ -100,8 +100,7 @@ const EventoRiesgo = ({ match }) => {
 
   // Calcula Monto total recuperado
   const totalRecuperado = ()=>{
-    var suma = 0;
-    return suma = dataApi.montoRecuperado + dataApi.gastoAsociado + dataApi.montoRecuperadoSeguro
+    return dataApi.montoRecuperado + dataApi.gastoAsociado + dataApi.montoRecuperadoSeguro;
   }
 
   return (
