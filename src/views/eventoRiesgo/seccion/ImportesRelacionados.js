@@ -58,7 +58,8 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
         tasaCambioId: tasaCambio,
         monedaId: (values.monedaId !== null) ? values.monedaId.value : 0,
         impactoId: (values.impactoId !== null) ? values.impactoId.value : 0,
-        polizaSeguroId: (values.polizaSeguroId !== null) ? values.polizaSeguroId.value : 0
+        polizaSeguroId: (values.polizaSeguroId !== null) ? values.polizaSeguroId.value : 0,
+        recuperacionActivo: (values.recuperacionActivo !== null) ? values.recuperacionActivo.value : 0
       }
       const dataSelect =  _.omit(data, ['montoPerdidaRiesgo', 'totalPerdida', 'totalRecuperado']);
 

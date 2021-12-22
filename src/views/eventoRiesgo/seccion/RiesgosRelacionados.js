@@ -20,9 +20,8 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
         reputacionalId: Yup.mixed().nullable(),
         cumplimientoId: Yup.mixed().nullable(),
         estrategicoId: Yup.mixed().nullable(),
-        gobiernoId: Yup.mixed().nullable()
-        /* seguridadId: Yup.mixed().nullable(),
-        lgiId: Yup.mixed().nullable(), */
+        gobiernoId: Yup.mixed().nullable(),
+        seguridadId: Yup.mixed().nullable(),
       }
     ),
 
@@ -37,8 +36,7 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
         cumplimientoId: (values.cumplimientoId !== null) ?  values.cumplimientoId.value : 0,
         estrategicoId:  (values.estrategicoId !== null) ?   values.estrategicoId.value : 0,
         gobiernoId:     (values.gobiernoId !== null) ?      values.gobiernoId.value : 0,
-        /* seguridadId:    (values.seguridadId !== null) ?     values.seguridadId.value : 0,
-        lgiId:          (values.lgiId !== null) ?           values.lgiId.value : 0, */
+        seguridadId:    (values.seguridadId !== null) ?     values.seguridadId.value : 0
      }
      console.log('datos que se enviaran SECCION 5:', data)
      handleOnSubmmit(data)
@@ -71,7 +69,7 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
       })
   }
 
-  // Legal
+  // Cumplimiento
   const [dataApiCumplimiento, setDataApiCumplimiento] = useState([])
   const callApiCumplimiento = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
@@ -131,13 +129,25 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
       })
   }
 
-  // Liquidez
+  // Operativo
   const [dataApiOperativo, setDataApiOperativo] = useState([])
   const callApiOperativo = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiOperativo(options)
+      }).catch((error) => {
+        console.log('Error: ', error)
+      })
+  }
+
+  // Seguridad
+  const [dataApiSeguridad, setDataApiSeguridad] = useState([])
+  const callApiSeguridad = (idTablaDes) => {
+    getTablaDescripcionEventoN1(idTablaDes)
+      .then(res => {
+        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
+        setDataApiSeguridad(options)
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -152,14 +162,12 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
     callApiFraude(33);
     callApiLiquidez(34);
     callApiOperativo(35);
+    callApiSeguridad(36);
   }, [])
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
   return (
     <Fragment>
-      {/* <div className='content-header'>
-        <h5 className='mb-0'>Categoria</h5>
-      </div> */}
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
         <Row className='pt-4'>
 
@@ -180,7 +188,7 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
             />
           </FormGroup>
 
-         {/*  <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
               Seguridad de la información
             </Label>
@@ -195,7 +203,7 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
               touched={formik.touched.seguridadId}
               options={dataApiSeguridad}
             />
-          </FormGroup> */}
+          </FormGroup>
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
@@ -213,23 +221,6 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
               options={dataApiLiquidez}
             />
           </FormGroup>
-
-          {/* <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
-            <Label className='form-label'>
-              LGI FT y/o DP
-            </Label>
-            <CSelectReact
-              type={"select"}
-              id={'lgiId'}
-              placeholder={'Seleccionar'}
-              value={formik.values.lgiId}
-              onChange={formik.setFieldValue}
-              onBlur={formik.setFieldTouched}
-              error={formik.errors.lgiId}
-              touched={formik.touched.lgiId}
-              options={dataApiLgi}
-            />
-          </FormGroup> */}
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>

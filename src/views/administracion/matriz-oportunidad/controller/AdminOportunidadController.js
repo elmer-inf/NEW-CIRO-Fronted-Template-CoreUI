@@ -33,7 +33,7 @@ export const putTablaDescripcionOportunidadId = (id, data) => {
 }
 
  export const getTablaDescripcionOportunidadId = async (id) => {
-    const uri = HOST + 'v1/tablaDescripcionMatrizOportunidad/mostrar/' + id;
+    const uri = HOST + 'v1/tablaDescripcionMatrizOportunidad/mostrar2/' + id;
     const response = await axios.get(uri);
     return response;
 };
