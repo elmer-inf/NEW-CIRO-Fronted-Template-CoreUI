@@ -6,9 +6,9 @@ import { FormGroup, Col, Form, Button, Label } from 'reactstrap'
 import { CSelectReact } from 'src/reusable/CSelectReact'
 import { getTablaListaOportunidad, getTablaDescripcionOportunidadN1 } from '../controller/AdminOportunidadController';
 import { buildSelectTwo } from 'src/functions/Function'
+import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
 
-const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
-
+const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit, optionsList, isEdit }) => {
   const formik = useFormik({
     initialValues: initialValuess,
     validationSchema: Yup.object().shape(
@@ -34,25 +34,8 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
     }
   })
 
-  /* LISTA LAS TABLAS LISTA*/
-  const [tablaListaOptions, setTablaListaOptions] = useState([])
-  const callApi = () => {
-    getTablaListaOportunidad()
-      .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombreTabla', true)
-        setTablaListaOptions(options)
-      }).catch((error) => {
-        console.log('Error: ', error)
-      })
-  }
-
-  useEffect(() => {
-    callApi();
-  }, [])
-
-
   /* LISTA TABLA DESCRIPCION NIVEL 2 */
-  const [dataApi2, setDataApi] = useState([])
+  const [dataApi2, setDataApi] = useState(optionsList.opLebel2List);
   const callApi2 = (idTablaDes) => {
     getTablaDescripcionOportunidadN1(idTablaDes)
       .then(res => {
@@ -63,27 +46,65 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
       })
   }
 
+
+  /*
+    useEffect(() => {
+     if( formik.values.tablaId !== null){
+      const idnivel2 = formik.values.tablaId.nivel2;
+      callApi2(idnivel2);
+      resetValues();
+     }
+     //eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [formik.values.tablaId])
+  */
+  /*useEffect(() => {
+     if( formik.values.tablaId !== null){
+      console.log('efect 2: ',formik.values.tablaId.nivel2 )
+      const idnivel2 = formik.values.tablaId.nivel2;
+      callApi2(idnivel2);
+     }
+     //eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])*/
+
+
   const resetValues = () => {
+    /*     formik.setFieldValue('campoA', null, false);
+        formik.setFieldValue('nombre', null, false);
+        formik.setFieldValue('campoB', null, false);
+        formik.setFieldValue('campoC', null, false);
+        formik.setFieldValue('campoD', null, false);
+        formik.setFieldValue('tablaId', null, false); */
     formik.setFieldValue('nivel2Id', null, false);
   }
 
-  useEffect(() => {
-   if( formik.values.tablaId !== null){
-    const idnivel2 = formik.values.tablaId.nivel2;
-    callApi2(idnivel2);
+  const clearAllDependences = () => {
     resetValues();
-   }
-   //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.tablaId])
+    setDataApi([]);
+  }
+
+  const getSelectValueLevel2 = (value) => {
+    console.log('getSelectValue : ', value);
+    if (value.nivel2 !== null && value.nivel2 !== 0) {
+      const idnivel2 = value.nivel2;
+      callApi2(idnivel2);
+    }
+  }
+  const inputIsClearableLevel2 = (id) => {
+    console.log('inputIsClearable aaa: ', id);
+    //formik.setFieldValue(id, null, false);
+    //clearAllDependences();
+  }
+
+
 
   useEffect(() => {
-    if( formik.values.tablaId !== null){
-     console.log('efect 2: ',formik.values.tablaId.nivel2 )
-     const idnivel2 = formik.values.tablaId.nivel2;
-     callApi2(idnivel2);
+    if (isEdit) {
+      setDataApi(optionsList.opLebel2List)
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [])
+  }, [optionsList]);
+
+
 
   return (
     <Form onSubmit={formik.handleSubmit} autoComplete="off">
@@ -92,7 +113,7 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
           Tabla
         </Label>
         <Col sm='9' lg='5'>
-          <CSelectReact
+          {/*      <CSelectReact
             type={"select"}
             id={'tablaId'}
             placeholder={'Seleccionar . . . '}
@@ -101,12 +122,35 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
             onBlur={formik.setFieldTouched}
             error={formik.errors.tablaId}
             touched={formik.touched.tablaId}
-            options={tablaListaOptions}
+            options={optionsList.opTabla || []}
+          /> */}
+
+          <CSelectReactTwo
+            label={""}
+            id={'tablaId'}
+            placeholder={'Seleccione'}
+            value={formik.values.tablaId}
+            onChange={formik.setFieldValue}
+            onBlur={formik.setFieldTouched}
+            errors={formik.errors.tablaId}
+            touched={formik.touched.tablaId}
+            //options={tablaIdOptions}optionToSelect.tablaOp
+            options={optionsList.opTabla || []}
+            obligatorio={true}
+            isClearable={true}
+            isSearchable={true}
+            isDisabled={false}
+            dependence={true}
+            cleareableDependences={clearAllDependences}  //FUNCION PARA LIMPIA LOS VALORES FORMIK...
+            getAddValue={true}
+            getSelectValue={getSelectValueLevel2} // AGGARA EL EL VALOR DEL SELECT VALUE
+            inputIsClearable={inputIsClearableLevel2} // AGGARA EL EL VALOR DEL SELECT VALUE
           />
+
         </Col>
       </FormGroup>
 
-      { (formik.values.tablaId !== null &&
+      {(formik.values.tablaId !== null &&
         (formik.values.tablaId.label === 'Matriz FODA - Listado' ||
           formik.values.tablaId.label === 'Grupos de interés' ||
           formik.values.tablaId.label === 'Impacto de oportunidad' ||
@@ -114,11 +158,11 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
           formik.values.tablaId.label === 'Fortaleza - oportunidad')) ?
         <FormGroup row className='justify-content-center'>
           <Label sm='3' lg='3' for='clave'>
-            {formik.values.tablaId.label === 'Matriz FODA - Listado' ? 'Código': null }
-            {formik.values.tablaId.label === 'Grupos de interés' ? 'Int/Ext': null }
-            {formik.values.tablaId.label === 'Impacto de oportunidad' ? 'Nivel': null }
-            {formik.values.tablaId.label === 'Tratamiento - oportunidad' ? 'Calificación': null }
-            {formik.values.tablaId.label === 'Fortaleza - oportunidad' ? 'Ponderación': null }
+            {formik.values.tablaId.label === 'Matriz FODA - Listado' ? 'Código' : null}
+            {formik.values.tablaId.label === 'Grupos de interés' ? 'Int/Ext' : null}
+            {formik.values.tablaId.label === 'Impacto de oportunidad' ? 'Nivel' : null}
+            {formik.values.tablaId.label === 'Tratamiento - oportunidad' ? 'Calificación' : null}
+            {formik.values.tablaId.label === 'Fortaleza - oportunidad' ? 'Ponderación' : null}
           </Label>
           <Col sm='9' lg='5'>
             <CInputReact
@@ -132,18 +176,18 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
             />
           </Col>
         </FormGroup>
-      : null
+        : null
       }
 
       {formik.values.tablaId !== null ?
         <FormGroup row className='justify-content-center'>
           <Label sm='3' lg='3' for='nombre'>
-            {formik.values.tablaId.label === 'Matriz FODA' ? 'Nombre': null }
+            {formik.values.tablaId.label === 'Matriz FODA' ? 'Nombre' : null}
             {formik.values.tablaId.label === 'Matriz FODA - Listado' ||
-              formik.values.tablaId.label === 'Fortaleza - oportunidad'? 'Descripción': null }
-            {formik.values.tablaId.label === 'Grupos de interés' ? 'Parte interesada': null }
-            {formik.values.tablaId.label === 'Impacto de oportunidad' ? 'Descriptivo': null }
-            {formik.values.tablaId.label === 'Tratamiento - oportunidad' ? 'Nivel': null }
+              formik.values.tablaId.label === 'Fortaleza - oportunidad' ? 'Descripción' : null}
+            {formik.values.tablaId.label === 'Grupos de interés' ? 'Parte interesada' : null}
+            {formik.values.tablaId.label === 'Impacto de oportunidad' ? 'Descriptivo' : null}
+            {formik.values.tablaId.label === 'Tratamiento - oportunidad' ? 'Nivel' : null}
           </Label>
           <Col sm='9' lg='5'>
             <CInputReact
@@ -158,16 +202,16 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
             />
           </Col>
         </FormGroup>
-      : null}
+        : null}
 
 
-      { (formik.values.tablaId !== null &&
+      {(formik.values.tablaId !== null &&
         (formik.values.tablaId.label === 'Impacto de oportunidad' ||
-        formik.values.tablaId.label === 'Tratamiento - oportunidad')) ?
+          formik.values.tablaId.label === 'Tratamiento - oportunidad')) ?
         <FormGroup row className='justify-content-center'>
           <Label sm='3' lg='3' for='clave'>
-            {formik.values.tablaId.label === 'Impacto de oportunidad' ? 'Descriptivo 2': null }
-            {formik.values.tablaId.label === 'Tratamiento - oportunidad' ? 'Descriptivo': null }
+            {formik.values.tablaId.label === 'Impacto de oportunidad' ? 'Descriptivo 2' : null}
+            {formik.values.tablaId.label === 'Tratamiento - oportunidad' ? 'Descriptivo' : null}
           </Label>
           <Col sm='9' lg='5'>
             <CInputReact
@@ -182,16 +226,16 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
             />
           </Col>
         </FormGroup>
-      : null
+        : null
       }
 
-      {(formik.values.tablaId !== null && 
+      {(formik.values.tablaId !== null &&
         (formik.values.tablaId.label === 'Impacto de oportunidad' ||
           formik.values.tablaId.label === 'Tratamiento - oportunidad')) ?
         <FormGroup row className='justify-content-center'>
           <Label sm='3' lg='3' for='clave'>
-            {formik.values.tablaId.label === 'Impacto de oportunidad' ? 'Impacto-oportunidad': null }
-            {formik.values.tablaId.label === 'Tratamiento - oportunidad' ? 'Descripción': null }
+            {formik.values.tablaId.label === 'Impacto de oportunidad' ? 'Impacto-oportunidad' : null}
+            {formik.values.tablaId.label === 'Tratamiento - oportunidad' ? 'Descripción' : null}
           </Label>
           <Col sm='9' lg='5'>
             <CInputReact
@@ -206,7 +250,7 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
             />
           </Col>
         </FormGroup>
-      : null
+        : null
       }
 
       {(formik.values.tablaId !== null &&
@@ -214,8 +258,8 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
           formik.values.tablaId.label === 'Tratamiento - oportunidad')) ?
         <FormGroup row className='justify-content-center'>
           <Label sm='3' lg='3' for='clave'>
-            {formik.values.tablaId.label === 'Impacto de oportunidad' ? '% de Impacto-oportunidad': null }
-            {formik.values.tablaId.label === 'Tratamiento - oportunidad' ? 'Tratamiento': null }
+            {formik.values.tablaId.label === 'Impacto de oportunidad' ? '% de Impacto-oportunidad' : null}
+            {formik.values.tablaId.label === 'Tratamiento - oportunidad' ? 'Tratamiento' : null}
           </Label>
           <Col sm='9' lg='5'>
             <CInputReact
@@ -230,13 +274,13 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
             />
           </Col>
         </FormGroup>
-      : null
+        : null
       }
 
       {(formik.values.tablaId !== null && // PARA NIVEL 2
-          formik.values.tablaId.label === 'Matriz FODA - Listado' ) ?
+        formik.values.tablaId.label === 'Matriz FODA - Listado') ?
         <FormGroup row className='justify-content-center'>
-          <Label sm='3'  lg='3' for='nivel2Id'>
+          <Label sm='3' lg='3' for='nivel2Id'>
             Matriz FODA
           </Label>
           <Col sm='9' lg='5'>
@@ -253,7 +297,7 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
             />
           </Col>
         </FormGroup>
-      : null }
+        : null}
 
       <FormGroup className='mb-0' row>
         <Col className='d-flex justify-content-center'>
@@ -261,8 +305,8 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
             className='mr-4 text-white'
             color="primary"
             type="submit"
-            //disabled={formik.isSubmitting}
-            //disabled={(formik.values.tablaId !== null && formik.values.tablaId.label === 'Tasa de cambio')? true : false}
+          //disabled={formik.isSubmitting}
+          //disabled={(formik.values.tablaId !== null && formik.values.tablaId.label === 'Tasa de cambio')? true : false}
           >
             Guardar
           </Button>
