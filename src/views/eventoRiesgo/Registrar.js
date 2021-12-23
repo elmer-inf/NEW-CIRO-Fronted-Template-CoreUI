@@ -103,7 +103,11 @@ const EventoRiesgoRegistrar = () => {
     tipoServicioId: null,
     descServicioId: null,
     riesgoRelacionado: '',
-    detalleEstado: ''
+    detalleEstado: '',
+
+    listMatrizRiesgo:null
+
+
   }
 
   const formValueInitialImportes = {
