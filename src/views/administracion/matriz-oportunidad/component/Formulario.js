@@ -4,7 +4,7 @@ import * as Yup from "yup"
 import { CInputReact } from 'src/reusable/CInputReact'
 import { FormGroup, Col, Form, Button, Label } from 'reactstrap'
 import { CSelectReact } from 'src/reusable/CSelectReact'
-import { getTablaListaOportunidad, getTablaDescripcionOportunidadN1 } from '../controller/AdminOportunidadController';
+import { getTablaDescripcionOportunidadN1 } from '../controller/AdminOportunidadController';
 import { buildSelectTwo } from 'src/functions/Function'
 import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
 

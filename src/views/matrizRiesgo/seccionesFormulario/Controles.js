@@ -185,7 +185,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, isEdit }
               <CInputReact
                 type={"textarea"}
                 id={'controlValoracion'}
-                value={(values.controlId !== "" && _.find(dataApiControl, ['id', _.toInteger(values.controlId)]) !== null) ? _.find(dataApiControl, ['id', _.toInteger(values.controlId)]).nombre : ""}
+                value={(values.controlId !== "" && _.find(dataApiControl, ['id', _.toInteger(values.controlId)]) !== null) ? (_.find(dataApiControl, ['id', _.toInteger(values.controlId)]).campoA + '. ' + _.find(dataApiControl, ['id', _.toInteger(values.controlId)]).nombre) : ""}
                 disabled={true}
                 rows={1}
               />
@@ -198,7 +198,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, isEdit }
               <CInputReact
                 type={"text"}
                 id={'controlDisminucion'}
-                value={(values.controlId !== "" && _.find(dataApiControl, ['id', _.toInteger(values.controlId)]) !== null) ? _.find(dataApiControl, ['id', _.toInteger(values.controlId)]).campoC : ""}
+                value={(values.controlId !== "" && _.find(dataApiControl, ['id', _.toInteger(values.controlId)]) !== null) ? _.find(dataApiControl, ['id', _.toInteger(values.controlId)]).campoB : ""}
                 disabled={true}
               />
             </Col>

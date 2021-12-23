@@ -53,7 +53,7 @@ const AdministracionMatrizRiesgosListar = () => {
         text: (labelTabla === 'Probabilidad')?
                         'PROB CUALITATIVA': (labelTabla === 'Impacto de Riesgo')?
                                         'IMPACTO CUALITATIVO' : (labelTabla === 'Controles')?
-                                                                    'DESCRIPCION 2' : (labelTabla === 'Nivel de riesgo inherente')?
+                                                                    '% MITIGACION' : (labelTabla === 'Nivel de riesgo inherente')?
                                                                                     'DESCRIPTIVO' : '',
         sort: true,
        /*  filter: customFilter(),
@@ -64,8 +64,7 @@ const AdministracionMatrizRiesgosListar = () => {
       dataField: 'campoC',
       text: (labelTabla === 'Probabilidad')?
             'TEMPORALIDAD': (labelTabla === 'Impacto de Riesgo')?
-                            'IMPACTO CUANTITATIVO' : (labelTabla === 'Controles')?
-                                                        '% MITIGACION' : (labelTabla === 'Nivel de riesgo inherente')?
+                            'IMPACTO CUANTITATIVO' : (labelTabla === 'Nivel de riesgo inherente')?
                                                                    'DESCRIPCION' : '',
       sort: true,
      /*  filter: customFilter(),

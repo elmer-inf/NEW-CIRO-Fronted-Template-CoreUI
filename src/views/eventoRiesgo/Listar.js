@@ -24,7 +24,7 @@ const EventoRiesgoListar = () => {
   const [spin, setSpin] = useState(false);
 
   const redirect = () => {
-    history.push('./registrar')
+    history.push('/eventoRiesgo/Registrar')
   }
 
   const columns = [

@@ -1,8 +1,10 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import { Card, CardHeader, CardBody, CardTitle, Button, Col, Label, Row } from 'reactstrap'
 import BootstrapTable from 'react-bootstrap-table-next';
+/* import paginationFactory from 'react-bootstrap-table2-paginator'; */
+import { typeFormatter } from 'src/reusable/Component';
+import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import ActionFormatter from 'src/reusable/ActionFormatter';
-
 import Select from 'react-select'
 import { useHistory } from 'react-router-dom'
 import { getTablaDescripcionEventoN1, getTablaListaEvento } from './controller/AdminEventoController'
@@ -12,6 +14,10 @@ import { Plus } from 'react-feather';
 const AdministracionEventoListar = () => {
 
   const [labelTabla, setLabelTabla] = useState([])
+
+  /* const pagination = paginationFactory({
+    page: 2,
+  }); */
 
   const columns = [
     {
@@ -36,12 +42,16 @@ const AdministracionEventoListar = () => {
                       'TIPO DOC' : (labelTabla === 'Seguridad de la información') ?
                                   'CALIFICACION' : '',
       sort: true,
-      //formatter: columnaVacia
-      //hidden : (row) => row.clave == null ? true : false
-      /*  filter: customFilter(),
-       filterRenderer: (onFilter, column) =>
-           <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
-      //headerFormatter: typeFormatter,
+      hidden: (labelTabla === 'Área' || labelTabla === 'Unidad' || labelTabla === 'Macroproceso' ||
+                labelTabla === 'Entidad' || labelTabla === 'Tipo de evento' || labelTabla === 'Moneda' ||
+                labelTabla === 'Póliza ATC' || labelTabla === 'Reputacional' || labelTabla === 'Legal' ||
+                labelTabla === 'Cumplimiento' || labelTabla === 'Estratégico' || labelTabla === 'Gobierno' ||
+                labelTabla === 'Fraude' || labelTabla === 'Liquidez' || labelTabla === 'Operativo' ||
+                labelTabla === 'Proceso' ||labelTabla === 'Seguridad de la información') ? false : true,
+      filter: textFilter({
+        placeholder:'Buscar'
+      }),
+      headerFormatter: typeFormatter,
     }, {
       dataField: 'nombre',
       text: (labelTabla === 'Proceso') ?
@@ -57,10 +67,11 @@ const AdministracionEventoListar = () => {
             'DESCRIPTIVO' : (labelTabla === 'Recuperación activo') ?
                   'DESCRIPCION' : 'NOMBRE',
       sort: true,
-      /*  filter: customFilter(),
-       filterRenderer: (onFilter, column) =>
-           <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
-      //headerFormatter: typeFormatter
+      hidden: (labelTabla !== '' || labelTabla !== undefined) ? false : true,
+      filter: textFilter({
+        placeholder:'Buscar'
+      }),
+      headerFormatter: typeFormatter,
     }, {
       dataField: 'descripcion',
       text: (labelTabla === 'Categoria de tipo de Evento' ||
@@ -78,10 +89,15 @@ const AdministracionEventoListar = () => {
                   'NIVEL DE GOB #' : (labelTabla === 'Fraude') ?
                     'Imp reportado ($)' : '',
       sort: true,
-      /*  filter: customFilter(),
-       filterRenderer: (onFilter, column) =>
-           <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
-      //headerFormatter: typeFormatter
+      hidden: (labelTabla === 'Categoria de tipo de Evento' || labelTabla === 'Efecto de pérdida' || labelTabla === 'Impacto' ||
+                labelTabla === 'Reputacional' || labelTabla === 'Estratégico' || labelTabla === 'Operativo' ||
+                labelTabla === 'Seguridad de la información' || labelTabla === 'Macroproceso' || labelTabla === 'Proceso' ||
+                labelTabla === 'Legal' || labelTabla === 'Liquidez' || labelTabla === 'Cumplimiento' ||
+                labelTabla === 'Gobierno' || labelTabla === 'Fraude') ? false : true,
+      filter: textFilter({
+        placeholder:'Buscar'
+      }),
+      headerFormatter: typeFormatter,
     }, {
       dataField: 'campoA',
       text: (labelTabla === 'Macroproceso') ?
@@ -92,10 +108,12 @@ const AdministracionEventoListar = () => {
                 'LIQUIDEZ' : (labelTabla === 'Seguridad de la información')?
                   'PLAZO HASTA' : '',
       sort: true,
-      /*  filter: customFilter(),
-       filterRenderer: (onFilter, column) =>
-           <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
-      //headerFormatter: typeFormatter
+      hidden: (labelTabla === 'Macroproceso' || labelTabla === 'Proceso' || labelTabla === 'Gobierno' ||
+                labelTabla === 'Fraude' || labelTabla === 'Liquidez' || labelTabla === 'Seguridad de la información')? false : true,
+      filter: textFilter({
+        placeholder:'Buscar'
+      }),
+      headerFormatter: typeFormatter,
     }, {
       dataField: 'campoB',
       text: (labelTabla === 'Proceso') ?
@@ -104,26 +122,30 @@ const AdministracionEventoListar = () => {
             'Imp reportado 2 ($)' : (labelTabla === 'Liquidez') ?
               "CAPITAL DE TRABAJO" : '',
       sort: true,
-      /*  filter: customFilter(),
-       filterRenderer: (onFilter, column) =>
-           <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
-      //headerFormatter: typeFormatter
+      hidden : (labelTabla === 'Proceso' || labelTabla === 'Gobierno' ||
+                labelTabla === 'Fraude' || labelTabla === 'Liquidez') ? false : true,
+      filter: textFilter({
+        placeholder:'Buscar'
+      }),
+      headerFormatter: typeFormatter,
     }, {
       dataField: 'campoC',
       text: (labelTabla === 'Fraude') ? "IMPACTO - SEVERIDAD" : '',
       sort: true,
-      /*  filter: customFilter(),
-       filterRenderer: (onFilter, column) =>
-           <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
-      //headerFormatter: typeFormatter
+      hidden: (labelTabla === 'Fraude') ? false : true,
+      filter: textFilter({
+        placeholder:'Buscar'
+      }),
+      headerFormatter: typeFormatter,
     }, {
       dataField: 'campoD',
       text: (labelTabla === 'Fraude') ? "IMPACTO - SEVERIDAD 2" : '',
       sort: true,
-      /*  filter: customFilter(),
-       filterRenderer: (onFilter, column) =>
-           <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
-      //headerFormatter: typeFormatter
+      hidden: (labelTabla === 'Fraude') ? false : true,
+      filter: textFilter({
+        placeholder:'Buscar'
+      }),
+      headerFormatter: typeFormatter,
     }, {
       dataField: 'codigoAsfi',
       text: (labelTabla === 'Ciudad' ||
@@ -137,14 +159,19 @@ const AdministracionEventoListar = () => {
               labelTabla === 'Moneda' ||
               labelTabla === 'Recuperación activo') ? "COD ASFI" : '',
       sort: true,
-      /*  filter: customFilter(),
-       filterRenderer: (onFilter, column) =>
-           <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
-      //headerFormatter: typeFormatter
+      hidden:  (labelTabla === 'Ciudad' || labelTabla === 'Tipo de evento' || labelTabla === 'Canal ASFI' ||
+                labelTabla === 'Clase Evento - Basilea' || labelTabla === 'Factor de riesgo' || labelTabla === 'Proceso' ||
+                labelTabla === 'Línea de negocio ASFI' || labelTabla === 'Operaciones ASFI' || labelTabla === 'Moneda' ||
+                labelTabla === 'Recuperación activo') ? false : true,
+      filter: textFilter({
+        placeholder:'Buscar'
+      }),
+      headerFormatter: typeFormatter,
     }, {
       dataField: 'tablaLista.nombre_tabla',
       text: 'TABLA',
       sort: true,
+      hidden:true
     }
      /* {
       dataField: 'tablaLista.nivel2',
@@ -204,16 +231,17 @@ const AdministracionEventoListar = () => {
 
   /* LISTA TABLA DESCRIPCION despendiento de seleccion tabla lista*/
   const handleSelectOnChange = (result) => {
-    //console.log('select:  ', result)
+    console.log('select:  ', result)
     const labelTable = result.label
     setLabelTabla(labelTable)
     getTablaDescripcion(result.value);
   }
 
   const getTablaDescripcion = (idTabla) => {
+
     getTablaDescripcionEventoN1(idTabla)
       .then(res => {
-        //console.log('nivel 1: ', res.data)
+        console.log('nivel 1: ', res.data)
         setDAtaApi(res.data)
       }).catch((error) => {
         console.log('Error: ', error)
@@ -244,6 +272,7 @@ const AdministracionEventoListar = () => {
       }
     }
   }
+
 
   return (
     <div id='' className='table-hover-animation'>
@@ -296,7 +325,8 @@ const AdministracionEventoListar = () => {
               hover={false}
               condensed={false}
               wrapperClasses="table-responsive"
-            //filter={filterFactory()}
+              /* pagination={ pagination } */
+              filter={filterFactory()}
             />
           </CardBody>
         </Card>
