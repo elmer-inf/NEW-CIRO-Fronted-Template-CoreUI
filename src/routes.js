@@ -53,6 +53,11 @@ const AdministracionMatrizOportunidadListar = React.lazy(() => import('./views/a
 const AdministracionMatrizOportunidadRegistrar = React.lazy(() => import('./views/administracion/matriz-oportunidad/Registrar'));
 const AdministracionMatrizOportunidadEditar = React.lazy(() => import('./views/administracion/matriz-oportunidad/Editar'));
 
+// Parametrizacion Seguridad
+const AdministracionSeguridadListar = React.lazy(() => import('./views/administracion/seguridad/Listar'));
+const AdministracionSeguridadRegistrar = React.lazy(() => import('./views/administracion/seguridad/Registrar'));
+const AdministracionSeguridadEditar = React.lazy(() => import('./views/administracion/seguridad/Editar'));
+
 // 1er Modulo: Eventos de riesgo
 const EventoRiesgoListar = React.lazy(() => import('./views/eventoRiesgo/Listar'));
 const EventoRiesgoRegistrar = React.lazy(() => import('./views/eventoRiesgo/Registrar'));
@@ -121,9 +126,13 @@ const routes = [
   { path: '/administracion/matriz-riesgo/Registrar', name: 'Registrar parámetro de Matriz de riesgo', component: AdministracionMatrizRiesgosRegistrar },
   { path: '/administracion/matriz-riesgo/Editar/:id', name: 'Editar parámetro de Matriz de riesgo', component: AdministracionMatrizRiesgosEditar },
 
-  { path: '/administracion/matriz-oportunidad/Listar', name: 'Lista de Matriz de oportunidades', component: AdministracionMatrizOportunidadListar },
-  { path: '/administracion/matriz-oportunidad/Registrar', name: 'Registrar Matriz de oportunidad', component: AdministracionMatrizOportunidadRegistrar },
+  { path: '/administracion/matriz-oportunidad/Listar', name: 'Parámetros de Matriz de oportunidades', component: AdministracionMatrizOportunidadListar },
+  { path: '/administracion/matriz-oportunidad/Registrar', name: 'Registrar parámetro de Matriz de oportunidad', component: AdministracionMatrizOportunidadRegistrar },
   { path: '/administracion/matriz-oportunidad/Editar/:id', name: 'Editar parámetro de Matriz de oportunidad', component: AdministracionMatrizOportunidadEditar },
+
+  { path: '/administracion/seguridad/Listar', name: 'Parámetros de Seguridad', component: AdministracionSeguridadListar },
+  { path: '/administracion/seguridad/Registrar', name: 'Registrar parámetro de Seguridad', component: AdministracionSeguridadRegistrar },
+  { path: '/administracion/seguridad/Editar/:id', name: 'Editar parámetro de Seguridad', component: AdministracionSeguridadEditar },
 
   // 1er Modulo: Eventos de riesgo
   { path: '/eventoRiesgo', name: 'Eventos de Riesgo', component: EventoRiesgoListar, exact: true },

@@ -15,17 +15,22 @@ const _nav =  [
         _tag: 'CSidebarNavItem',
         name: 'Eventos de riesgo',
         //icon: <Circle size={10} className='mr-2'/>,
-        to: '/administracion/evento-riesgo/listar',
+        to: '/administracion/evento-riesgo/Listar',
       },
       {
         _tag: 'CSidebarNavItem',
         name: 'Matriz de riesgos',
-        to: '/administracion/matriz-riesgo/listar',
+        to: '/administracion/matriz-riesgo/Listar',
       },
       {
         _tag: 'CSidebarNavItem',
         name: 'Matriz de oportunidades',
-        to: '/administracion/matriz-oportunidad/listar',
+        to: '/administracion/matriz-oportunidad/Listar',
+      },
+      {
+        _tag: 'CSidebarNavItem',
+        name: 'Seguridad',
+        to: '/administracion/seguridad/Listar',
       }
     ],
   },{
@@ -77,7 +82,20 @@ const _nav =  [
         to: '/matrizOportunidad/listar',
       }
     ],
-  }
+  }/* , {
+
+    _tag: 'CSidebarNavDropdown',
+    name: 'Módulo de Seguridad',
+    route: '/seguridad',
+    icon: <FontAwesomeIcon style={{ flex: '0 0 56px', marginLeft: '-1rem', fontSize: '18px'}} icon={'shield'}/>,
+    _children: [
+      {
+        _tag: 'CSidebarNavItem',
+        name: 'Seguridad',
+        to: '/seguridad/listar',
+      }
+    ],
+  } */
 ]
 
 export default _nav
