@@ -166,7 +166,7 @@ const MatrizRiesgo = ({ match }) => {
 
   const probabilidadResidual = () => {
     var probabilidadR = 0;
-    var disminucion = dataApi.controlId.campoC;
+    var disminucion = dataApi.controlId.campoB;
     if(dataApi.controlObjetivo === 'Ambos' || dataApi.controlObjetivo === 'Probabilidad')
       probabilidadR = reduceProbabilidadImpacto(dataApi.probabilidadId.campoA, parseInt(disminucion));
     else
@@ -185,7 +185,7 @@ const MatrizRiesgo = ({ match }) => {
 
   const impactoResidual = () => {
     var impactoR = 0;
-    var disminucion = dataApi.controlId.campoC;
+    var disminucion = dataApi.controlId.campoB;
     if(dataApi.controlObjetivo === 'Ambos' || dataApi.controlObjetivo === 'Impacto')
       impactoR = reduceProbabilidadImpacto(dataApi.impactoId.campoA, parseInt(disminucion));
     else
@@ -570,7 +570,7 @@ const MatrizRiesgo = ({ match }) => {
 
                           <Col xs='12' sm='6' md='6' className='pt-2'>
                             <div className='text-label'>% Disminución del control: </div>
-                            <div className='text-data'>{dataApi.controlId !== null ? dataApi.controlId.campoC : <i>Sin registro</i>}</div>
+                            <div className='text-data'>{dataApi.controlId !== null ? dataApi.controlId.campoB : <i>Sin registro</i>}</div>
                           </Col>
 
                           <Col xs='12' sm='6' md='6' className='pt-2'>

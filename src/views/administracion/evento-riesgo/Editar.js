@@ -17,6 +17,7 @@ const AdministracionEventoEditar = ({ match }) => {
     campoB: '',
     campoC: '',
     campoD: '',
+    codigoAsfi: '',
     nivel2_id: null,
     nivel3_id: null
   }
@@ -32,12 +33,12 @@ const AdministracionEventoEditar = ({ match }) => {
     tabla_n2: dataApi2,
     tabla_n3: dataApi3,
   }
+
   //useState
   const [formValueToEdit, setformValueToEdit] = useState(formValueInitial)
   const [spin, setSpin] = useState(false)
 
-
-  //functions
+  // functions
   const handleOnSubmit = (dataToRequest) => {
     console.log('data que se edita: ', dataToRequest)
     const idTabDesc = match.params.id;
@@ -52,8 +53,6 @@ const AdministracionEventoEditar = ({ match }) => {
 
   const macthed = (dataResponse) => {
     const r = dataResponse.tablaLista;
-
-
 
     var nivel1 = { value: dataResponse.tablaLista.id, label: dataResponse.tablaLista.nombre_tabla, nivel2: dataResponse.tablaLista.nivel2, nivel3: dataResponse.tablaLista.nivel3 }
     var nivel2 = {}
@@ -74,36 +73,26 @@ const AdministracionEventoEditar = ({ match }) => {
       campoB: dataResponse.campoB,
       campoC: dataResponse.campoC,
       campoD: dataResponse.campoD,
+      codigoAsfi: dataResponse.codigoAsfi,
       tablaLista: nivel1,
       nivel2_id: (dataResponse.nivel2_id !== null) ? nivel2 : null,
       nivel3_id: (dataResponse.nivel3_id !== null) ? nivel3 : null
     }
     //console.log('MATCHEDEDED: ', valores)
-
     setformValueToEdit(valores);
-
-    console.log('mtachhhher: ', dataResponse.tablaLista);
-
+    //console.log('mtachhhher: ', dataResponse.tablaLista);
     if (r.nivel2 !== null && r.nivel2 != 0) {
       const idnivel2 = r.nivel2;
       callApi2(idnivel2);
     }
-
-
     if (r.nivel3 !== null && r.nivel3 != 0) {
       const idnivel3 = r.nivel3;
       callApi3(idnivel3);
-
     }
-
-
-
-
   }
 
   const getById = async () => {
     setSpin(true)
-
     const idParametro = match.params.id;
     await getTablaDescripcionEventoId(idParametro)
       .then((response) => {
@@ -159,17 +148,15 @@ const AdministracionEventoEditar = ({ match }) => {
       })
   }
 
-
   //Life Cycle
   useEffect(() => {
     getById();
     getTablaLista();
-
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <div id=''>
+    <div>
       <Fragment>
         <Card>
           <CardHeader>

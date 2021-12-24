@@ -54,7 +54,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         riesgoRelacionado: Yup.mixed().nullable(),
         detalleEstado: Yup.string().nullable(),
 
-        listMatrizRiesgo:Yup.mixed().required('Campo obligatorio')
+        listMatrizRiesgo:Yup.mixed().nullable()
         */
 
         codigoInicial: Yup.string().nullable(),
@@ -79,11 +79,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         riesgoRelacionado: Yup.mixed().nullable(),
         detalleEstado: Yup.string().nullable(),
 
-
         listMatrizRiesgo: Yup.mixed().nullable(),
-
-
-
       }
     ),
 
@@ -128,8 +124,6 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         nextSection(4);
     }
   });
-
-
 
 
   /*   P  A  R  A  M  E  T  R  O  S   */
@@ -265,13 +259,6 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
       })
   }
 
-  // Riesgo relacionado
-  const optionsRiesgoRelacionado = [
-    { value: 'Riesgo relacionado 1', label: 'Riesgo relacionado 1' },
-    { value: 'Riesgo relacionado 2', label: 'Riesgo relacionado 2' },
-    { value: 'Riesgo relacionado 3', label: 'Riesgo relacionado 3' }
-  ]
-
   // Operación, producto o servicio afectado
   const [dataApiOpeProSer, setDataApiOpeProSer] = useState([])
   const callApiOpeProSer = (idTablaDes) => {
@@ -318,7 +305,6 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
     callApiEfectoPerdida(19);
     callApiOpeProSer(20);
     callLListMatrizRiesgos();
-
   }, [])
 
   // Sub evento (nivel 2)
@@ -336,6 +322,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   useEffect(() => {
     if (formik.values.subEventoId !== null) {
       callApiClaseEvento(13, formik.values.subEventoId.id, formik.values.tipoEventoPerdidaId.id);
+      console.log('13, ', formik.values.subEventoId.id, ', ', formik.values.tipoEventoPerdidaId.id);
       resetClaseEvento();
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
@@ -386,25 +373,19 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   const [listRiesgoRel, setListRiesgoRel] = useState([]);
 
   const callLListMatrizRiesgos = () => {
-    console.log('llegoo: ');
+    //console.log('llegoo: ');
     getRiesgos()
       .then(res => {
         const options = buildSelectThree(res.data, 'id', 'codigo', 'definicion', true)
-        console.log('resssponseeee riesgo realcionado:: ', options);
+        //console.log('resssponseeee riesgo realcionado:: ', options);
         setListRiesgoRel(options)
       }).catch((error) => {
         console.log('Error: ', error)
       })
   }
 
-
-
-
   return (
     <Fragment>
-      {/* <div className='content-header'>
-        <h5 className='mb-0'>Categoria</h5>
-      </div> */}
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
         <div className='divider divider-left divider-dark pt-2'>
           <div className='divider-text'><span className='text-label'>Categoria</span></div>
@@ -625,7 +606,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
           </FormGroup>
           <FormGroup tag={Col} md='12' className='mb-0'>
             <Label className='form-label'>
-              Riesgo relacionado <span className='text-primary h5'><b>*</b></span>
+              Riesgo(s) relacionado(s) {/* <span className='text-primary h5'><b>*</b></span> */}
             </Label>
             <CSelectReact
               type={"select"}
@@ -640,13 +621,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
               isMulti={true}
             />
           </FormGroup>
-
         </Row>
-
-
-
-
-
         <div className='divider divider-left divider-dark pt-2'>
           <div className='divider-text'><span className='text-label'>Línea de negocio</span></div>
         </div>
@@ -699,23 +674,6 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
               error={formik.errors.efectoPerdidaId}
               touched={formik.touched.efectoPerdidaId}
               options={dataApiEfectoPerdida}
-            />
-          </FormGroup>
-
-          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
-            <Label className='form-label'>
-              Riesgo relacionado
-            </Label>
-            <CSelectReact
-              type={"select"}
-              id={'riesgoRelacionado'}
-              placeholder={'Seleccionar'}
-              value={formik.values.riesgoRelacionado}
-              onChange={formik.setFieldValue}
-              onBlur={formik.setFieldTouched}
-              error={formik.errors.riesgoRelacionado}
-              touched={formik.touched.riesgoRelacionado}
-              options={optionsRiesgoRelacionado}
             />
           </FormGroup>
 

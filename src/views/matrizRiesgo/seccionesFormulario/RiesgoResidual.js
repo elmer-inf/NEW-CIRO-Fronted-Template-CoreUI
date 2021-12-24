@@ -12,6 +12,9 @@ var _ = require('lodash');
 
 const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, dataAux2, isEdit}) => {
 
+  console.log('dataAux: ', dataAux);
+  console.log('dataAux2: ', dataAux2);
+
   const formik = useFormik({
     initialValues: initValues,
     validationSchema: Yup.object().shape(
@@ -88,13 +91,13 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, d
     callApiProbabilidad(2);
     callApiImpacto(3);
     callApiRiesgoI(9);
-
     callApiControl(5);
   }, [])
 
   // calcula "Probabilidad e impacto residual" del valor "Probabilidad inherente"
-  const disminucionAux = (dataAux.controlIdAux !== undefined && _.find(dataApiControl, ['id', _.toInteger(dataAux.controlIdAux)]) !== null) ? _.find(dataApiControl, ['id', _.toInteger(dataAux.controlIdAux)]).campoC : null
+  const disminucionAux = (dataAux.controlIdAux !== undefined && _.find(dataApiControl, ['id', _.toInteger(dataAux.controlIdAux)]) !== null) ? _.find(dataApiControl, ['id', _.toInteger(dataAux.controlIdAux)]).campoB : null
   const probInherenteAux = parseInt(dataAux2.probabilidaNivelAux);
+  console.log('disminucionAux: ', disminucionAux);
   const impactoInherenteAux = parseInt(dataAux2.impactoNivelAux);
   useEffect(() => {
     if(dataAux.controlObjetivoAux === 'Ambos'){

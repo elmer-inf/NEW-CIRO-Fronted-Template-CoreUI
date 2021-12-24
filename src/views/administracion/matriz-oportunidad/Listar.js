@@ -1,8 +1,9 @@
 import React, { Fragment, useState, useEffect } from 'react'
-import { Card, CardHeader, CardBody, CardTitle, Button, Col, Label, Row} from 'reactstrap'
+import { Card, CardHeader, CardBody, CardTitle, Button, Col, Label, Row } from 'reactstrap'
 import BootstrapTable from 'react-bootstrap-table-next';
+import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
+import { typeFormatter } from 'src/reusable/Component';
 import ActionFormatter from 'src/reusable/ActionFormatter';
-
 import Select from 'react-select'
 import { useHistory } from 'react-router-dom'
 import { getTablaDescripcionOportunidadN1, getTablaListaOportunidad } from './controller/AdminOportunidadController'
@@ -18,83 +19,78 @@ const AdministracionMatrizOportunidadListar = () => {
       dataField: 'id',
       text: 'ID',
       sort: false,
-      //hidden: true
-    },{
-        dataField: 'campoA',
-        text:  (labelTabla === 'Matriz FODA - Listado')?
-                'CODIGO' : (labelTabla === 'Grupos de interés')?
-                            'INT/EXT' : (labelTabla === 'Impacto de oportunidad')?
-                                        'NIVEL' : (labelTabla === 'Tratamiento - oportunidad')?
-                                                    "CALIFICACION" : (labelTabla === 'Fortaleza - oportunidad')?
-                                                                    "PONDERACION" : '',
-        sort: true,
-        //formatter: columnaVacia
-        //hidden : (row) => row.clave == null ? true : false
-       /*  filter: customFilter(),
-        filterRenderer: (onFilter, column) =>
-            <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
-        //headerFormatter: typeFormatter,
+      hidden: true
     }, {
-        dataField: 'nombre',
-        text:  (labelTabla === 'Matriz FODA')?
-                'NOMBRE' : (labelTabla === 'Matriz FODA - Listado' ||
-                            labelTabla === 'Fortaleza - oportunidad')?
-                                    'DESCRIPCION' : (labelTabla === 'Grupos de interés')?
-                                                    'PARTE INTERESADA' : (labelTabla === 'Impacto de oportunidad')?
-                                                                        'DESCRIPTIVO' : (labelTabla === 'Tratamiento - oportunidad')?
-                                                                                        "NIVEL" : '',
-        sort: true,
-       /*  filter: customFilter(),
-        filterRenderer: (onFilter, column) =>
-            <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
-        //headerFormatter: typeFormatter
+      dataField: 'campoA',
+      text: (labelTabla === 'Matriz FODA - Listado') ?
+        'CODIGO' : (labelTabla === 'Grupos de interés') ?
+          'INT/EXT' : (labelTabla === 'Impacto de oportunidad') ?
+            'NIVEL' : (labelTabla === 'Tratamiento - oportunidad') ?
+              "CALIFICACION" : (labelTabla === 'Fortaleza - oportunidad') ?
+                "PONDERACION" : '',
+      sort: true,
+      hidden: (labelTabla === 'Matriz FODA - Listado' || labelTabla === 'Grupos de interés' ||
+        labelTabla === 'Impacto de oportunidad' || labelTabla === 'Tratamiento - oportunidad' ||
+        labelTabla === 'Fortaleza - oportunidad') ? false : true,
+      filter: textFilter({
+        placeholder: 'Buscar'
+      }),
+      headerFormatter: typeFormatter,
     }, {
-        dataField: 'campoB',
-        text: (labelTabla === 'Impacto de oportunidad')?
-                'DESCRIPTIVO 2' : (labelTabla === 'Tratamiento - oportunidad')?
-                            "DESCRIPTIVO" : '',
-        sort: true,
-       /*  filter: customFilter(),
-        filterRenderer: (onFilter, column) =>
-            <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
-        //headerFormatter: typeFormatter
+      dataField: 'nombre',
+      text: (labelTabla === 'Matriz FODA') ?
+        'NOMBRE' : (labelTabla === 'Matriz FODA - Listado' ||
+          labelTabla === 'Fortaleza - oportunidad') ?
+          'DESCRIPCION' : (labelTabla === 'Grupos de interés') ?
+            'PARTE INTERESADA' : (labelTabla === 'Impacto de oportunidad') ?
+              'DESCRIPTIVO' : (labelTabla === 'Tratamiento - oportunidad') ?
+                "NIVEL" : '',
+      sort: true,
+      hidden: (labelTabla === 'Matriz FODA' || labelTabla === 'Matriz FODA - Listado' ||
+        labelTabla === 'Fortaleza - oportunidad' || labelTabla === 'Grupos de interés' ||
+        labelTabla === 'Impacto de oportunidad' || labelTabla === 'Tratamiento - oportunidad') ? false : true,
+      filter: textFilter({
+        placeholder: 'Buscar'
+      }),
+      headerFormatter: typeFormatter,
+    }, {
+      dataField: 'campoB',
+      text: (labelTabla === 'Impacto de oportunidad') ?
+        'DESCRIPTIVO 2' : (labelTabla === 'Tratamiento - oportunidad') ?
+          "DESCRIPTIVO" : '',
+      sort: true,
+      hidden: (labelTabla === 'Impacto de oportunidad' || labelTabla === 'Tratamiento - oportunidad') ? false : true,
+      filter: textFilter({
+        placeholder: 'Buscar'
+      }),
+      headerFormatter: typeFormatter,
     }, {
       dataField: 'campoC',
-      text: (labelTabla === 'Impacto de oportunidad')?
-            'IMPACTO-OPORTUNIDAD' : (labelTabla === 'Tratamiento - oportunidad')?
-                        "DESCRIPCION" : '',
+      text: (labelTabla === 'Impacto de oportunidad') ?
+        'IMPACTO-OPORTUNIDAD' : (labelTabla === 'Tratamiento - oportunidad') ?
+          "DESCRIPCION" : '',
       sort: true,
-     /*  filter: customFilter(),
-      filterRenderer: (onFilter, column) =>
-          <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
-      //headerFormatter: typeFormatter
+      hidden: (labelTabla === 'Impacto de oportunidad' || labelTabla === 'Tratamiento - oportunidad') ? false : true,
+      filter: textFilter({
+        placeholder: 'Buscar'
+      }),
+      headerFormatter: typeFormatter,
     }, {
       dataField: 'campoD',
-      text: (labelTabla === 'Impacto de oportunidad')?
-              '% IMPACTO OPORTUNIDAD' : (labelTabla === 'Tratamiento - oportunidad')?
-                          "TRATAMIENTO" : '',
-              sort: true,
-     /*  filter: customFilter(),
-      filterRenderer: (onFilter, column) =>
-          <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />, */
-      //headerFormatter: typeFormatter
-    }, {
-         dataField: 'tablaId.nombreTabla',
-         text: 'TABLA',
-         sort: true,
-     }
-     /* {
-      dataField: 'tablaLista.nivel2',
-      text: (tablaLista.nivel2 === 1)?
-              'Agencia' : (tablaLista.nivel2 === 3)?
-                          'Área' : '',
+      text: (labelTabla === 'Impacto de oportunidad') ?
+        '% IMPACTO OPORTUNIDAD' : (labelTabla === 'Tratamiento - oportunidad') ?
+          "TRATAMIENTO" : '',
       sort: true,
-     } */,{
-        dataField: 'acciones',
-        text: 'ACCIONES',
-        headerAlign: 'center',
-        style: { textAlign: 'center' },
-        formatter: (cell, row) => actionFormatter(cell, row)
+      hidden: (labelTabla === 'Impacto de oportunidad' || labelTabla === 'Tratamiento - oportunidad') ? false : true,
+      filter: textFilter({
+        placeholder: 'Buscar'
+      }),
+      headerFormatter: typeFormatter,
+    }, {
+      text: (labelTabla.length !== 0) ? 'ACCIONES' : '',
+      headerAlign: 'center',
+      style: { textAlign: 'center' },
+      formatter: (cell, row) => actionFormatter(cell, row)
     }
   ]
 
@@ -146,21 +142,21 @@ const AdministracionMatrizOportunidadListar = () => {
 
   const getTablaDescripcion = (idTabla) => {
     getTablaDescripcionOportunidadN1(idTabla)
-    .then(res => {
-      //console.log('nivel 1: ', res.data)
-      setDAtaApi(res.data)
-    }).catch((error) => {
-      console.log('Error: ', error)
-      //notificationToast('error', Messages.notification.notOk)
-    })
+      .then(res => {
+        //console.log('nivel 1: ', res.data)
+        setDAtaApi(res.data)
+      }).catch((error) => {
+        console.log('Error: ', error)
+        //notificationToast('error', Messages.notification.notOk)
+      })
   }
 
   // Style Select
-  const customStyles =  {
+  const customStyles = {
     menu: provided => ({ ...provided, zIndex: "9999 !important" }),
     control: (styles,) => ({
-        ...styles,
-        boxShadow: 'none',
+      ...styles,
+      boxShadow: 'none',
     }),
     option: (styles, { isDisabled, isSelected }) => {
       return {
@@ -168,12 +164,12 @@ const AdministracionMatrizOportunidadListar = () => {
         backgroundColor: isSelected ? '#e79140' : 'white',
         cursor: isDisabled ? 'not-allowed' : 'default',
         ':active': {
-            backgroundColor: '#e79140',
-            color: 'white'
+          backgroundColor: '#e79140',
+          color: 'white'
         },
-        ':hover':{
-            backgroundColor: isSelected ? '#e79140' : '#fbf3eb',
-            color: isSelected ? 'white' : '#e79140'
+        ':hover': {
+          backgroundColor: isSelected ? '#e79140' : '#fbf3eb',
+          color: isSelected ? 'white' : '#e79140'
         }
       }
     }
@@ -186,8 +182,8 @@ const AdministracionMatrizOportunidadListar = () => {
         <Card>
           <CardHeader>
             <CardTitle className='float-left h4 pt-2'>Listado de Parámetros de Matriz de oportunidades</CardTitle>
-            <Button color='primary' onClick={redirect} className='float-right mt-1 text-white' style={{width: '130px'}}>
-            <Plus size={15} className='mr-2'/><span>Registrar</span>
+            <Button color='primary' onClick={redirect} className='float-right mt-1 text-white' style={{ width: '130px' }}>
+              <Plus size={15} className='mr-2' /><span>Registrar</span>
             </Button>
           </CardHeader>
           <CardBody>
@@ -205,21 +201,21 @@ const AdministracionMatrizOportunidadListar = () => {
                   isLoading={true}
                   styles={customStyles}
                   theme={theme => ({
-                      ...theme,
-                      borderRadius: 5,
-                      colors: {
-                          ...theme.colors,
-                          primary: '#e79140'
-                      }
+                    ...theme,
+                    borderRadius: 5,
+                    colors: {
+                      ...theme.colors,
+                      primary: '#e79140'
+                    }
                   })}
                 />
               </Col>
             </Row>
 
             <BootstrapTable
-              classes= {'table-hover-animation mt-5'}
+              classes={'table-hover-animation mt-5'}
               bootstrap4={true}
-              sort={ { dataField: 'id', order: 'asc' } }
+              sort={{ dataField: 'id', order: 'asc' }}
               noDataIndication={'No se encontraron resultados'}
               keyField='id'
               data={dataApi}
@@ -229,7 +225,7 @@ const AdministracionMatrizOportunidadListar = () => {
               hover={false}
               condensed={false}
               wrapperClasses="table-responsive"
-              //filter={filterFactory()}
+              filter={filterFactory()}
             />
           </CardBody>
         </Card>
