@@ -173,7 +173,8 @@ const EventoRiesgoListar = () => {
 
   const editRow = (row) => {
     console.log(row)
-    history.push('./editar/' + row.id);
+   // history.push('./editar/' + row.id);
+    history.push('/eventoRiesgo/Editar/' + row.id);
   }
 
   const actionFormatterEvaluar = (cell, row) => {
@@ -213,7 +214,6 @@ const EventoRiesgoListar = () => {
 
   const callApi = async (page, size) => {
     setSpin(true)
-
     await getEventosPaging(page, size)
       .then(res => {
         //console.log('El response de tabla: ', res.data)
@@ -244,8 +244,8 @@ const EventoRiesgoListar = () => {
     const valueToSearch = _.lowerCase(event.value);;
 
     //add exception
-    if (fieldName === 'fechaIni' && !_.isEmpty(event.value)) {
-      param['fechaIni'] = event.value;
+    if (fieldName === 'fechaFin' && !_.isEmpty(event.value)) {
+      param['fechaFin'] = event.value;
     } else if (fieldName === 'fechaDesc' && !_.isEmpty(event.value)) {
       param['fechaDesc'] = event.value;
     } else {
@@ -253,15 +253,18 @@ const EventoRiesgoListar = () => {
     }
 
     console.log('params:: ', param)
-    console.log('param[fechaIni]:: ', param['fechaIni'])
+    console.log('param[fechaFin]:: ', param['fechaFin'])
 
-    //delete
-    if (param['fechaIni'] === '' || _.isEmpty(param['fechaIni'])) {
-      delete param['fechaIni'];
-    } else if (param['fechaDesc'] === '' || _.isEmpty(param['fechaDesc'])) {
-      delete param['fechaDesc'];
+    //deleteok
 
+    if (param['fechaFin'] === '' || _.isEmpty(param['fechaFin'])) {
+      delete param['fechaFin'];
     }
+    if (param['fechaDesc'] === '' || _.isEmpty(param['fechaDesc'])) {
+      delete param['fechaDesc'];
+    }
+
+
     setParams(param)
     validatePagination(pagination.page, pagination.size, param);
   }
@@ -275,7 +278,11 @@ const EventoRiesgoListar = () => {
     } else {
       search = getParams(toSearch);
     }
-    const endpoint = 'v1/eventoRiesgo/'
+
+    console.log('TO SEARCH:: ', search);
+
+    const endpoint = 'v1/eventoRiesgo/';
+
     await getListPagingWithSearch(page, size, endpoint, search)
       .then((response) => {
         const paging = response.data.paging;

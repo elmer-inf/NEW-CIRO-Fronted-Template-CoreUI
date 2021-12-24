@@ -30,3 +30,11 @@ export const getUltimaObservacion = async (id) => {
     const response = await axios.get(uri);
     return response;
 };
+
+
+// Paginacion
+export const getMatrizPaging = async (page, size) => {
+    const uri = HOST + 'v1/matrizRiesgo/' + page + '/' + size + '/id:desc';
+    const response = await axios.get(uri);
+    return response;
+};

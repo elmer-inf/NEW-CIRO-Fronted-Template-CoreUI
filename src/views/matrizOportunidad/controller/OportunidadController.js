@@ -30,3 +30,9 @@ export const getUltimaObservacion = async (id) => {
     const response = await axios.get(uri);
     return response;
 };
+// Paginacion
+export const getOportunidadPaging = async (page, size) => {
+    const uri = HOST + 'v1/matrizOportunidad/' + page + '/' + size + '/id:desc';
+    const response = await axios.get(uri);
+    return response;
+};
