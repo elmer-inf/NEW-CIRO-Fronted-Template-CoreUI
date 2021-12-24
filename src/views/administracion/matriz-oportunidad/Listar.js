@@ -105,7 +105,8 @@ const AdministracionMatrizOportunidadListar = () => {
   }
   const editRow = (row) => {
     console.log(row)
-    history.push('./editar/' + row.id);
+   // history.push('./editar/' + row.id);
+    history.push('/administracion/matriz-oportunidad/Editar/' + row.id);
   }
 
   const [tablaListaOptions, setTablaListaOptions] = useState([])
@@ -113,7 +114,8 @@ const AdministracionMatrizOportunidadListar = () => {
   const history = useHistory()
 
   const redirect = () => {
-    history.push('./registrar')
+   // history.push('./registrar')
+    history.push('/administracion/matriz-oportunidad/Registrar')
   }
   /* LISTA TABLA LISTA */
   const callApi = () => {

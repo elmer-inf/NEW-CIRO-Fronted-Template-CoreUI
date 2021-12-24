@@ -10,6 +10,7 @@ const HOST = HOSTURI.endpoint_ciro;
 
 export const getListPagingWithSearch = async (page, size,endpoint, search) => {
     const uri = HOST + endpoint + page + '/' + size + '/id:desc?' + search;
+    console.log('endpoint:: ' ,  uri);
     const response = await axios.get(uri);
 
     return response;
