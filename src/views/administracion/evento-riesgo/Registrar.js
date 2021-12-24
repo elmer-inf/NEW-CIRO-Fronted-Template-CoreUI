@@ -16,6 +16,7 @@ const AdministracionEventoRegistrar = () => {
     campoB: '',
     campoC: '',
     campoD: '',
+    codigoAsfi: '',
     nivel2_id: null,
     nivel3_id: null
   }

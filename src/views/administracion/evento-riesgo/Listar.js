@@ -32,24 +32,24 @@ const AdministracionEventoListar = () => {
           'SIGLA' : (labelTabla === 'Moneda') ?
             'ABREVIATURA' : (labelTabla === 'Póliza ATC') ?
               'NRO' : (labelTabla === 'Reputacional' ||
-                      labelTabla === 'Legal' ||
-                      labelTabla === 'Cumplimiento' ||
-                      labelTabla === 'Estratégico' ||
-                      labelTabla === 'Gobierno' ||
-                      labelTabla === 'Fraude' ||
-                      labelTabla === 'Liquidez' ||
-                      labelTabla === 'Operativo') ? 'NIVEL' : (labelTabla === 'Proceso') ?
-                      'TIPO DOC' : (labelTabla === 'Seguridad de la información') ?
-                                  'CALIFICACION' : '',
+                labelTabla === 'Legal' ||
+                labelTabla === 'Cumplimiento' ||
+                labelTabla === 'Estratégico' ||
+                labelTabla === 'Gobierno' ||
+                labelTabla === 'Fraude' ||
+                labelTabla === 'Liquidez' ||
+                labelTabla === 'Operativo') ? 'NIVEL' : (labelTabla === 'Proceso') ?
+                'TIPO DOC' : (labelTabla === 'Seguridad de la información') ?
+                  'CALIFICACION' : '',
       sort: true,
       hidden: (labelTabla === 'Área' || labelTabla === 'Unidad' || labelTabla === 'Macroproceso' ||
-                labelTabla === 'Entidad' || labelTabla === 'Tipo de evento' || labelTabla === 'Moneda' ||
-                labelTabla === 'Póliza ATC' || labelTabla === 'Reputacional' || labelTabla === 'Legal' ||
-                labelTabla === 'Cumplimiento' || labelTabla === 'Estratégico' || labelTabla === 'Gobierno' ||
-                labelTabla === 'Fraude' || labelTabla === 'Liquidez' || labelTabla === 'Operativo' ||
-                labelTabla === 'Proceso' ||labelTabla === 'Seguridad de la información') ? false : true,
+        labelTabla === 'Entidad' || labelTabla === 'Tipo de evento' || labelTabla === 'Moneda' ||
+        labelTabla === 'Póliza ATC' || labelTabla === 'Reputacional' || labelTabla === 'Legal' ||
+        labelTabla === 'Cumplimiento' || labelTabla === 'Estratégico' || labelTabla === 'Gobierno' ||
+        labelTabla === 'Fraude' || labelTabla === 'Liquidez' || labelTabla === 'Operativo' ||
+        labelTabla === 'Proceso' || labelTabla === 'Seguridad de la información') ? false : true,
       filter: textFilter({
-        placeholder:'Buscar'
+        placeholder: 'Buscar'
       }),
       headerFormatter: typeFormatter,
     }, {
@@ -64,12 +64,12 @@ const AdministracionEventoListar = () => {
           labelTabla === 'Liquidez' ||
           labelTabla === 'Operativo' ||
           labelTabla === 'Seguridad de la información') ?
-            'DESCRIPTIVO' : (labelTabla === 'Recuperación activo') ?
-                  'DESCRIPCION' : 'NOMBRE',
+          'DESCRIPTIVO' : (labelTabla === 'Recuperación activo') ?
+            'DESCRIPCION' : 'NOMBRE',
       sort: true,
-      hidden: (labelTabla !== '' || labelTabla !== undefined) ? false : true,
+      hidden: (labelTabla.length !== 0) ? false : true,
       filter: textFilter({
-        placeholder:'Buscar'
+        placeholder: 'Buscar'
       }),
       headerFormatter: typeFormatter,
     }, {
@@ -90,12 +90,12 @@ const AdministracionEventoListar = () => {
                     'Imp reportado ($)' : '',
       sort: true,
       hidden: (labelTabla === 'Categoria de tipo de Evento' || labelTabla === 'Efecto de pérdida' || labelTabla === 'Impacto' ||
-                labelTabla === 'Reputacional' || labelTabla === 'Estratégico' || labelTabla === 'Operativo' ||
-                labelTabla === 'Seguridad de la información' || labelTabla === 'Macroproceso' || labelTabla === 'Proceso' ||
-                labelTabla === 'Legal' || labelTabla === 'Liquidez' || labelTabla === 'Cumplimiento' ||
-                labelTabla === 'Gobierno' || labelTabla === 'Fraude') ? false : true,
+        labelTabla === 'Reputacional' || labelTabla === 'Estratégico' || labelTabla === 'Operativo' ||
+        labelTabla === 'Seguridad de la información' || labelTabla === 'Macroproceso' || labelTabla === 'Proceso' ||
+        labelTabla === 'Legal' || labelTabla === 'Liquidez' || labelTabla === 'Cumplimiento' ||
+        labelTabla === 'Gobierno' || labelTabla === 'Fraude') ? false : true,
       filter: textFilter({
-        placeholder:'Buscar'
+        placeholder: 'Buscar'
       }),
       headerFormatter: typeFormatter,
     }, {
@@ -105,13 +105,13 @@ const AdministracionEventoListar = () => {
           'PROCESO' : (labelTabla === 'Gobierno') ?
             'NIVEL DE GOB' : (labelTabla === 'Fraude') ?
               'Fraude a ventas ($)' : (labelTabla === 'Liquidez') ?
-                'LIQUIDEZ' : (labelTabla === 'Seguridad de la información')?
+                'LIQUIDEZ' : (labelTabla === 'Seguridad de la información') ?
                   'PLAZO HASTA' : '',
       sort: true,
       hidden: (labelTabla === 'Macroproceso' || labelTabla === 'Proceso' || labelTabla === 'Gobierno' ||
-                labelTabla === 'Fraude' || labelTabla === 'Liquidez' || labelTabla === 'Seguridad de la información')? false : true,
+        labelTabla === 'Fraude' || labelTabla === 'Liquidez' || labelTabla === 'Seguridad de la información') ? false : true,
       filter: textFilter({
-        placeholder:'Buscar'
+        placeholder: 'Buscar'
       }),
       headerFormatter: typeFormatter,
     }, {
@@ -122,10 +122,10 @@ const AdministracionEventoListar = () => {
             'Imp reportado 2 ($)' : (labelTabla === 'Liquidez') ?
               "CAPITAL DE TRABAJO" : '',
       sort: true,
-      hidden : (labelTabla === 'Proceso' || labelTabla === 'Gobierno' ||
-                labelTabla === 'Fraude' || labelTabla === 'Liquidez') ? false : true,
+      hidden: (labelTabla === 'Proceso' || labelTabla === 'Gobierno' ||
+        labelTabla === 'Fraude' || labelTabla === 'Liquidez') ? false : true,
       filter: textFilter({
-        placeholder:'Buscar'
+        placeholder: 'Buscar'
       }),
       headerFormatter: typeFormatter,
     }, {
@@ -134,7 +134,7 @@ const AdministracionEventoListar = () => {
       sort: true,
       hidden: (labelTabla === 'Fraude') ? false : true,
       filter: textFilter({
-        placeholder:'Buscar'
+        placeholder: 'Buscar'
       }),
       headerFormatter: typeFormatter,
     }, {
@@ -143,35 +143,35 @@ const AdministracionEventoListar = () => {
       sort: true,
       hidden: (labelTabla === 'Fraude') ? false : true,
       filter: textFilter({
-        placeholder:'Buscar'
+        placeholder: 'Buscar'
       }),
       headerFormatter: typeFormatter,
     }, {
       dataField: 'codigoAsfi',
       text: (labelTabla === 'Ciudad' ||
-              labelTabla === 'Tipo de evento' ||
-              labelTabla === 'Canal ASFI' ||
-              labelTabla === 'Clase Evento - Basilea' ||
-              labelTabla === 'Factor de riesgo' ||
-              labelTabla === 'Proceso' ||
-              labelTabla === 'Línea de negocio ASFI' ||
-              labelTabla === 'Operaciones ASFI' ||
-              labelTabla === 'Moneda' ||
-              labelTabla === 'Recuperación activo') ? "COD ASFI" : '',
+        labelTabla === 'Tipo de evento' ||
+        labelTabla === 'Canal ASFI' ||
+        labelTabla === 'Clase Evento - Basilea' ||
+        labelTabla === 'Factor de riesgo' ||
+        labelTabla === 'Proceso' ||
+        labelTabla === 'Línea de negocio ASFI' ||
+        labelTabla === 'Operaciones ASFI' ||
+        labelTabla === 'Moneda' ||
+        labelTabla === 'Recuperación activo') ? "COD ASFI" : '',
       sort: true,
-      hidden:  (labelTabla === 'Ciudad' || labelTabla === 'Tipo de evento' || labelTabla === 'Canal ASFI' ||
-                labelTabla === 'Clase Evento - Basilea' || labelTabla === 'Factor de riesgo' || labelTabla === 'Proceso' ||
-                labelTabla === 'Línea de negocio ASFI' || labelTabla === 'Operaciones ASFI' || labelTabla === 'Moneda' ||
-                labelTabla === 'Recuperación activo') ? false : true,
+      hidden: (labelTabla === 'Ciudad' || labelTabla === 'Tipo de evento' || labelTabla === 'Canal ASFI' ||
+        labelTabla === 'Clase Evento - Basilea' || labelTabla === 'Factor de riesgo' || labelTabla === 'Proceso' ||
+        labelTabla === 'Línea de negocio ASFI' || labelTabla === 'Operaciones ASFI' || labelTabla === 'Moneda' ||
+        labelTabla === 'Recuperación activo') ? false : true,
       filter: textFilter({
-        placeholder:'Buscar'
+        placeholder: 'Buscar'
       }),
       headerFormatter: typeFormatter,
     }, {
       dataField: 'tablaLista.nombre_tabla',
       text: 'TABLA',
       sort: true,
-      hidden:true
+      hidden: true
     }
      /* {
       dataField: 'tablaLista.nivel2',
@@ -180,8 +180,7 @@ const AdministracionEventoListar = () => {
                           'Área' : '',
       sort: true,
      } */, {
-      dataField: 'acciones',
-      text: 'ACCIONES',
+      text: (labelTabla.length !== 0) ? 'ACCIONES' : '',
       headerAlign: 'center',
       style: { textAlign: 'center' },
       formatter: (cell, row) => actionFormatter(cell, row)
@@ -277,7 +276,6 @@ const AdministracionEventoListar = () => {
   return (
     <div id='' className='table-hover-animation'>
       <Fragment>
-        {/* <BreadCrumbs breadCrumbTitle='Eventos de Riesgo' breadCrumbParent='Administración' breadCrumbActive='Eventos de Riesgo' /> */}
         <Card>
           <CardHeader>
             <CardTitle className='float-left h4 pt-2'>Listado de Parámetros de Eventos de Riesgo</CardTitle>
