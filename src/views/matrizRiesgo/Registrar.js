@@ -26,6 +26,8 @@ const MatrizRiesgoRegistrar = () => {
     fechaEvaluacion : '',
     identificadoId : null,
     identificadoOtro : '',
+    eventoRiesgoId:null,
+    eventoMaterializado:false
   }
 
   const formValueInitialDefinicionRiesgos = {
