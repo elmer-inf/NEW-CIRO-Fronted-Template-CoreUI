@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useFormik } from "formik"
 import * as Yup from "yup"
 import { CInputReact } from 'src/reusable/CInputReact'
-import { FormGroup, Row, Col, Form, Button, Label } from 'reactstrap'
+import { FormGroup, Col, Form, Button, Label } from 'reactstrap'
 import { CSelectReact } from 'src/reusable/CSelectReact'
 import { getTablaListaSeguridad } from '../controller/AdminSeguridadController';
 import { buildSelectTwo } from 'src/functions/Function'

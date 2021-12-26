@@ -81,11 +81,11 @@ const AdministracionEventoEditar = ({ match }) => {
     //console.log('MATCHEDEDED: ', valores)
     setformValueToEdit(valores);
     //console.log('mtachhhher: ', dataResponse.tablaLista);
-    if (r.nivel2 !== null && r.nivel2 != 0) {
+    if (r.nivel2 !== null && r.nivel2 !== 0) {
       const idnivel2 = r.nivel2;
       callApi2(idnivel2);
     }
-    if (r.nivel3 !== null && r.nivel3 != 0) {
+    if (r.nivel3 !== null && r.nivel3 !== 0) {
       const idnivel3 = r.nivel3;
       callApi3(idnivel3);
     }
