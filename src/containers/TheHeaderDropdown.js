@@ -21,7 +21,7 @@ const TheHeaderDropdown = () => {
           {/* <CImg
             src={'/avatars/6.jpg'}
             className="c-avatar-img"
-            alt="admin@bootstrapmaster.com"
+            alt=""
           /> 
           <User size={50}/>
           {/* <Circle size={50}/> 
