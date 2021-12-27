@@ -1,4 +1,4 @@
-import React from 'react'
+/*import React from 'react'
 //import { Edit, Circle, Calendar } from 'react-feather'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faCalendarMinus, faChartLine, faChartBar } from '@fortawesome/free-solid-svg-icons';
@@ -66,7 +66,7 @@ const _nav =  [
         icon: <Circle size={10} className='mr-2'/>,
         //icon: 'cil-circle',
         to: '/eventoRiesgo/registrar',
-      } */
+      }
     ],
   },{
 
@@ -95,7 +95,7 @@ const _nav =  [
         to: '/seguridad/listar',
       }
     ],
-  } */
+  } 
 ]
 
-export default _nav
+export default _nav*/
