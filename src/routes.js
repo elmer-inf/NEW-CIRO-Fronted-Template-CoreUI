@@ -1,5 +1,5 @@
 import React from 'react';
-
+/*
 const Toaster = React.lazy(() => import('./views/notifications/toaster/Toaster'));
 const Tables = React.lazy(() => import('./views/base/tables/Tables'));
 
@@ -36,7 +36,10 @@ const Colors = React.lazy(() => import('./views/theme/colors/Colors'));
 const Typography = React.lazy(() => import('./views/theme/typography/Typography'));
 const Widgets = React.lazy(() => import('./views/widgets/Widgets'));
 const Users = React.lazy(() => import('./views/users/Users'));
-const User = React.lazy(() => import('./views/users/User'));
+const User = React.lazy(() => import('./views/users/User'));*/
+
+const Main = React.lazy(() => import('./views/pages/main/Main'));
+
 
 // Parametrizacion - Evento de riesgo
 const AdministracionEventoListar = React.lazy(() => import('./views/administracion/evento-riesgo/Listar'));
@@ -81,7 +84,7 @@ const SeguridadControl = React.lazy(() => import('./views/seguridad/Control'));
 
 
 const routes = [
-  { path: '/', exact: true, name: 'Home' },
+ /* { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/theme', name: 'Theme', component: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', component: Colors },
@@ -120,7 +123,13 @@ const routes = [
   { path: '/notifications/toaster', name: 'Toaster', component: Toaster },
   { path: '/widgets', name: 'Widgets', component: Widgets },
   { path: '/users', exact: true,  name: 'Users', component: Users },
-  { path: '/users/:id', exact: true, name: 'User Details', component: User },
+  { path: '/users/:id', exact: true, name: 'User Details', component: User },*/
+  { path: '/', exact: true, name: 'Home' },
+  { path: '/main', name: 'Main', component: Main },
+  { path: '/eventoRiesgo/Mostrar/:id', name: 'Evento de Riesgo', component: EventoRiesgo }, // start
+  { path: '/matrizRiesgo/Mostrar/:id', name: 'Matriz de Riesgo', component: MatrizRiesgoMostrar }, // start
+  { path: '/matrizOportunidad/Mostrar/:id', name: 'Matriz de oportunidad', component: MatrizOportunidadMostrar }, // start
+
 
   // Parametrizacion
   { path: '/administracion', name: 'Administración', component: AdministracionEventoListar, exact: true },
@@ -144,19 +153,16 @@ const routes = [
   { path: '/eventoRiesgo', name: 'Eventos de Riesgo', component: EventoRiesgoListar, exact: true },
   { path: '/eventoRiesgo/Listar', name: 'Lista de Eventos de riesgo', component: EventoRiesgoListar },
   { path: '/eventoRiesgo/Registrar', name: 'Registrar Evento de Riesgo', component: EventoRiesgoRegistrar },
-  { path: '/eventoRiesgo/Mostrar/:id', name: 'Evento de Riesgo', component: EventoRiesgo },
 
   // 2do Modulo: Matriz de riesgo
   { path: '/matrizRiesgo', name: 'Matriz de Riesgo', component: MatrizRiesgoListar, exact: true },
   { path: '/matrizRiesgo/Listar', name: 'Lista de Matriz de riesgos', component: MatrizRiesgoListar },
   { path: '/matrizRiesgo/Registrar', name: 'Registrar Matriz de Riesgo', component: MatrizRiesgoRegistrar },
-  { path: '/matrizRiesgo/Mostrar/:id', name: 'Matriz de Riesgo', component: MatrizRiesgoMostrar },
 
   // 3er Modulo: Matriz de oportunidad
   { path: '/matrizOportunidad', name: 'Matriz de oportunidad', component: MatrizOportunidadListar, exact: true },
   { path: '/matrizOportunidad/Listar', name: 'Lista de Matriz de oportunidades', component: MatrizOportunidadListar },
   { path: '/matrizOportunidad/Registrar', name: 'Registrar Matriz de oportunidad', component: MatrizOportunidadRegistrar },
-  { path: '/matrizOportunidad/Mostrar/:id', name: 'Matriz de oportunidad', component: MatrizOportunidadMostrar },
 
   // Modulo de Seguridad
   { path: '/seguridad', name: 'Riesgo en Seguridad', component: SeguridadListar, exact: true },

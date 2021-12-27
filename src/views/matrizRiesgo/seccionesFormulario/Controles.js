@@ -57,10 +57,12 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, isEdit }
   function onSubmit(values) {
     const data = {
       ...values,
+      controlesTiene:Boolean(values.controlesTiene)
     }
     // display form field values on success
     //alert(JSON.stringify(_.omit(data, ['nroControles']), null, 10));
-    console.log('datos que se enviaran SECCION 3:', _.omit(data, ['nroControles']))
+    console.log('datos que se enviaran SECCION 3:', _.omit(data, ['nroControles']));
+
     setObject(_.omit(data, ['nroControles']), values);
     nextSection(3);
   }

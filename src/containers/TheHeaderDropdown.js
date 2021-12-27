@@ -1,4 +1,4 @@
-import React from 'react'
+/*import React from 'react'
 import {
   CBadge,
   CDropdown,
@@ -22,9 +22,9 @@ const TheHeaderDropdown = () => {
             src={'/avatars/6.jpg'}
             className="c-avatar-img"
             alt="admin@bootstrapmaster.com"
-          /> */}
+          /> 
           <User size={50}/>
-          {/* <Circle size={50}/> */}
+          {/* <Circle size={50}/> 
         </div>
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">
@@ -88,6 +88,85 @@ const TheHeaderDropdown = () => {
         </CDropdownItem>
       </CDropdownMenu>
     </CDropdown>
+  )
+}
+
+export default TheHeaderDropdown*/
+import React, { useState, useEffect } from 'react'
+
+
+import { FaSortDown } from 'react-icons/fa';
+import { DropdownItem, DropdownMenu, Dropdown, DropdownToggle, Nav } from 'reactstrap';
+import { useHistory } from 'react-router-dom'
+
+import AuthService from 'src/views/authentication/AuthService';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+     faLock,  faUser, faUserCheck
+} from '@fortawesome/free-solid-svg-icons';
+import ModalProfile from './ModalProfile';
+
+const TheHeaderDropdown = () => {
+
+  const [dropdownOpen2, setdropdownOpen2] = useState(false)
+  const history = useHistory();
+  const [modal, setModal] = useState(false)
+
+  const Auth = new AuthService();
+  const profile = Auth.getProfile();
+  const user = profile.usuario;
+
+  const toggle2 = () => {
+    setdropdownOpen2(!dropdownOpen2);
+
+  }
+  const closeModal = () => setModal(!modal);
+
+  const askIfIsLoggedIn = () => {
+
+    if (!Auth.loggedIn()) {
+      history.push('/login')
+      Auth.logout();
+    }
+
+  }
+
+  const closeSession = () => {
+    Auth.logout();
+    history.push('/login')
+  }
+  // Cycle life
+  useEffect(() => {
+    askIfIsLoggedIn();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  });
+
+
+  return (
+    <Nav className="ml-auto" navbar>
+
+      <Dropdown isOpen={dropdownOpen2} toggle={toggle2} >
+        <DropdownToggle nav>
+          <div>
+          <FontAwesomeIcon icon={faUserCheck} />&nbsp;&nbsp; {user.nombre + ' ' + user.primerApellido}
+            <FaSortDown />
+          </div>
+        </DropdownToggle>
+        <DropdownMenu right style={{ right: 'auto', overflowY: 'scroll' }}>
+
+          <DropdownItem onClick={()=> closeModal()}>
+            <FontAwesomeIcon icon={faUser} />&nbsp;&nbsp; Perfil
+          </DropdownItem>
+          <DropdownItem divider />
+          <DropdownItem onClick={() => closeSession()}>
+          <FontAwesomeIcon icon={faLock} />&nbsp;&nbsp;Cerrar sesión
+          </DropdownItem>
+        </DropdownMenu>
+      </Dropdown>
+      {modal && <ModalProfile profileData={profile} mod={modal} closeModal={closeModal} />}
+
+    </Nav>
+
   )
 }
 

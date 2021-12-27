@@ -1,4 +1,4 @@
-import React from 'react'
+/*import React from 'react'
 //import { Edit, Circle, Calendar } from 'react-feather'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faCalendarMinus, faChartLine, faChartBar, faShieldAlt, faShieldVirus, faUserShield } from '@fortawesome/free-solid-svg-icons';
@@ -56,7 +56,6 @@ const _nav = [
       {
         _tag: 'CSidebarNavItem',
         name: 'Riesgos',
-        to: '/matrizRiesgo/Listar',
       }
     ],
   }, {
@@ -89,7 +88,6 @@ const _nav = [
         to: '/seguridad/Control',
       }
     ],
-  }
 ]
 
-export default _nav
+export default _nav*/
