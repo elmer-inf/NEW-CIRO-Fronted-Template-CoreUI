@@ -1,14 +1,14 @@
 import React from 'react'
 //import { Edit, Circle, Calendar } from 'react-feather'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faCalendarMinus, faChartLine, faChartBar } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faCalendarMinus, faChartLine, faChartBar, faShieldAlt, faShieldVirus, faUserShield } from '@fortawesome/free-solid-svg-icons';
 
-const _nav =  [
+const _nav = [
   {
     _tag: 'CSidebarNavDropdown',
     name: 'Administración',
     route: '/administracion',
-    icon: <FontAwesomeIcon style={{ flex: '0 0 56px', marginLeft: '-1rem', fontSize: '18px'}} icon={faEdit}/>,
+    icon: <FontAwesomeIcon style={{ flex: '0 0 56px', marginLeft: '-1rem', fontSize: '18px' }} icon={faEdit} />,
     //icon: <Edit size={20} className='mr-3'/>,
     _children: [
       {
@@ -33,69 +33,63 @@ const _nav =  [
         to: '/administracion/seguridad/Listar',
       }
     ],
-  },{
-
+  }, {
     _tag: 'CSidebarNavDropdown',
     name: 'Eventos de Riesgo',
     route: '/eventoRiesgo',
-    icon: <FontAwesomeIcon style={{ flex: '0 0 56px', marginLeft: '-1rem', fontSize: '18px'}} icon={faCalendarMinus}/>,
+    icon: <FontAwesomeIcon style={{ flex: '0 0 56px', marginLeft: '-1rem', fontSize: '18px' }} icon={faCalendarMinus} />,
     //icon: <Calendar size={20} className='mr-3'/>,
     _children: [
       {
         _tag: 'CSidebarNavItem',
         name: 'Eventos',
-        to: '/eventoRiesgo/listar',
+        to: '/eventoRiesgo/Listar',
       }
     ],
-  },{
-
+  }, {
     _tag: 'CSidebarNavDropdown',
     name: 'Matriz de Riesgo',
     route: '/matrizRiesgo',
-    icon: <FontAwesomeIcon style={{ flex: '0 0 56px', marginLeft: '-1rem', fontSize: '18px'}} icon={faChartLine}/>,
+    icon: <FontAwesomeIcon style={{ flex: '0 0 56px', marginLeft: '-1rem', fontSize: '18px' }} icon={faChartLine} />,
     //icon: <Calendar size={20} className='mr-3'/>,
     _children: [
       {
         _tag: 'CSidebarNavItem',
         name: 'Riesgos',
-        to: '/matrizRiesgo/listar',
-      },
-      /* {
-        _tag: 'CSidebarNavItem',
-        name: 'Registrar',
-        icon: <Circle size={10} className='mr-2'/>,
-        //icon: 'cil-circle',
-        to: '/eventoRiesgo/registrar',
-      } */
+        to: '/matrizRiesgo/Listar',
+      }
     ],
-  },{
-
+  }, {
     _tag: 'CSidebarNavDropdown',
     name: 'Matriz de Oportunidad',
     route: '/matrizOportunidad',
-    icon: <FontAwesomeIcon style={{ flex: '0 0 56px', marginLeft: '-1rem', fontSize: '18px'}} icon={faChartBar}/>,
+    icon: <FontAwesomeIcon style={{ flex: '0 0 56px', marginLeft: '-1rem', fontSize: '18px' }} icon={faChartBar} />,
     //icon: <Calendar size={20} className='mr-3'/>,
     _children: [
       {
         _tag: 'CSidebarNavItem',
         name: 'Oportunidades',
-        to: '/matrizOportunidad/listar',
+        to: '/matrizOportunidad/Listar',
       }
     ],
-  }/* , {
-
+  }, {
     _tag: 'CSidebarNavDropdown',
     name: 'Módulo de Seguridad',
     route: '/seguridad',
-    icon: <FontAwesomeIcon style={{ flex: '0 0 56px', marginLeft: '-1rem', fontSize: '18px'}} icon={'shield'}/>,
+    icon: <FontAwesomeIcon style={{ flex: '0 0 56px', marginLeft: '-1rem', fontSize: '18px' }} icon={faShieldAlt} />,
     _children: [
       {
         _tag: 'CSidebarNavItem',
         name: 'Seguridad',
-        to: '/seguridad/listar',
+        to: '/seguridad/Listar',
+      },
+      {
+        _tag: 'CSidebarNavItem',
+        name: 'Control',
+        to: '/seguridad/Control',
       }
     ],
-  } */
+  }
 ]
 
 export default _nav

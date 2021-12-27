@@ -271,10 +271,10 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
       })
   }
 
-  // Tipo de servicio (Nivel 2), depende de Operación, producto o servicio
+  // Tipo de servicio (Nivel 1)
   const [dataApiTipoServicio, setDataApiTipoServicio] = useState([])
-  const callApiTipoServicio = (idTablaDes, idNivel2) => {
-    getTablaDescripcionEventoN2(idTablaDes, idNivel2)
+  const callApiTipoServicio = (idTablaDes) => {
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiTipoServicio(options)
@@ -283,10 +283,10 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
       })
   }
 
-  // Descripción de servicio (Nivel 3), depende de Tipo de servicio
+  // Descripción de servicio (Nivel 2), depende de Tipo de servicio
   const [dataApiServicioDesc, setDataApiServicioDesc] = useState([])
-  const callApiServicioDesc = (idTablaDes, idNivel2, idNivel3) => {
-    getTablaDescripcionEventoN3(idTablaDes, idNivel2, idNivel3)
+  const callApiServicioDesc = (idTablaDes, idNivel2) => {
+    getTablaDescripcionEventoN2(idTablaDes, idNivel2)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiServicioDesc(options)
@@ -304,6 +304,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
     callApiOperacion(18);
     callApiEfectoPerdida(19);
     callApiOpeProSer(20);
+    callApiTipoServicio(21);
     callLListMatrizRiesgos();
   }, [])
 
@@ -338,21 +339,11 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.procesoId])
 
-  // Tipo de servicio (nivel 2)
-  const resetTipoYservicio = () => { formik.setFieldValue('tipoServicioId', null, false); formik.setFieldValue('descServicioId', null, false); }
-  useEffect(() => {
-    if (formik.values.opeProSerId !== null) {
-      callApiTipoServicio(21, formik.values.opeProSerId.id);
-      resetTipoYservicio();
-    }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.opeProSerId])
-
-  //  Descripción de servicio (nivel 3)
+  // Descripción de servicio (nivel 2)
   const resetServicioDesc = () => { formik.setFieldValue('descServicioId', null, false); }
   useEffect(() => {
     if (formik.values.tipoServicioId !== null) {
-      callApiServicioDesc(22, formik.values.tipoServicioId.id, formik.values.opeProSerId.id);
+      callApiServicioDesc(22, formik.values.tipoServicioId.id);
       resetServicioDesc();
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
