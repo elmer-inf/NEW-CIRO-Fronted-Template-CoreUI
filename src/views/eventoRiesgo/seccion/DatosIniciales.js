@@ -228,9 +228,6 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
 
   return (
     <Fragment>
-     {/*  <div className='content-header'>
-        <h5 className='mb-0'>Datos Iniciales</h5>
-      </div> */}
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
         <Row className='pt-4'>
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
