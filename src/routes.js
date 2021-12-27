@@ -129,7 +129,7 @@ const routes = [
   { path: '/eventoRiesgo/Mostrar/:id', name: 'Evento de Riesgo', component: EventoRiesgo }, // start
   { path: '/matrizRiesgo/Mostrar/:id', name: 'Matriz de Riesgo', component: MatrizRiesgoMostrar }, // start
   { path: '/matrizOportunidad/Mostrar/:id', name: 'Matriz de oportunidad', component: MatrizOportunidadMostrar }, // start
-
+  { path: '/seguridad/Mostrar/:id', name: 'Riesgo en Seguridad', component: SeguridadMostrar },
 
   // Parametrizacion
   { path: '/administracion', name: 'Administración', component: AdministracionEventoListar, exact: true },
@@ -168,7 +168,6 @@ const routes = [
   { path: '/seguridad', name: 'Riesgo en Seguridad', component: SeguridadListar, exact: true },
   { path: '/seguridad/Listar', name: 'Lista de Riesgos en Seguridad', component: SeguridadListar },
   { path: '/seguridad/Registrar', name: 'Registrar Riesgo en Seguridad', component: SeguridadRegistrar },
-  { path: '/seguridad/Mostrar/:id', name: 'Riesgo en Seguridad', component: SeguridadMostrar },
   { path: '/seguridad/Control', name: 'Control de Riesgo en Seguridad', component: SeguridadControl },
 
 ];

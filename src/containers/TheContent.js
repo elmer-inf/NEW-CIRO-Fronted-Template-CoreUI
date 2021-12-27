@@ -80,6 +80,7 @@ const TheContent = ({ routesProp }) => {
     newRoute.push(routes[2]);
     newRoute.push(routes[3]);
     newRoute.push(routes[4]);
+    newRoute.push(routes[5]);
 
     _.forEach(routesProp, function (item) {
       var searching = _.find(routes, ['path', item]);
