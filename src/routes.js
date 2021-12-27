@@ -73,6 +73,12 @@ const MatrizOportunidadListar = React.lazy(() => import('./views/matrizOportunid
 const MatrizOportunidadRegistrar = React.lazy(() => import('./views/matrizOportunidad/Registrar'));
 const MatrizOportunidadMostrar = React.lazy(() => import('./views/matrizOportunidad/Mostrar'));
 
+// Modulo de Seguridad
+const SeguridadListar = React.lazy(() => import('./views/seguridad/Listar'));
+const SeguridadRegistrar = React.lazy(() => import('./views/seguridad/Registrar'));
+const SeguridadMostrar = React.lazy(() => import('./views/seguridad/Mostrar'));
+const SeguridadControl = React.lazy(() => import('./views/seguridad/Control'));
+
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -151,6 +157,13 @@ const routes = [
   { path: '/matrizOportunidad/Listar', name: 'Lista de Matriz de oportunidades', component: MatrizOportunidadListar },
   { path: '/matrizOportunidad/Registrar', name: 'Registrar Matriz de oportunidad', component: MatrizOportunidadRegistrar },
   { path: '/matrizOportunidad/Mostrar/:id', name: 'Matriz de oportunidad', component: MatrizOportunidadMostrar },
+
+  // Modulo de Seguridad
+  { path: '/seguridad', name: 'Riesgo en Seguridad', component: SeguridadListar, exact: true },
+  { path: '/seguridad/Listar', name: 'Lista de Riesgos en Seguridad', component: SeguridadListar },
+  { path: '/seguridad/Registrar', name: 'Registrar Riesgo en Seguridad', component: SeguridadRegistrar },
+  { path: '/seguridad/Mostrar/:id', name: 'Riesgo en Seguridad', component: SeguridadMostrar },
+  { path: '/seguridad/Control', name: 'Control de Riesgo en Seguridad', component: SeguridadControl },
 
 ];
 
