@@ -66,7 +66,7 @@ const Seguridad = ({ match }) => {
                 <Row className='pt-3 pb-4'>
                   <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                     <div className='text-label'>Fecha Registro : </div>
-                    <div className='text-data'>{dataApi.fechaRegistro !== '' ? dataApi.fechaRegistro : <i>Sin registro</i>}</div>
+                    <div className='text-data'>{dataApi.fechaRegistro !== null ? dataApi.fechaRegistro : <i>Sin registro</i>}</div>
                   </Col>
 
                   <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
@@ -86,7 +86,7 @@ const Seguridad = ({ match }) => {
 
                   <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                     <div className='text-label'>Red: </div>
-                    <div className='text-data'>{dataApi.red !== '' ? dataApi.red : <i>Sin registro</i>}</div>
+                    <div className='text-data'>{dataApi.red !== null ? dataApi.red : <i>Sin registro</i>}</div>
                   </Col>
 
                   <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
@@ -123,12 +123,12 @@ const Seguridad = ({ match }) => {
 
                   <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                     <div className='text-label'>Fecha de solución: </div>
-                    <div className='text-data'>{dataApi.fechaSolucion !== '' ? dataApi.fechaSolucion : <i>Sin registro</i>}</div>
+                    <div className='text-data'>{dataApi.fechaSolucion !== null ? dataApi.fechaSolucion : <i>Sin registro</i>}</div>
                   </Col>
 
                   <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                     <div className='text-label'>Fecha límite de atención: </div>
-                    <div className='text-data'>{dataApi.fechaLimite !== '' ? dataApi.fechaLimite : <i>Sin registro</i>}</div>
+                    <div className='text-data'>{dataApi.fechaLimite !== null ? dataApi.fechaLimite : <i>Sin registro</i>}</div>
                   </Col>
 
                   <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>

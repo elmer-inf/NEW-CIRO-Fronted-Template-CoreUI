@@ -16,6 +16,8 @@ import { buildSelectTwo } from 'src/functions/Function'
 import { useFormik } from "formik"
 import * as Yup from "yup"
 
+var _ = require('lodash');
+
 const EventoRiesgoRegistrar = () => {
 
   const history = useHistory()
@@ -26,7 +28,7 @@ const EventoRiesgoRegistrar = () => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'clave', false)
-        setDataApiTipoEvento(options)
+        setDataApiTipoEvento(_.orderBy(options, ['value' ], ['asc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -35,7 +37,6 @@ const EventoRiesgoRegistrar = () => {
   useEffect(() => {
     callApiTipoEvento(6);
   }, [])
-
 
   const formValueInitialTipoEvento = {
     tipoEvento: null,

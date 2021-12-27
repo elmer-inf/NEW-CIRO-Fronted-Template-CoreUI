@@ -30,8 +30,8 @@ const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
         comentario: Yup.string().nullable(),
 
         tipoActivoId: Yup.mixed().nullable(),
-        nivelRiesgoId: Yup.mixed().nullable(),
-        estadoId: Yup.mixed().nullable(),
+        nivelRiesgoId: Yup.mixed().required('Campo obligatorio'),
+        estadoId: Yup.mixed().required('Campo obligatorio'),
         areaId: Yup.mixed().nullable()
       }
     ),
@@ -43,7 +43,7 @@ const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
         nivelRiesgoId: (values.nivelRiesgoId !== null) ? values.nivelRiesgoId.value : 0,
         estadoId: (values.estadoId !== null) ? values.estadoId.value : 0,
         areaId: (values.areaId !== null) ? values.areaId.value : 0,
-        red: (values.red !== null) ? values.red.value : ''
+        red: (values.red !== null) ? values.red.value : null
       }
       console.log('datos que se enviaran:', data)
       handleOnSubmit(data)
