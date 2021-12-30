@@ -35,9 +35,10 @@ const MatrizRiesgoRegistrar = () => {
     causa : '',
     consecuencia : '',
     defConcatenado : '',
+    efectoPerdidaOtro : '',
     efectoPerdidaId : null,
     perdidaAsfiId : null,
-    monetario : false,
+    monetario : '',
     factorRiesgoId: null,
 
     probabilidadId: null,
@@ -119,6 +120,7 @@ const MatrizRiesgoRegistrar = () => {
     }
   }
 
+  const [dataAuxSeccion1, setDataAuxSeccion1] = useState([])
   const [dataAuxSeccion2, setDataAuxSeccion2] = useState([])
   const [dataAuxSeccion3, setDataAuxSeccion3] = useState([])
   const [dataAuxSeccion4, setDataAuxSeccion4] = useState([])
@@ -129,10 +131,20 @@ const MatrizRiesgoRegistrar = () => {
       ...requestData,
       ...result
     }
+
+    // Obtiene label Proceso para busqueda en Seccion Controles: Select Proceso
+    if(activeTab === '1' && realValues !== undefined){
+      const dataAuxSeccion1 = {
+        procedimientoAux : realValues.procedimientoId.label,
+      }
+      setDataAuxSeccion1(dataAuxSeccion1)
+    }
+    // FIN Obtiene data Proceso para busqueda en Seccion Controles: Select Proceso
+
     // Obtiene valores auxiliares de "Definicion y Riesgo inherente" para "Valoracion cuantitativa y Riesgo residual"
     if(activeTab === '2' && realValues !== undefined){
       const dataAuxSeccion2 = {
-        efectPerdidaAux: realValues.efectoPerdidaId.label,
+        efectPerdidaAux: realValues.efectoPerdidaId !== null? realValues.efectoPerdidaId.label : realValues.efectoPerdidaOtro,
         perdidaAsfiAux: realValues.perdidaAsfiId.label,
 
         probabilidaNivelAux : realValues.probabilidadId.campoA,
@@ -288,6 +300,7 @@ const MatrizRiesgoRegistrar = () => {
                     beforeSection={beforeSection}
                     setObject={setObject}
                     initValues={formValueInitialControles}
+                    dataAux={dataAuxSeccion1}
                     //isEdit={true}
                     //arrayColumnaSelected={[]}
                   />
@@ -339,7 +352,6 @@ const MatrizRiesgoRegistrar = () => {
                     //isEdit={true}
                   />
                 </TabPane>
-
               </TabContent>
             </Col>
           </Row>

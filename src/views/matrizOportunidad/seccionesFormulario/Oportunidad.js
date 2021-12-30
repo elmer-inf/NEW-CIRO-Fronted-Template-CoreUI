@@ -53,7 +53,7 @@ const Oportunidad = ({ nextSection, beforeSection, setObject, initValues, isEdit
     getTablaDescripcionRiesgoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'campoD', true)
-        setDataApiProbabilidad(options)
+        setDataApiProbabilidad(_.orderBy(options, ['value' ], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -65,7 +65,7 @@ const Oportunidad = ({ nextSection, beforeSection, setObject, initValues, isEdit
     getTablaDescripcionOportunidadN1(idTablaDes, idNivel2)
       .then(res => {
         const options = buildSelectThree(res.data, 'id', 'campoA', 'campoC', true)
-        setDataApiImpactoOpor(options)
+        setDataApiImpactoOpor(_.orderBy(options, ['value' ], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -82,7 +82,6 @@ const Oportunidad = ({ nextSection, beforeSection, setObject, initValues, isEdit
         console.log('Error: ', error)
       })
   }
-
 
   useEffect(() => {
     callApiProbabilidad(2);

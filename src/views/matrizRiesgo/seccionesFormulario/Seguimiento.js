@@ -60,7 +60,7 @@ const SeguimientoRiesgos = ({ nextSection, beforeSection, setObject, initValues,
     initialValues: initValues,
     validationSchema: Yup.object().shape(
       {
-        seguimientoFecha: Yup.date().nullable(),
+        seguimientoFecha: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
         seguimientoObs: Yup.string().nullable(),
         seguimientoComen: Yup.string().nullable()
       }

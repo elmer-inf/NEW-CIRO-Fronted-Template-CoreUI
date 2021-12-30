@@ -16,15 +16,22 @@ var _ = require('lodash');
 const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, isEdit, tipoEvento, fechaDesc }) => {
 
   // Obtiene Trimestre a partir de la fechaDesc
-  var trimestreGenerado = '';
-  if (fechaDesc.substring(5, 7) === '01' || fechaDesc.substring(5, 7) === '02' || fechaDesc.substring(5, 7) === '03')
-    trimestreGenerado = 'T1 / ' + fechaDesc.substring(0, 4);
-  if (fechaDesc.substring(5, 7) === '04' || fechaDesc.substring(5, 7) === '05' || fechaDesc.substring(5, 7) === '06')
-    trimestreGenerado = 'T2 / ' + fechaDesc.substring(0, 4);
-  if (fechaDesc.substring(5, 7) === '07' || fechaDesc.substring(5, 7) === '08' || fechaDesc.substring(5, 7) === '09')
-    trimestreGenerado = 'T3 / ' + fechaDesc.substring(0, 4);
-  if (fechaDesc.substring(5, 7) === '10' || fechaDesc.substring(5, 7) === '11' || fechaDesc.substring(5, 7) === '12')
-    trimestreGenerado = 'T4 / ' + fechaDesc.substring(0, 4);
+  const generaTrimestre = ()=>{
+    if(fechaDesc !== undefined){
+      var mes = parseInt(fechaDesc.substring(5, 7));
+      var anio = parseInt(fechaDesc.substring(0, 4));
+      var trimestre = '';
+      if (mes >= 1 && mes <= 3)
+        trimestre = 'T1 / ' + anio;
+      if (mes >= 4 && mes <= 6)
+        trimestre = 'T2 / ' + anio;
+      if (mes >= 7 && mes <= 9)
+        trimestre = 'T3 / ' + anio;
+      if (mes >= 10 && mes <= 12)
+        trimestre = 'T4 / ' + anio;
+      return trimestre;
+    }
+  }
 
   const formik = useFormik({
     initialValues: initValues,
@@ -111,7 +118,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         lineaNegocio: (values.lineaNegocio !== null) ? values.lineaNegocio.value : null,
         riesgoRelacionado: (values.riesgoRelacionado !== null) ? values.riesgoRelacionado.value : null,
 
-        trimestre: trimestreGenerado,
+        trimestre: generaTrimestre(),
 
         listMatrizRiesgo: arrayIdMatrizRiesgo
       }
@@ -219,8 +226,8 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
 
   // Línea de negocio
   const optionsLineaAsfi = [
-    { value: 'Línea de Negocio Emisor', label: 'Línea de Negocio Emisor' },
-    { value: 'Línea de Negocio Adquirente', label: 'Línea de Negocio Adquirente' }
+    { value: '1. Línea de Negocio Emisor', label: '1. Línea de Negocio Emisor' },
+    { value: '2. Línea de Negocio Adquirente', label: '2. Línea de Negocio Adquirente' }
   ]
 
   // Linea de negocio ASFI
@@ -423,7 +430,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
               type={"text"}
               id={'trimestre'}
               //placeholder={'Trimestre'}
-              value={trimestreGenerado}
+              value={generaTrimestre()}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               touched={formik.touched.trimestre}
@@ -547,7 +554,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
-              Proceso <span className='text-primary h5'><b>*</b></span>
+              Macroproceso <span className='text-primary h5'><b>*</b></span>
             </Label>
             <CSelectReact
               type={"select"}

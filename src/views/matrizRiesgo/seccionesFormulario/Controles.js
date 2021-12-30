@@ -10,7 +10,8 @@ import { CInputReact } from 'src/reusable/CInputReact'
 
 var _ = require('lodash');
 
-const Controles = ({ nextSection, beforeSection, setObject, initValues, isEdit }) => {
+const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux, isEdit }) => {
+
 
   const formik = Yup.object().shape({
     controlId: Yup.mixed().required('Campo obligatorio'),
@@ -67,14 +68,16 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, isEdit }
     nextSection(3);
   }
 
+  console.log('data Aux: ', dataAux.procedimientoAux);
   /*   P  A  R  A  M  E  T  R  O  S   */
   // Procedimiento
   const [dataApiProcedimiento, setDataApiProcedimiento] = useState([])
   const callApiProcedimiento = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
-        setDataApiProcedimiento(options)
+        const options = buildSelectTwo(res.data, 'id', 'nombre', true);
+        setDataApiProcedimiento(_.filter(options, ['campoA', dataAux.procedimientoAux]));
+        console.log('data select: ', _.filter(options, ['campoA', dataAux.procedimientoAux]));
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -110,18 +113,19 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, isEdit }
     getTablaDescripcionRiesgoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'campoA', true)
-        setDataApiControl(options)
+        setDataApiControl(_.orderBy(options, ['value' ], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
   }
 
   useEffect(() => {
+    console.log('ejecuta');
     callApiProcedimiento(16);
     callApiTipoControl(6);
     callApiNivelAuto(7);
     callApiControl(5);
-  }, [])
+  }, [dataAux])
 
   // Despliegue de dataApi Parametros en options (Select)
   const optionsProcedimiento = () => {
@@ -319,8 +323,9 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, isEdit }
                           name={`controles.${i}.norma`}
                           className={'form-control' + (controlErrors.norma && controlTouched.norma ? ' is-invalid' : '')}
                           as={"select"}
+                          disabled={control.formalizado === 'true' ? false : true}
                         >
-                          <option value="" disabled>Seleccionar</option>
+                          <option value='null' >Seleccionar</option>
                           {optionsProcedimiento()}
                         </Field>
                         <ErrorMessage name={`controles.${i}.norma`} component="div" className="invalid-feedback" />

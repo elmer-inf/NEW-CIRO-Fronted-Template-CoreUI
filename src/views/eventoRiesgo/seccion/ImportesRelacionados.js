@@ -27,7 +27,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
         coberturaSeguro: Yup.string().nullable(),
         polizaSeguroId: Yup.mixed().nullable(),
         montoRecuperadoSeguro: Yup.number().nullable(),
-        recuperacionActivo: Yup.string().required('Campo obligatorio'),
+        recuperacionActivoId: Yup.mixed().required('Campo obligatorio'),
         perdidaMercado: Yup.number().required('Campo obligatorio'),
         // Solo para mostrar
         montoPerdidaRiesgo: Yup.number().nullable(),
@@ -43,7 +43,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
         coberturaSeguro: Yup.string().nullable(),
         polizaSeguroId: Yup.mixed().nullable(),
         montoRecuperadoSeguro: Yup.number().nullable(),
-        recuperacionActivo: Yup.string().nullable(),
+        recuperacionActivoId: Yup.mixed().nullable(),
         perdidaMercado: Yup.number().nullable(),
         // Solo para mostrar
         montoPerdidaRiesgo: Yup.number().nullable(),
@@ -59,7 +59,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
         monedaId: (values.monedaId !== null) ? values.monedaId.value : 0,
         impactoId: (values.impactoId !== null) ? values.impactoId.value : 0,
         polizaSeguroId: (values.polizaSeguroId !== null) ? values.polizaSeguroId.value : 0,
-        recuperacionActivo: (values.recuperacionActivo !== null) ? values.recuperacionActivo.value : 0
+        recuperacionActivoId: (values.recuperacionActivoId !== null) ? values.recuperacionActivoId.value : 0
       }
       const dataSelect =  _.omit(data, ['montoPerdidaRiesgo', 'totalPerdida', 'totalRecuperado']);
 
@@ -91,7 +91,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
   const callApiMoneda = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'clave', true)
+        const options = buildSelectTwo(res.data, 'id', 'clave', false)
         setDataApiMoneda(options)
       }).catch((error) => {
         console.log('Error: ', error)
@@ -103,8 +103,8 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
   const callApiImpacto = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
-        setDataApiImpacto(options)
+        const options = buildSelectTwo(res.data, 'id', 'nombre', false)
+        setDataApiImpacto(_.orderBy(options, ['value' ], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -115,8 +115,20 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
   const callApiPoliza = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
+        const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiPoliza(options)
+      }).catch((error) => {
+        console.log('Error: ', error)
+      })
+  }
+
+  // RecuperacionActivo
+  const [dataApiRecuperacionActivo, setDataApiRecuperacionActivo] = useState([])
+  const callApiRecuperacionActivo = (idTablaDes) => {
+    getTablaDescripcionEventoN1(idTablaDes)
+      .then(res => {
+        const options = buildSelectTwo(res.data, 'id', 'nombre', false)
+        setDataApiRecuperacionActivo(options)
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -133,6 +145,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
     callApiImpacto(24);
     callApiPoliza(25);
     callApiTasaCambio(14);
+    callApiRecuperacionActivo(37);
   }, [])
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
@@ -349,15 +362,16 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
             <Label className='form-label'>
               Recuperación activo <span className='text-primary h5'><b>*</b></span>
             </Label>
-            <CInputReact
-              type={"text"}
-              id={'recuperacionActivo'}
-              placeholder={'Recuperación activo'}
-              value={formik.values.recuperacionActivo}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              touched={formik.touched.recuperacionActivo}
-              errors={formik.errors.recuperacionActivo}
+            <CSelectReact
+              type={"select"}
+              id={'recuperacionActivoId'}
+              placeholder={'Seleccionar'}
+              value={formik.values.recuperacionActivoId}
+              onChange={formik.setFieldValue}
+              onBlur={formik.setFieldTouched}
+              error={formik.errors.recuperacionActivoId}
+              touched={formik.touched.recuperacionActivoId}
+              options={dataApiRecuperacionActivo}
             />
           </FormGroup>
 

@@ -61,8 +61,8 @@ const Descripcion = ({ nextSection, beforeSection, setObject, initValues, isEdit
   const callApiGrupoInteres = (idTablaDes, idNivel2) => {
     getTablaDescripcionOportunidadN1(idTablaDes, idNivel2)
       .then(res => {
-        const options = buildSelectThree(res.data, 'id', 'campoA', 'nombre', true)
-        setDataApiGrupoInteres(options)
+        const options = buildSelectThree(res.data, 'id', 'campoA', 'nombre', false)
+        setDataApiGrupoInteres(_.orderBy(options, ['value' ], ['asc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })

@@ -7,6 +7,8 @@ import { CSelectReact } from 'src/reusable/CSelectReact'
 import { getTablaDescripcionEventoN1} from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
 import { buildSelectTwo } from 'src/functions/Function'
 
+var _ = require('lodash');
+
 const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit, tipoEvento }) => {
 
   const formik = useFormik({
@@ -26,6 +28,7 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
     ),
 
     onSubmit: values => {
+      console.log('entra');
       const data = {
        ...values,
         operativoId:    (values.operativoId !== null) ?     values.operativoId.value : 0,
@@ -50,8 +53,8 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
   const callApiReputacional = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
-        setDataApiReputacional(options)
+        const options = buildSelectTwo(res.data, 'id', 'clave', false)
+        setDataApiReputacional(_.orderBy(options, ['value' ], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -62,8 +65,8 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
   const callApiLegal = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
-        setDataApiLegal(options)
+        const options = buildSelectTwo(res.data, 'id', 'clave', false)
+        setDataApiLegal(_.orderBy(options, ['value' ], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -74,8 +77,8 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
   const callApiCumplimiento = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
-        setDataApiCumplimiento(options)
+        const options = buildSelectTwo(res.data, 'id', 'clave', false)
+        setDataApiCumplimiento(_.orderBy(options, ['value' ], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -86,8 +89,8 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
   const callApiEstrategico = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
-        setDataApiEstrategico(options)
+        const options = buildSelectTwo(res.data, 'id', 'clave', false)
+        setDataApiEstrategico(_.orderBy(options, ['value' ], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -98,8 +101,8 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
   const callApiGobierno = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
-        setDataApiGobierno(options)
+        const options = buildSelectTwo(res.data, 'id', 'clave', false)
+        setDataApiGobierno(_.orderBy(options, ['value' ], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -110,8 +113,8 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
   const callApiFraude = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
-        setDataApiFraude(options)
+        const options = buildSelectTwo(res.data, 'id', 'clave', false)
+        setDataApiFraude(_.orderBy(options, ['value' ], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -122,8 +125,8 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
   const callApiLiquidez = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
-        setDataApiLiquidez(options)
+        const options = buildSelectTwo(res.data, 'id', 'clave', false)
+        setDataApiLiquidez(_.orderBy(options, ['value' ], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -134,8 +137,8 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
   const callApiOperativo = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
-        setDataApiOperativo(options)
+        const options = buildSelectTwo(res.data, 'id', 'clave', false)
+        setDataApiOperativo(_.orderBy(options, ['value' ], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -146,8 +149,8 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
   const callApiSeguridad = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
-        setDataApiSeguridad(options)
+        const options = buildSelectTwo(res.data, 'id', 'clave', false)
+        setDataApiSeguridad(_.orderBy(options, ['value' ], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -351,7 +354,7 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
             className='text-white'
             color="primary"
             type="submit"
-            disabled={formik.isSubmitting}
+            //disabled={formik.isSubmitting}
           >
             <Save size={17} className='mr-2'/>
             GUARDAR

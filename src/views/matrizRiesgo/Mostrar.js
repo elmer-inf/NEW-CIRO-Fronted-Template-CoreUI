@@ -430,19 +430,10 @@ const MatrizRiesgo = ({ match }) => {
                             <div className='text-data'>{dataApi.fechaEvaluacion !== null ? dataApi.fechaEvaluacion : <i>Sin registro</i>}</div>
                           </Col>
 
-                          {dataApi.identificadoId !== null ?
-                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
-                              <div className='text-label'>Identificado por: </div>
-                              <div className='text-data'>{dataApi.identificadoId !== null ? dataApi.identificadoId.nombre : <i>Sin registro</i>}</div>
-                            </Col>
-                          : null}
-
-                          {dataApi.identificadoOtro !== null ?
-                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
-                              <div className='text-label'>Identificado por: </div>
-                              <div className='text-data'>{dataApi.identificadoOtro !== null ? dataApi.identificadoOtro : <i>Sin registro</i>}</div>
-                            </Col>
-                          : null}
+                          <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                            <div className='text-label'>{dataApi.identificadoId !== null ? 'Identificado por:': 'Identificado por: (Otro)'} </div>
+                            <div className='text-data'>{dataApi.identificadoId !== null ? dataApi.identificadoId.nombre : dataApi.identificadoOtro}</div>
+                          </Col>
                         </Row>
                       </CTabPane>
 
@@ -472,8 +463,8 @@ const MatrizRiesgo = ({ match }) => {
                           </Col>
 
                           <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
-                            <div className='text-label'>Tipo de Pérdida: </div>
-                            <div className='text-data'>{dataApi.efectoPerdidaId !== null ? dataApi.efectoPerdidaId.nombre : <i>Sin registro</i>}</div>
+                            <div className='text-label'>{dataApi.efectoPerdidaId !== null ? 'Tipo de Pérdida': 'Tipo de Pérdida (Otro)'} </div>
+                            <div className='text-data'>{dataApi.efectoPerdidaId !== null ? dataApi.efectoPerdidaId.nombre : dataApi.efectoPerdidaOtro}</div>
                           </Col>
 
                           <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>

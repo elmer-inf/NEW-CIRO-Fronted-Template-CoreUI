@@ -1,18 +1,10 @@
 import React, { useState } from 'react'
 import { CCard, CCardBody, CCardGroup, CCol, CContainer, CRow } from '@coreui/react'
-//import CIcon from '@coreui/icons-react'
 import {
   Button, Form, FormGroup,
   Input,
   Label, Alert
 } from 'reactstrap';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faSignInAlt
-} from '@fortawesome/free-solid-svg-icons';
-
-
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -23,6 +15,7 @@ import CCSpinner from 'src/reusable/spinner/CCSpinner';
 import { postAuthentication } from 'src/views/authentication/AuthController';
 import CIcon from '@coreui/icons-react';
 import { Messages } from 'src/reusable/variables/Messages';
+import { LogIn } from 'react-feather';
 
 const Login = () => {
 
@@ -103,28 +96,22 @@ background: linear-gradient(153deg, rgba(0,171,181,1) 0%, rgba(0,183,198,1) 26%)
             <CCardGroup>
               <CCard className="text-white py-5 d-md-down-none" style={{ width: '44%', "backgroundColor": "rgba(0, 0, 0, 0.3)" }} >
                 <CCardBody className="text-center">
-                  <div>
+                  <div className='pb-4'>
                     <CIcon
                       className="c-sidebar-brand-minimized"
                       name="sygnet"
                       src="/avatars/logo_atc_white.png"
                       height={200}
                     />
-                    <br/>
-                    <h3>{'SISTEMA'}</h3>
-                    <h3>{'GESTION DE RIESGOS INTEGRALES'}</h3>
                   </div>
+                  <span className='text-center h4 text-data'>SISTEMA GESTION DE RIESGOS INTEGRALES</span>
                 </CCardBody>
               </CCard>
-              <CCard className="text-white p-4" style={{ "WebkitBackdropFilter": " blur(20px)", "backdropFilter": "blur(20px)", "backgroundColor": "rgba(0, 0, 0, 0.1)" }}>
-
-
+              <CCard className="text-white pt-4" style={{ "WebkitBackdropFilter": " blur(20px)", "backdropFilter": "blur(20px)", "backgroundColor": "rgba(0, 0, 0, 0.1)" }}>
                 <CCardBody>
                   <Form onSubmit={formik.handleSubmit} autoComplete="off">
-
                     <h4 style={{ textAlign: 'center' }}>Iniciar sesión en su cuenta</h4>
-                    <br />
-                    <CCol sm="12" md={{ size: 12, offset: 0 }}>
+                    <CCol sm="12" md={{ size: 12, offset: 0 }} className='pt-4'>
                       <CInputReactTwo
                         label={"Usuario"}
                         type={'text'}
@@ -149,7 +136,7 @@ background: linear-gradient(153deg, rgba(0,171,181,1) 0%, rgba(0,183,198,1) 26%)
                         errors={formik.errors.password}
                       />
                     </CCol>
-                    <CCol xs="6" sm="12" className="text-right">
+                    <CCol xs="12" sm="12" className="text-right">
                       <FormGroup check>
                         <Input type="checkbox" onChange={(e) => { showPassword(e) }} />
                         {' '}
@@ -159,23 +146,20 @@ background: linear-gradient(153deg, rgba(0,171,181,1) 0%, rgba(0,183,198,1) 26%)
                       </FormGroup>
                     </CCol>
                     {/*   <CRow> */}
-                    <CCol xs="6" sm="12">
-                    <br/>
+                    <CCol xs="12" sm="12">
+                      <br />
 
                       <Button
                         //color="primary"
                         style={{ background: '#00b7c5', color: 'white' }}
                         block
                         disabled={formik.isSubmitting}
-
                       >
-                        <FontAwesomeIcon icon={faSignInAlt} />&nbsp;&nbsp; Login
+                        <LogIn size={17} className='mr-2' />Login
                       </Button>
                     </CCol>
-
                     {/* </CRow> */}
                   </Form>
-
 
                 </CCardBody>
               </CCard>

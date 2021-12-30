@@ -12,7 +12,6 @@ import classnames from 'classnames';
 import { getTablaDescripcionEventoN1} from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
 import { postEventoRiesgo } from './controller/EventoController';
 import { buildSelectTwo } from 'src/functions/Function'
-
 import { useFormik } from "formik"
 import * as Yup from "yup"
 
@@ -37,6 +36,7 @@ const EventoRiesgoRegistrar = () => {
   useEffect(() => {
     callApiTipoEvento(6);
   }, [])
+
 
   const formValueInitialTipoEvento = {
     tipoEvento: null,
@@ -107,25 +107,20 @@ const EventoRiesgoRegistrar = () => {
     detalleEstado: '',
 
     listMatrizRiesgo:null
-
-
   }
 
   const formValueInitialImportes = {
     tasaCambioId: null,
     monedaId: null,
     montoPerdida: '',
-    montoPerdidaRiesgo: '',
     gastoAsociado: '',
     montoRecuperado: '',
     impactoId: null,
     coberturaSeguro: '',
     polizaSeguroId: null,
     montoRecuperadoSeguro: '',
-    recuperacionActivo: '',
+    recuperacionActivoId: null,
     perdidaMercado: '',
-    totalPerdida: '',
-    totalRecuperado: ''
   }
 
   const formValueInitialRiesgos = {
@@ -136,9 +131,8 @@ const EventoRiesgoRegistrar = () => {
     reputacionalId: null,
     cumplimientoId: null,
     estrategicoId: null,
-    gobiernoId: null
-    /* seguridadId: null,
-    lgiId: null, */
+    gobiernoId: null,
+    seguridadId: null,
   }
 
   const dataResult = {
@@ -189,9 +183,6 @@ const EventoRiesgoRegistrar = () => {
     setRequestData(values);
     return values;
   }
-
-  // Recupera fechaDesc para enviar a Seccion Categoria (Generar trimestre)
-  const fechaD = requestData.fechaDesc;
 
   const handleOnSubmmit = (values) => {
     //setSpin(true);
@@ -327,7 +318,7 @@ const EventoRiesgoRegistrar = () => {
                       setObject={setObject}
                       initValues={formValueInitialCategoria}
                       tipoEvento={formik.values.tipoEvento}
-                      fechaDesc={fechaD}
+                      fechaDesc={requestData.fechaDesc}
                     />
                   </TabPane>
 
