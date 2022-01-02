@@ -12,7 +12,7 @@ const ActionFormatterEvento = ({ cell, row, detailFunction, editFunction }) => {
             <MoreVertical size={15} className='text-dark'/>
           </CDropdownToggle>
         </CTooltip>
-        <CDropdownMenu placement="right">
+        <CDropdownMenu placement="left">
           <CDropdownItem onClick={() => {
             // props.deleteRow(props.row)
             detailFunction(row)

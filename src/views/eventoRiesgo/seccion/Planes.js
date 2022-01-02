@@ -17,7 +17,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
         areaResponsableId: Yup.mixed().nullable(),
         cargoResponsableId: Yup.mixed().nullable(),
         detallePlan: Yup.string().nullable(),
-        fechaFinPlan: Yup.date().nullable(),
+        fechaFinPlan: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
         descripcionEstado: Yup.string().nullable(),
         estadoPlan: Yup.mixed().nullable(),
       }

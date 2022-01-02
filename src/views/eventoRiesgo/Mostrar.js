@@ -543,7 +543,7 @@ const EventoRiesgo = ({ match }) => {
 
                               <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                                 <div className='text-label'>Recuperación activo: </div>
-                                <div className='text-data'>{dataApi.recuperacionActivo !== null ? dataApi.recuperacionActivo : <i>Sin registro</i>}</div>
+                                <div className='text-data'>{dataApi.recuperacionActivoId !== null ? dataApi.recuperacionActivoId.nombre : <i>Sin registro</i>}</div>
                               </Col>
 
                               <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>

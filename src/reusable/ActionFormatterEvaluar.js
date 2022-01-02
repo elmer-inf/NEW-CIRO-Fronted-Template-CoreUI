@@ -12,7 +12,7 @@ const ActionFormatterEvaluar = ({ cell, row, autorizarFunction, descartarFunctio
             <MoreVertical size={15} className='text-dark'/>
           </CDropdownToggle>
         </CTooltip>
-        <CDropdownMenu placement="right">
+        <CDropdownMenu placement="left">
           <CDropdownItem href="#" onClick={() => {
             autorizarFunction(row)
           }} >

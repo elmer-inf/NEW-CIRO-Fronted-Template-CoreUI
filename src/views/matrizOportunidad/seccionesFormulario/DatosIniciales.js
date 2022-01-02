@@ -20,7 +20,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
       procedimientoId : Yup.mixed().required("Campo obligatorio"),
       duenoCargoId : Yup.mixed().required("Campo obligatorio"),
       responsableCargoId : Yup.mixed().required("Campo obligatorio"),
-      fechaEvaluacion : Yup.date().required("Campo obligatorio"),
+      fechaEvaluacion : Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").required("Campo obligatorio"),
       fodaId : Yup.mixed().nullable(),
       fodaDesccripcionId: Yup.mixed().nullable(),
       // Campos solo para mostrar:
@@ -33,7 +33,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
       procedimientoId : Yup.mixed().nullable(),
       duenoCargoId : Yup.mixed().nullable(),
       responsableCargoId : Yup.mixed().nullable(),
-      fechaEvaluacion : Yup.date().nullable(),
+      fechaEvaluacion : Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
       fodaId : Yup.mixed().nullable(),
       fodaDescripcionId: Yup.mixed().nullable(),
       // Campos solo para mostrar:
@@ -104,7 +104,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   const callApiProcedimiento = (idTablaDes, idNivel2) => {
     getTablaDescripcionEventoN2(idTablaDes, idNivel2)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'campoA', true)
+        const options = buildSelectTwo(res.data, 'id', 'descripcion', true)
         setDataApiProcedimiento(options)
       }).catch((error) => {
         console.log('Error: ', error)

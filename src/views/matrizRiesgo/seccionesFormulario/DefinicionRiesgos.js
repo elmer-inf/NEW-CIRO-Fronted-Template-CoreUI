@@ -6,6 +6,7 @@ import * as Yup from "yup"
 import { CInputReact } from 'src/reusable/CInputReact'
 import { CSelectReact } from 'src/reusable/CSelectReact'
 import  CInputCheckbox  from 'src/reusable/CInputCheckbox'
+import CInputRadio from 'src/reusable/CInputRadio'
 import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController'
 import { getTablaDescripcionRiesgoN1 } from 'src/views/administracion/matriz-riesgo/controller/AdminRiesgoController';
 import { buildSelectTwo } from 'src/functions/Function'
@@ -16,21 +17,28 @@ var _ = require('lodash');
 const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) => {
 
   const formik = useFormik({
-    initialValues: initValues,
+    initialValues: {...initValues, otrosAux2: false},
     validationSchema: Yup.object().shape(
       {
         /* definicion : Yup.string().required('Campo obligatorio'),
         causa : Yup.string().required('Campo obligatorio'),
         consecuencia : Yup.string().required('Campo obligatorio'),
         defConcatenado : Yup.string().required('Campo obligatorio'),
-        efectoPerdidaId : Yup.mixed().required("Campo obligatorio"),
+        efectoPerdidaOtro: Yup.string().nullable().when('otrosAux2',{
+          is:(val) => (val === true),
+          then: Yup.string().nullable().required("Campo obligatorio"),
+        }),
+        efectoPerdidaId : Yup.mixed().nullable().when('otrosAux2',{
+          is:(val) =>  (val === false),
+          then: Yup.mixed().nullable().required("Campo obligatorio"),
+        }),
         perdidaAsfiId : Yup.mixed().required("Campo obligatorio"),
         monetario : Yup.mixed().required('Campo obligatorio'),
         factorRiesgoId : Yup.mixed().required('Campo obligatorio'),
-
         probabilidadId : Yup.mixed().required("Campo obligatorio"),
         impactoId : Yup.mixed().required("Campo obligatorio"),
         // Campos solo para mostrar
+        otrosAux2: Yup.boolean(),
         riesgoInherente : Yup.number().required('Campo obligatorio'),
         valorRiesgoInherente : Yup.string().required('Campo obligatorio'),
         probInherente : Yup.string().nullable(),
@@ -44,14 +52,21 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
         causa : Yup.string().nullable(),
         consecuencia : Yup.string().nullable(),
         defConcatenado : Yup.string().nullable(),
-        efectoPerdidaId : Yup.mixed().required("Campo obligatorio"),
+        efectoPerdidaOtro: Yup.string().nullable().when('otrosAux2',{
+          is:(val) => (val === true),
+          then: Yup.string().nullable().required("Campo obligatorio"),
+        }),
+        efectoPerdidaId : Yup.mixed().nullable().when('otrosAux2',{
+          is:(val) =>  (val === false),
+          then: Yup.mixed().nullable().required("Campo obligatorio"),
+        }),
         perdidaAsfiId : Yup.mixed().required("Campo obligatorio"),
         monetario : Yup.mixed().nullable(),
         factorRiesgoId : Yup.mixed().nullable(),
-
         probabilidadId : Yup.mixed().required("Campo obligatorio"),
         impactoId : Yup.mixed().required("Campo obligatorio"),
         // Campos solo para mostrar
+        otrosAux2: Yup.boolean(),
         riesgoInherente : Yup.number().nullable(),
         valorRiesgoInherente : Yup.string().nullable(),
         probInherente : Yup.string().nullable(),
@@ -105,6 +120,12 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
       })
   }
 
+  // Cobertura seguro
+  const optionsMonetario = [
+    { value: true, label: 'Si' },
+    { value: false, label: 'No' }
+  ]
+
   // Factor de riesgo operativo
   const [dataApiFactorRiesgo, setDataApiFactorRiesgo] = useState([])
   const callApiFactorRiesgo = (idTablaDes) => {
@@ -123,7 +144,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
     getTablaDescripcionRiesgoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'campoD', true)
-        setDataApiProbabilidad(options)
+        setDataApiProbabilidad(_.orderBy(options, ['value' ], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -135,7 +156,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
     getTablaDescripcionRiesgoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'campoD', true)
-        setDataApiImpacto(options)
+        setDataApiImpacto(_.orderBy(options, ['value' ], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -165,7 +186,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
   // Concatena definicion, causa y consecuencia
   useEffect(() => {
     if(formik.values.definicion !== '' && formik.values.causa !== '' && formik.values.consecuencia !== ''){
-      formik.setFieldValue('defConcatenado', formik.values.definicion + ' DEBIDO A ' + formik.values.causa + ' PUEDE OCASIONAR ' + formik.values.consecuencia, false)
+      formik.setFieldValue('defConcatenado', 'RIESGO POR ' + formik.values.definicion + ' DEBIDO A ' + formik.values.causa + ' PUEDE OCASIONAR ' + formik.values.consecuencia, false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.definicion, formik.values.causa, formik.values.consecuencia]);
@@ -207,6 +228,15 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
     calculoRiesgoInerente();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.probabilidadId,formik.values.impactoId]);
+
+  // Resetea "otros" dependiendo del check
+  const resetOtros = () => { formik.setFieldValue('efectoPerdidaOtro', null, false); }
+  useEffect(() => {
+    if (formik.values.otrosAux2 !== true) {
+      resetOtros();
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.otrosAux2])
 
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
@@ -270,8 +300,8 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
 
           <FormGroup tag={Col} md='12' className='mb-0'>
             <Label className='form-label'>
-              Definición del Riesgo (Riesgo por (<span className='text-label'>EVENTO</span>), 
-              debido a (<span className='text-label'>CAUSA</span>), 
+              Definición del Riesgo (Riesgo por (<span className='text-label'>EVENTO</span>),
+              debido a (<span className='text-label'>CAUSA</span>),
               puede ocasionar (<span className='text-label'>IMPACTO</span>)) <span className='text-primary h5'><b>*</b></span>
             </Label>
             <CInputReact
@@ -288,7 +318,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
-              Tipo de Pérdida <span className='text-primary h5'><b>*</b></span>
+              Tipo de Pérdida {formik.values.otrosAux2 === false? <span className='text-primary h5'><b>*</b></span>: null}
             </Label>
             <CSelectReact
               type={"select"}
@@ -300,8 +330,40 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
               error={formik.errors.efectoPerdidaId}
               touched={formik.touched.efectoPerdidaId}
               options={dataApiEfectoPerdida}
+              isDisabled={formik.values.otrosAux2 === true? true: false}
             />
           </FormGroup>
+
+          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+            <br/>
+            <CInputCheckbox
+              id={'otrosAux2'}
+              type={"checkbox"}
+              value={formik.values.otrosAux2}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              label='Otros (Tipo de Pérdida)'
+              disabled={formik.values.efectoPerdidaId !== null? true: false}
+            />
+          </FormGroup>
+
+          {formik.values.otrosAux2 === true && formik.values.efectoPerdidaId === null?
+            <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+              <Label className='form-label'>
+                Otros (Tipo de Pérdida) {formik.values.otrosAux2 === true? <span className='text-primary h5'><b>*</b></span>: null}
+              </Label>
+              <CInputReact
+                type={"text"}
+                id={'efectoPerdidaOtro'}
+                placeholder={'Otros'}
+                value={formik.values.efectoPerdidaOtro}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                touched={formik.touched.efectoPerdidaOtro}
+                errors={formik.errors.efectoPerdidaOtro}
+              />
+            </FormGroup>
+          : null}
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
@@ -321,13 +383,18 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
           </FormGroup>
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
-            <CInputCheckbox
-              type={"checkbox"}
+            <Label className='form-label'>
+              Monetario
+            </Label>
+            <CInputRadio
+              data={optionsMonetario}
               id={'monetario'}
               value={formik.values.monetario}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              label='Monetario / No monetario *'
+              onChange={formik.setFieldValue}
+              onBlur={formik.setFieldTouched}
+              touched={formik.touched.monetario}
+              errors={formik.errors.monetario}
+              sendValue={true}
             />
           </FormGroup>
 

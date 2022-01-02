@@ -15,11 +15,11 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   const formik = useFormik({
     initialValues: initValues,
     validationSchema: Yup.object().shape({
-        /* fechaIni: Yup.date().required('Campo obligatorio'),
+        /* fechaIni: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").required('Campo obligatorio'),
         horaIni: Yup.string().required('Campo obligatorio'),
-        fechaDesc: Yup.date().required('Campo obligatorio'),
+        fechaDesc: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").required('Campo obligatorio'),
         horaDesc: Yup.string().required('Campo obligatorio'),
-        fechaFin: Yup.date().nullable(),
+        fechaFin: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
         horaFin: Yup.string().nullable(),
         agenciaId: Yup.mixed().nullable(),
         ciudadId: Yup.mixed().nullable(),
@@ -35,11 +35,11 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         descripcion: Yup.string().required('Campo obligatorio'),
         descripcionCompleta: Yup.string().nullable() */
 
-        fechaIni: Yup.date().nullable(),
+        fechaIni: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
         horaIni: Yup.string().nullable(),
-        fechaDesc: Yup.date().nullable(),
+        fechaDesc: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
         horaDesc: Yup.string().nullable(),
-        fechaFin: Yup.date().nullable(),
+        fechaFin: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
         horaFin: Yup.string().nullable(),
         agenciaId: Yup.mixed().nullable(),
         ciudadId: Yup.mixed().nullable(),
@@ -438,7 +438,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
-              Cargo persona afectada ASFI <span className='text-primary h5'><b>*</b></span>
+              Cargos Involucrados ASFI <span className='text-primary h5'><b>*</b></span>
             </Label>
             <CSelectReact
               type={"select"}

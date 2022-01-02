@@ -22,8 +22,8 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
           estrategia: Yup.string().nullable(),
           descripcion: Yup.string().nullable(),
           cargo: Yup.mixed().nullable(),
-          fechaAccion: Yup.date().nullable(),
-          fechaImpl: Yup.date().nullable(),
+          fechaAccion: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
+          fechaImpl: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
           estado: Yup.mixed().nullable(),
 
           fechaSeg: Yup.date().nullable(),

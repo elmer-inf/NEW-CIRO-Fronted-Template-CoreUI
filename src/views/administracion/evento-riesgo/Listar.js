@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import { Card, CardHeader, CardBody, CardTitle, Button, Col, Label, Row } from 'reactstrap'
 import BootstrapTable from 'react-bootstrap-table-next';
-/* import paginationFactory from 'react-bootstrap-table2-paginator'; */
+import paginationFactory from 'react-bootstrap-table2-paginator';
 import { typeFormatter } from 'src/reusable/Component';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import ActionFormatter from 'src/reusable/ActionFormatter';
@@ -15,9 +15,9 @@ const AdministracionEventoListar = () => {
 
   const [labelTabla, setLabelTabla] = useState([])
 
-  /* const pagination = paginationFactory({
+  const pagination = paginationFactory({
     page: 2,
-  }); */
+  });
 
   const columns = [
     {
@@ -323,7 +323,7 @@ const AdministracionEventoListar = () => {
               hover={false}
               condensed={false}
               wrapperClasses="table-responsive"
-              /* pagination={ pagination } */
+              pagination={ pagination }
               filter={filterFactory()}
             />
           </CardBody>

@@ -66,7 +66,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, isEdit }
     getTablaDescripcionOportunidadN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'campoA', true)
-        setDataApiFortaleza(options)
+        setDataApiFortaleza(_.orderBy(options, ['value' ], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
