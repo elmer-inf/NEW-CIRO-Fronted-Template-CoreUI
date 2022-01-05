@@ -15,10 +15,9 @@ var _ = require('lodash');
 const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValues, isEdit }) => {
 
   const formik = useFormik({
-    initialValues: initValues,
+    initialValues: {...initValues, totalPerdida: 0},
     validationSchema: Yup.object().shape(
       {
-        /* tasaCambioId : Yup.mixed().nullable(),
         monedaId: Yup.mixed().nullable(),
         montoPerdida: Yup.number().required('Campo obligatorio'),
         gastoAsociado: Yup.number().required('Campo obligatorio'),
@@ -32,10 +31,10 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
         // Solo para mostrar
         montoPerdidaRiesgo: Yup.number().nullable(),
         totalPerdida: Yup.number().nullable(),
-        totalRecuperado: Yup.number().nullable() */
+        totalRecuperado: Yup.number().nullable()
 
 
-        monedaId: Yup.mixed().nullable(),
+        /* monedaId: Yup.mixed().nullable(),
         montoPerdida: Yup.number().nullable(),
         gastoAsociado: Yup.number().nullable(),
         montoRecuperado: Yup.number().nullable(),
@@ -48,7 +47,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
         // Solo para mostrar
         montoPerdidaRiesgo: Yup.number().nullable(),
         totalPerdida: Yup.number().nullable(),
-        totalRecuperado: Yup.number().nullable()
+        totalRecuperado: Yup.number().nullable() */
       }
     ),
 
@@ -189,7 +188,13 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
 
   // Calcula "Monto total de perdida"
   useEffect(() => {
-    formik.setFieldValue('totalPerdida', formik.values.montoPerdidaRiesgo - formik.values.totalRecuperado, false)
+    var a = _.toNumber(formik.values.montoPerdidaRiesgo);
+    var b = _.toNumber(formik.values.totalRecuperado);
+    if(!_.isNaN(a - b))
+      formik.setFieldValue('totalPerdida', a - b, false)
+
+    else
+      formik.setFieldValue('totalPerdida', 0, false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.montoPerdidaRiesgo, formik.values.totalRecuperado]);
 

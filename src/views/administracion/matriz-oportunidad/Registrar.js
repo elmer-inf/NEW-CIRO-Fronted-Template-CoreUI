@@ -5,10 +5,14 @@ import { useHistory } from 'react-router-dom'
 import Formulario from './component/Formulario'
 import { getTablaListaOportunidad, postTablaDescripcionOportunidad } from './controller/AdminOportunidadController'
 import { buildSelectTwo } from 'src/functions/Function'
+import { ToastContainer, toast } from 'react-toastify'
+import CCSpinner from 'src/reusable/spinner/CCSpinner'
 
 const AdministracionMatrizOportunidadRegistrar = () => {
 
   const history = useHistory();
+  const [spin, setSpin] = useState(false);
+
   const [tablaListaOptions, setTablaListaOptions] = useState([])
 
   const formValueInitial = {
@@ -23,16 +27,61 @@ const AdministracionMatrizOportunidadRegistrar = () => {
   const optionsSelect = {
     opTabla: tablaListaOptions,
     opLebel2List: []
+  }
 
+  const notificationToast = (type, mensaje) => {
+    switch (type) {
+        case 'error':
+            toast.error(mensaje, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            break;
+        case 'success':
+            toast.success(mensaje, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            break;
+
+        default:
+            toast(mensaje, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+            });
+    }
+    setTimeout(() => {
+        history.push('/administracion/matriz-oportunidad/Listar');
+        setSpin(false);
+    }, 5000);
   }
 
   const handleOnSubmit = (dataToRequest) => {
+    setSpin(true);
     postTablaDescripcionOportunidad(dataToRequest)
-      .then(response => {
-        console.log('Envio el request : ', response);
-        history.push("/administracion/matriz-oportunidad/listar")
+      .then(res => {
+        if (res.status >= 200 && res.status < 300) {
+          console.log('Envio el request: ', res);
+          notificationToast('success', 'Parámetro de Matriz de Oportunidad registrado exitósamente');
+        } else {
+          console.log('Hubo un  error ', res);
+          notificationToast('error', 'Algo salió mal, intente nuevamente');
+        }
       }).catch((error) => {
-        console.log('Error al obtener datos: ', error)
+        console.log('Error al registrar Evento de Riesgo: ', error);
+        notificationToast('error', 'Algo salió mal, intente nuevamente');
       })
   }
 
@@ -54,7 +103,8 @@ const AdministracionMatrizOportunidadRegistrar = () => {
 
 
   return (
-    <div id=''>
+    <div>
+      <CCSpinner show={spin} />
       <Fragment>
         <Card>
           <CardHeader>
@@ -70,6 +120,17 @@ const AdministracionMatrizOportunidadRegistrar = () => {
           </CardBody>
         </Card>
       </Fragment>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   )
 }

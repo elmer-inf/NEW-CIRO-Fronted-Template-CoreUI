@@ -177,7 +177,7 @@ const EventoRiesgo = ({ match }) => {
                   </CModal>
                 </CardTitle>
                 <span className='float-right'>
-                  {(dataApi.estadoEvento === 'Solucionado') ?
+                  {(dataApi.estadoEvento === 'Solución') ?
                     <Badge className='mt-2 py-2 px-3 h6 font-weight-bold badge-success'>{dataApi.estadoEvento}</Badge>
                     : null}
 

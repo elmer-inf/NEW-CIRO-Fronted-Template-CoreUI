@@ -22,9 +22,9 @@ const TheHeaderDropdown = () => {
             src={'/avatars/6.jpg'}
             className="c-avatar-img"
             alt=""
-          /> 
+          />
           <User size={50}/>
-          {/* <Circle size={50}/> 
+          {/* <Circle size={50}/>
         </div>
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">
@@ -93,18 +93,11 @@ const TheHeaderDropdown = () => {
 
 export default TheHeaderDropdown*/
 import React, { useState, useEffect } from 'react'
-
-
-import { FaSortDown } from 'react-icons/fa';
 import { DropdownItem, DropdownMenu, Dropdown, DropdownToggle, Nav } from 'reactstrap';
 import { useHistory } from 'react-router-dom'
-
 import AuthService from 'src/views/authentication/AuthService';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-     faLock,  faUser, faUserCheck
-} from '@fortawesome/free-solid-svg-icons';
 import ModalProfile from './ModalProfile';
+import { LogOut, User } from 'react-feather';
 
 const TheHeaderDropdown = () => {
 
@@ -148,23 +141,24 @@ const TheHeaderDropdown = () => {
       <Dropdown isOpen={dropdownOpen2} toggle={toggle2} >
         <DropdownToggle nav>
           <div>
-          <FontAwesomeIcon icon={faUserCheck} />&nbsp;&nbsp; {user.nombre + ' ' + user.primerApellido}
-            <FaSortDown />
+            <span className='font-weight-bolder'>{user.nombre + ' ' + user.primerApellido}</span><User size={28} className='ml-4 text-dark'/>
+           {/* <FaSortDown/> */}
           </div>
         </DropdownToggle>
-        <DropdownMenu right style={{ right: 'auto', overflowY: 'scroll' }}>
+        <DropdownMenu right>
 
           <DropdownItem onClick={()=> closeModal()}>
-            <FontAwesomeIcon icon={faUser} />&nbsp;&nbsp; Perfil
+            <User size={18} className='text-primary mr-3'/> Perfil
           </DropdownItem>
+
           <DropdownItem divider />
+
           <DropdownItem onClick={() => closeSession()}>
-          <FontAwesomeIcon icon={faLock} />&nbsp;&nbsp;Cerrar sesión
+          <LogOut size={18} className='text-primary mr-3'/> Cerrar sesión
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>
       {modal && <ModalProfile profileData={profile} mod={modal} closeModal={closeModal} />}
-
     </Nav>
 
   )

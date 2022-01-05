@@ -202,7 +202,8 @@ const MatrizRiesgoListar = () => {
   }
 
   useEffect(() => {
-    callApi(pagination.page, pagination.size)
+    callApi(pagination.page, pagination.size);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // search by columns

@@ -22,7 +22,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   const formik = useFormik({
     initialValues: {...initValues, otrosAux: false},
     validationSchema: Yup.object().shape({
-      /* areaId : Yup.mixed().required('Campo obligatorio'),
+      areaId : Yup.mixed().required('Campo obligatorio'),
       unidadId : Yup.mixed().required('Campo obligatorio'),
       procesoId : Yup.mixed().required('Campo obligatorio'),
 
@@ -31,6 +31,8 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
       macroCriticidad : Yup.string().nullable(),
       macroValoracion : Yup.string().nullable(),
       otrosAux: Yup.boolean(),
+      eventoFechaAux: Yup.date().nullable(),
+      eventoDescAux: Yup.string().nullable(),
       // FIN Campos solo para mostrar:
 
       procedimientoId : Yup.mixed().required('Campo obligatorio'),
@@ -47,10 +49,9 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
       }),
       eventoRiesgoId: Yup.mixed().nullable(),
       eventoMaterializado: Yup.boolean(),
-      */
 
 
-      areaId: Yup.mixed().nullable(),
+      /* areaId: Yup.mixed().nullable(),
       unidadId: Yup.mixed().nullable(),
       procesoId: Yup.mixed().required("Campo obligatorio"),
 
@@ -76,7 +77,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         then: Yup.string().nullable().required("Campo obligatorio"),
       }),
       eventoRiesgoId: Yup.mixed().nullable(),
-      eventoMaterializado: Yup.boolean(),
+      eventoMaterializado: Yup.boolean(), */
     }
     ),
 

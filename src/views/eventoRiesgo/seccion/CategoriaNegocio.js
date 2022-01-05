@@ -37,7 +37,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
     initialValues: initValues,
     validationSchema: Yup.object().shape(
       {
-        /* codigoInicial: Yup.string().nullable(),
+        codigoInicial: Yup.string().nullable(),
         subcategorizacionId: Yup.mixed().nullable(),
         trimestre: Yup.string().nullable(),
         tipoEventoPerdidaId: Yup.mixed().required('Campo obligatorio'),
@@ -58,18 +58,19 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         opeProSerId: Yup.mixed().nullable(),
         tipoServicioId: Yup.mixed().nullable(),
         descServicioId: Yup.mixed().nullable(),
-        riesgoRelacionado: Yup.mixed().nullable(),
         detalleEstado: Yup.string().nullable(),
 
         listMatrizRiesgo:Yup.mixed().nullable()
-        */
+       
 
-        codigoInicial: Yup.string().nullable(),
+        /* codigoInicial: Yup.string().nullable(),
         subcategorizacionId: Yup.mixed().nullable(),
         trimestre: Yup.string().nullable(),
         tipoEventoPerdidaId: Yup.mixed().nullable(),
         subEventoId: Yup.mixed().nullable(),
         claseEventoId: Yup.mixed().nullable(),
+        otrosAux: Yup.string().nullable(),
+        otros: Yup.string().nullable(),
         detalleEventoCritico: Yup.string().nullable(),
         factorRiesgoId: Yup.mixed().nullable(),
         procesoId: Yup.mixed().nullable(),
@@ -83,10 +84,9 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         opeProSerId: Yup.mixed().nullable(),
         tipoServicioId: Yup.mixed().nullable(),
         descServicioId: Yup.mixed().nullable(),
-        riesgoRelacionado: Yup.mixed().nullable(),
         detalleEstado: Yup.string().nullable(),
 
-        listMatrizRiesgo: Yup.mixed().nullable(),
+        listMatrizRiesgo: Yup.mixed().nullable(), */
       }
     ),
 
@@ -116,7 +116,6 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
 
         eventoCritico: (values.eventoCritico !== null) ? values.eventoCritico.value : null,
         lineaNegocio: (values.lineaNegocio !== null) ? values.lineaNegocio.value : null,
-        riesgoRelacionado: (values.riesgoRelacionado !== null) ? values.riesgoRelacionado.value : null,
 
         trimestre: generaTrimestre(),
 

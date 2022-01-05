@@ -9,10 +9,13 @@ import { Row, Col, Card, CardBody, CardHeader, CardTitle, TabContent, TabPane, N
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames';
 import { postOportunidad } from './controller/OportunidadController';
+import { ToastContainer, toast } from 'react-toastify'
+import CCSpinner from 'src/reusable/spinner/CCSpinner'
 
 const MatrizRiesgoRegistrar = () => {
 
-  const history = useHistory()
+  const history = useHistory();
+  const [spin, setSpin] = useState(false);
 
   const formValueInitialDatosIniciales = {
     areaId : null,
@@ -66,7 +69,7 @@ const MatrizRiesgoRegistrar = () => {
   }
 
   const [requestData, setRequestData] = useState(dataResult);
-  const [activeTab, setActiveTap] = useState('1');
+  const [activeTab, setActiveTap] = useState('5');
   /* manejo de botones siguiente */
   const nextSection = (tab) => {
     if (tab === 1) {
@@ -103,7 +106,47 @@ const MatrizRiesgoRegistrar = () => {
     return values;
   }
 
+  const notificationToast = (type, mensaje) => {
+    switch (type) {
+        case 'error':
+            toast.error(mensaje, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            break;
+        case 'success':
+            toast.success(mensaje, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            break;
+
+        default:
+            toast(mensaje, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+            });
+    }
+    setTimeout(() => {
+        history.push('/matrizOportunidad/Listar');
+        setSpin(false);
+    }, 5000);
+  }
+
   const handleOnSubmmit = (values) => {
+    setSpin(true);
     const dataRequest = setObject(values);
     console.log('dataRequest: ', dataRequest)
     const dataValues = {
@@ -116,19 +159,23 @@ const MatrizRiesgoRegistrar = () => {
 
     postOportunidad(dataValues)
     .then(res => {
-      if (res.status === 200) {
+      if (res.status >= 200 && res.status < 300) {
         console.log('Envio el request: ', res)
-        history.push("/matrizOportunidad/listar")
+        notificationToast('success', 'Matriz de Oportunidad registrada exitósamente');
+        // history.push("/matrizOportunidad/listar")
       } else {
-        console.log('Hubo un  error ', res)
+        console.log('Hubo un  error ', res);
+        notificationToast('error', 'Algo salió mal, intente nuevamente');
       }
     }).catch((error) => {
-      console.log('Error al obtener datos: ', error)
+      console.log('Error al obtener datos: ', error);
+      notificationToast('error', 'Algo salió mal, intente nuevamente');
     });
   }
 
   return (
     <div>
+      <CCSpinner show={spin} />
       <Card>
         <CardHeader>
           <CardTitle className='float-left h4 pt-2'>Registrar Matriz de Oportunidad</CardTitle>
@@ -232,6 +279,17 @@ const MatrizRiesgoRegistrar = () => {
           </Row>
         </CardBody>
       </Card>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   )
 }

@@ -4,13 +4,16 @@ import { useHistory } from 'react-router-dom'
 import Formulario from './component/Formulario'
 import { putTablaDescripcionOportunidadId, getTablaDescripcionOportunidadId, getTablaDescripcionOportunidadN1, getTablaListaOportunidad } from './controller/AdminOportunidadController'
 import { buildSelectTwo } from 'src/functions/Function'
+import { ToastContainer, toast } from 'react-toastify'
 
 const AdministracionMatrizOEditar = ({ match }) => {
 
   const [tablaListaOptions, setTablaListaOptions] = useState([]);
   const [listLevel2, setListlevel2] = useState([]);
 
-  const history = useHistory()
+  const history = useHistory();
+  const [spin, setSpin] = useState(false);
+
   const formValueInitial = {
     campoA: '',
     nombre: '',
@@ -24,19 +27,64 @@ const AdministracionMatrizOEditar = ({ match }) => {
     opTabla: tablaListaOptions,
     opLebel2List: listLevel2
   }
+
   const [formValueToEdit, setformValueToEdit] = useState(formValueInitial)
 
-  const [spin, setSpin] = useState(false)
+  const notificationToast = (type, mensaje) => {
+    switch (type) {
+        case 'error':
+            toast.error(mensaje, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            break;
+        case 'success':
+            toast.success(mensaje, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            break;
+
+        default:
+            toast(mensaje, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+            });
+    }
+    setTimeout(() => {
+        history.push('/administracion/matriz-oportunidad/Listar');
+        setSpin(false);
+    }, 5000);
+  }
 
   const handleOnSubmit = (dataToRequest) => {
+    setSpin(true);
     console.log('data que se edita: ', dataToRequest)
     const idTabDesc = match.params.id;
     putTablaDescripcionOportunidadId(idTabDesc, dataToRequest)
       .then(res => {
-        //console.log('response : ', res);
-        history.push("/administracion/matriz-oportunidad/listar")
+        if (res.status >= 200 && res.status < 300) {
+          console.log('Envio el request: ', res);
+          notificationToast('success', 'Parámetro de Matriz de Oportunidad modificado exitósamente');
+        } else {
+          console.log('Hubo un  error ', res);
+          notificationToast('error', 'Algo salió mal, intente nuevamente');
+        }
       }).catch((error) => {
-        console.log('Error al obtener datos: ', error);
+        console.log('Error al modificar Parámetro de Matriz de Oportunidad: ', error);
+        notificationToast('error', 'Algo salió mal, intente nuevamente');
       });
   }
 
@@ -69,16 +117,17 @@ const AdministracionMatrizOEditar = ({ match }) => {
   }
 
   const getById = async () => {
-    setSpin(true)
+    setSpin(true);
     const idParametro = match.params.id;
     await getTablaDescripcionOportunidadId(idParametro)
       .then((response) => {
-        console.log("API xxxxx: ", response.data);
+        //console.log("API xxxxx: ", response.data);
         const res = response.data;
-        macthed(res)
-        setSpin(false)
+        macthed(res);
+        setSpin(false);
       }).catch((error) => {
         console.log("Error: ", error);
+        setSpin(false);
       });
   }
   /* LISTA LAS TABLAS LISTA*/
@@ -103,9 +152,6 @@ const AdministracionMatrizOEditar = ({ match }) => {
       })
   }
 
-
-
-
   useEffect(() => {
     //console.log("call")
     getById();
@@ -113,9 +159,8 @@ const AdministracionMatrizOEditar = ({ match }) => {
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-
   return (
-    <div id=''>
+    <div>
       <Fragment>
         <Card>
           <CardHeader>
@@ -135,6 +180,17 @@ const AdministracionMatrizOEditar = ({ match }) => {
           </CardBody>
         </Card>
       </Fragment>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   )
 }

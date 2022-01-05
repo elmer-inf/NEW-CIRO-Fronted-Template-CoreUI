@@ -10,10 +10,13 @@ import { Row, Col, Card, CardBody, CardHeader, CardTitle, TabContent, TabPane, N
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames';
 import { postRiesgo } from './controller/RiesgoController';
+import { ToastContainer, toast } from 'react-toastify';
+import CCSpinner from 'src/reusable/spinner/CCSpinner'
 
 const MatrizRiesgoRegistrar = () => {
 
-  const history = useHistory()
+  const history = useHistory();
+  const [spin, setSpin] = useState(false);
 
   const formValueInitialDatosIniciales = {
     areaId : null,
@@ -37,7 +40,7 @@ const MatrizRiesgoRegistrar = () => {
     efectoPerdidaOtro : '',
     efectoPerdidaId : null,
     perdidaAsfiId : null,
-    monetario : '',
+    monetario : false,
     factorRiesgoId: null,
 
     probabilidadId: null,
@@ -170,7 +173,47 @@ const MatrizRiesgoRegistrar = () => {
     return values;
   }
 
+  const notificationToast = (type, mensaje) => {
+    switch (type) {
+        case 'error':
+            toast.error(mensaje, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            break;
+        case 'success':
+            toast.success(mensaje, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            break;
+
+        default:
+            toast(mensaje, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+            });
+    }
+    setTimeout(() => {
+        history.push('/matrizRiesgo/Listar');
+        setSpin(false);
+    }, 5000);
+  }
+
   const handleOnSubmmit = (values) => {
+    setSpin(true);
     const dataRequest = setObject(values);
     console.log('dataRequest: ', dataRequest)
     const dataValues = {
@@ -183,19 +226,23 @@ const MatrizRiesgoRegistrar = () => {
 
     postRiesgo(dataValues)
     .then(res => {
-      if (res.status === 200) {
-        console.log('Envio el request: ', res)
-        history.push("/matrizRiesgo/listar")
+      if (res.status >= 200 && res.status < 300) {
+        console.log('Envio el request: ', res);
+        notificationToast('success', 'Matriz de Riesgo registrada exitósamente');
+        //history.push("/matrizRiesgo/listar")
       } else {
-        console.log('Hubo un  error ', res)
+        console.log('Hubo un  error ', res);
+        notificationToast('error', 'Algo salió mal, intente nuevamente');
       }
     }).catch((error) => {
-      console.log('Error al obtener datos: ', error)
+      console.log('Error al obtener datos: ', error);
+      notificationToast('error', 'Algo salió mal, intente nuevamente');
     });
   }
 
   return (
     <div>
+      <CCSpinner show={spin} />
       <Card>
         <CardHeader>
           <CardTitle className='float-left h4 pt-2'>Registrar Matriz de Riesgo</CardTitle>
@@ -325,6 +372,17 @@ const MatrizRiesgoRegistrar = () => {
           </Row>
         </CardBody>
       </Card>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   )
 }

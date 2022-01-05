@@ -3,27 +3,74 @@ import { Card, CardHeader, CardTitle, CardBody } from 'reactstrap'
 import { useHistory } from 'react-router-dom'
 import Formulario from './component/Formulario'
 import { putTablaDescripcionSeguridad, getTablaDescripcionSeguridadId } from './controller/AdminSeguridadController'
+import { ToastContainer, toast } from 'react-toastify'
 
 const AdministracionSeguridadEditar = ( { match } ) => {
 
-  const history = useHistory()
+  const history = useHistory();
+  const [spin, setSpin] = useState(false);
+
   const formValueInitial = {
     nombre: '',
     tablaId: null
   }
 
   const [formValueToEdit, setformValueToEdit] = useState(formValueInitial)
-  const [spin, setSpin] = useState(false)
+
+  const notificationToast = (type, mensaje) => {
+    switch (type) {
+        case 'error':
+            toast.error(mensaje, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            break;
+        case 'success':
+            toast.success(mensaje, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            break;
+
+        default:
+            toast(mensaje, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+            });
+    }
+    setTimeout(() => {
+        history.push('/administracion/seguridad/Listar');
+        setSpin(false);
+    }, 5000);
+  }
 
   const handleOnSubmit = (dataToRequest) => {
-    console.log('data que se edita: ', dataToRequest)
+    setSpin(true);
     const idTabDesc = match.params.id;
     putTablaDescripcionSeguridad(idTabDesc, dataToRequest)
     .then(res => {
-      console.log('response : ', res);
-      history.push("/administracion/seguridad/listar")
+      if (res.status >= 200 && res.status < 300) {
+        console.log('Envio el request: ', res);
+        notificationToast('success', 'Párametro de Seguridad modificado exitósamente');
+      } else {
+        console.log('Hubo un  error ', res);
+        notificationToast('error', 'Algo salió mal, intente nuevamente');
+      }
     }).catch((error) => {
-        console.log('Error al obtener datos: ', error);
+      console.log('Error al modificar Párametro de Seguridad: ', error);
+      notificationToast('error', 'Algo salió mal, intente nuevamente');
     });
   }
 
@@ -47,6 +94,7 @@ const AdministracionSeguridadEditar = ( { match } ) => {
         setSpin(false)
       }).catch((error) => {
         console.log("Error: ", error);
+        setSpin(false);
     });
   }
 
@@ -57,7 +105,7 @@ const AdministracionSeguridadEditar = ( { match } ) => {
 
 
   return (
-    <div id=''>
+    <div>
       <Fragment>
         <Card>
           <CardHeader>
@@ -75,6 +123,17 @@ const AdministracionSeguridadEditar = ( { match } ) => {
           </CardBody>
         </Card>
       </Fragment>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   )
 }

@@ -14,13 +14,14 @@ import { postEventoRiesgo } from './controller/EventoController';
 import { buildSelectTwo } from 'src/functions/Function'
 import { useFormik } from "formik"
 import * as Yup from "yup"
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify'
+import CCSpinner from 'src/reusable/spinner/CCSpinner'
 
 var _ = require('lodash');
 
 const EventoRiesgoRegistrar = () => {
 
-  const history = useHistory()
+  const history = useHistory();
   const [spin, setSpin] = useState(false);
 
   // Tipo de evento
@@ -147,7 +148,7 @@ const EventoRiesgoRegistrar = () => {
   }
 
   const [requestData, setRequestData] = useState(dataResult);
-  const [activeTab, setActiveTap] = useState('5');
+  const [activeTab, setActiveTap] = useState('1');
   //const [spin, setSpin] = useState(false);
 
   /* manejo de botones siguiente */
@@ -222,15 +223,13 @@ const EventoRiesgoRegistrar = () => {
     setTimeout(() => {
         history.push('/eventoRiesgo/Listar');
         setSpin(false);
-    }, 6000);
+    }, 5000);
   }
 
   const handleOnSubmmit = (values) => {
     setSpin(true);
     const dataRequest = setObject(values);
-
     var request = {}
-
     if(formik.values.tipoEvento === 'A'){
       request = {
         ...dataRequest,
@@ -248,22 +247,23 @@ const EventoRiesgoRegistrar = () => {
 
     postEventoRiesgo(request)
       .then(res => {
-        if (res.status === 200) {
-          console.log('Envio el request: ', res)
+        if (res.status >= 200 && res.status < 300) {
+          console.log('Envio el request: ', res);
           notificationToast('success', 'Evento de Riesgo registrado exitósamente');
           //history.push("/eventoRiesgo/listar")
         } else {
-          console.log('Hubo un  error ', res)
+          console.log('Hubo un  error ', res);
           notificationToast('error', 'Algo salió mal, intente nuevamente');
         }
       }).catch((error) => {
-        console.log('Error al registrar Evento de Riesgo: ', error)
+        console.log('Error al registrar Evento de Riesgo: ', error);
         notificationToast('error', 'Algo salió mal, intente nuevamente');
       });
   }
 
   return (
     <div>
+      <CCSpinner show={spin} />
       <Card>
         <CardHeader>
           <CardTitle className='float-left h4 pt-2'>Registrar Evento de Riesgo</CardTitle>
@@ -391,6 +391,17 @@ const EventoRiesgoRegistrar = () => {
           }
         </CardBody>
       </Card>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   )
 }

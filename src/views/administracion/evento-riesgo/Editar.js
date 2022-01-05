@@ -4,10 +4,13 @@ import { useHistory } from 'react-router-dom'
 import Formulario from './component/Formulario'
 import { putTablaDescripcionEventoId, getTablaDescripcionEventoId, getTablaListaEvento, getTablaDescripcionEventoN1 } from './controller/AdminEventoController'
 import { buildSelectTwo } from 'src/functions/Function'
+import { ToastContainer, toast } from 'react-toastify'
 
 const AdministracionEventoEditar = ({ match }) => {
 
-  const history = useHistory()
+  const history = useHistory();
+  const [spin, setSpin] = useState(false);
+
   const formValueInitial = {
     tablaLista: null,
     nombre: '',
@@ -36,18 +39,63 @@ const AdministracionEventoEditar = ({ match }) => {
 
   //useState
   const [formValueToEdit, setformValueToEdit] = useState(formValueInitial)
-  const [spin, setSpin] = useState(false)
+
+  const notificationToast = (type, mensaje) => {
+    switch (type) {
+        case 'error':
+            toast.error(mensaje, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            break;
+        case 'success':
+            toast.success(mensaje, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            break;
+
+        default:
+            toast(mensaje, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+            });
+    }
+    setTimeout(() => {
+        history.push('/administracion/evento-riesgo/Listar');
+        setSpin(false);
+    }, 5000);
+  }
 
   // functions
   const handleOnSubmit = (dataToRequest) => {
+    setSpin(true);
     console.log('data que se edita: ', dataToRequest)
     const idTabDesc = match.params.id;
     putTablaDescripcionEventoId(idTabDesc, dataToRequest)
       .then(res => {
-        console.log('response : ', res);
-        history.push("/administracion/evento-riesgo/listar")
+        if (res.status >= 200 && res.status < 300) {
+          console.log('Envio el request: ', res);
+          notificationToast('success', 'Parámetro de Evento de Riesgo modificado exitósamente');
+        } else {
+          console.log('Hubo un  error ', res);
+          notificationToast('error', 'Algo salió mal, intente nuevamente');
+        }
       }).catch((error) => {
-        console.log('Error al obtener datos: ', error);
+        console.log('Error al modificar Parámetro de Evento de Riesgo: ', error);
+        notificationToast('error', 'Algo salió mal, intente nuevamente');
       });
   }
 
@@ -99,9 +147,9 @@ const AdministracionEventoEditar = ({ match }) => {
         const res = response.data;
         macthed(res)
         setSpin(false)
-
       }).catch((error) => {
         console.log("Error: ", error);
+        setSpin(false);
       });
   }
 
@@ -176,6 +224,17 @@ const AdministracionEventoEditar = ({ match }) => {
           </CardBody>
         </Card>
       </Fragment>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   )
 }

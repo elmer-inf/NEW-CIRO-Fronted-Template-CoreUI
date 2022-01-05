@@ -16,7 +16,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   const formik = useFormik({
     initialValues: initValues,
     validationSchema: Yup.object().shape({
-      /* areaId : Yup.mixed().required("Campo obligatorio"),
+      areaId : Yup.mixed().required("Campo obligatorio"),
       unidadId : Yup.mixed().required("Campo obligatorio"),
       procesoId : Yup.mixed().required("Campo obligatorio"),
       procedimientoId : Yup.mixed().required("Campo obligatorio"),
@@ -26,10 +26,10 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
       fodaId : Yup.mixed().nullable(),
       fodaDesccripcionId: Yup.mixed().nullable(),
       // Campos solo para mostrar:
-      macroNombre : Yup.string().nullable(), */
+      macroNombre : Yup.string().nullable(),
 
 
-      areaId : Yup.mixed().nullable(),
+      /* areaId : Yup.mixed().nullable(),
       unidadId : Yup.mixed().nullable(),
       procesoId : Yup.mixed().nullable(),
       procedimientoId : Yup.mixed().nullable(),
@@ -39,7 +39,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
       fodaId : Yup.mixed().nullable(),
       fodaDescripcionId: Yup.mixed().nullable(),
       // Campos solo para mostrar:
-      macroNombre : Yup.string().nullable(),
+      macroNombre : Yup.string().nullable(), */
       }
     ),
 

@@ -160,7 +160,6 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
     });
     return deployOption;
   }
-
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
   return (

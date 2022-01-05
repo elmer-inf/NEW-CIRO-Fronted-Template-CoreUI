@@ -150,7 +150,7 @@ const EventoRiesgoListar = () => {
   }
 
   function colorEstadoEvento(cell) {
-    if (cell === 'Solucionado') {
+    if (cell === 'Solución') {
       return (
         <CBadge className="mr-1 px-2 py-1 badge-success">{cell}</CBadge>
       );

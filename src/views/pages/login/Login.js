@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
 import { CCard, CCardBody, CCardGroup, CCol, CContainer, CRow } from '@coreui/react'
 import {
-  Button, Form, FormGroup,
-  Input,
-  Label, Alert
+  Button, Form, FormGroup, Alert
 } from 'reactstrap';
 
 import { useFormik } from "formik";
@@ -16,6 +14,7 @@ import { postAuthentication } from 'src/views/authentication/AuthController';
 import CIcon from '@coreui/icons-react';
 import { Messages } from 'src/reusable/variables/Messages';
 import { LogIn } from 'react-feather';
+import CInputCheckbox from 'src/reusable/CInputCheckbox'
 
 const Login = () => {
 
@@ -104,7 +103,7 @@ background: linear-gradient(153deg, rgba(0,171,181,1) 0%, rgba(0,183,198,1) 26%)
                       height={200}
                     />
                   </div>
-                  <span className='text-center h4 text-data'>SISTEMA GESTION DE RIESGOS INTEGRALES</span>
+                  <span className='text-center h4 text-data'>SISTEMA DE GESTION DE RIESGOS INTEGRALES</span>
                 </CCardBody>
               </CCard>
               <CCard className="text-white pt-4" style={{ "WebkitBackdropFilter": " blur(20px)", "backdropFilter": "blur(20px)", "backgroundColor": "rgba(0, 0, 0, 0.1)" }}>
@@ -138,11 +137,17 @@ background: linear-gradient(153deg, rgba(0,171,181,1) 0%, rgba(0,183,198,1) 26%)
                     </CCol>
                     <CCol xs="12" sm="12" className="text-right">
                       <FormGroup check>
-                        <Input type="checkbox" onChange={(e) => { showPassword(e) }} />
+                      <CInputCheckbox
+                        id={'otrosAux'}
+                        type={"checkbox"}
+                        onChange={(e) => { showPassword(e) }}
+                        label='Mostrar password'
+                      />
+                        {/* <Input type="checkbox" onChange={(e) => { showPassword(e) }} />
                         {' '}
                         <Label check>
                           Mostrar password
-                        </Label>
+                        </Label> */}
                       </FormGroup>
                     </CCol>
                     {/*   <CRow> */}

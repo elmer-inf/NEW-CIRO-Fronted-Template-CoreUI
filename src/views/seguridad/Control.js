@@ -3,7 +3,6 @@ import { Card, CardHeader, CardBody, CardTitle, Button, Col, Row } from 'reactst
 
 import { useHistory } from 'react-router-dom'
 import { getGroupByArea } from './controller/SeguridadController'
-import CCSpinner from 'src/reusable/spinner/CCSpinner';
 import { getTablaDescripcionRiesgoN1 } from 'src/views/administracion/matriz-riesgo/controller/AdminRiesgoController'
 import { getTablaDescripcionSeguridadN1 } from 'src/views/administracion/seguridad/controller/AdminSeguridadController'
 import { buildSelectTwo } from 'src/functions/Function'
@@ -20,7 +19,7 @@ const SeguridadListar = () => {
 
   //  P  A  R  A  M  E  T  R  O  S
   // Estado
-  const [dataApiEstado, setDataApiEstado] = useState([])
+ /*  const [dataApiEstado, setDataApiEstado] = useState([])
   const callApiEstado = (idTablaDes) => {
     getTablaDescripcionSeguridadN1(idTablaDes)
       .then(res => {
@@ -46,11 +45,11 @@ const SeguridadListar = () => {
   useEffect(() => {
     callApiEstado(2);
     callApiNivelRiesgo(9);
-  }, [])
+  }, []) */
   // F  I  N     P  A  R  A  M  E  T  R  O  S
 
 
-  const [dataApi, setDataApi] = useState([])
+/*   const [dataApi, setDataApi] = useState([])
 
   const callApi = () => {
     getGroupByArea()
@@ -65,7 +64,7 @@ const SeguridadListar = () => {
 
   useEffect(() => {
     callApi()
-  }, [])
+  }, []) */
 
 
 

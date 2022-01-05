@@ -20,7 +20,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
     initialValues: {...initValues, otrosAux2: false},
     validationSchema: Yup.object().shape(
       {
-        /* definicion : Yup.string().required('Campo obligatorio'),
+        definicion : Yup.string().required('Campo obligatorio'),
         causa : Yup.string().required('Campo obligatorio'),
         consecuencia : Yup.string().required('Campo obligatorio'),
         defConcatenado : Yup.string().required('Campo obligatorio'),
@@ -33,7 +33,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
           then: Yup.mixed().nullable().required("Campo obligatorio"),
         }),
         perdidaAsfiId : Yup.mixed().required("Campo obligatorio"),
-        monetario : Yup.mixed().required('Campo obligatorio'),
+        monetario : Yup.boolean().required('Campo obligatorio'),
         factorRiesgoId : Yup.mixed().required('Campo obligatorio'),
         probabilidadId : Yup.mixed().required("Campo obligatorio"),
         impactoId : Yup.mixed().required("Campo obligatorio"),
@@ -46,9 +46,9 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
         probValoracion : Yup.string().nullable(),
         impactoInherente : Yup.string().nullable(),
         impactoPorcentaje : Yup.string().nullable(),
-        impactoValoracion : Yup.string().nullable(), */
+        impactoValoracion : Yup.string().nullable(),
 
-        definicion : Yup.string().nullable(),
+        /* definicion : Yup.string().nullable(),
         causa : Yup.string().nullable(),
         consecuencia : Yup.string().nullable(),
         defConcatenado : Yup.string().nullable(),
@@ -61,7 +61,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
           then: Yup.mixed().nullable().required("Campo obligatorio"),
         }),
         perdidaAsfiId : Yup.mixed().required("Campo obligatorio"),
-        monetario : Yup.mixed().nullable(),
+        monetario : Yup.boolean(),
         factorRiesgoId : Yup.mixed().nullable(),
         probabilidadId : Yup.mixed().required("Campo obligatorio"),
         impactoId : Yup.mixed().required("Campo obligatorio"),
@@ -74,7 +74,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
         probValoracion : Yup.string().nullable(),
         impactoInherente : Yup.string().nullable(),
         impactoPorcentaje : Yup.string().nullable(),
-        impactoValoracion : Yup.string().nullable(),
+        impactoValoracion : Yup.string().nullable(), */
       }
     ),
 

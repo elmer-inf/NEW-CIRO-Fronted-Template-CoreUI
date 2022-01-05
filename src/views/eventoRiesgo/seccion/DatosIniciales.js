@@ -15,12 +15,12 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   const formik = useFormik({
     initialValues: initValues,
     validationSchema: Yup.object().shape({
-        /* fechaIni: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").required('Campo obligatorio'),
-        horaIni: Yup.string().required('Campo obligatorio'),
+        fechaIni: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").required('Campo obligatorio'),
+        horaIni: Yup.mixed().required('Campo obligatorio'),
         fechaDesc: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").required('Campo obligatorio'),
-        horaDesc: Yup.string().required('Campo obligatorio'),
+        horaDesc: Yup.mixed().required('Campo obligatorio'),
         fechaFin: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
-        horaFin: Yup.string().nullable(),
+        horaFin: Yup.mixed().nullable(),
         agenciaId: Yup.mixed().nullable(),
         ciudadId: Yup.mixed().nullable(),
         areaID:  Yup.mixed().required('Campo obligatorio'),
@@ -33,9 +33,9 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         fuenteInfId: Yup.mixed().nullable(),
         canalAsfiId: Yup.mixed().required('Campo obligatorio'),
         descripcion: Yup.string().required('Campo obligatorio'),
-        descripcionCompleta: Yup.string().nullable() */
+        descripcionCompleta: Yup.string().nullable()
 
-        fechaIni: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
+        /* fechaIni: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
         horaIni: Yup.string().nullable(),
         fechaDesc: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
         horaDesc: Yup.string().nullable(),
@@ -53,7 +53,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         fuenteInfId: Yup.mixed().nullable(),
         canalAsfiId: Yup.mixed().nullable(),
         descripcion: Yup.string().nullable(),
-        descripcionCompleta: Yup.string().nullable()
+        descripcionCompleta: Yup.string().nullable() */
       }
     ),
 
@@ -61,7 +61,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
        const data = {
         ...values,
         estadoRegistro: 'Pendiente',
-        estadoEvento: (values.horaFin !== null && values.fechaFin !== null) ? 'Solucionado': 'Seguimiento',
+        estadoEvento: (values.horaFin !== null && values.fechaFin !== null) ? 'Solución': 'Seguimiento',
 
         horaIni:    (values.horaIni !== null) ?  values.horaIni + ':00' : null,
         horaDesc:   (values.horaDesc !== null) ?  values.horaDesc + ':00' : null,

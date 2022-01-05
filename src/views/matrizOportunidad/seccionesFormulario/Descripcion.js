@@ -16,22 +16,22 @@ const Descripcion = ({ nextSection, beforeSection, setObject, initValues, isEdit
     initialValues: initValues,
     validationSchema: Yup.object().shape(
       {
-        /* definicion : Yup.string().required("Campo obligatorio"),
+        definicion : Yup.string().required("Campo obligatorio"),
         causa : Yup.string().required("Campo obligatorio"),
         consecuencia : Yup.string().required("Campo obligatorio"),
         factor : Yup.mixed().required("Campo obligatorio"),
         grupoInteresId: Yup.mixed().required("Campo obligatorio"),
         // Solo para mostrar
-        defConcatenado : Yup.string().nullable(), */
+        defConcatenado : Yup.string().nullable(),
 
 
-        definicion : Yup.string().nullable(),
+        /* definicion : Yup.string().nullable(),
         causa : Yup.string().nullable(),
         consecuencia : Yup.string().nullable(),
         factor : Yup.mixed().nullable(),
         grupoInteresId: Yup.mixed().nullable(),
         // Solo para mostrar
-        defConcatenado : Yup.string().nullable(),
+        defConcatenado : Yup.string().nullable(), */
       }
     ),
 

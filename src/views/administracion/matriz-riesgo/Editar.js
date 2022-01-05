@@ -3,10 +3,13 @@ import { Card, CardHeader, CardTitle, CardBody } from 'reactstrap'
 import { useHistory } from 'react-router-dom'
 import Formulario from './component/Formulario'
 import { putTablaDescripcionRiesgo, getTablaDescripcionRiesgoId } from './controller/AdminRiesgoController'
+import { ToastContainer, toast } from 'react-toastify'
 
 const AdministracionMatrizRiesgoEditar = ( { match } ) => {
 
-  const history = useHistory()
+  const history = useHistory();
+  const [spin, setSpin] = useState(false);
+
   const formValueInitial = {
     campoA: '',
     nombre: '',
@@ -21,17 +24,61 @@ const AdministracionMatrizRiesgoEditar = ( { match } ) => {
 
   const [formValueToEdit, setformValueToEdit] = useState(formValueInitial)
 
-  const [spin, setSpin] = useState(false)
+  const notificationToast = (type, mensaje) => {
+    switch (type) {
+        case 'error':
+            toast.error(mensaje, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            break;
+        case 'success':
+            toast.success(mensaje, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            break;
+
+        default:
+            toast(mensaje, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+            });
+    }
+    setTimeout(() => {
+        history.push('/administracion/matriz-riesgo/listar');
+        setSpin(false);
+    }, 5000);
+  }
 
   const handleOnSubmit = (dataToRequest) => {
+    setSpin(true);
     console.log('data que se edita: ', dataToRequest)
     const idTabDesc = match.params.id;
     putTablaDescripcionRiesgo(idTabDesc, dataToRequest)
     .then(res => {
-      console.log('response : ', res);
-      history.push("/administracion/matriz-riesgo/listar")
+      if (res.status >= 200 && res.status < 300) {
+        console.log('Envio el request: ', res);
+        notificationToast('success', 'Párametro de Matriz de Riesgo modificado exitósamente');
+      } else {
+        console.log('Hubo un  error ', res);
+        notificationToast('error', 'Algo salió mal, intente nuevamente');
+      }
     }).catch((error) => {
-        console.log('Error al obtener datos: ', error);
+      console.log('Error al modificar Párametro de Matriz de Riesgo: ', error);
+      notificationToast('error', 'Algo salió mal, intente nuevamente');
     });
   }
 
@@ -54,16 +101,16 @@ const AdministracionMatrizRiesgoEditar = ( { match } ) => {
   }
 
   const getById = async () => {
-    setSpin(true)
+    setSpin(true);
     const idParametro = match.params.id;
     await getTablaDescripcionRiesgoId(idParametro)
       .then((response) => {
-          //console.log("API xxxxx: ", response);
           const res = response.data;
-          matched(res)
-        setSpin(false)
+          matched(res);
+          setSpin(false);
       }).catch((error) => {
         console.log("Error: ", error);
+        setSpin(false);
     });
   }
 
@@ -75,7 +122,7 @@ const AdministracionMatrizRiesgoEditar = ( { match } ) => {
 
 
   return (
-    <div id=''>
+    <div>
       <Fragment>
         <Card>
           <CardHeader>
@@ -94,6 +141,17 @@ const AdministracionMatrizRiesgoEditar = ( { match } ) => {
           </CardBody>
         </Card>
       </Fragment>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   )
 }
