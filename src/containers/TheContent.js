@@ -5,7 +5,6 @@ import {
   Switch
 } from 'react-router-dom'
 import { CContainer, CFade } from '@coreui/react'
-
 // routes config
 import routes from '../routes'
   
@@ -14,7 +13,6 @@ const loading = (
     <div className="sk-spinner sk-spinner-pulse"></div>
   </div>
 )
-
 const TheContent = () => {
   return (
     <main className="c-main">
@@ -42,7 +40,6 @@ const TheContent = () => {
     </main>
   )
 }
-
 export default React.memo(TheContent)*/
 
 
@@ -134,5 +131,3 @@ const TheContent = ({ routesProp }) => {
 }
 
 export default React.memo(TheContent)
-
-

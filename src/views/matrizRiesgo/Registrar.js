@@ -3,8 +3,7 @@ import DatosIniciales from './seccionesFormulario/DatosIniciales'
 import DefinicionRiesgos from './seccionesFormulario/DefinicionRiesgos'
 import Controles from './seccionesFormulario/Controles'
 import RiesgoResidual from './seccionesFormulario/RiesgoResidual'
-import Planes from './seccionesFormulario/Planes'
-import Seguimiento from './seccionesFormulario/Seguimiento'
+import PlanesSeguimiento from './seccionesFormulario/PlanesSeguimiento'
 import Valoracion from './seccionesFormulario/Valoracion'
 import { FileText, BarChart2, ChevronRight, CheckSquare, PieChart, Trello, List, TrendingUp } from 'react-feather'
 import { Row, Col, Card, CardBody, CardHeader, CardTitle, TabContent, TabPane, NavLink, NavItem, Nav} from 'reactstrap';
@@ -26,8 +25,8 @@ const MatrizRiesgoRegistrar = () => {
     fechaEvaluacion : '',
     identificadoId : null,
     identificadoOtro : '',
-    eventoRiesgoId:null,
-    eventoMaterializado:false
+    eventoRiesgoId: null,
+    eventoMaterializado: ''
   }
 
   const formValueInitialDefinicionRiesgos = {
@@ -59,29 +58,22 @@ const MatrizRiesgoRegistrar = () => {
 
   }
 
-  const formValueInitialPlanes = {
+  const formValueInitialPlanesSeguimiento = {
     nroPlanes: '',
     planesAccion: []
-  }
-
-  const formValueInitialSeguimiento = {
-    seguimientoFecha: '',
-    seguimientoObs: '',
-    seguimientoComen: ''
   }
 
   const formValueInitialValoracion = {
     criterioImpacto: '',
     criterioprobabilidad: '',
-    impactoUSD: ''
+    impactoUSD: 0
   }
 
   const dataResult = {
     ...formValueInitialDatosIniciales,
     ...formValueInitialDefinicionRiesgos,
     ...formValueInitialControles,
-    ...formValueInitialPlanes,
-    ...formValueInitialSeguimiento,
+    ...formValueInitialPlanesSeguimiento,
     ...formValueInitialValoracion
   }
 
@@ -99,8 +91,6 @@ const MatrizRiesgoRegistrar = () => {
       setActiveTap('5');
     } else if (tab === 5) {
       setActiveTap('6');
-    } else if (tab === 6) {
-      setActiveTap('7');
     }
   }
   /* manejo de botones atras */
@@ -115,8 +105,6 @@ const MatrizRiesgoRegistrar = () => {
       setActiveTap('4');
     } else if (tab === 6) {
       setActiveTap('5');
-    } else if (tab === 7) {
-      setActiveTap('6');
     }
   }
 
@@ -252,7 +240,7 @@ const MatrizRiesgoRegistrar = () => {
                 <NavItem>
                   <NavLink className={classnames({ active: activeTab === '5' })}>
                     <span className={activeTab === '5' ? '' : 'd-none'}></span>
-                    <List size={20} /><span className='pl-2 h6 font-weight-bold'>Planes de Acción</span>
+                    <CheckSquare size={20} /><span className='pl-2 h6 font-weight-bold'>Planes de Acción y Seguimiento</span>
                     <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary'/>
                   </NavLink>
                 </NavItem>
@@ -260,14 +248,6 @@ const MatrizRiesgoRegistrar = () => {
                 <NavItem>
                   <NavLink className={classnames({ active: activeTab === '6' })}>
                     <span className={activeTab === '6' ? '' : 'd-none'}></span>
-                    <CheckSquare size={20} /><span className='pl-2 h6 font-weight-bold'>Seguimiento</span>
-                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary'/>
-                  </NavLink>
-                </NavItem>
-
-                <NavItem>
-                  <NavLink className={classnames({ active: activeTab === '7' })}>
-                    <span className={activeTab === '7' ? '' : 'd-none'}></span>
                     <PieChart size={20} /><span className='pl-2 h6 font-weight-bold'>Valoración cuantitativa</span>
                   </NavLink>
                 </NavItem>
@@ -320,29 +300,17 @@ const MatrizRiesgoRegistrar = () => {
                 </TabPane>
 
                 <TabPane tabId="5">
-                  <Planes
+                  <PlanesSeguimiento
                     nextSection={nextSection}
                     beforeSection={beforeSection}
                     setObject={setObject}
-                    initValues={formValueInitialPlanes}
+                    initValues={formValueInitialPlanesSeguimiento}
                     //isEdit={true}
                     //arrayColumnaSelected={[]}
                   />
                 </TabPane>
 
                 <TabPane tabId="6">
-                  <Seguimiento
-                    nextSection={nextSection}
-                    beforeSection={beforeSection}
-                    setObject={setObject}
-                    initValues={formValueInitialSeguimiento}
-                    dataPlanesAccion={requestData.planesAccion}
-                    //isEdit={true}
-                    //arrayColumnaSelected={[]}
-                  />
-                </TabPane>
-
-                <TabPane tabId="7">
                   <Valoracion
                     beforeSection={beforeSection}
                     initValues={formValueInitialValoracion}

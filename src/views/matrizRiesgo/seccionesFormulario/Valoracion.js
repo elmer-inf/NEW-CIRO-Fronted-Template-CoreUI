@@ -6,23 +6,26 @@ import * as Yup from "yup"
 import { CInputReact } from 'src/reusable/CInputReact'
 import { getTablaDescripcionRiesgoN1 } from 'src/views/administracion/matriz-riesgo/controller/AdminRiesgoController';
 import { buildSelectTwo } from 'src/functions/Function'
+import { obtieneRiesgoIntervalo, obtieneValorRiesgoIntervalo } from 'src/functions/FunctionsMatriz'
 
 var _ = require('lodash');
 
 const Valoracion = ({ beforeSection, initValues, dataAux , dataAux2, isEdit, handleOnSubmmit }) => {
 
   const formik = useFormik({
-    initialValues: initValues,
+    initialValues: {...initValues, montoRiesgo: 0},
     validationSchema: Yup.object().shape(
       {
         criterioImpacto: Yup.string().nullable(),
         criterioprobabilidad: Yup.string().nullable(),
         impactoUSD: Yup.number().nullable(),
-        montoRiesgo: Yup.number().nullable(),
 
         // Solo para mostrar
         probTiempo: Yup.string().nullable(),
         probVecesAnio: Yup.number().nullable(),
+        montoRiesgo: Yup.number().nullable(),
+        valorRiesgoIntervalo: Yup.number().nullable(),
+        riesgoIntervalo: Yup.string().nullable(),
       }
     ),
 
@@ -30,12 +33,12 @@ const Valoracion = ({ beforeSection, initValues, dataAux , dataAux2, isEdit, han
       const data = {
        ...values,
      }
-     console.log('datos que se enviaran SECCION 7:', data)
+     console.log('datos que se enviaran SECCION 6:', data)
      handleOnSubmmit(data)
    }
   })
 
-  /*  P  A  R  A  M  E  T  R  O  S  (Aux)*/
+  /*  P  A  R  A  M  E  T  R  O  S  (Aux) */
   // Probabilidad
   const [dataApiProbabilidad, setDataApiProbabilidad] = useState([])
   const callApiProbabilidad = (idTablaDes) => {
@@ -48,10 +51,23 @@ const Valoracion = ({ beforeSection, initValues, dataAux , dataAux2, isEdit, han
       })
   }
 
+   // Impacto de riesgo
+   const [dataApiImpacto, setDataApiImpacto] = useState([])
+   const callApiImpacto = (idTablaDes) => {
+     getTablaDescripcionRiesgoN1(idTablaDes)
+       .then(res => {
+         const options = buildSelectTwo(res.data, 'id', 'campoD', true)
+         setDataApiImpacto(_.orderBy(options, ['value' ], ['desc']))
+       }).catch((error) => {
+         console.log('Error: ', error)
+       })
+   }
+
   useEffect(() => {
     callApiProbabilidad(2);
+    callApiImpacto(3);
   }, [])
-  /*  F  I  N     P  A  R  A  M  E  T  R  O  S  (Aux)*/
+  /*  F  I  N     P  A  R  A  M  E  T  R  O  S  (Aux) */
 
   // Obtiene valor "Veces al anio" y "Probabilidad temporalidad" de la probabilidad"
   const probVecesAnioAux = (_.find(dataApiProbabilidad, ['campoA', dataAux2.probabilidadAux+ '']) !== undefined) ? _.find(dataApiProbabilidad, ['campoA', dataAux2.probabilidadAux+ '']).campoE : null
@@ -65,15 +81,24 @@ const Valoracion = ({ beforeSection, initValues, dataAux , dataAux2, isEdit, han
 
   // Calculo de Monto Riesgo de Pérdida (formula entre "veces al año" e "impactoUSD")
   useEffect(() => {
-    formik.setFieldValue('montoRiesgo', formik.values.probVecesAnio * formik.values.impactoUSD , false)
+    if(formik.values.impactoUSD === 0)
+      formik.setFieldValue('montoRiesgo', 0 , false);
+    else
+      formik.setFieldValue('montoRiesgo', formik.values.probVecesAnio * formik.values.impactoUSD , false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.impactoUSD]);
+
+  // Asigna valor en Valoracion de riesgo
+  useEffect(() => {
+    formik.setFieldValue('valorRiesgoIntervalo', obtieneValorRiesgoIntervalo(dataApiImpacto, formik.values.montoRiesgo), false)
+    formik.setFieldValue('riesgoIntervalo', obtieneRiesgoIntervalo(dataApiImpacto, formik.values.montoRiesgo), false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.montoRiesgo]);
 
   return (
     <Fragment>
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
         <Row className='pt-4'>
-
           <FormGroup tag={Col} md='6' className='mb-0'>
             <Label className='form-label'>
               Tipo de Pérdida
@@ -252,8 +277,12 @@ const Valoracion = ({ beforeSection, initValues, dataAux , dataAux2, isEdit, han
             </Label>
             <CInputReact
               type={"number"}
-              id={'riesgoInherenteAux'}
-              value={dataAux2.riesgoAux}
+              id={'valorRiesgoIntervalo'}
+              value={formik.values.valorRiesgoIntervalo}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              touched={formik.touched.valorRiesgoIntervalo}
+              errors={formik.errors.valorRiesgoIntervalo}
               disabled={true}
             />
           </FormGroup>
@@ -264,8 +293,12 @@ const Valoracion = ({ beforeSection, initValues, dataAux , dataAux2, isEdit, han
             </Label>
             <CInputReact
               type={"text"}
-              id={'valorRiesgoInherenteAux'}
-              value={dataAux2.riesgoValAux}
+              id={'riesgoIntervalo'}
+              value={formik.values.riesgoIntervalo}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              touched={formik.touched.riesgoIntervalo}
+              errors={formik.errors.riesgoIntervalo}
               disabled={true}
             />
           </FormGroup>
@@ -276,7 +309,7 @@ const Valoracion = ({ beforeSection, initValues, dataAux , dataAux2, isEdit, han
             style={{width: '130px'}}
             className='text-white'
             color="primary"
-            onClick={ () => beforeSection(7) }
+            onClick={ () => beforeSection(6) }
           >
             <ChevronLeft size={17} className='mr-1'/>
             Atrás

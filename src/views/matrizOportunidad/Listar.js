@@ -67,7 +67,7 @@ const MatrizOportunidadListar = () => {
       filterRenderer: (onFilter, column) =>
         <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
       headerFormatter: typeFormatter,
-    }, {
+    }, /* {
       dataField: 'unidadId.nombre',
       text: 'UNIDAD',
       sort: true,
@@ -75,7 +75,7 @@ const MatrizOportunidadListar = () => {
       filterRenderer: (onFilter, column) =>
         <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
       headerFormatter: typeFormatter,
-    }, {
+    }, */ {
       dataField: 'duenoCargoId.nombre',
       text: 'DUEÑO PROCESO',
       sort: true,
@@ -198,10 +198,6 @@ const MatrizOportunidadListar = () => {
     callApi(pagination.page, pagination.size)
   }, [])
 
-
-
-
-
   // search by columns
   const handleOnFilter = (event) => {
     const param = {
@@ -279,7 +275,7 @@ const MatrizOportunidadListar = () => {
           <Col sm='12'>
             <Card>
               <CardHeader>
-                <CardTitle className='float-left h4 pt-2'>Matriz de Riesgos</CardTitle>
+                <CardTitle className='float-left h4 pt-2'>Matriz de Oportunidades</CardTitle>
                 <Button color='primary' onClick={redirect} className='float-right mt-1' style={{ width: '130px' }}>
                   <span className='text-white'>Registrar</span>
                 </Button>

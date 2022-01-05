@@ -25,9 +25,6 @@ const MatrizRiesgoListar = () => {
   const [params, setParams] = useState({});
   const [spin, setSpin] = useState(false);
 
-
-
-
   const redirect = () => {
     history.push('./registrar')
   }
@@ -207,26 +204,6 @@ const MatrizRiesgoListar = () => {
   useEffect(() => {
     callApi(pagination.page, pagination.size)
   }, [])
-
-  /* LISTA TABLA DESCRIPCION despendiento de seleccion tabla lista*/
-  //const [dataApi, setDAtaApi] = useState([])
-  /*   const handleSelectOnChange = (result) => {
-      console.log('select:  ', result)
-      getTablaDescripcion(result.value);
-    }
-  
-    const getTablaDescripcion = (idTabla) => {
-      getTablaDescripcionNivel(idTabla)
-      .then(res => {
-        console.log('nivel 1: ', res.data)
-        setDAtaApi(res.data)
-      }).catch((error) => {
-        console.log('Error: ', error)
-        //notificationToast('error', Messages.notification.notOk)
-      })
-    } */
-
-
 
   // search by columns
   const handleOnFilter = (event) => {

@@ -14,12 +14,14 @@ import { postEventoRiesgo } from './controller/EventoController';
 import { buildSelectTwo } from 'src/functions/Function'
 import { useFormik } from "formik"
 import * as Yup from "yup"
+import { ToastContainer, toast } from 'react-toastify';
 
 var _ = require('lodash');
 
 const EventoRiesgoRegistrar = () => {
 
   const history = useHistory()
+  const [spin, setSpin] = useState(false);
 
   // Tipo de evento
   const [dataApiTipoEvento, setDataApiTipoEvento] = useState([])
@@ -145,7 +147,7 @@ const EventoRiesgoRegistrar = () => {
   }
 
   const [requestData, setRequestData] = useState(dataResult);
-  const [activeTab, setActiveTap] = useState('1');
+  const [activeTab, setActiveTap] = useState('5');
   //const [spin, setSpin] = useState(false);
 
   /* manejo de botones siguiente */
@@ -184,8 +186,47 @@ const EventoRiesgoRegistrar = () => {
     return values;
   }
 
+  const notificationToast = (type, mensaje) => {
+    switch (type) {
+        case 'error':
+            toast.error(mensaje, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            break;
+        case 'success':
+            toast.success(mensaje, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            break;
+
+        default:
+            toast(mensaje, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+            });
+    }
+    setTimeout(() => {
+        history.push('/eventoRiesgo/Listar');
+        setSpin(false);
+    }, 6000);
+  }
+
   const handleOnSubmmit = (values) => {
-    //setSpin(true);
+    setSpin(true);
     const dataRequest = setObject(values);
 
     var request = {}
@@ -209,12 +250,15 @@ const EventoRiesgoRegistrar = () => {
       .then(res => {
         if (res.status === 200) {
           console.log('Envio el request: ', res)
-          history.push("/eventoRiesgo/listar")
+          notificationToast('success', 'Evento de Riesgo registrado exitósamente');
+          //history.push("/eventoRiesgo/listar")
         } else {
           console.log('Hubo un  error ', res)
+          notificationToast('error', 'Algo salió mal, intente nuevamente');
         }
       }).catch((error) => {
-        console.log('Error al obtener datos: ', error)
+        console.log('Error al registrar Evento de Riesgo: ', error)
+        notificationToast('error', 'Algo salió mal, intente nuevamente');
       });
   }
 

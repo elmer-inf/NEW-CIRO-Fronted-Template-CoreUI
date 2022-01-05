@@ -75,7 +75,7 @@ const Descripcion = ({ nextSection, beforeSection, setObject, initValues, isEdit
   // Concatena definicion, causa y consecuencia
   useEffect(() => {
     if(formik.values.definicion !== '' && formik.values.causa !== '' && formik.values.consecuencia !== ''){
-      formik.setFieldValue('defConcatenado', formik.values.definicion + ' DEBIDO A ' + formik.values.causa + ' PUEDE OCASIONAR ' + formik.values.consecuencia, false)
+      formik.setFieldValue('defConcatenado', 'OPORTUNIDAD DE ' + formik.values.definicion + ' DEBIDO A ' + formik.values.causa + ' PUEDE OCASIONAR ' + formik.values.consecuencia, false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.definicion, formik.values.causa, formik.values.consecuencia]);

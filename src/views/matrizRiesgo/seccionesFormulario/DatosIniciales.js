@@ -11,6 +11,7 @@ import { getTablaDescripcionEventoN1, getTablaDescripcionEventoN2 } from 'src/vi
 import { buildSelectTwo, buildSelectThree } from 'src/functions/Function'
 import { getEventos } from 'src/views/eventoRiesgo/controller/EventoController'
 import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
+import CInputRadio from 'src/reusable/CInputRadio'
 
 var _ = require('lodash');
 
@@ -29,8 +30,6 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
       macroNombre : Yup.string().nullable(),
       macroCriticidad : Yup.string().nullable(),
       macroValoracion : Yup.string().nullable(),
-      eventoRiesgoId: Yup.mixed().nullable(),
-      eventoMaterializado:Yup.boolean(),
       otrosAux: Yup.boolean(),
       // FIN Campos solo para mostrar:
 
@@ -46,6 +45,8 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         is:(val) => (val === true),
         then: Yup.string().nullable().required("Campo obligatorio"),
       }),
+      eventoRiesgoId: Yup.mixed().nullable(),
+      eventoMaterializado: Yup.boolean(),
       */
 
 
@@ -57,9 +58,9 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
       macroNombre: Yup.string().nullable(),
       macroCriticidad: Yup.string().nullable(),
       macroValoracion: Yup.string().nullable(),
-      eventoRiesgoId: Yup.mixed().nullable(),
-      eventoMaterializado: Yup.boolean(),
       otrosAux: Yup.boolean(),
+      eventoFechaAux: Yup.date().nullable(),
+      eventoDescAux: Yup.string().nullable(),
       // FIN Campos solo para mostrar:
 
       procedimientoId: Yup.mixed().required("Campo obligatorio"),
@@ -74,6 +75,8 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         is:(val) => (val === true),
         then: Yup.string().nullable().required("Campo obligatorio"),
       }),
+      eventoRiesgoId: Yup.mixed().nullable(),
+      eventoMaterializado: Yup.boolean(),
     }
     ),
 
@@ -91,7 +94,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         responsableCargoId: (values.responsableCargoId !== null) ? values.responsableCargoId.value : 0,
         identificadoId: (values.identificadoId !== null) ? values.identificadoId.value : 0,
         eventoRiesgoId: (values.eventoRiesgoId !== null) ? values.eventoRiesgoId.value : 0,
-        eventoMaterializado: values.eventoMaterializado
+        //eventoMaterializado: values.eventoMaterializado
       }
       console.log('datos que se enviaran SECCION 1:', data)
       setObject(data, values);
@@ -142,7 +145,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   const callApiProcedimiento = (idTablaDes, idNivel2) => {
     getTablaDescripcionEventoN2(idTablaDes, idNivel2)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'campoA', true);
+        const options = buildSelectTwo(res.data, 'id', 'descripcion', true);
         //console.log('repetidos: ', options);
         //console.log('sin rep : ', _.uniqBy(options, 'label'));
         setDataApiProcedimiento(_.uniqBy(options, 'label'))
@@ -174,6 +177,12 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         console.log('Error: ', error)
       })
   }
+
+  // Evento Materializado
+  const optionsMaterializado = [
+    { value: true, label: 'Si' },
+    { value: false, label: 'No' }
+  ]
 
   useEffect(() => {
     callApiArea(3);
@@ -221,6 +230,30 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.otrosAux])
+
+
+   // Autocompleta "Fecha y Descripcion" de Eventos
+   useEffect(() => {
+    if (formik.values.eventoRiesgoId !== null) {
+      formik.setFieldValue('eventoFechaAux', formik.values.eventoRiesgoId.fechaDesc !== null? formik.values.eventoRiesgoId.fechaDesc : '', false);
+      formik.setFieldValue('eventoDescAux', formik.values.eventoRiesgoId.descripcion, false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.eventoRiesgoId]);
+
+  // Resetea "Fecha y Descripcion" de Eventos dependiendo del check "Evento Materializado"
+  const resetDatosEvento = () => {
+    formik.setFieldValue('eventoRiesgoId', '', false);
+    formik.setFieldValue('eventoFechaAux', '', false);
+    formik.setFieldValue('eventoDescAux', '', false);
+
+  }
+  useEffect(() => {
+    if (formik.values.eventoMaterializado === false) {
+      resetDatosEvento();
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.eventoMaterializado])
 
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
@@ -313,7 +346,6 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
               touched={formik.touched.procesoId}
               options={dataApiMacroproceso}
             /> */}
-
 
             <CSelectReactTwo
               label={""}
@@ -504,24 +536,28 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
             </FormGroup>
           : null}
         </Row>
-        <hr />
-        <h4>Evento de riesgo</h4>
-        <hr />
+
+        <hr/>
         <Row>
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
-            <br />
-            <CInputCheckbox
+            <Label className='form-label'>
+              Evento materializado
+            </Label>
+            <CInputRadio
+              data={optionsMaterializado}
               id={'eventoMaterializado'}
-              type={"checkbox"}
               value={formik.values.eventoMaterializado}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              label='Evento materializado (si/no)'
+              onChange={formik.setFieldValue}
+              onBlur={formik.setFieldTouched}
+              touched={formik.touched.eventoMaterializado}
+              errors={formik.errors.eventoMaterializado}
+              sendValue={true}
             />
           </FormGroup>
+
           <FormGroup tag={Col} md='6' lg='6' className='mb-0'>
             <Label className='form-label'>
-              Evento de riesgo
+              Código de Evento de riesgo
             </Label>
             <CSelectReact
               type={"select"}
@@ -533,44 +569,43 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
               error={formik.errors.eventoRiesgoId}
               touched={formik.touched.eventoRiesgoId}
               options={relEventoRiesgo}
+              isDisabled={formik.values.eventoMaterializado === true? false : true}
             />
           </FormGroup>
 
           {/* Campos autocompletados del evento de riesgo seleccionado */}
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
-              Fecha descubrimiento - evento
+              Fecha descubrimiento del Evento
             </Label>
             <CInputReact
-              type={"text"}
-              value={
-                (formik.values.eventoRiesgoId !== null)
-                  ? formik.values.eventoRiesgoId.fechaDesc
-                  : ''
-              }
-              style='rigth'
+              type={"date"}
+              id={'eventoFechaAux'}
+              value={formik.values.eventoFechaAux}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              touched={formik.touched.eventoFechaAux}
+              errors={formik.errors.eventoFechaAux}
               disabled={true}
             />
           </FormGroup>
+
           <FormGroup tag={Col} md='12' lg='12' className='mb-0'>
             <Label className='form-label'>
-              Descripción resumida del evento
+              Descripción resumida del Evento
             </Label>
             <CInputReact
               type={"textarea"}
-              value={
-                (formik.values.eventoRiesgoId !== null)
-                  ? formik.values.eventoRiesgoId.descripcion
-                  : ''
-              }
+              id={'eventoDescAux'}
+              value={formik.values.eventoDescAux}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              touched={formik.touched.eventoDescAux}
+              errors={formik.errors.eventoDescAux}
               disabled={true}
             />
           </FormGroup>
-
-
           {/* FIN Campos autocompletados del evento de riesgo seleccionado */}
-
-
         </Row>
 
 
