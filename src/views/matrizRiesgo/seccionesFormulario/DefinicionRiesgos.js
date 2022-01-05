@@ -120,7 +120,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
       })
   }
 
-  // Cobertura seguro
+  // Monetario
   const optionsMonetario = [
     { value: true, label: 'Si' },
     { value: false, label: 'No' }

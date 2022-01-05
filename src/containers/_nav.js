@@ -2,7 +2,6 @@
 //import { Edit, Circle, Calendar } from 'react-feather'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faCalendarMinus, faChartLine, faChartBar, faShieldAlt, faShieldVirus, faUserShield } from '@fortawesome/free-solid-svg-icons';
-
 const _nav = [
   {
     _tag: 'CSidebarNavDropdown',
@@ -89,5 +88,4 @@ const _nav = [
       }
     ],
 ]
-
 export default _nav*/

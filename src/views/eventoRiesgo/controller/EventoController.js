@@ -37,3 +37,24 @@ export const getEventosPaging = async (page, size) => {
     const response = await axios.get(uri);
     return response;
 };
+
+// 1ra Alerta / Notificacion - 10 dias antes
+export const getDiezDiasAntes = async () => {
+    const uri = HOST.concat('v1/eventoRiesgo/diezDiasAntes')
+    const response = await axios.get(uri)
+    return response
+}
+
+// 2da Alerta / Notificacion - 5 dias antes
+export const getCincoDiasAntes = async () => {
+    const uri = HOST.concat('v1/eventoRiesgo/cincoDiasAntes')
+    const response = await axios.get(uri)
+    return response
+}
+
+// 3ra Alerta / Notificacion - Plan vencido
+export const getPlanVencido = async () => {
+    const uri = HOST.concat('v1/eventoRiesgo/planVencido')
+    const response = await axios.get(uri)
+    return response
+}

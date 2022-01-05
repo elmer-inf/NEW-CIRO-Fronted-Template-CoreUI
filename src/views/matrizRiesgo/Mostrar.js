@@ -6,7 +6,7 @@ import { getRiesgoId, getUltimaObservacion, putEvaluaRiesgo } from './controller
 import { getTablaDescripcionRiesgoN1 } from 'src/views/administracion/matriz-riesgo/controller/AdminRiesgoController';
 import FormularioEvaluar from './component/FormularioEvaluar'
 import BootstrapTable from 'react-bootstrap-table-next';
-import { calculaRiesgo, buscaValorLiteralRiesgoI, buscaValorLiteral, reduceProbabilidadImpacto, countEstadoPlanes, resultAvance  } from 'src/functions/FunctionsMatriz'
+import { calculaRiesgo, buscaValorLiteralRiesgoI, buscaValorLiteral, reduceProbabilidadImpacto, countEstadoPlanes, resultAvance, obtieneRiesgoIntervalo, obtieneValorRiesgoIntervalo } from 'src/functions/FunctionsMatriz'
 import { buildSelectTwo } from 'src/functions/Function'
 
 var _ = require('lodash');
@@ -22,7 +22,7 @@ const MatrizRiesgo = ({ match }) => {
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const columns = [
+  const columnsControles = [
     {
       dataField: 'nroControl',
       text: 'Control',
@@ -70,7 +70,6 @@ const MatrizRiesgo = ({ match }) => {
     }, {
         dataField: 'descripcion',
         text: 'Descripción',
-        style: { whiteSpace: 'nowrap' },
     }, {
         dataField: 'cargo',
         text: 'Cargo',
@@ -87,6 +86,22 @@ const MatrizRiesgo = ({ match }) => {
         text: 'Estado',
         sort: true,
         formatter: colorEstado,
+    }
+  ]
+
+  const columnsSeguimiento = [
+    {
+      dataField: 'nroPlan',
+      text: 'Plan',
+    }, {
+        dataField: 'fechaSeg',
+        text: 'Fecha seguimiento',
+    }, {
+        dataField: 'comenPropuesta',
+        text: 'Comentarios: Tareas Propuestas',
+    }, {
+        dataField: 'comenEnProceso',
+        text: 'Comentarios: Tareas en Proceso',
     }
   ]
 
@@ -212,6 +227,10 @@ const MatrizRiesgo = ({ match }) => {
     var valorRiesgoI = '';
     valorRiesgoI = buscaValorLiteralRiesgoI(dataApiRiesgoI, riesgo(prob, imp));
     return valorRiesgoI;
+  }
+
+  const calculaMontoRiesgo = ()=>{
+    return _.find(dataApiProbabilidad, ['campoA', probabilidadResidual()+'']).campoE * dataApi.impactoUSD;
   }
 
   /* FIN CALCULO RIESGOS */
@@ -361,13 +380,7 @@ const MatrizRiesgo = ({ match }) => {
 
                       <CNavItem>
                         <CNavLink>
-                          <List size={20}/><span className='pl-1 pr-2 h6 font-weight-bold'>Planes de Acción</span>
-                        </CNavLink>
-                      </CNavItem>
-
-                      <CNavItem>
-                        <CNavLink>
-                          <CheckSquare size={20}/><span className='pl-1 pr-2 h6 font-weight-bold'>Seguimiento</span>
+                          <CheckSquare size={20}/><span className='pl-1 pr-2 h6 font-weight-bold'>Planes de Acción y Seguimiento</span>
                         </CNavLink>
                       </CNavItem>
 
@@ -402,7 +415,7 @@ const MatrizRiesgo = ({ match }) => {
 
                           <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                             <div className='text-label'>Proceso: </div>
-                            <div className='text-data'>{dataApi.procedimientoId !== null ? dataApi.procedimientoId.campoA : <i>Sin registro</i>}</div>
+                            <div className='text-data'>{dataApi.procedimientoId !== null ? dataApi.procedimientoId.descripcion : <i>Sin registro</i>}</div>
                           </Col>
 
                           <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
@@ -581,7 +594,7 @@ const MatrizRiesgo = ({ match }) => {
                           {dataApi.controlesTiene === false?
                             <Col xs='12' sm='6' md='8' className='pt-2'>
                               <div className='text-label'>Comentario </div>
-                              <div className='text-data'>{dataApi.controlComentario !== null ? dataApi.controlComentario : <i>Sin registro</i>}</div>
+                              <div className='text-data'>{dataApi.controlComentario !== '' ? dataApi.controlComentario : <i>Sin registro</i>}</div>
                             </Col>
                           : null }
 
@@ -594,7 +607,7 @@ const MatrizRiesgo = ({ match }) => {
                                 noDataIndication={'No hay registros de Controles actuales'}
                                 keyField='nroControl'
                                 data={JSON.parse(dataApi.controles)}
-                                columns={columns}
+                                columns={columnsControles}
                                 bordered={false}
                                 striped={true}
                                 hover={false}
@@ -647,10 +660,13 @@ const MatrizRiesgo = ({ match }) => {
                       </CTabPane>
 
                       <CTabPane>
-                        <Row className='pt-3'>
-                          <Col xs='12' className='pt-2'>
+                        <div className='divider divider-left divider-dark pt-2'>
+                          <div className='divider-text '><span className='text-label'>Planes de acción</span></div>
+                        </div>
+                        <Row>
+                          <Col xs='12'>
                             <BootstrapTable
-                              classes= {'table-hover-animation mt-2'}
+                              classes= {'table-hover-animation'}
                               bootstrap4={true}
                               sort={ { dataField: 'nroPlan', order: 'asc' } }
                               noDataIndication={'No hay registros de Planes de acción'}
@@ -665,30 +681,8 @@ const MatrizRiesgo = ({ match }) => {
                             />
                           </Col>
                         </Row>
-                      </CTabPane>
 
-                      <CTabPane>
                         <Row className='pt-3'>
-                          <Col xs='12' className='pt-2'>
-                            <BootstrapTable
-                              classes= {'table-hover-animation mt-2'}
-                              bootstrap4={true}
-                              sort={ { dataField: 'nroPlan', order: 'asc' } }
-                              noDataIndication={'No hay registros de Planes de acción'}
-                              keyField='nroPlan'
-                              data={JSON.parse(dataApi.planesAccion)}
-                              columns={columnsPlanes}
-                              bordered={false}
-                              striped={true}
-                              hover={false}
-                              condensed={false}
-                              wrapperClasses="table-responsive"
-                            />
-                            <div className='divider divider-left divider-dark'>
-                              <div className='divider-text '><span className='text-label'>Seguimiento de Riesgos</span></div>
-                            </div>
-                          </Col>
-
                           <Col xs='12' md='6' xl='3'>
                             <CCallout color="info">
                               <div className="text-label">Nro. de Tareas</div>
@@ -762,23 +756,30 @@ const MatrizRiesgo = ({ match }) => {
                               </div>
                             : null}
                           </Col>
-
-                          <Col xs='12' md='4' className='pt-2'>
-                            <div className='text-label'>Fecha Seguimiento: </div>
-                            <div className='text-data'>{dataApi.seguimientoFecha !== null ? dataApi.seguimientoFecha : <i>Sin registro</i>}</div>
-                          </Col>
-
-                          <Col xs='12' sm='12' className='pt-3'>
-                            <div className='text-label'>Observaciones a tareas propuestas: </div>
-                            <div className='text-data'>{dataApi.seguimientoObs !== null ? dataApi.seguimientoObs : <i>Sin registro</i>}</div>
-                          </Col>
-
-                          <Col xs='12' sm='12' className='pt-3'>
-                            <div className='text-label'>Comentarios tareas en Proceso: </div>
-                            <div className='text-data'>{dataApi.seguimientoComen !== null ? dataApi.seguimientoComen : <i>Sin registro</i>}</div>
-                          </Col>
-
                         </Row>
+
+                        <div className='divider divider-left divider-dark'>
+                          <div className='divider-text '><span className='text-label'>Seguimiento</span></div>
+                        </div>
+                        <Row>
+                          <Col xs='12'>
+                            <BootstrapTable
+                              classes= {'table-hover-animation'}
+                              bootstrap4={true}
+                              sort={ { dataField: 'nroPlan', order: 'asc' } }
+                              noDataIndication={'No hay registros de Seguimiento de Planes de acción'}
+                              keyField='nroPlan'
+                              data={JSON.parse(dataApi.planesAccion)}
+                              columns={columnsSeguimiento}
+                              bordered={false}
+                              striped={true}
+                              hover={false}
+                              condensed={false}
+                              wrapperClasses="table-responsive"
+                            />
+                          </Col>
+                        </Row>
+
                       </CTabPane>
 
                       <CTabPane>
@@ -829,7 +830,7 @@ const MatrizRiesgo = ({ match }) => {
 
                           <Col xs='12' sm='6' md='6' xl='4' className='pt-2'>
                             <div className='text-label'>Impacto por cada vez que ocurre el evento (USD): </div>
-                            <div className='text-data'>{dataApi.impactoUSD}</div>
+                            <div className='text-data'>{dataApi.impactoUSD !== null ? dataApi.impactoUSD : 0}</div>
                           </Col>
 
                           <Col xs='12' sm='6' md='6' xl='4' className='pt-2'>
@@ -844,20 +845,22 @@ const MatrizRiesgo = ({ match }) => {
 
                           <Col xs='12' sm='6' md='6' xl='4' className='pt-2'>
                             <div className='text-label'>Monto Riesgo de Pérdida (Anual): </div>
-                            <div className='text-data'>{_.find(dataApiProbabilidad, ['campoA', probabilidadResidual()+'']).campoE * dataApi.impactoUSD}</div>
+                            <div className='text-data'>
+                              {calculaMontoRiesgo()}
+                            </div>
                           </Col>
 
                           <Col xs='12' sm='6' md='6' xl='4' className='pt-2'>
                             <div className='text-label'>Valoración Riesgo (Matriz de Riesgo): </div>
                             <div className='text-data'>
-                              {riesgo(probabilidadResidual(), impactoResidual())}
+                              {obtieneValorRiesgoIntervalo(dataApiImpacto, calculaMontoRiesgo())}
                             </div>
                           </Col>
 
                           <Col xs='12' sm='6' md='6' xl='4' className='pt-2'>
                             <div className='text-label'>Riesgo (Matriz de Riesgo): </div>
                             <div className='text-data'>
-                              {valorRiesgo(probabilidadResidual(), impactoResidual())}
+                              {obtieneRiesgoIntervalo(dataApiImpacto, calculaMontoRiesgo())}
                             </div>
                           </Col>
 

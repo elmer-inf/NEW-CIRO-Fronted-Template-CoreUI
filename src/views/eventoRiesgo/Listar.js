@@ -297,7 +297,6 @@ const EventoRiesgoListar = () => {
   }
   // End search by columns
 
-
   return (
     <div id='' className='table-hover-animation'>
       <CCSpinner show={spin} />

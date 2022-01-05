@@ -42,7 +42,6 @@ const MatrizOportunidad = ({ match }) => {
     }, {
         dataField: 'descripcion',
         text: 'Descripción',
-        style: { whiteSpace: 'nowrap' },
     }, {
         dataField: 'cargo',
         text: 'Cargo',
@@ -72,7 +71,6 @@ const MatrizOportunidad = ({ match }) => {
     }, {
         dataField: 'comenConcluido',
         text: 'Comentarios: Tareas Concluidas',
-        style: { whiteSpace: 'nowrap' },
     }, {
         dataField: 'comenEnProceso',
         text: 'Comentarios: Tareas en Proceso',
@@ -316,7 +314,7 @@ const MatrizOportunidad = ({ match }) => {
 
                           <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                             <div className='text-label'>Proceso: </div>
-                            <div className='text-data'>{dataApi.procedimientoId !== null ? dataApi.procedimientoId.campoA : <i>Sin registro</i>}</div>
+                            <div className='text-data'>{dataApi.procedimientoId !== null ? dataApi.procedimientoId.descripcion : <i>Sin registro</i>}</div>
                           </Col>
 
                           <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
@@ -367,7 +365,7 @@ const MatrizOportunidad = ({ match }) => {
                           <Col xs='12' md='12' className='pt-3'>
                             <div className='text-label'>Definición de la Oportunidad (OPORTUNIDAD), debido a (CAUSA), puede ocasionar (EFECTO POSITIVO)</div>
                             <div className='text-data'>
-                              {dataApi.definicion !== null ? dataApi.definicion : ''} DEBIDO A
+                              OPORTUNIDAD DE {dataApi.definicion !== null ? dataApi.definicion : ''} DEBIDO A
                               {dataApi.causa !== null ? ' ' + dataApi.causa : ''} PUEDE OCASIONAR
                               {dataApi.consecuencia !== null ? ' ' + dataApi.consecuencia : ''}
                             </div>
@@ -468,7 +466,7 @@ const MatrizOportunidad = ({ match }) => {
                           {dataApi.controlesTiene === false?
                             <Col xs='12' sm='6' md='8' className='pt-2'>
                               <div className='text-label'>Comentario: </div>
-                              <div className='text-data'>{dataApi.controlComentario !== null ? dataApi.controlComentario : <i>Sin registro</i>}</div>
+                              <div className='text-data'>{dataApi.controlComentario !== '' ? dataApi.controlComentario : <i>Sin registro</i>}</div>
                             </Col>
                           : null }
 

@@ -9,6 +9,8 @@ import { getTablaDescripcionEventoN1, getTablaDescripcionEventoN2 } from 'src/vi
 import { getTablaDescripcionOportunidadN1, getTablaDescripcionOportunidadN2 } from 'src/views/administracion/matriz-oportunidad/controller/AdminOportunidadController';
 import { buildSelectTwo } from 'src/functions/Function'
 
+var _ = require('lodash');
+
 const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
 
   const formik = useFormik({
@@ -105,7 +107,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
     getTablaDescripcionEventoN2(idTablaDes, idNivel2)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'descripcion', true)
-        setDataApiProcedimiento(options)
+        setDataApiProcedimiento(_.uniqBy(options, 'label'))
       }).catch((error) => {
         console.log('Error: ', error)
       })

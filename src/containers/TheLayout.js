@@ -5,9 +5,7 @@ import {
   TheFooter,
   TheHeader
 } from './index'
-
 const TheLayout = () => {
-
   return (
     <div className="c-app c-default-layout">
       <TheSidebar/>
@@ -21,7 +19,6 @@ const TheLayout = () => {
     </div>
   )
 }
-
 export default TheLayout
  */
 

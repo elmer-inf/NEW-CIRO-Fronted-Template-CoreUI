@@ -1,67 +1,110 @@
-import React from 'react'
-import {
-  CBadge,
-  CDropdown,
-  CDropdownItem,
-  CDropdownMenu,
-  CDropdownToggle,
-  CProgress
-} from '@coreui/react'
-import CIcon from '@coreui/icons-react'
+import React, { useEffect, useState } from 'react'
+import { CBadge, CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle } from '@coreui/react'
+import { Bell, Calendar } from 'react-feather'
+import { getDiezDiasAntes, getCincoDiasAntes, getPlanVencido } from 'src/views/eventoRiesgo/controller/EventoController'
+import { buildSelectTwo } from 'src/functions/Function'
+import { ListGroup, ListGroupItem } from 'reactstrap'
 
 const TheHeaderDropdownNotif = () => {
-  const itemsCount = 5
+
+  // Eventos 10 dias antes de vencer el plan
+  const [listDiezDiasAntes, setDiezDiasAntes] = useState([])
+  const callApiDiezDiasAntes = () => {
+    getDiezDiasAntes()
+      .then(res => {
+        const options = buildSelectTwo(res.data, 'id', 'codigo', true)
+        console.log('options : ', options)
+        setDiezDiasAntes(options)
+      }).catch((error) => {
+        console.log('Error: ', error)
+      })
+  }
+
+  // Eventos 5 dias antes de vencer el plan
+  const [listCincoDiasAntes, setCincoDiasAntes] = useState([])
+  const callApiCincoDiasAntes = () => {
+    getCincoDiasAntes()
+      .then(res => {
+        const options = buildSelectTwo(res.data, 'id', 'codigo', true)
+        console.log('options : ', options)
+        setCincoDiasAntes(options)
+      }).catch((error) => {
+        console.log('Error: ', error)
+      })
+  }
+
+  // Eventos con plan vencido
+  const [listPlanVencido, setPlanVencido] = useState([])
+  const callApiPlanVencido = () => {
+    getPlanVencido()
+      .then(res => {
+        const options = buildSelectTwo(res.data, 'id', 'codigo', true)
+        console.log('options : ', options)
+        setPlanVencido(options)
+      }).catch((error) => {
+        console.log('Error: ', error)
+      })
+  }
+
+  useEffect(() => {
+    callApiDiezDiasAntes();
+    callApiCincoDiasAntes();
+    callApiPlanVencido();
+  }, [])
+
+
   return (
     <CDropdown
       inNav
-      className="c-header-nav-item mx-2"
+      className="c-header-nav-item mx-2 mr-4"
     >
       <CDropdownToggle className="c-header-nav-link" caret={false}>
-        <CIcon name="cil-bell"/>
-        <CBadge shape="pill" color="danger">{itemsCount}</CBadge>
+        <Bell size={20} />
+        <CBadge shape="pill" color="primary"><span className='text-white'>{listDiezDiasAntes.length + listCincoDiasAntes.length + listPlanVencido.length}</span></CBadge>
       </CDropdownToggle>
-      <CDropdownMenu  placement="bottom-end" className="pt-0">
-        <CDropdownItem
-          header
-          tag="div"
-          className="text-center"
-          color="light"
-        >
-          <strong>You have {itemsCount} notifications</strong>
+      <CDropdownMenu placement="bottom-end" className="pt-0">
+        <CDropdownItem header tag="div" className="text-center" color="light">
+          <strong>{listDiezDiasAntes.length} Evento(s) a 10 dias de vencer la fecha fin del Plan de Acción</strong>
         </CDropdownItem>
-        <CDropdownItem><CIcon name="cil-user-follow" className="mr-2 text-success" /> New user registered</CDropdownItem>
-        <CDropdownItem><CIcon name="cil-user-unfollow" className="mr-2 text-danger" /> User deleted</CDropdownItem>
-        <CDropdownItem><CIcon name="cil-chart-pie" className="mr-2 text-info" /> Sales report is ready</CDropdownItem>
-        <CDropdownItem><CIcon name="cil-basket" className="mr-2 text-primary" /> New client</CDropdownItem>
-        <CDropdownItem><CIcon name="cil-speedometer" className="mr-2 text-warning" /> Server overloaded</CDropdownItem>
-        <CDropdownItem
-          header
-          tag="div"
-          color="light"
-        >
-          <strong>Server</strong>
+        {
+          listDiezDiasAntes !== null && listDiezDiasAntes.length !== 0?
+            <ListGroup flush className='pt-2'>
+              {listDiezDiasAntes.map((evento) => {
+                return  <ListGroupItem className='py-1' key={evento.value}>
+                          <Calendar size={15} className='text-success mr-1 mb-1'/> {evento.id} | {evento.codigo !== null ? evento.codigo : <span>Sin código</span>} | {evento.fechaFinPlan}
+                        </ListGroupItem>
+              })}
+            </ListGroup>
+            : <CDropdownItem header><i>Sin notificaciones</i></CDropdownItem>
+        }
+        <CDropdownItem header tag="div" className="text-center" color="light">
+          <strong>{listCincoDiasAntes.length} Evento(s) a 5 dias de vencer la fecha fin del Plan de Acción</strong>
         </CDropdownItem>
-        <CDropdownItem className="d-block">
-          <div className="text-uppercase mb-1">
-            <small><b>CPU Usage</b></small>
-          </div>
-          <CProgress size="xs" color="info" value={25} />
-          <small className="text-muted">348 Processes. 1/4 Cores.</small>
+        {
+          listCincoDiasAntes !== null && listCincoDiasAntes.length !== 0?
+            <ListGroup flush className='pt-2'>
+              {listCincoDiasAntes.map((evento) => {
+                return  <ListGroupItem className='py-1' key={evento.value}>
+                          <Calendar size={15} className='text-primary mr-1 mb-1'/> {evento.id} | {evento.codigo !== null ? evento.codigo : <span>Sin código</span>} | {evento.fechaFinPlan}
+                        </ListGroupItem>
+              })}
+            </ListGroup>
+            : <CDropdownItem header><i>Sin notificaciones</i></CDropdownItem>
+        }
+        <CDropdownItem header tag="div" className="text-center" color="light">
+          <strong>{listPlanVencido.length} Evento(s) que {listPlanVencido.length === 1 ? 'venció' : 'vencieron'} a la fecha fin del Plan de Acción</strong>
         </CDropdownItem>
-        <CDropdownItem className="d-block">
-          <div className="text-uppercase mb-1">
-            <small><b>Memory Usage</b></small>
-          </div>
-          <CProgress size="xs" color="warning" value={70} />
-          <small className="text-muted">11444GB/16384MB</small>
-        </CDropdownItem>
-        <CDropdownItem className="d-block">
-          <div className="text-uppercase mb-1">
-            <small><b>SSD 1 Usage</b></small>
-          </div>
-          <CProgress size="xs" color="danger" value={90} />
-          <small className="text-muted">243GB/256GB</small>
-        </CDropdownItem>
+        {
+          listPlanVencido !== null && listPlanVencido.length !== 0?
+            <ListGroup flush className='pt-2'>
+              {listPlanVencido.map((evento) => {
+                return  <ListGroupItem className='py-1' key={evento.value}>
+                          <Calendar size={15} className='text-danger mr-1 mb-1'/> {evento.id} | {evento.codigo !== null ? evento.codigo : <span>Sin código</span>} | {evento.fechaFinPlan}
+                        </ListGroupItem>
+              })}
+            </ListGroup>
+            : <CDropdownItem header><i>Sin notificaciones</i></CDropdownItem>
+        }
       </CDropdownMenu>
     </CDropdown>
   )

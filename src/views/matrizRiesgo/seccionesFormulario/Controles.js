@@ -12,7 +12,6 @@ var _ = require('lodash');
 
 const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux, isEdit }) => {
 
-
   const formik = Yup.object().shape({
     controlId: Yup.mixed().required('Campo obligatorio'),
     controlObjetivo: Yup.mixed().required('Campo obligatorio'),
@@ -68,7 +67,6 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
     nextSection(3);
   }
 
-  console.log('data Aux: ', dataAux.procedimientoAux);
   /*   P  A  R  A  M  E  T  R  O  S   */
   // Procedimiento
   const [dataApiProcedimiento, setDataApiProcedimiento] = useState([])
@@ -77,7 +75,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true);
         setDataApiProcedimiento(_.filter(options, ['campoA', dataAux.procedimientoAux]));
-        console.log('data select: ', _.filter(options, ['campoA', dataAux.procedimientoAux]));
+        //console.log('data select: ', _.filter(options, ['campoA', dataAux.procedimientoAux]));
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -120,7 +118,6 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
   }
 
   useEffect(() => {
-    console.log('ejecuta');
     callApiProcedimiento(16);
     callApiTipoControl(6);
     callApiNivelAuto(7);
