@@ -28,6 +28,7 @@ const AdministracionEventoEditar = ({ match }) => {
     nivelRiesgoId: null,
     areaId: null
   }
+
   //Lista las tablas Lista
   const [tablaListaOptions, setTablaListaOptions] = useState([])
   //LISTA TABLA DESCRIPCION NIVEL 2
@@ -35,11 +36,6 @@ const AdministracionEventoEditar = ({ match }) => {
   //LISTA TABLA DESCRIPCION NIVEL 3
   const [dataApi3, setDataApi3] = useState([]);
 
-  const optionsToFormik = {
-    tablaOp: tablaListaOptions,
-    tabla_n2: dataApi2,
-    tabla_n3: dataApi3,
-  }
 
   //useState
   const [formValueToEdit, setformValueToEdit] = useState(formValueInitial)
@@ -175,7 +171,6 @@ const AdministracionEventoEditar = ({ match }) => {
                 ? <div></div>
                 : <Formulario
                   initialValuess={formValueToEdit}
-                  optionToSelect={optionsToFormik}
                   handleOnSubmit={handleOnSubmit}
                   isEdit={true}
                 />

@@ -119,7 +119,6 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, isEdit }
               />
             </Col>
 
-
             <Col sm='12' md='6'>
               <Row>
                 <Label xs='6' md='6' xl='6' className='text-label'>¿Tiene Controles?</Label>

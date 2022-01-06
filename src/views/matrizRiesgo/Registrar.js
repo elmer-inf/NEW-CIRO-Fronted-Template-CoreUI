@@ -81,7 +81,7 @@ const MatrizRiesgoRegistrar = () => {
   }
 
   const [requestData, setRequestData] = useState(dataResult);
-  const [activeTab, setActiveTap] = useState('1');
+  const [activeTab, setActiveTap] = useState('5');
   /* manejo de botones siguiente */
   const nextSection = (tab) => {
     if (tab === 1) {
