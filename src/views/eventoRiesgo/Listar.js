@@ -10,21 +10,45 @@ import { pagingInit } from 'src/reusable/variables/Variables';
 import CCSpinner from 'src/reusable/spinner/CCSpinner';
 import CPagination from 'src/reusable/pagination/CPagination';
 import { getListPagingWithSearch } from 'src/functions/FunctionApi';
-import { getParams } from 'src/functions/Function';
+import { getParams, hasPermission } from 'src/functions/Function';
 import { CFilterDate, CFilterText, handleChildClick, typeFormatter } from 'src/reusable/Component';
 import filterFactory, { customFilter } from 'react-bootstrap-table2-filter';
+import { PathContext } from 'src/containers/TheLayout';
+import { ToastContainer, toast } from 'react-toastify';
+import { Messages } from 'src/reusable/variables/Messages';
 
 var _ = require('lodash');
 
 const EventoRiesgoListar = () => {
 
-  const history = useHistory()
+  //useContext
+  const valuePathFromContext = React.useContext(PathContext);
+
+  const history = useHistory();
   const [pagination, setpagination] = useState(pagingInit);
   const [params, setParams] = useState({});
   const [spin, setSpin] = useState(false);
 
-  const redirect = () => {
-    history.push('/eventoRiesgo/Registrar')
+  const redirect = (e) => {
+    e.preventDefault();
+
+    const path = '/eventoRiesgo/Registrar';
+    if (hasPermission(path, valuePathFromContext)) {
+      history.push(path);
+    } else {
+      notificationToast();
+    }
+  }
+
+  const notificationToast = () => {
+    toast.error(Messages.dontHavePermission, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+    });
   }
 
   const columns = [
@@ -173,8 +197,14 @@ const EventoRiesgoListar = () => {
 
   const editRow = (row) => {
     console.log(row)
-   // history.push('./editar/' + row.id);
+    // history.push('./editar/' + row.id);
+
+
     history.push('/eventoRiesgo/Editar/' + row.id);
+
+
+
+
   }
 
   const actionFormatterEvaluar = (cell, row) => {
@@ -298,7 +328,7 @@ const EventoRiesgoListar = () => {
   // End search by columns
 
   return (
-    <div id='' className='table-hover-animation'>
+    <div className='table-hover-animation'>
       <CCSpinner show={spin} />
 
       <Fragment>
@@ -307,7 +337,7 @@ const EventoRiesgoListar = () => {
             <Card>
               <CardHeader>
                 <CardTitle className='float-left h4 pt-2'>Eventos de Riesgo</CardTitle>
-                <Button color='primary' onClick={redirect} className='float-right mt-1' style={{ width: '130px' }}>
+                <Button color='primary' onClick={(e) => {redirect(e)}} className='float-right mt-1' style={{ width: '130px' }}>
                   <span className='text-white'>Registrar</span>
                 </Button>
               </CardHeader>
@@ -340,6 +370,18 @@ const EventoRiesgoListar = () => {
           </Col>
         </Row>
       </Fragment>
+
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   )
 }

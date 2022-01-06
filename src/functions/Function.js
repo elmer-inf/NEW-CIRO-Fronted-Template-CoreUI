@@ -130,3 +130,15 @@ export const deleteRowOfTable = (rowToDelete, data, field) => {
   return newList
   //console.log("Nuevo:::::: ", newList)
 }
+export const hasPermission = (path, pathRoutes) => {
+  const permission = _.find(pathRoutes, function (o) {
+      return o.path === path;
+  });
+  if (!_.isEmpty(permission)) {
+      console.log('Tiene permiso')
+
+      return true;
+  }
+  console.log('NO Tiene permiso')
+  return false;
+}

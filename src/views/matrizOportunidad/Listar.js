@@ -10,12 +10,19 @@ import { CFilterDate, CFilterText, handleChildClick, typeFormatter } from 'src/r
 import filterFactory, { customFilter } from 'react-bootstrap-table2-filter';
 import CPagination from 'src/reusable/pagination/CPagination';
 import { pagingInit } from 'src/reusable/variables/Variables';
-import { getParams } from 'src/functions/Function';
+import { getParams, hasPermission } from 'src/functions/Function';
 import { getListPagingWithSearch } from 'src/functions/FunctionApi';
 import CCSpinner from 'src/reusable/spinner/CCSpinner';
+import { PathContext } from 'src/containers/TheLayout';
+import { ToastContainer, toast } from 'react-toastify';
+import { Messages } from 'src/reusable/variables/Messages';
 
 var _ = require('lodash');
+
 const MatrizOportunidadListar = () => {
+
+  //useContext
+  const valuePathFromContext = React.useContext(PathContext);
 
   const history = useHistory()
   const [pagination, setpagination] = useState(pagingInit);
@@ -23,8 +30,27 @@ const MatrizOportunidadListar = () => {
   const [spin, setSpin] = useState(false);
 
 
-  const redirect = () => {
-    history.push('./registrar')
+  const redirect = (e) => {
+    e.preventDefault();
+
+    const path = '/matrizOportunidad/Registrar';
+    if (hasPermission(path, valuePathFromContext)) {
+      history.push(path);
+
+    } else {
+      notificationToast();
+    }
+  }
+
+  const notificationToast = () => {
+    toast.error(Messages.dontHavePermission, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+    });
   }
 
   const columns = [
@@ -268,15 +294,16 @@ const MatrizOportunidadListar = () => {
   // End search by columns
 
   return (
-    <div id='' className='table-hover-animation'>
+    <div className='table-hover-animation'>
       <CCSpinner show={spin} />
+
       <Fragment>
         <Row>
           <Col sm='12'>
             <Card>
               <CardHeader>
                 <CardTitle className='float-left h4 pt-2'>Matriz de Oportunidades</CardTitle>
-                <Button color='primary' onClick={redirect} className='float-right mt-1' style={{ width: '130px' }}>
+                <Button color='primary' onClick={(e) => {redirect(e)}} className='float-right mt-1' style={{ width: '130px' }}>
                   <span className='text-white'>Registrar</span>
                 </Button>
               </CardHeader>
@@ -309,6 +336,18 @@ const MatrizOportunidadListar = () => {
           </Col>
         </Row>
       </Fragment>
+
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   )
 }

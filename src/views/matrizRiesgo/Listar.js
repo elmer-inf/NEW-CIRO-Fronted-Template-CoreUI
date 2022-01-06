@@ -8,25 +8,48 @@ import { useHistory } from 'react-router-dom'
 import { putEvaluaRiesgo, getMatrizPaging } from './controller/RiesgoController'
 import { pagingInit } from 'src/reusable/variables/Variables';
 import CPagination from 'src/reusable/pagination/CPagination';
-import { getParams } from 'src/functions/Function';
+import { getParams, hasPermission } from 'src/functions/Function';
 import { getListPagingWithSearch } from 'src/functions/FunctionApi';
 import CCSpinner from 'src/reusable/spinner/CCSpinner';
 import { CFilterDate, CFilterText, handleChildClick, typeFormatter } from 'src/reusable/Component';
 import filterFactory, { customFilter } from 'react-bootstrap-table2-filter';
-
+import { PathContext } from 'src/containers/TheLayout';
+import { ToastContainer, toast } from 'react-toastify';
+import { Messages } from 'src/reusable/variables/Messages';
 
 var _ = require('lodash');
 
-
 const MatrizRiesgoListar = () => {
+
+  //useContext
+  const valuePathFromContext = React.useContext(PathContext);
 
   const history = useHistory()
   const [pagination, setpagination] = useState(pagingInit);
   const [params, setParams] = useState({});
   const [spin, setSpin] = useState(false);
 
-  const redirect = () => {
-    history.push('./registrar')
+  const redirect = (e) => {
+    e.preventDefault();
+
+    const path = '/matrizRiesgo/Registrar';
+    if (hasPermission(path, valuePathFromContext)) {
+      history.push(path);
+
+    } else {
+      notificationToast();
+    }
+  }
+
+  const notificationToast = () => {
+    toast.error(Messages.dontHavePermission, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+    });
   }
 
   const columns = [
@@ -185,17 +208,12 @@ const MatrizRiesgoListar = () => {
     getMatrizPaging(page, size)
       .then(res => {
         //console.log('El response de tabla: ', res.data)
-
         const paging = res.data.paging;
         const toPaging = { ...paging }
 
         setListaMatrices(res.data.data);
         setpagination(toPaging);
-
         setSpin(false)
-
-
-
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -243,7 +261,6 @@ const MatrizRiesgoListar = () => {
       delete param['fechaEvaluacion'];
     }
 
-
     setParams(param)
     validatePagination(pagination.page, pagination.size, param);
   }
@@ -278,7 +295,7 @@ const MatrizRiesgoListar = () => {
 
 
   return (
-    <div id='' className='table-hover-animation'>
+    <div className='table-hover-animation'>
       <CCSpinner show={spin} />
 
       <Fragment>
@@ -287,7 +304,7 @@ const MatrizRiesgoListar = () => {
             <Card>
               <CardHeader>
                 <CardTitle className='float-left h4 pt-2'>Matriz de Riesgos</CardTitle>
-                <Button color='primary' onClick={redirect} className='float-right mt-1' style={{ width: '130px' }}>
+                <Button color='primary' onClick={(e) => {redirect(e)}} className='float-right mt-1' style={{ width: '130px' }}>
                   <span className='text-white'>Registrar</span>
                 </Button>
               </CardHeader>
@@ -320,6 +337,18 @@ const MatrizRiesgoListar = () => {
           </Col>
         </Row>
       </Fragment>
+
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   )
 }

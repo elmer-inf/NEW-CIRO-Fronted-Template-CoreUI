@@ -7,9 +7,37 @@ import ActionFormatter from 'src/reusable/ActionFormatter';
 import Select from 'react-select'
 import { useHistory } from 'react-router-dom'
 import { getTablaListaRiesgo, getTablaDescripcionRiesgoN1 } from './controller/AdminRiesgoController'
-import { buildSelectTwo } from 'src/functions/Function'
+import { buildSelectTwo, hasPermission } from 'src/functions/Function'
+import { PathContext } from 'src/containers/TheLayout';
+import { ToastContainer, toast } from 'react-toastify';
+import { Messages } from 'src/reusable/variables/Messages';
 
 const AdministracionMatrizRiesgosListar = () => {
+
+  //useContext
+  const valuePathFromContext = React.useContext(PathContext);
+
+  const redirect = (e) => {
+    e.preventDefault();
+
+    const path = '/administracion/matriz-riesgo/Registrar';
+    if (hasPermission(path, valuePathFromContext)) {
+      history.push(path);
+    } else {
+      notificationToast();
+    }
+  }
+
+  const notificationToast = () => {
+    toast.error(Messages.dontHavePermission, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+    });
+  }
 
   const [labelTabla, setLabelTabla] = useState([])
 
@@ -148,19 +176,19 @@ const AdministracionMatrizRiesgosListar = () => {
     //return <DetailRestForm row={row} mod={true}/>
   }
   const editRow = (row) => {
-    console.log(row)
-   // history.push('./editar/' + row.id);
-    history.push('/administracion/matriz-riesgo/Editar/' + row.id);
+    //history.push('/administracion/matriz-riesgo/Editar/' + row.id);
+    const path = '/administracion/matriz-riesgo/Editar/:id' + row.id;
+    if (hasPermission(path, valuePathFromContext)) {
+      history.push(path);
+    } else {
+      notificationToast();
+    }
   }
 
   const [tablaListaOptions, setTablaListaOptions] = useState([])
   const [dataApi, setDAtaApi] = useState([])
   const history = useHistory()
 
-  const redirect = () => {
-    //history.push('./registrar')
-    history.push('/administracion/matriz-riesgo/Registrar')
-  }
   /* LISTA TABLA LISTA */
   const callApi = () => {
     getTablaListaRiesgo()
@@ -178,7 +206,6 @@ const AdministracionMatrizRiesgosListar = () => {
   useEffect(() => {
     callApi()
   }, [])
-
 
   /* LISTA TABLA DESCRIPCION despendiento de seleccion tabla lista*/
   const handleSelectOnChange = (result) => {
@@ -224,13 +251,12 @@ const AdministracionMatrizRiesgosListar = () => {
   }
 
   return (
-    <div id='' className='table-hover-animation'>
+    <div className='table-hover-animation'>
       <Fragment>
-        {/* <BreadCrumbs breadCrumbTitle='Eventos de Riesgo' breadCrumbParent='Administración' breadCrumbActive='Eventos de Riesgo' /> */}
         <Card>
           <CardHeader>
             <CardTitle className='float-left h4 pt-2'>Listado de Parámetros de Matriz de Riesgos</CardTitle>
-            <Button color='primary' onClick={redirect} className='float-right mt-1' style={{ width: '130px' }}>
+            <Button color='primary' onClick={(e) => {redirect(e)}} className='float-right mt-1' style={{ width: '130px' }}>
               <span className='text-white'>Registrar</span>
             </Button>
           </CardHeader>
@@ -278,6 +304,18 @@ const AdministracionMatrizRiesgosListar = () => {
           </CardBody>
         </Card>
       </Fragment>
+
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   )
 }
