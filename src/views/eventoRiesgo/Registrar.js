@@ -9,7 +9,7 @@ import { Row, Col, Card, CardBody, CardHeader, CardTitle, TabContent, TabPane, N
 import CInputRadio from 'src/reusable/CInputRadio'
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames';
-import { getTablaDescripcionEventoN1} from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
+import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
 import { postEventoRiesgo } from './controller/EventoController';
 import { buildSelectTwo } from 'src/functions/Function'
 import { useFormik } from "formik"
@@ -30,7 +30,7 @@ const EventoRiesgoRegistrar = () => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'clave', false)
-        setDataApiTipoEvento(_.orderBy(options, ['value' ], ['asc']))
+        setDataApiTipoEvento(_.orderBy(options, ['value'], ['asc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -76,7 +76,7 @@ const EventoRiesgoRegistrar = () => {
     descripcionCompleta: ''
   }
 
-  const formValueInitialPlanes ={
+  const formValueInitialPlanes = {
     areaResponsableId: null,
     cargoResponsableId: null,
     detallePlan: '',
@@ -109,7 +109,7 @@ const EventoRiesgoRegistrar = () => {
     riesgoRelacionado: '',
     detalleEstado: '',
 
-    listMatrizRiesgo:null
+    listMatrizRiesgo: null
   }
 
   const formValueInitialImportes = {
@@ -189,40 +189,40 @@ const EventoRiesgoRegistrar = () => {
 
   const notificationToast = (type, mensaje) => {
     switch (type) {
-        case 'error':
-            toast.error(mensaje, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-            });
-            break;
-        case 'success':
-            toast.success(mensaje, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-            });
-            break;
+      case 'error':
+        toast.error(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        break;
+      case 'success':
+        toast.success(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        break;
 
-        default:
-            toast(mensaje, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-            });
+      default:
+        toast(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
     }
     setTimeout(() => {
-        history.push('/eventoRiesgo/Listar');
-        setSpin(false);
+      history.push('/eventoRiesgo/Listar');
+      setSpin(false);
     }, 5000);
   }
 
@@ -230,18 +230,18 @@ const EventoRiesgoRegistrar = () => {
     setSpin(true);
     const dataRequest = setObject(values);
     var request = {}
-    if(formik.values.tipoEvento === 'A'){
+    if (formik.values.tipoEvento === 'A') {
       request = {
         ...dataRequest,
         tipoEvento: formik.values.tipoEvento
-       }
-      }else{
-        request = {
-          ...dataRequest,
-          ...formValueInitialImportes,
-          tipoEvento: formik.values.tipoEvento
-        }
       }
+    } else {
+      request = {
+        ...dataRequest,
+        ...formValueInitialImportes,
+        tipoEvento: formik.values.tipoEvento
+      }
+    }
 
     console.log('Lo que se enviara en el request: ', request)
 
@@ -290,7 +290,7 @@ const EventoRiesgoRegistrar = () => {
             </Col>
           </FormGroup>
 
-          {(formik.values.tipoEvento !== null)?
+          {(formik.values.tipoEvento !== null) ?
             <Row>
               <Col xs="12" md="12" className="mb-4">
                 <Nav tabs className='justify-content-center'>
@@ -299,7 +299,7 @@ const EventoRiesgoRegistrar = () => {
                     <NavLink className={classnames({ active: activeTab === '1' })}>
                       <span className={activeTab === '1' ? '' : 'd-none'}></span>
                       <FileText size={20} /><span className='pl-2 h6 font-weight-bold'>Datos iniciales</span>
-                      <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary'/>
+                      <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
                     </NavLink>
                   </NavItem>
 
@@ -307,7 +307,7 @@ const EventoRiesgoRegistrar = () => {
                     <NavLink className={classnames({ active: activeTab === '2' })}>
                       <span className={activeTab === '2' ? '' : 'd-none'}></span>
                       <CheckSquare size={20} /><span className='pl-2 h6 font-weight-bold'>Planes de acción</span>
-                      <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary'/>
+                      <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
                     </NavLink>
                   </NavItem>
 
@@ -315,19 +315,19 @@ const EventoRiesgoRegistrar = () => {
                     <NavLink className={classnames({ active: activeTab === '3' })}>
                       <span className={activeTab === '3' ? '' : 'd-none'}></span>
                       <BarChart2 size={20} /><span className='pl-2 h6 font-weight-bold'>Categoria y Línea de negocio</span>
-                      <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary'/>
+                      <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
                     </NavLink>
                   </NavItem>
 
-                  {(formik.values.tipoEvento === 'A')?
+                  {(formik.values.tipoEvento === 'A') ?
                     <NavItem>
                       <NavLink className={classnames({ active: activeTab === '4' })}>
                         <span className={activeTab === '4' ? '' : 'd-none'}></span>
                         <DollarSign size={20} /><span className='pl-2 h6 font-weight-bold'>Importes relacionados</span>
-                        <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary'/>
+                        <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
                       </NavLink>
                     </NavItem>
-                  : null}
+                    : null}
 
                   <NavItem>
                     <NavLink className={classnames({ active: activeTab === '5' })}>
@@ -387,7 +387,7 @@ const EventoRiesgoRegistrar = () => {
                 </TabContent>
               </Col>
             </Row>
-          : <div className='text-danger'><AlertTriangle size={15}/> Debe seleccionar el Tipo de Evento</div>
+            : <div className='text-danger'><AlertTriangle size={15} /> Debe seleccionar el Tipo de Evento</div>
           }
         </CardBody>
       </Card>

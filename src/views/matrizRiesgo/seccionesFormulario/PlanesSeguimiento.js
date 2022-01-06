@@ -163,14 +163,10 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
     }
   }
 
-  const [selectedCargo, setSelectedCargo] = useState("");
-  const handleCargoChange = selectedCargo => {
-    setSelectedCargo(selectedCargo);
-  };
 
   return (
     <Formik initialValues={initValues} validationSchema={formik} onSubmit={onSubmit}>
-      {({ handleChange, errors, values, touched, setValues }) => (
+      {({ errors, values, touched, setValues, setFieldValue}) => (
         <Form className='pt-2'>
           <div className='divider divider-left divider-primary'>
             <div className='divider-text'><span className='text-label text-primary'>Planes de Acción</span></div>
@@ -230,33 +226,19 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
                       <ErrorMessage name={`planesAccion.${i}.descripcion`} component="div" className="invalid-feedback" />
                     </FormGroup>
 
-                    <FormGroup tag={Col} md='6' lg='3' className='mb-2'>
-                      <Label>Cargo</Label>
-                      <Field
-                        name={`planesAccion.${i}.cargo`}
-                        className={'form-control' + (planErrors.cargo && planTouched.cargo ? ' is-invalid' : '')}
-                        as={"select"}
-                      >
-                        <option value="" disabled>Seleccionar</option>
-                        {optionsCargo()}
-                      </Field>
-                      <ErrorMessage name={`planesAccion.${i}.cargo`} component="div" className="invalid-feedback" />
-                    </FormGroup>
-                    {/* <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+                    <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
                       <Label className='form-label'>
                         Cargo
                       </Label>
                       <Select
                         placeholder="Seleccionar"
-                        value={selectedCargo}
                         onChange={selectedOption => {
-                          handleCargoChange(selectedOption);
-                          handleChange(`cargo`);
+                          setFieldValue(`planesAccion.${i}.cargo`,selectedOption.label, false)
                         }}
                         options={dataApiCargo}
-                        name={`cargo`}
+                        name={`planesAccion.${i}.cargo`}
                       />
-                    </FormGroup> */}
+                    </FormGroup>
 
                     <FormGroup tag={Col} md='6' lg='3' className='mb-2'>
                       <Label>Fecha plan de acción</Label>

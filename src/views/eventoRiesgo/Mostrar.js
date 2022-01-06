@@ -1,9 +1,11 @@
 import { React, useState, useEffect } from 'react'
 import { FileText, Activity, DollarSign, BarChart2, CheckSquare } from 'react-feather'
-import { Row, Col, Card, CardBody, CardHeader, CardTitle, Badge, Button, ListGroup, ListGroupItem } from 'reactstrap';
+import { Row, Col, Card, CardBody, CardHeader, CardTitle, Badge, Button, ListGroup, ListGroupItem, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { CNav, CNavItem, CNavLink, CTabContent, CTabPane, CTabs, CButton, CCollapse, CCard, CModal, CModalBody, CModalHeader, CModalTitle } from '@coreui/react'
 import { getEventoRiesgoId, getUltimaObservacion, putEvaluaEvento } from './controller/EventoController';
 import FormularioEvaluar from './component/FormularioEvaluar'
+import Swal from 'sweetalert2'
+
 var _ = require('lodash');
 
 const EventoRiesgo = ({ match }) => {
@@ -78,6 +80,67 @@ const EventoRiesgo = ({ match }) => {
         console.log('Error al obtener datos: ', error);
       });
   }
+/* 
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: 'btn btn-primary px-4',
+      cancelButton: 'btn btn-outline-primary px-4 mr-4',
+    },
+    buttonsStyling: false
+  })
+
+  swalWithBootstrapButtons.fire({
+    title: '',
+    text: "¿Está seguro de autorizar el registro del Evento de Riesgo?",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Si',
+    cancelButtonText: 'No',
+    reverseButtons: true,
+    position: 'top'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      //window.alert("Hello world!")
+      swalWithBootstrapButtons.fire({
+        title: '',
+        text: "Se asignará el siguiente código de Evento para ASFI: ¿Está seguro de generarlo?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si',
+        cancelButtonText: 'No',
+        reverseButtons: true,
+        position: 'top'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          handleOnSubmit(dataToRequest)
+          swalWithBootstrapButtons.fire({
+            title: '',
+            text: 'El Evento de Riesgo se autorizó exitósamente',
+            icon: 'success',
+            position: 'top',
+          })
+        } else if (
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          swalWithBootstrapButtons.fire({
+            title: '',
+            text: 'Autorizacion de registro cancelada',
+            icon: 'error',
+            position: 'top'
+        })
+        }
+      })
+    } else if (
+      result.dismiss === Swal.DismissReason.cancel
+    ) {
+      swalWithBootstrapButtons.fire({
+        title: '',
+        text: 'Autorizacion de registro cancelada',
+        icon: 'error',
+        position: 'top'
+      })
+    }
+  }) */
 
   // Lista las observaciones
   const listaObservaciones = String(dataUltimaObservacion.listaObservacion);
@@ -112,7 +175,6 @@ const EventoRiesgo = ({ match }) => {
       )
     })
     return build
-
   }
 
   return (
@@ -425,13 +487,21 @@ const EventoRiesgo = ({ match }) => {
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Procedimiento: </div>
-                              <div className='text-data'>{dataApi.procedimientoId !== null ? dataApi.procedimientoId.descripcion : <i>Sin registro</i>}</div>
+                              <div className='text-data'>{dataApi.procedimientoId !== null ? dataApi.procedimientoId.nombre : <i>Sin registro</i>}</div>
                             </Col>
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Evento crítico ASFI: </div>
                               <div className='text-data'>{dataApi.eventoCritico !== null ? dataApi.eventoCritico : <i>Sin registro</i>}</div>
                             </Col>
+
+                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                              <div className='text-label'>Riesgo(s) relacionado(s): </div>
+                              <div className='text-data'>
+                                {(dataApi.riesgoRelacionado !== null && !_.isEmpty(dataApi.riesgoRelacionado)) ? renderRiesgoRelacionado(dataApi.riesgoRelacionado) : <i>Sin registro</i>}
+                              </div>
+                            </Col>
+
                           </Row>
                           <hr />
                           <Row>
@@ -448,11 +518,6 @@ const EventoRiesgo = ({ match }) => {
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Efectos de pérdida: </div>
                               <div className='text-data'>{dataApi.efectoPerdidaId !== null ? dataApi.efectoPerdidaId.nombre : <i>Sin registro</i>}</div>
-                            </Col>
-
-                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
-                              <div className='text-label'>Riesgo relacionado: </div>
-                              <div className='text-data'>{(dataApi.riesgoRelacionado !== null && !_.isEmpty(dataApi.riesgoRelacionado)) ? renderRiesgoRelacionado(dataApi.riesgoRelacionado) : <i>Sin registro</i>}</div>
                             </Col>
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
@@ -646,7 +711,7 @@ const EventoRiesgo = ({ match }) => {
               </CardBody>
             </Card>
           </div>
-          : <div>aiakjakalo</div>
+          : null
       }
     </div>
   )

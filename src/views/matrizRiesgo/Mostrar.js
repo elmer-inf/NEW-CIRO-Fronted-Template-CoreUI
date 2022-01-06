@@ -3,6 +3,7 @@ import { FileText, BarChart2, Trello, List, CheckSquare, PieChart, TrendingUp, P
 import { Row, Col, Card, CardBody, CardHeader, CardTitle, Badge, Button, ListGroup, ListGroupItem} from 'reactstrap';
 import { CNav, CNavItem, CNavLink, CTabContent, CTabPane, CTabs, CButton, CCollapse, CCard, CModal, CModalBody, CModalHeader, CModalTitle, CBadge, CCallout, CProgress} from '@coreui/react'
 import { getRiesgoId, getUltimaObservacion, putEvaluaRiesgo } from './controller/RiesgoController';
+import { getEventoRiesgoId } from 'src/views/eventoRiesgo/controller/EventoController'
 import { getTablaDescripcionRiesgoN1 } from 'src/views/administracion/matriz-riesgo/controller/AdminRiesgoController';
 import FormularioEvaluar from './component/FormularioEvaluar'
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -132,7 +133,6 @@ const MatrizRiesgo = ({ match }) => {
       setDataApi(res)
     }).catch((error) => {
       console.log("Error: ", error);
-      //notificationToast('error', Messages.notification.notOk)
     });
   }
 
@@ -447,6 +447,35 @@ const MatrizRiesgo = ({ match }) => {
                             <div className='text-label'>{dataApi.identificadoId !== null ? 'Identificado por:': 'Identificado por: (Otro)'} </div>
                             <div className='text-data'>{dataApi.identificadoId !== null ? dataApi.identificadoId.nombre : dataApi.identificadoOtro}</div>
                           </Col>
+                        </Row>
+
+                        <hr/>
+
+                        <Row>
+                          <Col xs='12' sm='6' md='4' className='pt-2'>
+                            <div className='text-label'>Evento materializado: </div>
+                            {(dataApi.eventoMaterializado === true)?
+                              <div className='text-data'>Si</div>
+                              :
+                              <div className='text-data'>No</div>
+                            }
+                          </Col>
+
+                          <Col xs='12' sm='6' md='4' className='pt-2'>
+                            <div className='text-label'>Código de Evento de riesgo: </div>
+                            <div className='text-data'>{dataApi.eventoRiesgoId !== null ? dataApi.eventoRiesgoId.codigo : <i>Sin registro</i>}</div>
+                          </Col>
+
+                          <Col xs='12' sm='6' md='4' className='pt-2'>
+                            <div className='text-label'>Fecha descubrimiento del Evento: </div>
+                            <div className='text-data'>{dataApi.eventoRiesgoId !== null ? dataApi.eventoRiesgoId.fechaDesc : <i>Sin registro</i>}</div>
+                          </Col>
+
+                          <Col xs='12' className='pt-2'>
+                            <div className='text-label'>Descripción resumida del Evento: </div>
+                            <div className='text-data'>{dataApi.eventoRiesgoId !== null ? dataApi.eventoRiesgoId.descripcion : <i>Sin registro</i>}</div>
+                          </Col>
+
                         </Row>
                       </CTabPane>
 
