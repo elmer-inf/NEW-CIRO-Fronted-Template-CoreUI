@@ -5,7 +5,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import ActionFormatter from 'src/reusable/ActionFormatterEvento';
 import ActionFormatterEvaluar from 'src/reusable/ActionFormatterEvaluar';
 import { useHistory } from 'react-router-dom'
-import { putEvaluaRiesgo, getMatrizPaging } from './controller/RiesgoController'
+import { putEvaluaRiesgo, getMatrizPaging, getGeneraCodigo } from './controller/RiesgoController'
 import { pagingInit } from 'src/reusable/variables/Variables';
 import CPagination from 'src/reusable/pagination/CPagination';
 import { getParams, hasPermission } from 'src/functions/Function';
@@ -16,10 +16,20 @@ import filterFactory, { customFilter } from 'react-bootstrap-table2-filter';
 import { PathContext } from 'src/containers/TheLayout';
 import { ToastContainer, toast } from 'react-toastify';
 import { Messages } from 'src/reusable/variables/Messages';
+import Swal from 'sweetalert2'
 
 var _ = require('lodash');
 
 const MatrizRiesgoListar = () => {
+
+  // Configuracion sweetalert2
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: 'btn btn-primary px-4',
+      cancelButton: 'btn btn-outline-primary px-4 mr-4',
+    },
+    buttonsStyling: false
+  })
 
   //useContext
   const valuePathFromContext = React.useContext(PathContext);
@@ -30,15 +40,15 @@ const MatrizRiesgoListar = () => {
   const [spin, setSpin] = useState(false);
 
   const redirect = (e) => {
-    e.preventDefault();
-
+    history.push('/matrizRiesgo/Registrar');
+    /* e.preventDefault();
     const path = '/matrizRiesgo/Registrar';
     if (hasPermission(path, valuePathFromContext)) {
       history.push(path);
 
     } else {
       notificationToast();
-    }
+    } */
   }
 
   const notificationToast = () => {
@@ -172,31 +182,134 @@ const MatrizRiesgoListar = () => {
     return <ActionFormatterEvaluar cell={cell} row={row} autorizarFunction={autorizaRiesgo} descartarFunction={descartaRiesgo} />
   }
 
-  const autorizaRiesgo = (row) => {
+  const autorizaRiesgo = async (row) => {
     const data = {
       estadoRegistro: 'Autorizado'
     }
-    putEvaluaRiesgo(row.id, data)
-      .then(res => {
-        //console.log('response : ', res);
-        window.location.reload(true);
+    // Genera posible codigo al Autorizar Evento
+    await getGeneraCodigo(row.id)
+      .then((response) => {
+        if(row.estadoRegistro !== 'Descartado' && row.estadoRegistro !== 'Autorizado'){
+           swalWithBootstrapButtons.fire({
+            title: '',
+            text: 'Al autorizar el registro se asignará el siguiente código: ' + response.data + ' ¿Está seguro de generarlo?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Si',
+            cancelButtonText: 'No',
+            reverseButtons: true,
+            position: 'top',
+          }).then((result) => {
+            if (result.isConfirmed) {
+                putEvaluaRiesgo(row.id, data)
+                .then(res => {
+                  swalWithBootstrapButtons.fire({
+                    title: '',
+                    text: 'Operación realizada exitósamente',
+                    icon: 'success',
+                    position: 'top',
+                  }).then(okay => {
+                    if (okay) {
+                      callApi(pagination.page, pagination.size);
+                    }
+                  })
+                }).catch((error) => {
+                  console.log('Error al obtener datos: ', error);
+                });
+            } else if (
+              result.dismiss === Swal.DismissReason.cancel
+            ) {
+              swalWithBootstrapButtons.fire({
+                title: '',
+                text: 'Operación cancelada',
+                icon: 'error',
+                position: 'top'
+              })
+            }
+          })
+        }else{
+          if(row.estadoRegistro === 'Descartado'){
+            swalWithBootstrapButtons.fire({
+              title: '',
+              text: 'Un registro Descartado no se puede Autorizar',
+              icon: 'error',
+              position: 'top'
+            })
+          }
+          if(row.estadoRegistro === 'Autorizado'){
+            swalWithBootstrapButtons.fire({
+              title: '',
+              text: 'El registro ya está Autorizado',
+              icon: 'error',
+              position: 'top'
+            })
+          }
+        }
       }).catch((error) => {
-        console.log('Error al obtener datos: ', error);
+        console.log("Error: ", error);
       });
   }
-
-  const descartaRiesgo = (row) => {
+  // Descarta Registro
+  const descartaRiesgo = async (row) => {
     const data = {
       estadoRegistro: 'Descartado'
     }
-    console.log('data : ', data)
-    putEvaluaRiesgo(row.id, data)
-      .then(res => {
-        console.log('response : ', res);
-        window.location.reload(true);
-      }).catch((error) => {
-        console.log('Error al obtener datos: ', error);
-      });
+    if(row.estadoRegistro !== 'Autorizado' && row.estadoRegistro !== 'Descartado'){
+      swalWithBootstrapButtons.fire({
+        title: '',
+        text:'¿Está seguro de modificar el estado de registro a Descartado?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si',
+        cancelButtonText: 'No',
+        reverseButtons: true,
+        position: 'top'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          putEvaluaRiesgo(row.id, data)
+            .then(res => {
+              swalWithBootstrapButtons.fire({
+                title: '',
+                text: 'Operación realizada exitósamente',
+                icon: 'success',
+                position: 'top',
+              }).then(okay => {
+                if (okay) {
+                  callApi(pagination.page, pagination.size);
+                }
+              })
+            }).catch((error) => {
+              console.log('Error al obtener datos: ', error);
+            });
+        } else if (
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          swalWithBootstrapButtons.fire({
+            title: '',
+            text: 'Operación cancelada',
+            icon: 'error',
+            position: 'top'
+          })
+        }
+      })
+    } else{
+      if(row.estadoRegistro === 'Autorizado'){
+        swalWithBootstrapButtons.fire({
+          title: '',
+          text: 'Un registro Autorizado no se puede Descartar',
+          icon: 'error',
+          position: 'top'
+        })
+      }
+      if(row.estadoRegistro === 'Descartado'){
+        swalWithBootstrapButtons.fire({
+          title: '',
+          text: 'El registro ya está Descartado',
+          icon: 'error',
+          position: 'top'
+        })
+      }
+    }
   }
 
   /* LISTA TABLA LISTA */

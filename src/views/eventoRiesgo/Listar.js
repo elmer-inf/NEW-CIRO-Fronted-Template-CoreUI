@@ -5,7 +5,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import ActionFormatter from 'src/reusable/ActionFormatterEvento';
 import ActionFormatterEvaluar from 'src/reusable/ActionFormatterEvaluar';
 import { useHistory } from 'react-router-dom'
-import { putEvaluaEvento, getEventosPaging } from './controller/EventoController'
+import { putEvaluaEvento, getEventosPaging, getGeneraCodigo } from './controller/EventoController'
 import { pagingInit } from 'src/reusable/variables/Variables';
 import CCSpinner from 'src/reusable/spinner/CCSpinner';
 import CPagination from 'src/reusable/pagination/CPagination';
@@ -16,10 +16,20 @@ import filterFactory, { customFilter } from 'react-bootstrap-table2-filter';
 import { PathContext } from 'src/containers/TheLayout';
 import { ToastContainer, toast } from 'react-toastify';
 import { Messages } from 'src/reusable/variables/Messages';
+import Swal from 'sweetalert2'
 
 var _ = require('lodash');
 
 const EventoRiesgoListar = () => {
+
+  // Configuracion sweetalert2
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: 'btn btn-primary px-4',
+      cancelButton: 'btn btn-outline-primary px-4 mr-4',
+    },
+    buttonsStyling: false
+  })
 
   //useContext
   const valuePathFromContext = React.useContext(PathContext);
@@ -55,8 +65,12 @@ const EventoRiesgoListar = () => {
     {
       dataField: 'id',
       text: 'ID',
+      hidden: false,
       sort: true,
-      hidden: false
+      filter: customFilter(),
+      filterRenderer: (onFilter, column) =>
+        <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
+      headerFormatter: typeFormatter,
     }, {
       dataField: 'codigo',
       text: 'CODIGO',
@@ -136,13 +150,11 @@ const EventoRiesgoListar = () => {
         <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
       headerFormatter: typeFormatter,
     }, {
-      dataField: 'xxx',
       text: 'ACCIONES',
       headerAlign: 'center',
       style: { textAlign: 'center' },
       formatter: (cell, row) => actionFormatter(cell, row),
     }, {
-      dataField: 'xxx',
       text: 'EVALUAR',
       headerAlign: 'center',
       comun: { textAlign: 'center' },
@@ -198,45 +210,142 @@ const EventoRiesgoListar = () => {
   const editRow = (row) => {
     console.log(row)
     // history.push('./editar/' + row.id);
-
-
     history.push('/eventoRiesgo/Editar/' + row.id);
-
-
-
-
   }
 
   const actionFormatterEvaluar = (cell, row) => {
     return <ActionFormatterEvaluar cell={cell} row={row} autorizarFunction={autorizaEvento} descartarFunction={descartaEvento} />
   }
 
-  const autorizaEvento = (row) => {
+  // Autoriza Registro
+  const autorizaEvento = async (row) => {
     const data = {
       estadoRegistro: 'Autorizado'
     }
-    console.log('data : ', data)
-    putEvaluaEvento(row.id, data)
-      .then(res => {
-        console.log('response : ', res);
-        window.location.reload(true);
+    // Genera posible codigo al Autorizar Evento
+    await getGeneraCodigo(row.id)
+      .then((response) => {
+        if(row.estadoRegistro !== 'Descartado' && row.estadoRegistro !== 'Autorizado'){
+           swalWithBootstrapButtons.fire({
+            title: '',
+            text: 'Al autorizar el registro se asignará el siguiente código para ASFI: ' + response.data + ' ¿Está seguro de generarlo?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Si',
+            cancelButtonText: 'No',
+            reverseButtons: true,
+            position: 'top',
+          }).then((result) => {
+            if (result.isConfirmed) {
+                putEvaluaEvento(row.id, data)
+                .then(res => {
+                  swalWithBootstrapButtons.fire({
+                    title: '',
+                    text: 'Operación realizada exitósamente',
+                    icon: 'success',
+                    position: 'top',
+                  }).then(okay => {
+                    if (okay) {
+                      callApi(pagination.page, pagination.size);
+                    }
+                  })
+                }).catch((error) => {
+                  console.log('Error al obtener datos: ', error);
+                });
+            } else if (
+              result.dismiss === Swal.DismissReason.cancel
+            ) {
+              swalWithBootstrapButtons.fire({
+                title: '',
+                text: 'Operación cancelada',
+                icon: 'error',
+                position: 'top'
+              })
+            }
+          })
+        }else{
+          if(row.estadoRegistro === 'Descartado'){
+            swalWithBootstrapButtons.fire({
+              title: '',
+              text: 'Un registro Descartado no se puede Autorizar',
+              icon: 'error',
+              position: 'top'
+            })
+          }
+          if(row.estadoRegistro === 'Autorizado'){
+            swalWithBootstrapButtons.fire({
+              title: '',
+              text: 'El registro ya está Autorizado',
+              icon: 'error',
+              position: 'top'
+            })
+          }
+        }
       }).catch((error) => {
-        console.log('Error al obtener datos: ', error);
+        console.log("Error: ", error);
       });
   }
-
-  const descartaEvento = (row) => {
+  // Descarta Registro
+  const descartaEvento = async (row) => {
     const data = {
       estadoRegistro: 'Descartado'
     }
-    console.log('data : ', data)
-    putEvaluaEvento(row.id, data)
-      .then(res => {
-        console.log('response : ', res);
-        window.location.reload(true);
-      }).catch((error) => {
-        console.log('Error al obtener datos: ', error);
-      });
+    if(row.estadoRegistro !== 'Autorizado' && row.estadoRegistro !== 'Descartado'){
+      swalWithBootstrapButtons.fire({
+        title: '',
+        text:'¿Está seguro de modificar el estado de registro a Descartado?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si',
+        cancelButtonText: 'No',
+        reverseButtons: true,
+        position: 'top'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          putEvaluaEvento(row.id, data)
+            .then(res => {
+              swalWithBootstrapButtons.fire({
+                title: '',
+                text: 'Operación realizada exitósamente',
+                icon: 'success',
+                position: 'top',
+              }).then(okay => {
+                if (okay) {
+                  callApi(pagination.page, pagination.size);
+                }
+              })
+            }).catch((error) => {
+              console.log('Error al obtener datos: ', error);
+            });
+        } else if (
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          swalWithBootstrapButtons.fire({
+            title: '',
+            text: 'Operación cancelada',
+            icon: 'error',
+            position: 'top'
+          })
+        }
+      })
+    } else{
+      if(row.estadoRegistro === 'Autorizado'){
+        swalWithBootstrapButtons.fire({
+          title: '',
+          text: 'Un registro Autorizado no se puede Descartar',
+          icon: 'error',
+          position: 'top'
+        })
+      }
+      if(row.estadoRegistro === 'Descartado'){
+        swalWithBootstrapButtons.fire({
+          title: '',
+          text: 'El registro ya está Descartado',
+          icon: 'error',
+          position: 'top'
+        })
+      }
+    }
   }
 
   /* LISTA TABLA LISTA */
@@ -258,7 +367,6 @@ const EventoRiesgoListar = () => {
         console.log('Error: ', error)
       })
   }
-
   useEffect(() => {
     callApi(pagination.page, pagination.size)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -293,7 +401,6 @@ const EventoRiesgoListar = () => {
     if (param['fechaDesc'] === '' || _.isEmpty(param['fechaDesc'])) {
       delete param['fechaDesc'];
     }
-
 
     setParams(param)
     validatePagination(pagination.page, pagination.size, param);

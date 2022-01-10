@@ -62,7 +62,7 @@ const TheHeaderDropdownNotif = () => {
         <Bell size={20} />
         <CBadge shape="pill" color="primary"><span className='text-white'>{listDiezDiasAntes.length + listCincoDiasAntes.length + listPlanVencido.length}</span></CBadge>
       </CDropdownToggle>
-      <CDropdownMenu placement="bottom-end" className="pt-0">
+      <CDropdownMenu placement="bottom-end" className="pt-0" style={{maxHeight: '250px', overflowY: 'scroll'}}>
         <CDropdownItem header tag="div" className="text-center" color="light">
           <strong>{listDiezDiasAntes.length} Evento(s) a 10 dias de vencer la fecha fin del Plan de Acción</strong>
         </CDropdownItem>

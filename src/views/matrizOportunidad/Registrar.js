@@ -55,21 +55,16 @@ const MatrizRiesgoRegistrar = () => {
     planesAccion: []
   }
 
-  const formValueInitialSeguimiento = {
-    seguimientoPlanes: []
-  }
-
   const dataResult = {
     ...formValueInitialDatosIniciales,
     ...formValueInitialDescripcion,
     ...formValueInitialOportunidad,
     ...formValueInitialControles,
-    ...formValueInitialPlanesSeguimiento,
-    ...formValueInitialSeguimiento
+    ...formValueInitialPlanesSeguimiento
   }
 
   const [requestData, setRequestData] = useState(dataResult);
-  const [activeTab, setActiveTap] = useState('5');
+  const [activeTab, setActiveTap] = useState('1');
   /* manejo de botones siguiente */
   const nextSection = (tab) => {
     if (tab === 1) {

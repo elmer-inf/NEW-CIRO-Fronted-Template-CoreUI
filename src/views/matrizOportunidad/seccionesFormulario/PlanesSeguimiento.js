@@ -9,6 +9,7 @@ import { countEstadoPlanes, resultAvance } from 'src/functions/FunctionsMatriz'
 import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik';
 import BootstrapTable from 'react-bootstrap-table-next'
 import { CBadge, CCallout, CProgress } from '@coreui/react';
+import Select from "react-select";
 
 var _ = require('lodash');
 
@@ -91,17 +92,6 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
     callApiCargo(7);
   }, [])
 
-  // Despliegue de dataApi Parametros en options (Select)
-
-  const optionsCargo = () => {
-    const deployOption = dataApiCargo.map((item, i) => {
-      return (
-        <option key={i} value={item.label}>{item.label}</option>
-      )
-    });
-    return deployOption;
-  }
-
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
   const columns = [
@@ -150,9 +140,33 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
     }
   }
 
+  // Style Select
+  const customStyles = {
+    menu: provided => ({ ...provided, zIndex: "9999 !important" }),
+    control: (styles,) => ({
+      ...styles,
+      boxShadow: 'none'
+    }),
+    /* option: (styles, { isDisabled, isSelected }) => {
+      return {
+        ...styles,
+        backgroundColor: isSelected ? '#e79140' : 'white',
+        cursor: isDisabled ? 'not-allowed' : 'default',
+        ':active': {
+          backgroundColor: '#e79140',
+          color: 'white'
+        },
+        ':hover': {
+          backgroundColor: isSelected ? '#e79140' : '#fbf3eb',
+          color: isSelected ? 'white' : '#e79140'
+        }
+      }
+    } */
+  }
+
   return (
     <Formik initialValues={initValues} validationSchema={formik} onSubmit={onSubmit}>
-      {({ errors, values, touched, setValues }) => (
+      {({ errors, values, touched, setValues, setFieldValue }) => (
         <Form className='pt-2'>
           <div className='divider divider-left divider-primary'>
             <div className='divider-text'><span className='text-label text-primary'>Planes de Acción</span></div>
@@ -217,14 +231,16 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
 
                     <FormGroup tag={Col} md='6' lg='3' className='mb-2'>
                       <Label>Cargo</Label>
-                      <Field
+                      <Select
+                        placeholder="Seleccionar"
+                        onChange={selectedOption => {
+                          setFieldValue(`planesAccion.${i}.cargo`, selectedOption.label , false)
+                        }}
+                        options={dataApiCargo}
                         name={`planesAccion.${i}.cargo`}
-                        className={'form-control' + (planErrors.cargo && planTouched.cargo ? ' is-invalid' : '')}
-                        as={"select"}
-                      >
-                        <option value="" disabled>Seleccionar</option>
-                        {optionsCargo()}
-                      </Field>
+                        styles={customStyles}
+                        className={(planErrors.cargo && planTouched.cargo ? ' is-invalid' : '')}
+                      />
                       <ErrorMessage name={`planesAccion.${i}.cargo`} component="div" className="invalid-feedback" />
                     </FormGroup>
 

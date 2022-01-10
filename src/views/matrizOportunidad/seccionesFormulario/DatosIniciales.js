@@ -106,7 +106,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   const callApiProcedimiento = (idTablaDes, idNivel2) => {
     getTablaDescripcionEventoN2(idTablaDes, idNivel2)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'descripcion', true)
+        const options = buildSelectTwo(res.data, 'id', 'campoA', true)
         setDataApiProcedimiento(_.uniqBy(options, 'label'))
       }).catch((error) => {
         console.log('Error: ', error)

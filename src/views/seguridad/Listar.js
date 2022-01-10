@@ -12,9 +12,9 @@ import { getListPagingWithSearch } from 'src/functions/FunctionApi';
 import { getParams } from 'src/functions/Function';
 import { CFilterDate, CFilterText, handleChildClick, typeFormatter } from 'src/reusable/Component';
 import filterFactory, { customFilter } from 'react-bootstrap-table2-filter';
-import { getTablaDescripcionRiesgoN1 } from 'src/views/administracion/matriz-riesgo/controller/AdminRiesgoController'
+/* import { getTablaDescripcionRiesgoN1 } from 'src/views/administracion/matriz-riesgo/controller/AdminRiesgoController'
 import { getTablaDescripcionSeguridadN1 } from 'src/views/administracion/seguridad/controller/AdminSeguridadController'
-import { buildSelectTwo } from 'src/functions/Function'
+import { buildSelectTwo } from 'src/functions/Function' */
 
 var _ = require('lodash');
 
@@ -31,7 +31,7 @@ const SeguridadListar = () => {
 
   //  P  A  R  A  M  E  T  R  O  S
   // Estado
-  const [dataApiEstado, setDataApiEstado] = useState([])
+  /* const [dataApiEstado, setDataApiEstado] = useState([])
   const callApiEstado = (idTablaDes) => {
     getTablaDescripcionSeguridadN1(idTablaDes)
       .then(res => {
@@ -57,7 +57,7 @@ const SeguridadListar = () => {
   useEffect(() => {
     callApiEstado(2);
     callApiNivelRiesgo(9);
-  }, [])
+  }, []) */
   // F  I  N     P  A  R  A  M  E  T  R  O  S
 
   const columns = [

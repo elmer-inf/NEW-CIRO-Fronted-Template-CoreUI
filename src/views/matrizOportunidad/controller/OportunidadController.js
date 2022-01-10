@@ -25,6 +25,12 @@ export const putEvaluaOportunidad = (id, data) => {
     return axios.put(uri, data);
 }
 
+export const getGeneraCodigo = async (id) => {
+    const uri = HOST + 'v1/matrizOportunidad/generaCodigo/' + id;
+    const response = await axios.get(uri);
+    return response;
+}
+
 export const getUltimaObservacion = async (id) => {
     const uri = HOST + 'v1/observacion/ultimaObservacionOportunidad/' + id;
     const response = await axios.get(uri);

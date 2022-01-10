@@ -4,9 +4,10 @@ import { Row, Col, FormGroup, Label, Button, } from 'reactstrap'
 import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
 import { getTablaDescripcionRiesgoN1 } from 'src/views/administracion/matriz-riesgo/controller/AdminRiesgoController';
 import * as Yup from "yup"
-import { buildSelectTwo } from 'src/functions/Function'
+import { buildSelectThree, buildSelectTwo } from 'src/functions/Function'
 import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik';
 import { CInputReact } from 'src/reusable/CInputReact'
+import Select from "react-select";
 
 var _ = require('lodash');
 
@@ -73,11 +74,11 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
   const callApiProcedimiento = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', true);
-        setDataApiProcedimiento(_.filter(options, ['campoA', dataAux.procedimientoAux]));
-        //console.log('data select: ', _.filter(options, ['campoA', dataAux.procedimientoAux]));
+        const options = buildSelectThree(res.data, 'id', 'nombre', 'descripcion', true);
+        setDataApiProcedimiento(_.filter(options, ['campoA', dataAux.procedimientoAux])); /* campoA */
+        /* setDataApiProcedimiento(options); */
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.log('Error: ', error) 
       })
   }
 
@@ -122,17 +123,18 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
     callApiTipoControl(6);
     callApiNivelAuto(7);
     callApiControl(5);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataAux])
 
   // Despliegue de dataApi Parametros en options (Select)
-  const optionsProcedimiento = () => {
+  /* const optionsProcedimiento = () => {
     const deployOption = dataApiProcedimiento.map((item, i) => {
       return (
         <option key={i} value={item.label + ' - ' + item.descripcion}>{item.label + ' - ' + item.descripcion}</option>
       )
     });
     return deployOption;
-  }
+  } */
 
   const optionsTipoControl = () => {
     const deployOption = dataApiTipoControl.map((item, i) => {
@@ -162,9 +164,33 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
   }
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
+  // Style Select
+  const customStyles = {
+    menu: provided => ({ ...provided, zIndex: "9999 !important" }),
+    control: (styles,) => ({
+      ...styles,
+      boxShadow: 'none'
+    }),
+    /* option: (styles, { isDisabled, isSelected }) => {
+      return {
+        ...styles,
+        backgroundColor: isSelected ? '#e79140' : 'white',
+        cursor: isDisabled ? 'not-allowed' : 'default',
+        ':active': {
+          backgroundColor: '#e79140',
+          color: 'white'
+        },
+        ':hover': {
+          backgroundColor: isSelected ? '#e79140' : '#fbf3eb',
+          color: isSelected ? 'white' : '#e79140'
+        }
+      }
+    } */
+  }
+
   return (
     <Formik initialValues={initValues} validationSchema={formik} onSubmit={onSubmit}>
-      {({ errors, values, touched, setValues }) => (
+      {({ errors, values, touched, setValues, setFieldValue }) => (
         <Form>
           <Row className='pt-4'>
             <Col sm='12' md='12' xl='3'>
@@ -315,7 +341,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
 
                       <FormGroup tag={Col} md='6' lg='6' className='mb-2'>
                         <Label>Norma/procedimiento en la que está formalizado</Label>
-                        <Field
+                       {/*  <Field
                           name={`controles.${i}.norma`}
                           className={'form-control' + (controlErrors.norma && controlTouched.norma ? ' is-invalid' : '')}
                           as={"select"}
@@ -323,7 +349,19 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
                         >
                           <option value='null' >Seleccionar</option>
                           {optionsProcedimiento()}
-                        </Field>
+                        </Field> */}
+
+                        <Select
+                          placeholder="Seleccionar"
+                          onChange={selectedOption => {
+                            setFieldValue(`planesAccion.${i}.norma`, selectedOption.label , false)
+                          }}
+                          options={dataApiProcedimiento}
+                          name={`controles.${i}.norma`}
+                          styles={customStyles}
+                          className={(controlErrors.norma && controlTouched.norma ? ' is-invalid' : '')}
+                          isDisabled={control.formalizado === 'true' ? false : true}
+                        />
                         <ErrorMessage name={`controles.${i}.norma`} component="div" className="invalid-feedback" />
                       </FormGroup>
 
