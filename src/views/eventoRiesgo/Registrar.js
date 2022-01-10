@@ -124,7 +124,7 @@ const EventoRiesgoRegistrar = () => {
     gastoAsociado: '',
     montoRecuperado: '',
     impactoId: null,
-    coberturaSeguro: '',
+    coberturaSeguro: false,
     polizaSeguroId: null,
     montoRecuperadoSeguro: '',
     recuperacionActivoId: null,
@@ -252,8 +252,6 @@ const EventoRiesgoRegistrar = () => {
 
     formData.append('eventoRiesgoPostDTO', JSON.stringify(_.omit(request, ['files'])));
     //formData.append('file', getFiles);
-
-
 
     for (let i = 0; i < getFiles.length; i++) {
       formData.append("file", getFiles[i]);

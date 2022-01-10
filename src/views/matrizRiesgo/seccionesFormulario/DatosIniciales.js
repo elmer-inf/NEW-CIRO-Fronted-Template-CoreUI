@@ -12,6 +12,7 @@ import { buildSelectTwo, buildSelectThree } from 'src/functions/Function'
 import { getEventos } from 'src/views/eventoRiesgo/controller/EventoController'
 import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
 import CInputRadio from 'src/reusable/CInputRadio'
+import { useHistory } from 'react-router-dom'
 
 var _ = require('lodash');
 
@@ -291,6 +292,11 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.fechaEvaluacion]) */
+
+  const history = useHistory();
+  const redirect = (e) => {
+      history.push('/matrizRiesgo/Listar');
+  }
 
   return (
     <Fragment>
@@ -614,8 +620,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
             style={{ width: '130px' }}
             color="primary"
             outline
-          // onClick={(e) => { redirect(e) }}
-          //href="#/administracion/formularios"
+            onClick={(e) => {redirect(e)}}
           >
             Cancelar
           </Button>

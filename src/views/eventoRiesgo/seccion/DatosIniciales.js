@@ -11,7 +11,8 @@ import { getTablaDescripcionEventoN1, getTablaDescripcionEventoN2 } from 'src/vi
 import { buildSelectTwo } from 'src/functions/Function'
 import { Messages } from 'src/reusable/variables/Messages'
 import { CInputFile } from 'src/reusable/CInputFile'
-import { faTemperatureLow } from '@fortawesome/free-solid-svg-icons'
+//import { faTemperatureLow } from '@fortawesome/free-solid-svg-icons'
+import { useHistory } from 'react-router-dom'
 
 const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFiles }) => {
 
@@ -37,8 +38,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
       canalAsfiId: Yup.mixed().required('Campo obligatorio'),
       descripcion: Yup.string().required('Campo obligatorio'),
       descripcionCompleta: Yup.string().nullable(),
-      files: Yup.mixed().required(Messages.required),
-
+      files: Yup.mixed().required('Campo obligatorio'),
 
       /* fechaIni: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
       horaIni: Yup.string().nullable(),
@@ -58,7 +58,8 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
       fuenteInfId: Yup.mixed().nullable(),
       canalAsfiId: Yup.mixed().nullable(),
       descripcion: Yup.string().nullable(),
-      descripcionCompleta: Yup.string().nullable() */
+      descripcionCompleta: Yup.string().nullable(),
+      files: Yup.mixed().nullable(), */
     }
     ),
 
@@ -231,6 +232,11 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
   }, [formik.values.entidadAfectada])
 
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
+
+  const history = useHistory();
+  const redirect = (e) => {
+      history.push('/eventoRiesgo/Listar');
+  }
 
   return (
     <Fragment>
@@ -523,7 +529,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
               onBlur={formik.handleBlur}
               touched={formik.touched.descripcion}
               errors={formik.errors.descripcion}
-              rows={1}
+              rows={3}
             />
           </FormGroup>
 
@@ -540,16 +546,13 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
               onBlur={formik.handleBlur}
               touched={formik.touched.descripcionCompleta}
               errors={formik.errors.descripcionCompleta}
-              rows={1}
+              rows={3}
             />
           </FormGroup>
 
           <FormGroup tag={Col} sm='12' className='mb-0'>
-            {/*  <Label className='form-label'>
-            Cargar archivos
-            </Label> */}
             <CInputFile
-              label={"Cargar archivos"}
+              label={"Adjuntar Archivos"}
               type={"file"}
               id="files"
               value={formik.values.files}
@@ -567,8 +570,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
             style={{ width: '130px' }}
             color="primary"
             outline
-          // onClick={(e) => { redirect(e) }}
-          //href="#/administracion/formularios"
+            onClick={(e) => {redirect(e)}}
           >
             Cancelar
           </Button>

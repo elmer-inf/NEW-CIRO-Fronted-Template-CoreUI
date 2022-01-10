@@ -267,14 +267,12 @@ const AdministracionEventoListar = () => {
   }
 
   const getTablaDescripcion = (idTabla) => {
-
     getTablaDescripcionEventoN1(idTabla)
       .then(res => {
         console.log('nivel 1: ', res.data)
         setDAtaApi(res.data)
       }).catch((error) => {
         console.log('Error: ', error)
-        //notificationToast('error', Messages.notification.notOk)
       })
   }
 

@@ -8,6 +8,7 @@ import { CSelectReact } from 'src/reusable/CSelectReact'
 import { getTablaDescripcionEventoN1, getTablaDescripcionEventoN2 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController'
 import { getTablaDescripcionOportunidadN1, getTablaDescripcionOportunidadN2 } from 'src/views/administracion/matriz-oportunidad/controller/AdminOportunidadController';
 import { buildSelectTwo } from 'src/functions/Function'
+import { useHistory } from 'react-router-dom'
 
 var _ = require('lodash');
 
@@ -196,6 +197,11 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
 
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
+  const history = useHistory();
+  const redirect = (e) => {
+      history.push('/matrizOportunidad/Listar');
+  }
+
   return (
     <Fragment>
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
@@ -375,6 +381,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
               style={{width: '130px'}}
               color="primary"
               outline
+              onClick={(e) => {redirect(e)}}
             >
               Cancelar
           </Button>

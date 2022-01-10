@@ -126,7 +126,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
               onBlur={formik.handleBlur}
               touched={formik.touched.detallePlan}
               errors={formik.errors.detallePlan}
-              rows={1}
+              rows={3}
             />
           </FormGroup>
 
@@ -175,7 +175,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
               onBlur={formik.handleBlur}
               touched={formik.touched.descripcionEstado}
               errors={formik.errors.descripcionEstado}
-              rows={1}
+              rows={3}
             />
           </FormGroup>
         </Row>

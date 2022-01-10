@@ -6,7 +6,7 @@ import RiesgoResidual from './seccionesFormulario/RiesgoResidual'
 import PlanesSeguimiento from './seccionesFormulario/PlanesSeguimiento'
 import Valoracion from './seccionesFormulario/Valoracion'
 import { FileText, BarChart2, ChevronRight, CheckSquare, PieChart, Trello, TrendingUp } from 'react-feather'
-import { Row, Col, Card, CardBody, CardHeader, CardTitle, TabContent, TabPane, NavLink, NavItem, Nav} from 'reactstrap';
+import { Row, Col, Card, CardBody, CardHeader, CardTitle, TabContent, TabPane, NavLink, NavItem, Nav } from 'reactstrap';
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames';
 import { postRiesgo } from './controller/RiesgoController';
@@ -19,32 +19,32 @@ const MatrizRiesgoRegistrar = () => {
   const [spin, setSpin] = useState(false);
 
   const formValueInitialDatosIniciales = {
-    areaId : null,
-    unidadId : null,
-    procesoId : null,
-    procedimientoId : null,
-    duenoCargoId : null,
-    responsableCargoId : null,
-    fechaEvaluacion : '',
-    identificadoId : null,
-    identificadoOtro : '',
+    areaId: null,
+    unidadId: null,
+    procesoId: null,
+    procedimientoId: null,
+    duenoCargoId: null,
+    responsableCargoId: null,
+    fechaEvaluacion: '',
+    identificadoId: null,
+    identificadoOtro: '',
     eventoRiesgoId: null,
     eventoMaterializado: ''
   }
 
   const formValueInitialDefinicionRiesgos = {
-    definicion : '',
-    causa : '',
-    consecuencia : '',
-    defConcatenado : '',
-    efectoPerdidaOtro : '',
-    efectoPerdidaId : null,
-    perdidaAsfiId : null,
-    monetario : false,
+    definicion: '',
+    causa: '',
+    consecuencia: '',
+    defConcatenado: '',
+    efectoPerdidaOtro: '',
+    efectoPerdidaId: null,
+    perdidaAsfiId: null,
+    monetario: false,
     factorRiesgoId: null,
 
     probabilidadId: null,
-    impactoId : null
+    impactoId: null
   }
 
   const formValueInitialControles = {
@@ -52,7 +52,7 @@ const MatrizRiesgoRegistrar = () => {
     controlObjetivo: '',
     controlComentario: '',
 
-    controlesTiene : false,
+    controlesTiene: false,
     nroControles: '',
     controles: []
   }
@@ -124,29 +124,29 @@ const MatrizRiesgoRegistrar = () => {
     }
 
     // Obtiene label Proceso para busqueda en Seccion Controles: Select Proceso
-    if(activeTab === '1' && realValues !== undefined){
+    if (activeTab === '1' && realValues !== undefined) {
       const dataAuxSeccion1 = {
-        procedimientoAux : realValues.procedimientoId.label,
+        procedimientoAux: realValues.procedimientoId.label,
       }
       setDataAuxSeccion1(dataAuxSeccion1)
     }
     // FIN Obtiene data Proceso para busqueda en Seccion Controles: Select Proceso
 
     // Obtiene valores auxiliares de "Definicion y Riesgo inherente" para "Valoracion cuantitativa y Riesgo residual"
-    if(activeTab === '2' && realValues !== undefined){
+    if (activeTab === '2' && realValues !== undefined) {
       const dataAuxSeccion2 = {
-        efectPerdidaAux: realValues.efectoPerdidaId !== null? realValues.efectoPerdidaId.label : realValues.efectoPerdidaOtro,
+        efectPerdidaAux: realValues.efectoPerdidaId !== null ? realValues.efectoPerdidaId.label : realValues.efectoPerdidaOtro,
         perdidaAsfiAux: realValues.perdidaAsfiId.label,
 
-        probabilidaNivelAux : realValues.probabilidadId.campoA,
-        impactoNivelAux : realValues.impactoId.campoA,
+        probabilidaNivelAux: realValues.probabilidadId.campoA,
+        impactoNivelAux: realValues.impactoId.campoA,
       }
       setDataAuxSeccion2(dataAuxSeccion2)
     }
     // FIN Obtiene valores auxiliares de "Definicion y Riesgo inherente" para "Valoracion cuantitativa y Riesgo residual"
 
     // Obtiene valores auxiliares de "Controles" para "Riesgo residual"
-    if(activeTab === '3' && realValues !== undefined){
+    if (activeTab === '3' && realValues !== undefined) {
       const dataAuxSeccion3 = {
         controlIdAux: realValues.controlId,
         controlObjetivoAux: realValues.controlObjetivo,
@@ -156,7 +156,7 @@ const MatrizRiesgoRegistrar = () => {
     // FIN Obtiene valores auxiliares de "Controles" para "Riesgo residual"
 
     // Obtiene valores auxiliares de "Riesgo residual" para "Valoracion cuantitativa"
-    if(activeTab === '4' && realValues !== undefined){
+    if (activeTab === '4' && realValues !== undefined) {
       const dataAuxSeccion4 = {
         probabilidadAux: realValues.probabilidad,
         probabilidadValAux: realValues.probabilidadVal,
@@ -175,40 +175,40 @@ const MatrizRiesgoRegistrar = () => {
 
   const notificationToast = (type, mensaje) => {
     switch (type) {
-        case 'error':
-            toast.error(mensaje, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-            });
-            break;
-        case 'success':
-            toast.success(mensaje, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-            });
-            break;
+      case 'error':
+        toast.error(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        break;
+      case 'success':
+        toast.success(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        break;
 
-        default:
-            toast(mensaje, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-            });
+      default:
+        toast(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
     }
     setTimeout(() => {
-        history.push('/matrizRiesgo/Listar');
-        setSpin(false);
+      history.push('/matrizRiesgo/Listar');
+      setSpin(false);
     }, 5000);
   }
 
@@ -225,19 +225,19 @@ const MatrizRiesgoRegistrar = () => {
     console.log('Lo que se enviara en el request: ', dataValues)
 
     postRiesgo(dataValues)
-    .then(res => {
-      if (res.status >= 200 && res.status < 300) {
-        console.log('Envio el request: ', res);
-        notificationToast('success', 'Matriz de Riesgo registrada exitósamente');
-        //history.push("/matrizRiesgo/listar")
-      } else {
-        console.log('Hubo un  error ', res);
+      .then(res => {
+        if (res.status >= 200 && res.status < 300) {
+          console.log('Envio el request: ', res);
+          notificationToast('success', 'Matriz de Riesgo registrada exitósamente');
+          //history.push("/matrizRiesgo/listar")
+        } else {
+          console.log('Hubo un  error ', res);
+          notificationToast('error', 'Algo salió mal, intente nuevamente');
+        }
+      }).catch((error) => {
+        console.log('Error al obtener datos: ', error);
         notificationToast('error', 'Algo salió mal, intente nuevamente');
-      }
-    }).catch((error) => {
-      console.log('Error al obtener datos: ', error);
-      notificationToast('error', 'Algo salió mal, intente nuevamente');
-    });
+      });
   }
 
   return (
@@ -256,7 +256,7 @@ const MatrizRiesgoRegistrar = () => {
                   <NavLink className={classnames({ active: activeTab === '1' })}>
                     <span className={activeTab === '1' ? '' : 'd-none'}></span>
                     <FileText size={20} /><span className='pl-2 h6 font-weight-bold'>Datos</span>
-                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary'/>
+                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
                   </NavLink>
                 </NavItem>
 
@@ -264,7 +264,7 @@ const MatrizRiesgoRegistrar = () => {
                   <NavLink className={classnames({ active: activeTab === '2' })}>
                     <span className={activeTab === '2' ? '' : 'd-none'}></span>
                     <BarChart2 size={20} /><span className='pl-2 h6 font-weight-bold'>Definición y Riesgo inherente</span>
-                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary'/>
+                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
                   </NavLink>
                 </NavItem>
 
@@ -272,7 +272,7 @@ const MatrizRiesgoRegistrar = () => {
                   <NavLink className={classnames({ active: activeTab === '3' })}>
                     <span className={activeTab === '3' ? '' : 'd-none'}></span>
                     <Trello size={20} /><span className='pl-2 h6 font-weight-bold'>Controles</span>
-                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary'/>
+                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
                   </NavLink>
                 </NavItem>
 
@@ -280,7 +280,7 @@ const MatrizRiesgoRegistrar = () => {
                   <NavLink className={classnames({ active: activeTab === '4' })}>
                     <span className={activeTab === '4' ? '' : 'd-none'}></span>
                     <TrendingUp size={20} /><span className='pl-2 h6 font-weight-bold'>Riesgo residual</span>
-                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary'/>
+                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
                   </NavLink>
                 </NavItem>
 
@@ -288,7 +288,7 @@ const MatrizRiesgoRegistrar = () => {
                   <NavLink className={classnames({ active: activeTab === '5' })}>
                     <span className={activeTab === '5' ? '' : 'd-none'}></span>
                     <CheckSquare size={20} /><span className='pl-2 h6 font-weight-bold'>Planes de Acción y Seguimiento</span>
-                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary'/>
+                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
                   </NavLink>
                 </NavItem>
 
@@ -306,7 +306,7 @@ const MatrizRiesgoRegistrar = () => {
                     nextSection={nextSection}
                     setObject={setObject}
                     initValues={formValueInitialDatosIniciales}
-                    //isEdit={false}
+                  //isEdit={false}
                   />
                 </TabPane>
 
@@ -316,8 +316,8 @@ const MatrizRiesgoRegistrar = () => {
                     beforeSection={beforeSection}
                     setObject={setObject}
                     initValues={formValueInitialDefinicionRiesgos}
-                    //isEdit={false}
-                    //arrayCampoSelected={[]}
+                  //isEdit={false}
+                  //arrayCampoSelected={[]}
                   />
                 </TabPane>
 
@@ -328,8 +328,8 @@ const MatrizRiesgoRegistrar = () => {
                     setObject={setObject}
                     initValues={formValueInitialControles}
                     dataAux={dataAuxSeccion1}
-                    //isEdit={true}
-                    //arrayColumnaSelected={[]}
+                  //isEdit={true}
+                  //arrayColumnaSelected={[]}
                   />
                 </TabPane>
 
@@ -341,8 +341,8 @@ const MatrizRiesgoRegistrar = () => {
                     initValues={formValueInitialRiesgoResidual}
                     dataAux={dataAuxSeccion3}
                     dataAux2={dataAuxSeccion2}
-                    //isEdit={true}
-                    //arrayColumnaSelected={[]}
+                  //isEdit={true}
+                  //arrayColumnaSelected={[]}
                   />
                 </TabPane>
 
@@ -352,8 +352,8 @@ const MatrizRiesgoRegistrar = () => {
                     beforeSection={beforeSection}
                     setObject={setObject}
                     initValues={formValueInitialPlanesSeguimiento}
-                    //isEdit={true}
-                    //arrayColumnaSelected={[]}
+                  //isEdit={true}
+                  //arrayColumnaSelected={[]}
                   />
                 </TabPane>
 
@@ -364,7 +364,7 @@ const MatrizRiesgoRegistrar = () => {
                     handleOnSubmmit={handleOnSubmmit}
                     dataAux={dataAuxSeccion2}
                     dataAux2={dataAuxSeccion4}
-                    //isEdit={true}
+                  //isEdit={true}
                   />
                 </TabPane>
               </TabContent>

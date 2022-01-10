@@ -6,7 +6,6 @@ const Auth = new AuthService();
 const header = Auth.getHeader();
 
 
-
 const HOST = HOSTURI.endpoint_ciro
 
 export const getEventos = async () => {
@@ -23,9 +22,7 @@ export const postEventoRiesgo = (data) => {
 export const postEventoRiesgoFormData = (data) => {
     const uri = HOST.concat('v1/eventoRiesgo/registrarwithfiles')
     const headerFormData = Auth.getHeaderFormData(data);
-
     return axios.post(uri, data, headerFormData);
-
 }
 
 export const putEvaluaEvento = (id, data) => {
@@ -60,21 +57,28 @@ export const getEventosPaging = async (page, size) => {
 
 // 1ra Alerta / Notificacion - 10 dias antes
 export const getDiezDiasAntes = async () => {
-    const uri = HOST.concat('v1/eventoRiesgo/diezDiasAntes')
-    const response = await axios.get(uri)
-    return response
+    const uri = HOST.concat('v1/eventoRiesgo/diezDiasAntes');
+    const response = await axios.get(uri);
+    return response;
 }
 
 // 2da Alerta / Notificacion - 5 dias antes
 export const getCincoDiasAntes = async () => {
-    const uri = HOST.concat('v1/eventoRiesgo/cincoDiasAntes')
-    const response = await axios.get(uri)
-    return response
+    const uri = HOST.concat('v1/eventoRiesgo/cincoDiasAntes');
+    const response = await axios.get(uri);
+    return response;
 }
 
 // 3ra Alerta / Notificacion - Plan vencido
 export const getPlanVencido = async () => {
-    const uri = HOST.concat('v1/eventoRiesgo/planVencido')
+    const uri = HOST.concat('v1/eventoRiesgo/planVencido');
+    const response = await axios.get(uri);
+    return response;
+}
+
+// Listado de Archivos de Evento ID
+export const getArchivosByEvento = async (idEvento) => {
+    const uri = HOST.concat('v1/archivo/listarArchivobyId/', idEvento)
     const response = await axios.get(uri)
     return response
 }

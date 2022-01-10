@@ -5,7 +5,7 @@ import { useFormik } from "formik"
 import * as Yup from "yup"
 import { CSelectReact } from 'src/reusable/CSelectReact'
 import { getTablaDescripcionEventoN1} from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
-import { buildSelectTwo } from 'src/functions/Function'
+import { buildSelectThree } from 'src/functions/Function'
 
 var _ = require('lodash');
 
@@ -53,7 +53,7 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
   const callApiReputacional = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'clave', false)
+        const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
         setDataApiReputacional(_.orderBy(options, ['value' ], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
@@ -65,7 +65,7 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
   const callApiLegal = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'clave', false)
+        const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
         setDataApiLegal(_.orderBy(options, ['value' ], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
@@ -77,7 +77,7 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
   const callApiCumplimiento = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'clave', false)
+        const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
         setDataApiCumplimiento(_.orderBy(options, ['value' ], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
@@ -89,7 +89,7 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
   const callApiEstrategico = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'clave', false)
+        const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
         setDataApiEstrategico(_.orderBy(options, ['value' ], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
@@ -101,7 +101,7 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
   const callApiGobierno = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'clave', false)
+        const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
         setDataApiGobierno(_.orderBy(options, ['value' ], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
@@ -113,7 +113,7 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
   const callApiFraude = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'clave', false)
+        const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
         setDataApiFraude(_.orderBy(options, ['value' ], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
@@ -125,7 +125,7 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
   const callApiLiquidez = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'clave', false)
+        const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
         setDataApiLiquidez(_.orderBy(options, ['value' ], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
@@ -137,7 +137,7 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
   const callApiOperativo = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'clave', false)
+        const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
         setDataApiOperativo(_.orderBy(options, ['value' ], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
@@ -149,7 +149,7 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
   const callApiSeguridad = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'clave', false)
+        const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
         setDataApiSeguridad(_.orderBy(options, ['value' ], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)

@@ -9,6 +9,7 @@ import { getTablaDescripcionSeguridadN1 } from 'src/views/administracion/segurid
 import { getTablaDescripcionRiesgoN1 } from 'src/views/administracion/matriz-riesgo/controller/AdminRiesgoController'
 import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController'
 import { Delete, Save } from 'react-feather'
+import { useHistory } from 'react-router-dom'
 
 const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
 
@@ -112,6 +113,11 @@ const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
     callApiArea(3);
   }, [])
   // F  I  N     P  A  R  A  M  E  T  R  O  S
+
+  const history = useHistory();
+  const redirect = (e) => {
+      history.push('/seguridad/Listar');
+  }
 
   return (
     <Fragment>
@@ -382,7 +388,38 @@ const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
           </FormGroup>
         </Row>
 
-        <Row className='pt-4'>
+        <div className='d-flex justify-content-between pt-4'>
+          <Button
+            style={{ width: '130px' }}
+            color="primary"
+            outline
+            onClick={(e) => {redirect(e)}}
+          >
+            Cancelar
+          </Button>
+          <Button
+            style={{ width: '130px' }}
+            color="dark"
+            outline
+            onClick={() => { formik.handleReset() }}
+            disabled={!formik.dirty || formik.isSubmitting}
+          >
+            <Delete size={17} className='mr-2' />
+            Limpiar
+          </Button>
+          <Button
+            style={{ width: '130px' }}
+            className='text-white'
+            color="primary"
+            type="submit"
+            //disabled={formik.isSubmitting}
+          >
+            <Save size={17} className='mr-2'/>
+            GUARDAR
+          </Button>
+        </div>
+
+{/*         <Row className='pt-4'>
           <Col className='d-flex justify-content-center'>
             <Button
               className='mr-4 text-white'
@@ -404,7 +441,7 @@ const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
             </Button>
           </Col>
         </Row>
-
+ */}
       </Form>
     </Fragment>
   )

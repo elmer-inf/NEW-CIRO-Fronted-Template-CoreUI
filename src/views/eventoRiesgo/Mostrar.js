@@ -1,14 +1,18 @@
 import { React, useState, useEffect } from 'react'
 import { FileText, Activity, DollarSign, BarChart2, CheckSquare } from 'react-feather'
-import { Row, Col, Card, CardBody, CardHeader, CardTitle, Badge, Button, ListGroup, ListGroupItem } from 'reactstrap';
+import { Row, Col, Card, CardBody, CardHeader, CardTitle, Badge, Button, ListGroup, ListGroupItem, Table } from 'reactstrap';
 import { CNav, CNavItem, CNavLink, CTabContent, CTabPane, CTabs, CButton, CCollapse, CCard, CModal, CModalBody, CModalHeader, CModalTitle } from '@coreui/react'
-import { getEventoRiesgoId, getUltimaObservacion, putEvaluaEvento, getGeneraCodigo } from './controller/EventoController';
+import { getEventoRiesgoId, getUltimaObservacion, putEvaluaEvento, getGeneraCodigo, getArchivosByEvento } from './controller/EventoController';
 import FormularioEvaluar from './component/FormularioEvaluar'
+import { formatSizeUnits, formatDate } from 'src/functions/FunctionEvento'
 import Swal from 'sweetalert2'
+import CIcon from '@coreui/icons-react';
 
 var _ = require('lodash');
 
 const EventoRiesgo = ({ match }) => {
+
+  const [dataArchivos, setDataArchivo] = useState([])
 
   //const forceUpdate = useReducer(bool => !bool)[1];
 
@@ -20,6 +24,16 @@ const EventoRiesgo = ({ match }) => {
     },
     buttonsStyling: false
   })
+
+  const getArchivos = (idEvento) => {
+    getArchivosByEvento(idEvento)
+      .then(res => {
+        //console.log('archivo: ', res.data);
+        setDataArchivo(res.data)
+      }).catch((error) => {
+        console.log('Error: ', error)
+      })
+  }
 
   // Genera posible codigo al Autorizar Evento
   const [codigo, setGeneraCodigo] = useState({})
@@ -38,9 +52,11 @@ const EventoRiesgo = ({ match }) => {
     getById();
     getByIdObservacion();
     getCodigo();
+    getArchivos(match.params.id);
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  console.log('Archivos id: ', dataArchivos);
   // Obtiene Evento de riesgo por el ID
   const [dataApi, setDataApi] = useState({})
 
@@ -97,8 +113,8 @@ const EventoRiesgo = ({ match }) => {
     swalWithBootstrapButtons.fire({
       title: '',
       text: dataToRequest.estadoRegistro === 'Autorizado' ? 'Al autorizar el registro se asignará el siguiente código para ASFI: ' + codigo + ' ¿Está seguro de generarlo?' :
-            dataToRequest.estadoRegistro === 'Observado' ? '¿Está seguro de modificar el estado de registro a Observado?' :
-            dataToRequest.estadoRegistro === 'Pendiente' ? '¿Está seguro de modificar el estado de registro a Pendiente?' :
+        dataToRequest.estadoRegistro === 'Observado' ? '¿Está seguro de modificar el estado de registro a Observado?' :
+          dataToRequest.estadoRegistro === 'Pendiente' ? '¿Está seguro de modificar el estado de registro a Pendiente?' :
             dataToRequest.estadoRegistro === 'Descartado' ? '¿Está seguro de modificar el estado de registro a Descartado?' : '',
       icon: 'warning',
       showCancelButton: true,
@@ -166,9 +182,8 @@ const EventoRiesgo = ({ match }) => {
     return dataApi.montoRecuperado + dataApi.gastoAsociado + dataApi.montoRecuperadoSeguro;
   }
 
-
+  // Lista Matriz de riesgos relacionados
   const renderRiesgoRelacionado = (list) => {
-
     var build = list.map((item) => {
       return (
         <li>{item.codigo}</li>
@@ -176,6 +191,35 @@ const EventoRiesgo = ({ match }) => {
     })
     return build
   }
+
+  function base64toPDF(data) {
+    var bufferArray = base64ToArrayBuffer(data);
+    var blobStore = new Blob([bufferArray], { type: "application/pdf" });
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+        window.navigator.msSaveOrOpenBlob(blobStore);
+        return;
+    }
+    var data = window.URL.createObjectURL(blobStore);
+    var pdfWindow = window.open();
+    var link = document.createElement('a');
+    document.body.appendChild(link);
+    pdfWindow.location.href = data;
+    //link.download = "file.pdf";
+    link.click();
+    window.URL.revokeObjectURL(data);
+    link.remove();
+}
+
+function base64ToArrayBuffer(data) {
+  var bString = window.atob(data);
+  var bLength = bString.length;
+  var bytes = new Uint8Array(bLength);
+  for (var i = 0; i < bLength; i++) {
+      var ascii = bString.charCodeAt(i);
+      bytes[i] = ascii;
+  }
+  return bytes;
+};
 
   return (
     <div>
@@ -387,14 +431,53 @@ const EventoRiesgo = ({ match }) => {
                               <div className='text-data'>{dataApi.canalAsfiId !== null ? dataApi.canalAsfiId.nombre : <i>Sin registro</i>}</div>
                             </Col>
 
-                            <Col xs='12' md='6' className='pt-2'>
+                            <Col xs='12' className='pt-2'>
                               <div className='text-label'>Descripción: </div>
                               <div className='text-data'>{dataApi.descripcion !== '' ? dataApi.descripcion : <i>Sin registro</i>}</div>
                             </Col>
 
-                            <Col xs='12' md='6' className='pt-2'>
+                            <Col xs='12' className='pt-2'>
                               <div className='text-label'>Descripción completa: </div>
                               <div className='text-data'>{dataApi.descripcionCompleta !== '' ? dataApi.descripcionCompleta : <i>Sin registro</i>}</div>
+                            </Col>
+                          </Row>
+
+                          <Row>
+                            <Col xs='12' md='6' className='pt-2'>
+                              <div className='text-label'>Archivo(s) adjunto(s): </div>
+                              {(dataArchivos !== null && !_.isEmpty(dataArchivos)) ?
+                                <Table responsive size="sm" borderless="false" striped='false'className='mt-2'>
+                                  <thead>
+                                    <tr>
+                                      <th>Nombre</th>
+                                      <th>Tamaño</th>
+                                      <th>Fecha registro</th>
+                                      <th>Archivo</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {dataArchivos.map((archivo, index) => {
+                                      return (
+                                        <tr scope="row" key={archivo.id}>
+                                          <td>{archivo.nombreArchivo}</td>
+                                          <td>{formatSizeUnits(archivo.size)}</td>
+                                          <td>{formatDate(archivo.updated)}</td>
+                                          {/* <td><embed type="application/pdf" src={'data:application/pdf;base64,'+archivo.archivoBase64} /></td> */}
+                                          <td>
+                                            <a href='' target="_blank" onClick={() => base64toPDF(archivo.archivoBase64)} target="_blank">
+                                              <CIcon
+                                                className="mb-2"
+                                                src="/icon/pdf.png"
+                                                height={30}
+                                              />
+                                            </a>
+                                          </td>
+                                        </tr>
+                                      );
+                                    })}
+                                  </tbody>
+                                </Table>
+                              : <i>Sin Archivos</i>}
                             </Col>
                           </Row>
                         </CTabPane>
@@ -435,7 +518,7 @@ const EventoRiesgo = ({ match }) => {
 
                         <CTabPane>
                           <Row className='pt-3'>
-                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                            <Col xs='12' sm='6' md='4' xl='6' className='pt-2'>
                               <div className='text-label'>Código inicial: </div>
                               <div className='text-data'>{dataApi.codigoInicial !== '' ? dataApi.codigoInicial : <i>Sin registro</i>}</div>
                             </Col>
@@ -562,24 +645,24 @@ const EventoRiesgo = ({ match }) => {
 
                               <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                                 <div className='text-label'>Monto de pérdida: </div>
-                                <div className='text-data'>{dataApi.montoPerdida !== null ? dataApi.montoPerdida : <i>Sin registro</i>}</div>
+                                <div className='text-data'>{dataApi.montoPerdida !== null ? _.round(dataApi.montoPerdida, 2) : <i>Sin registro</i>}</div>
                               </Col>
 
                               <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                                 <div className='text-label'>Valor contable - Monto de pérdida (BOB){/* Monto de pérdida por riesgo operativo (USD) */}: </div>
                                 <div className='text-data'>
-                                  {calculaCambio()}
+                                  {_.round(calculaCambio(), 2)}
                                 </div>
                               </Col>
 
                               <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                                 <div className='text-label'>Gastos asociados: </div>
-                                <div className='text-data'>{dataApi.gastoAsociado !== null ? dataApi.gastoAsociado : <i>Sin registro</i>}</div>
+                                <div className='text-data'>{dataApi.gastoAsociado !== null ? _.round(dataApi.gastoAsociado, 2) : <i>Sin registro</i>}</div>
                               </Col>
 
                               <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                                 <div className='text-label'>Monto recuperado: </div>
-                                <div className='text-data'>{dataApi.montoRecuperado !== null ? dataApi.montoRecuperado : <i>Sin registro</i>}</div>
+                                <div className='text-data'>{dataApi.montoRecuperado !== null ? _.round(dataApi.montoRecuperado, 2) : <i>Sin registro</i>}</div>
                               </Col>
 
                               <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
@@ -603,7 +686,7 @@ const EventoRiesgo = ({ match }) => {
 
                               <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                                 <div className='text-label'>Monto recuperado del seguro: </div>
-                                <div className='text-data'>{dataApi.montoRecuperadoSeguro !== null ? dataApi.montoRecuperadoSeguro : <i>Sin registro</i>}</div>
+                                <div className='text-data'>{dataApi.montoRecuperadoSeguro !== null ? _.round(dataApi.montoRecuperadoSeguro, 2) : <i>Sin registro</i>}</div>
                               </Col>
 
                               <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
@@ -613,20 +696,20 @@ const EventoRiesgo = ({ match }) => {
 
                               <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                                 <div className='text-label'>Pérdida de valor de mercado: </div>
-                                <div className='text-data'>{dataApi.perdidaMercado !== null ? dataApi.perdidaMercado : <i>Sin registro</i>}</div>
+                                <div className='text-data'>{dataApi.perdidaMercado !== null ? _.round(dataApi.perdidaMercado, 2) : <i>Sin registro</i>}</div>
                               </Col>
 
                               <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                                 <div className='text-label'>Monto total recuperado: </div>
                                 <div className='text-data'>
-                                  {totalRecuperado()}
+                                  {_.round(totalRecuperado(), 2)}
                                 </div>
                               </Col>
 
                               <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                                 <div className='text-label'>Monto total de pérdida: </div>
                                 <div className='text-data'>
-                                  {calculaCambio() - (totalRecuperado())}
+                                  {_.round(calculaCambio() - totalRecuperado(), 2)}
                                 </div>
                               </Col>
                             </Row>

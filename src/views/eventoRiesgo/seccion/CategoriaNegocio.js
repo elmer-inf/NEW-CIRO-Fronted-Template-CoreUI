@@ -388,12 +388,12 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
           <div className='divider-text'><span className='text-label'>Categoria</span></div>
         </div>
         <Row>
-          <FormGroup tag={Col} md='6' lg='3'>
+          <FormGroup tag={Col} md='6' lg='6'>
             <Label className='form-label'>
               Código inicial
             </Label>
             <CInputReact
-              type={"text"}
+              type={"textarea"}
               id={'codigoInicial'}
               placeholder={'Código inicial'}
               value={formik.values.codigoInicial}
@@ -401,6 +401,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
               onBlur={formik.handleBlur}
               touched={formik.touched.codigoInicial}
               errors={formik.errors.codigoInicial}
+              rows={1}
             />
           </FormGroup>
 
@@ -755,7 +756,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
               onBlur={formik.handleBlur}
               touched={formik.touched.detalleEstado}
               errors={formik.errors.detalleEstado}
-              rows={1}
+              rows={3}
             />
           </FormGroup>
         </Row>

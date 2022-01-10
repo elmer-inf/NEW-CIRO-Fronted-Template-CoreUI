@@ -106,7 +106,7 @@ export const intervaloImpacto = (arrayData, perdida) => {
           montoPerdida = arrayData[value].id;
         }
         if(perdida > _.maxBy(arrayData, 'campoF').campoF){
-            montoPerdida = null;
+            montoPerdida = _.maxBy(arrayData, 'campoF').id;
         }
       }
     }

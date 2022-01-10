@@ -249,7 +249,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
                       <Field
                         name={`planesAccion.${i}.descripcion`}
                         as="textarea"
-                        rows="1"
+                        rows="2"
                         className={'form-control' + (planErrors.descripcion && planTouched.descripcion ? ' is-invalid' : '')}
                       />
                       <ErrorMessage name={`planesAccion.${i}.descripcion`} component="div" className="invalid-feedback" />
@@ -435,7 +435,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
                       <Field
                         name={`planesAccion.${i}.comenPropuesta`}
                         as="textarea"
-                        rows="1"
+                        rows="3"
                         className={'form-control' + (planErrors.comenPropuesta && planTouched.comenPropuesta ? ' is-invalid' : '')}
                       />
                       <ErrorMessage name={`planesAccion.${i}.comenPropuesta`} component="div" className="invalid-feedback" />
@@ -446,7 +446,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
                       <Field
                         name={`planesAccion.${i}.comenEnProceso`}
                         as="textarea"
-                        rows="1"
+                        rows="3"
                         className={'form-control' + (planErrors.comenEnProceso && planTouched.comenEnProceso ? ' is-invalid' : '')}
                       />
                       <ErrorMessage name={`planesAccion.${i}.comenEnProceso`} component="div" className="invalid-feedback" />
