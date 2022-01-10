@@ -9,7 +9,6 @@ import { countEstadoPlanes, resultAvance } from 'src/functions/FunctionsMatriz'
 import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik';
 import { CBadge, CCallout, CProgress } from '@coreui/react'
 import BootstrapTable from 'react-bootstrap-table-next'
-import { CSelectReact } from 'src/reusable/CSelectReact'
 import Select from "react-select";
 
 var _ = require('lodash');
@@ -94,6 +93,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
   useEffect(() => {
     callApiCargo(7);
     callApiEstrategia(4);
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Despliegue de dataApi Parametros en options (Select)
@@ -106,14 +106,19 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
     return deployOption;
   }
 
-  const optionsCargo = () => {
-    const deployOption = dataApiCargo.map((item, i) => {
-      return (
-        <option key={i} value={item.label}>{item.label}</option>
-      )
-    });
-    return deployOption;
-  }
+   // Options Num de Planes
+  /*  const optionsPlanes = [
+    { value: 1, label: 1 },
+    { value: 2, label: 2 },
+    { value: 3, label: 3 },
+    { value: 4, label: 4 },
+    { value: 5, label: 5 },
+    { value: 6, label: 6 },
+    { value: 7, label: 7 },
+    { value: 8, label: 8 },
+    { value: 9, label: 9 },
+    { value: 10, label: 10 },
+  ] */
 
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
@@ -161,6 +166,30 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
         <CBadge className="mt-1 mb-2 mr-1 px-2 py-1 badge-warning-light">{cell}</CBadge>
       );
     }
+  }
+
+  // Style Select
+  const customStyles = {
+    menu: provided => ({ ...provided, zIndex: "9999 !important" }),
+    control: (styles,) => ({
+      ...styles,
+      boxShadow: 'none'
+    }),
+    /* option: (styles, { isDisabled, isSelected }) => {
+      return {
+        ...styles,
+        backgroundColor: isSelected ? '#e79140' : 'white',
+        cursor: isDisabled ? 'not-allowed' : 'default',
+        ':active': {
+          backgroundColor: '#e79140',
+          color: 'white'
+        },
+        ':hover': {
+          backgroundColor: isSelected ? '#e79140' : '#fbf3eb',
+          color: isSelected ? 'white' : '#e79140'
+        }
+      }
+    } */
   }
 
 
@@ -233,11 +262,14 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
                       <Select
                         placeholder="Seleccionar"
                         onChange={selectedOption => {
-                          setFieldValue(`planesAccion.${i}.cargo`,selectedOption.label, false)
+                          setFieldValue(`planesAccion.${i}.cargo`, selectedOption.label , false)
                         }}
                         options={dataApiCargo}
                         name={`planesAccion.${i}.cargo`}
+                        styles={customStyles}
+                        className={(planErrors.cargo && planTouched.cargo ? ' is-invalid' : '')}
                       />
+                      <ErrorMessage name={`planesAccion.${i}.cargo`} component="div" className="invalid-feedback" />
                     </FormGroup>
 
                     <FormGroup tag={Col} md='6' lg='3' className='mb-2'>

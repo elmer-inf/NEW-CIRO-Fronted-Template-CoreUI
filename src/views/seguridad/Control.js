@@ -1,21 +1,21 @@
-import React, { Fragment, useState, useEffect } from 'react'
-import { Card, CardHeader, CardBody, CardTitle, Button, Col, Row } from 'reactstrap'
+import React, { Fragment } from 'react'
+import { Card, CardHeader, CardBody, CardTitle, Col, Row } from 'reactstrap'
 
-import { useHistory } from 'react-router-dom'
-import { getGroupByArea } from './controller/SeguridadController'
+//import { useHistory } from 'react-router-dom'
+/* import { getGroupByArea } from './controller/SeguridadController'
 import { getTablaDescripcionRiesgoN1 } from 'src/views/administracion/matriz-riesgo/controller/AdminRiesgoController'
 import { getTablaDescripcionSeguridadN1 } from 'src/views/administracion/seguridad/controller/AdminSeguridadController'
-import { buildSelectTwo } from 'src/functions/Function'
+import { buildSelectTwo } from 'src/functions/Function' */
 
-var _ = require('lodash');
+//var _ = require('lodash');
 
 const SeguridadListar = () => {
 
-  const history = useHistory()
+  //const history = useHistory()
 
-  const redirect = () => {
+  /* const redirect = () => {
     history.push('/seguridad/Registrar')
-  }
+  } */
 
   //  P  A  R  A  M  E  T  R  O  S
   // Estado

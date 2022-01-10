@@ -19,6 +19,12 @@ export const putEvaluaEvento = (id, data) => {
     return axios.put(uri, data);
 }
 
+export const getGeneraCodigo = async (id) => {
+    const uri = HOST + 'v1/eventoRiesgo/generaCodigo/' + id;
+    const response = await axios.get(uri);
+    return response;
+}
+
 export const getEventoRiesgoId = async (id) => {
     const uri = HOST + 'v1/eventoRiesgo/mostrar/' + id;
     const response = await axios.get(uri);

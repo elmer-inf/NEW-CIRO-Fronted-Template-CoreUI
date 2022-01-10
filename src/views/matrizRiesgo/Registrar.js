@@ -5,7 +5,7 @@ import Controles from './seccionesFormulario/Controles'
 import RiesgoResidual from './seccionesFormulario/RiesgoResidual'
 import PlanesSeguimiento from './seccionesFormulario/PlanesSeguimiento'
 import Valoracion from './seccionesFormulario/Valoracion'
-import { FileText, BarChart2, ChevronRight, CheckSquare, PieChart, Trello, List, TrendingUp } from 'react-feather'
+import { FileText, BarChart2, ChevronRight, CheckSquare, PieChart, Trello, TrendingUp } from 'react-feather'
 import { Row, Col, Card, CardBody, CardHeader, CardTitle, TabContent, TabPane, NavLink, NavItem, Nav} from 'reactstrap';
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames';
@@ -81,7 +81,7 @@ const MatrizRiesgoRegistrar = () => {
   }
 
   const [requestData, setRequestData] = useState(dataResult);
-  const [activeTab, setActiveTap] = useState('5');
+  const [activeTab, setActiveTap] = useState('1');
   /* manejo de botones siguiente */
   const nextSection = (tab) => {
     if (tab === 1) {

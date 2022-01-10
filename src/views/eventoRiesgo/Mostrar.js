@@ -1,22 +1,48 @@
 import { React, useState, useEffect } from 'react'
 import { FileText, Activity, DollarSign, BarChart2, CheckSquare } from 'react-feather'
-import { Row, Col, Card, CardBody, CardHeader, CardTitle, Badge, Button, ListGroup, ListGroupItem, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Row, Col, Card, CardBody, CardHeader, CardTitle, Badge, Button, ListGroup, ListGroupItem } from 'reactstrap';
 import { CNav, CNavItem, CNavLink, CTabContent, CTabPane, CTabs, CButton, CCollapse, CCard, CModal, CModalBody, CModalHeader, CModalTitle } from '@coreui/react'
-import { getEventoRiesgoId, getUltimaObservacion, putEvaluaEvento } from './controller/EventoController';
+import { getEventoRiesgoId, getUltimaObservacion, putEvaluaEvento, getGeneraCodigo } from './controller/EventoController';
 import FormularioEvaluar from './component/FormularioEvaluar'
 import Swal from 'sweetalert2'
 
 var _ = require('lodash');
 
 const EventoRiesgo = ({ match }) => {
-  // Obtiene Evento de riesgo por el ID
-  const [dataApi, setDataApi] = useState({})
+
+  //const forceUpdate = useReducer(bool => !bool)[1];
+
+  // Configuracion sweetalert2
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: 'btn btn-primary px-4',
+      cancelButton: 'btn btn-outline-primary px-4 mr-4',
+    },
+    buttonsStyling: false
+  })
+
+  // Genera posible codigo al Autorizar Evento
+  const [codigo, setGeneraCodigo] = useState({})
+  const getCodigo = async () => {
+    const idEvento = match.params.id;
+    await getGeneraCodigo(idEvento)
+      .then((response) => {
+        setGeneraCodigo(response.data)
+      }).catch((error) => {
+        console.log("Error: ", error);
+      });
+  }
 
   useEffect(() => {
+    //forceUpdate();
     getById();
     getByIdObservacion();
+    getCodigo();
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Obtiene Evento de riesgo por el ID
+  const [dataApi, setDataApi] = useState({})
 
   const getById = async () => {
     const idEvento = match.params.id;
@@ -43,7 +69,6 @@ const EventoRiesgo = ({ match }) => {
         setDataUltimaObs(res)
       }).catch((error) => {
         console.log("Error: ", error);
-        //notificationToast('error', Messages.notification.notOk)
       });
   }
 
@@ -57,90 +82,65 @@ const EventoRiesgo = ({ match }) => {
   // Modal
   const [danger, setDanger] = useState(false)
 
-  // Form Evaluar evento
-  const dataEstadoRegistro = dataApi.estadoRegistro;
-
   const formValueInitial = {
-    estadoRegistro: dataEstadoRegistro,
+    estadoRegistro: dataApi.estadoRegistro,
     listaObservacion: '',
     nota: '',
     estado: '',
     modulo: ''
   }
 
+  // Evalua Evento: Autorizar, Pendiente, Observado y Descartado
   const handleOnSubmit = (dataToRequest) => {
-    const idEvento = match.params.id
-    //console.log('ID evento para evaluar: ', idEvento)
-    //console.log('data antes de enviar: ', dataToRequest)
-    putEvaluaEvento(idEvento, dataToRequest)
-      .then(res => {
-        console.log('response : ', res);
-        window.location.reload(true);
-      }).catch((error) => {
-        console.log('Error al obtener datos: ', error);
-      });
-  }
-/* 
-  const swalWithBootstrapButtons = Swal.mixin({
-    customClass: {
-      confirmButton: 'btn btn-primary px-4',
-      cancelButton: 'btn btn-outline-primary px-4 mr-4',
-    },
-    buttonsStyling: false
-  })
+    const idEvento = match.params.id;
 
-  swalWithBootstrapButtons.fire({
-    title: '',
-    text: "¿Está seguro de autorizar el registro del Evento de Riesgo?",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Si',
-    cancelButtonText: 'No',
-    reverseButtons: true,
-    position: 'top'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      //window.alert("Hello world!")
-      swalWithBootstrapButtons.fire({
-        title: '',
-        text: "Se asignará el siguiente código de Evento para ASFI: ¿Está seguro de generarlo?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Si',
-        cancelButtonText: 'No',
-        reverseButtons: true,
-        position: 'top'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          handleOnSubmit(dataToRequest)
-          swalWithBootstrapButtons.fire({
-            title: '',
-            text: 'El Evento de Riesgo se autorizó exitósamente',
-            icon: 'success',
-            position: 'top',
-          })
-        } else if (
-          result.dismiss === Swal.DismissReason.cancel
-        ) {
-          swalWithBootstrapButtons.fire({
-            title: '',
-            text: 'Autorizacion de registro cancelada',
-            icon: 'error',
-            position: 'top'
+    swalWithBootstrapButtons.fire({
+      title: '',
+      text: dataToRequest.estadoRegistro === 'Autorizado' ? 'Al autorizar el registro se asignará el siguiente código para ASFI: ' + codigo + ' ¿Está seguro de generarlo?' :
+            dataToRequest.estadoRegistro === 'Observado' ? '¿Está seguro de modificar el estado de registro a Observado?' :
+            dataToRequest.estadoRegistro === 'Pendiente' ? '¿Está seguro de modificar el estado de registro a Pendiente?' :
+            dataToRequest.estadoRegistro === 'Descartado' ? '¿Está seguro de modificar el estado de registro a Descartado?' : '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si',
+      cancelButtonText: 'No',
+      reverseButtons: true,
+      position: 'top',
+      closeOnConfirm: false
+    }).then((result) => {
+      if (result.isConfirmed) {
+        putEvaluaEvento(idEvento, dataToRequest)
+          .then(res => {
+            swalWithBootstrapButtons.fire({
+              title: '',
+              text: 'Operación realizada exitósamente',
+              icon: 'success',
+              position: 'top',
+            }).then(okay => {
+              if (okay) {
+                window.location.reload();
+              }
+            })
+          }).catch((error) => {
+            console.log('Error al obtener datos: ', error);
+          });
+      } else if (
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        swalWithBootstrapButtons.fire({
+          title: '',
+          text: 'Operación cancelada',
+          icon: 'error',
+          position: 'top'
+        }).then(okay => {
+          if (okay) {
+            window.location.reload();
+          }
         })
-        }
-      })
-    } else if (
-      result.dismiss === Swal.DismissReason.cancel
-    ) {
-      swalWithBootstrapButtons.fire({
-        title: '',
-        text: 'Autorizacion de registro cancelada',
-        icon: 'error',
-        position: 'top'
-      })
-    }
-  }) */
+      }
+    })
+  }
+  // FIN Evalua Evento: Autorizar, Pendiente, Observado y Descartado
 
   // Lista las observaciones
   const listaObservaciones = String(dataUltimaObservacion.listaObservacion);

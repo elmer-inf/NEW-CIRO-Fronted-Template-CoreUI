@@ -146,9 +146,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   const callApiProcedimiento = (idTablaDes, idNivel2) => {
     getTablaDescripcionEventoN2(idTablaDes, idNivel2)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'descripcion', true);
-        //console.log('repetidos: ', options);
-        //console.log('sin rep : ', _.uniqBy(options, 'label'));
+        const options = buildSelectTwo(res.data, 'id', 'campoA', true);/* campoA */
         setDataApiProcedimiento(_.uniqBy(options, 'label'))
       }).catch((error) => {
         console.log('Error: ', error)
@@ -187,10 +185,11 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
 
   useEffect(() => {
     callApiArea(3);
-    callApiMacro(15);
+    callApiMacro(15); 
     callApiCargo(7);
     callApiIdentificado(8);
     getListEventosRiesgo();
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Reset Unidad (nivel 2)
