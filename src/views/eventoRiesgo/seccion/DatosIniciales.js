@@ -1,4 +1,4 @@
-import { React, Fragment, useState, useEffect} from 'react'
+import { React, Fragment, useState, useEffect } from 'react'
 import { ChevronRight, Delete } from 'react-feather'
 import { Label, FormGroup, Row, Col, Form, Button } from 'reactstrap'
 
@@ -6,80 +6,86 @@ import { useFormik } from "formik"
 import * as Yup from "yup"
 import { CInputReact } from 'src/reusable/CInputReact'
 import { CSelectReact } from 'src/reusable/CSelectReact'
-import  CInputCheckbox  from 'src/reusable/CInputCheckbox'
+import CInputCheckbox from 'src/reusable/CInputCheckbox'
 import { getTablaDescripcionEventoN1, getTablaDescripcionEventoN2 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
 import { buildSelectTwo } from 'src/functions/Function'
+import { Messages } from 'src/reusable/variables/Messages'
+import { CInputFile } from 'src/reusable/CInputFile'
+import { faTemperatureLow } from '@fortawesome/free-solid-svg-icons'
 
-const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
+const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFiles }) => {
 
   const formik = useFormik({
     initialValues: initValues,
     validationSchema: Yup.object().shape({
-        fechaIni: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").required('Campo obligatorio'),
-        horaIni: Yup.mixed().required('Campo obligatorio'),
-        fechaDesc: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").required('Campo obligatorio'),
-        horaDesc: Yup.mixed().required('Campo obligatorio'),
-        fechaFin: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
-        horaFin: Yup.mixed().nullable(),
-        agenciaId: Yup.mixed().nullable(),
-        ciudadId: Yup.mixed().nullable(),
-        areaID:  Yup.mixed().required('Campo obligatorio'),
-        unidadId: Yup.mixed().nullable(),
-        entidadAfectada: Yup.string().nullable(),
-        comercioAfectado: Yup.string().nullable(),
-        entidadId: Yup.mixed().nullable(),
-        cargoId: Yup.mixed().required('Campo obligatorio'),
-        estadoReportado: Yup.mixed().nullable(),
-        fuenteInfId: Yup.mixed().nullable(),
-        canalAsfiId: Yup.mixed().required('Campo obligatorio'),
-        descripcion: Yup.string().required('Campo obligatorio'),
-        descripcionCompleta: Yup.string().nullable()
+      fechaIni: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").required('Campo obligatorio'),
+      horaIni: Yup.mixed().required('Campo obligatorio'),
+      fechaDesc: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").required('Campo obligatorio'),
+      horaDesc: Yup.mixed().required('Campo obligatorio'),
+      fechaFin: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
+      horaFin: Yup.mixed().nullable(),
+      agenciaId: Yup.mixed().nullable(),
+      ciudadId: Yup.mixed().nullable(),
+      areaID: Yup.mixed().required('Campo obligatorio'),
+      unidadId: Yup.mixed().nullable(),
+      entidadAfectada: Yup.string().nullable(),
+      comercioAfectado: Yup.string().nullable(),
+      entidadId: Yup.mixed().nullable(),
+      cargoId: Yup.mixed().required('Campo obligatorio'),
+      estadoReportado: Yup.mixed().nullable(),
+      fuenteInfId: Yup.mixed().nullable(),
+      canalAsfiId: Yup.mixed().required('Campo obligatorio'),
+      descripcion: Yup.string().required('Campo obligatorio'),
+      descripcionCompleta: Yup.string().nullable(),
+      files: Yup.mixed().required(Messages.required),
 
-        /* fechaIni: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
-        horaIni: Yup.string().nullable(),
-        fechaDesc: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
-        horaDesc: Yup.string().nullable(),
-        fechaFin: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
-        horaFin: Yup.string().nullable(),
-        agenciaId: Yup.mixed().nullable(),
-        ciudadId: Yup.mixed().nullable(),
-        areaID:  Yup.mixed().nullable(),
-        unidadId: Yup.mixed().nullable(),
-        entidadAfectada: Yup.string().nullable(),
-        comercioAfectado: Yup.string().nullable(),
-        entidadId: Yup.mixed().nullable(),
-        cargoId: Yup.mixed().nullable(),
-        estadoReportado: Yup.mixed().nullable(),
-        fuenteInfId: Yup.mixed().nullable(),
-        canalAsfiId: Yup.mixed().nullable(),
-        descripcion: Yup.string().nullable(),
-        descripcionCompleta: Yup.string().nullable() */
-      }
+
+      /* fechaIni: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
+      horaIni: Yup.string().nullable(),
+      fechaDesc: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
+      horaDesc: Yup.string().nullable(),
+      fechaFin: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
+      horaFin: Yup.string().nullable(),
+      agenciaId: Yup.mixed().nullable(),
+      ciudadId: Yup.mixed().nullable(),
+      areaID:  Yup.mixed().nullable(),
+      unidadId: Yup.mixed().nullable(),
+      entidadAfectada: Yup.string().nullable(),
+      comercioAfectado: Yup.string().nullable(),
+      entidadId: Yup.mixed().nullable(),
+      cargoId: Yup.mixed().nullable(),
+      estadoReportado: Yup.mixed().nullable(),
+      fuenteInfId: Yup.mixed().nullable(),
+      canalAsfiId: Yup.mixed().nullable(),
+      descripcion: Yup.string().nullable(),
+      descripcionCompleta: Yup.string().nullable() */
+    }
     ),
 
     onSubmit: values => {
-       const data = {
+      const data = {
         ...values,
         estadoRegistro: 'Pendiente',
-        estadoEvento: (values.horaFin !== null && values.fechaFin !== null) ? 'Solución': 'Seguimiento',
+        estadoEvento: (values.horaFin !== null && values.fechaFin !== null) ? 'Solución' : 'Seguimiento',
 
-        horaIni:    (values.horaIni !== null) ?  values.horaIni + ':00' : null,
-        horaDesc:   (values.horaDesc !== null) ?  values.horaDesc + ':00' : null,
-        horaFin:   (values.horaFin !== null) ?  values.horaFin + ':00' : null,
+        horaIni: (values.horaIni !== null) ? values.horaIni + ':00' : null,
+        horaDesc: (values.horaDesc !== null) ? values.horaDesc + ':00' : null,
+        horaFin: (values.horaFin !== null) ? values.horaFin + ':00' : null,
 
-        agenciaId:  (values.agenciaId !== null) ?   values.agenciaId.value : 0,
-        ciudadId:   (values.ciudadId !== null) ?    values.ciudadId.value : 0,
-        areaID:     (values.areaID !== null) ?      values.areaID.value : 0,
-        unidadId:   (values.unidadId !== null) ?    values.unidadId.value : 0,
-        entidadId:  (values.entidadId !== null) ?   values.entidadId.value : 0,
-        cargoId:    (values.cargoId !== null) ?     values.cargoId.value : 0,
-        fuenteInfId:(values.fuenteInfId !== null) ? values.fuenteInfId.value : 0,
-        canalAsfiId:(values.canalAsfiId !== null) ? values.canalAsfiId.value : 0,
+        agenciaId: (values.agenciaId !== null) ? values.agenciaId.value : 0,
+        ciudadId: (values.ciudadId !== null) ? values.ciudadId.value : 0,
+        areaID: (values.areaID !== null) ? values.areaID.value : 0,
+        unidadId: (values.unidadId !== null) ? values.unidadId.value : 0,
+        entidadId: (values.entidadId !== null) ? values.entidadId.value : 0,
+        cargoId: (values.cargoId !== null) ? values.cargoId.value : 0,
+        fuenteInfId: (values.fuenteInfId !== null) ? values.fuenteInfId.value : 0,
+        canalAsfiId: (values.canalAsfiId !== null) ? values.canalAsfiId.value : 0,
 
         estadoReportado: (values.estadoReportado !== null) ? values.estadoReportado.value : 0,
       }
       console.log('datos que se enviaran SECCION 1:', data)
       setObject(data);
+      obtainFiles(values.files)
       nextSection(1);
     }
   })
@@ -199,7 +205,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
 
   const resetCiudadId = () => { formik.setFieldValue('ciudadId', null, false); }
   useEffect(() => {
-    if(formik.values.agenciaId !== null){
+    if (formik.values.agenciaId !== null) {
       callApiCiudad(2, formik.values.agenciaId.id);
       resetCiudadId();
     }
@@ -208,7 +214,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
 
   const resetUnidadId = () => { formik.setFieldValue('unidadId', null, false); }
   useEffect(() => {
-    if(formik.values.areaID !== null){
+    if (formik.values.areaID !== null) {
       callApiUnidad(4, formik.values.areaID.id);
       resetUnidadId();
     }
@@ -218,7 +224,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   // Resetea "Entidad" dependiendo del check Entidad afectada
   const resetEntidad = () => { formik.setFieldValue('entidadId', null, false); }
   useEffect(() => {
-    if(formik.values.entidadAfectada !== true){
+    if (formik.values.entidadAfectada !== true) {
       resetEntidad();
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
@@ -402,7 +408,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               label='Comercio afectado'
-              //checked={}
+            //checked={}
             />
           </FormGroup>
 
@@ -414,7 +420,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               label='Entidad afectada'
-              //checked={}
+            //checked={}
             />
           </FormGroup>
 
@@ -537,36 +543,53 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
               rows={1}
             />
           </FormGroup>
+
+          <FormGroup tag={Col} sm='12' className='mb-0'>
+            {/*  <Label className='form-label'>
+            Cargar archivos
+            </Label> */}
+            <CInputFile
+              label={"Cargar archivos"}
+              type={"file"}
+              id="files"
+              value={formik.values.files}
+              onChange={formik.setFieldValue}
+              onBlur={formik.handleBlur}
+              touched={formik.touched.files}
+              errors={formik.errors.files}
+              multiple={true}
+            />
+          </FormGroup>
         </Row>
 
         <div className='d-flex justify-content-between pt-4'>
           <Button
-              style={{width: '130px'}}
-              color="primary"
-              outline
-              // onClick={(e) => { redirect(e) }}
-              //href="#/administracion/formularios"
-            >
-              Cancelar
+            style={{ width: '130px' }}
+            color="primary"
+            outline
+          // onClick={(e) => { redirect(e) }}
+          //href="#/administracion/formularios"
+          >
+            Cancelar
           </Button>
           <Button
-            style={{width: '130px'}}
+            style={{ width: '130px' }}
             color="dark"
             outline
             onClick={() => { formik.handleReset() }}
             disabled={!formik.dirty || formik.isSubmitting}
           >
-            <Delete size={17} className='mr-2'/>
+            <Delete size={17} className='mr-2' />
             Limpiar
           </Button>
           <Button
-            style={{width: '130px'}}
+            style={{ width: '130px' }}
             className='text-white'
             color="primary"
             type="submit"
           >
             Siguiente
-            <ChevronRight size={17} className='ml-1'/>
+            <ChevronRight size={17} className='ml-1' />
           </Button>
         </div>
 

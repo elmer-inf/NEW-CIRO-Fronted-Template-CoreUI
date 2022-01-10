@@ -4,7 +4,7 @@ import { Row, Col, Card, CardBody, CardHeader, CardTitle, Badge, Button, ListGro
 import { CNav, CNavItem, CNavLink, CTabContent, CTabPane, CTabs, CButton, CCollapse, CCard, CModal, CModalBody, CModalHeader, CModalTitle } from '@coreui/react'
 import { getEventoRiesgoId, getUltimaObservacion, putEvaluaEvento, getGeneraCodigo } from './controller/EventoController';
 import FormularioEvaluar from './component/FormularioEvaluar'
-import Swal from 'sweetalert2'
+//import Swal from 'sweetalert2'
 
 var _ = require('lodash');
 

@@ -1,5 +1,11 @@
 import axios from 'axios'
 import { HOSTURI } from 'src/config'
+import AuthService from 'src/views/authentication/AuthService';
+
+const Auth = new AuthService();
+const header = Auth.getHeader();
+
+
 
 const HOST = HOSTURI.endpoint_ciro
 
@@ -12,6 +18,14 @@ export const getEventos = async () => {
 export const postEventoRiesgo = (data) => {
     const uri = HOST.concat('v1/eventoRiesgo/registrar')
     return axios.post(uri, data);
+}
+
+export const postEventoRiesgoFormData = (data) => {
+    const uri = HOST.concat('v1/eventoRiesgo/registrarwithfiles')
+    const headerFormData = Auth.getHeaderFormData(data);
+
+    return axios.post(uri, data, headerFormData);
+
 }
 
 export const putEvaluaEvento = (id, data) => {
