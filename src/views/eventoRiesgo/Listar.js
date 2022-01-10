@@ -150,11 +150,13 @@ const EventoRiesgoListar = () => {
         <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
       headerFormatter: typeFormatter,
     }, {
+      dataField: 'xxx1',
       text: 'ACCIONES',
       headerAlign: 'center',
       style: { textAlign: 'center' },
       formatter: (cell, row) => actionFormatter(cell, row),
     }, {
+      dataField: 'xxx2',
       text: 'EVALUAR',
       headerAlign: 'center',
       comun: { textAlign: 'center' },

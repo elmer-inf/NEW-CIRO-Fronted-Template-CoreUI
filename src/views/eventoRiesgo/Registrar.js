@@ -5,17 +5,18 @@ import CategoriaNegocio from './seccion/CategoriaNegocio'
 import DatosIniciales from './seccion/DatosIniciales'
 import Planes from './seccion/Planes'
 import { FileText, Activity, DollarSign, BarChart2, ChevronRight, AlertTriangle, CheckSquare } from 'react-feather'
-import { Row, Col, Card, CardBody, CardHeader, CardTitle, TabContent, TabPane, NavLink, NavItem, Nav, FormGroup, Label, } from 'reactstrap';
+import { Row, Col, Card, CardBody, CardHeader, CardTitle, TabContent, TabPane, NavLink, NavItem, Nav, FormGroup, Label, Form } from 'reactstrap';
 import CInputRadio from 'src/reusable/CInputRadio'
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames';
 import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
-import { postEventoRiesgo } from './controller/EventoController';
+import { postEventoRiesgo, postEventoRiesgoFormData } from './controller/EventoController';
 import { buildSelectTwo } from 'src/functions/Function'
 import { useFormik } from "formik"
 import * as Yup from "yup"
 import { ToastContainer, toast } from 'react-toastify'
 import CCSpinner from 'src/reusable/spinner/CCSpinner'
+import { CInputFile } from 'src/reusable/CInputFile'
 
 var _ = require('lodash');
 
@@ -23,7 +24,7 @@ const EventoRiesgoRegistrar = () => {
 
   const history = useHistory();
   const [spin, setSpin] = useState(false);
-
+  const [getFiles, setGetFiles] = useState(null)
   // Tipo de evento
   const [dataApiTipoEvento, setDataApiTipoEvento] = useState([])
   const callApiTipoEvento = (idTablaDes) => {
@@ -36,6 +37,9 @@ const EventoRiesgoRegistrar = () => {
       })
   }
 
+  const obtainFiles = (f) => {
+    setGetFiles(f)
+  }
   useEffect(() => {
     callApiTipoEvento(6);
   }, [])
@@ -73,7 +77,8 @@ const EventoRiesgoRegistrar = () => {
     fuenteInfId: null,
     canalAsfiId: null,
     descripcion: '',
-    descripcionCompleta: ''
+    descripcionCompleta: '',
+    files: null
   }
 
   const formValueInitialPlanes = {
@@ -149,7 +154,6 @@ const EventoRiesgoRegistrar = () => {
 
   const [requestData, setRequestData] = useState(dataResult);
   const [activeTab, setActiveTap] = useState('1');
-  //const [spin, setSpin] = useState(false);
 
   /* manejo de botones siguiente */
   const nextSection = (tab) => {
@@ -242,10 +246,27 @@ const EventoRiesgoRegistrar = () => {
         tipoEvento: formik.values.tipoEvento
       }
     }
+    //console.log('Lo que se enviara en el request: ', request)
+    // console.log('JSON.stringify(request) ', JSON.stringify(request))
+    var formData = new FormData();
 
-    console.log('Lo que se enviara en el request: ', request)
+    formData.append('eventoRiesgoPostDTO', JSON.stringify(_.omit(request, ['files'])));
+    //formData.append('file', getFiles);
 
-    postEventoRiesgo(request)
+
+
+    for (let i = 0; i < getFiles.length; i++) {
+      formData.append("file", getFiles[i]);
+    }
+
+   /*for (var value of formData.values()) {
+      console.log('===========================================')
+      console.log('--> ', value);
+      console.log('===========================================')
+    }*/
+
+
+    postEventoRiesgoFormData(formData)
       .then(res => {
         if (res.status >= 200 && res.status < 300) {
           console.log('Envio el request: ', res);
@@ -259,6 +280,22 @@ const EventoRiesgoRegistrar = () => {
         console.log('Error al registrar Evento de Riesgo: ', error);
         notificationToast('error', 'Algo salió mal, intente nuevamente');
       });
+
+
+    /*  postEventoRiesgo(request)
+        .then(res => {
+          if (res.status >= 200 && res.status < 300) {
+            console.log('Envio el request: ', res);
+            notificationToast('success', 'Evento de Riesgo registrado exitósamente');
+            //history.push("/eventoRiesgo/listar")
+          } else {
+            console.log('Hubo un  error ', res);
+            notificationToast('error', 'Algo salió mal, intente nuevamente');
+          }
+        }).catch((error) => {
+          console.log('Error al registrar Evento de Riesgo: ', error);
+          notificationToast('error', 'Algo salió mal, intente nuevamente');
+        });*/
   }
 
   return (
@@ -343,6 +380,7 @@ const EventoRiesgoRegistrar = () => {
                       nextSection={nextSection}
                       setObject={setObject}
                       initValues={formValueInitialDatos}
+                      obtainFiles={obtainFiles}
                     />
                   </TabPane>
 

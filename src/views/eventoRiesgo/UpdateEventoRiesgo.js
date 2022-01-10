@@ -1,4 +1,5 @@
 import React from 'react'
+import { getEventoRiesgoId } from './controller/EventoController';
 
 const UpdateEventoRiesgo = () => {
 

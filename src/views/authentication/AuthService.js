@@ -87,5 +87,19 @@ export default class AuthService {
 
         return header;
     }
+    getHeaderFormData(dataHeader) {
+        const token = this.getToken();
+        // const token = 'eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiI0ZGM2ZmFjOS1jMTk4LTQxZjAtYTZkNy0zYTBiYTQ4ZmMxOTQiLCJhdXRob3JpdGllcyI6eyJpZCI6IjRkYzZmYWM5LWMxOTgtNDFmMC1hNmQ3LTNhMGJhNDhmYzE5NCIsInVzZXJuYW1lIjoiQ29icmFuemEiLCJ0b2tlbiI6IjRkYzZmYWM5LWMxOTgtNDFmMC1hNmQ3LTNhMGJhNDhmYzE5NCJ9LCJzdWIiOiJDb2JyYW56YSIsImlhdCI6MTYzNjY3MDk3NSwiZXhwIjoxNjM2NzU3Mzc1fQ.Q0zgncqMb3jwJk3Vv7kkQIEyQchMwizdqLSCYxcSIocicp6eEKILxHdq5xnxUB3wW-ogj5JDgVsxAm2bXvLTqQ';
+        const header = {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            //    'Authorization': 'Bearer ' + token,
+                'sistema':sistema
+
+            },
+           // data: dataHeader
+        }
+        return header;
+    }
 
 }
