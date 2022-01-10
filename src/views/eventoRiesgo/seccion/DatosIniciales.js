@@ -4,21 +4,23 @@ import { Label, FormGroup, Row, Col, Form, Button } from 'reactstrap'
 
 import { useFormik } from "formik"
 import * as Yup from "yup"
-import { CInputReact } from '../../../reusable/CInputReact'
-import { CSelectReact } from '../../../reusable/CSelectReact'
-import  CInputCheckbox  from '../../../reusable/CInputCheckbox'
-import { getTablaDescripcionNivel, getTablaDescripcionNivel2 } from '../controller/EventoController';
-import { buildSelectTwo } from '../../../functions/Function'
+import { CInputReact } from 'src/reusable/CInputReact'
+import { CSelectReact } from 'src/reusable/CSelectReact'
+import  CInputCheckbox  from 'src/reusable/CInputCheckbox'
+import { getTablaDescripcionEventoN1, getTablaDescripcionEventoN2 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
+import { buildSelectTwo } from 'src/functions/Function'
 
 const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
 
   const formik = useFormik({
     initialValues: initValues,
     validationSchema: Yup.object().shape({
-        fechaIni: Yup.date().required('Campo obligatorio'),
-        horaIni: Yup.string().required('Campo obligatorio'),
-        fechaDesc: Yup.date().required('Campo obligatorio'),
-        horaDesc: Yup.string().required('Campo obligatorio'),
+        fechaIni: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").required('Campo obligatorio'),
+        horaIni: Yup.mixed().required('Campo obligatorio'),
+        fechaDesc: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").required('Campo obligatorio'),
+        horaDesc: Yup.mixed().required('Campo obligatorio'),
+        fechaFin: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
+        horaFin: Yup.mixed().nullable(),
         agenciaId: Yup.mixed().nullable(),
         ciudadId: Yup.mixed().nullable(),
         areaID:  Yup.mixed().required('Campo obligatorio'),
@@ -33,10 +35,12 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         descripcion: Yup.string().required('Campo obligatorio'),
         descripcionCompleta: Yup.string().nullable()
 
-        /* fechaIni: Yup.date().nullable(),
+        /* fechaIni: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
         horaIni: Yup.string().nullable(),
-        fechaDesc: Yup.date().nullable(),
+        fechaDesc: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
         horaDesc: Yup.string().nullable(),
+        fechaFin: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
+        horaFin: Yup.string().nullable(),
         agenciaId: Yup.mixed().nullable(),
         ciudadId: Yup.mixed().nullable(),
         areaID:  Yup.mixed().nullable(),
@@ -57,9 +61,11 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
        const data = {
         ...values,
         estadoRegistro: 'Pendiente',
+        estadoEvento: (values.horaFin !== null && values.fechaFin !== null) ? 'Solución': 'Seguimiento',
 
-        horaIni:    (values.horaIni !== null) ?  values.horaIni + ':00': null,
-        horaDesc:   (values.horaDesc !== null) ?  values.horaDesc + ':00': null,
+        horaIni:    (values.horaIni !== null) ?  values.horaIni + ':00' : null,
+        horaDesc:   (values.horaDesc !== null) ?  values.horaDesc + ':00' : null,
+        horaFin:   (values.horaFin !== null) ?  values.horaFin + ':00' : null,
 
         agenciaId:  (values.agenciaId !== null) ?   values.agenciaId.value : 0,
         ciudadId:   (values.ciudadId !== null) ?    values.ciudadId.value : 0,
@@ -82,7 +88,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   /* Agencia */
   const [dataApiAgencia, setDataApiAgencia] = useState([])
   const callApiAgencia = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiAgencia(options)
@@ -94,7 +100,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   /* Ciudad (Nivel 2), depende de agencia */
   const [dataApiCiudad, setDataApiCiudad] = useState([])
   const callApiCiudad = (idTablaDes, idNivel2) => {
-    getTablaDescripcionNivel2(idTablaDes, idNivel2)
+    getTablaDescripcionEventoN2(idTablaDes, idNivel2)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiCiudad(options)
@@ -106,7 +112,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   // Area
   const [dataApiArea, setDataApiArea] = useState([])
   const callApiArea = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiArea(options)
@@ -118,7 +124,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   // Unidad (Nivel 2), depende de area 
   const [dataApiUnidad, setDataApiUnidad] = useState([])
   const callApiUnidad = (idTablaDes, idNivel2) => {
-    getTablaDescripcionNivel2(idTablaDes, idNivel2)
+    getTablaDescripcionEventoN2(idTablaDes, idNivel2)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiUnidad(options)
@@ -130,7 +136,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   // Entidades
   const [dataApiEntidad, setDataApiEntidad] = useState([])
   const callApiEntidad = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiEntidad(options)
@@ -139,22 +145,11 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
       })
   }
 
-  // Tipo de evento
-  /* const [dataApiTipoEvento, setDataApiTipoEvento] = useState([])
-  const callApiTipoEvento = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
-      .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'clave', false)
-        setDataApiTipoEvento(options)
-      }).catch((error) => {
-        console.log('Error: ', error)
-      })
-  } */
 
   // Cargos
   const [dataApiCargo, setDataApiCargo] = useState([])
   const callApiCargo = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiCargo(options)
@@ -172,7 +167,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   // Fuente de informacion
   const [dataApiFuente, setDataApiFuente] = useState([])
   const callApiFuente = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiFuente(options)
@@ -184,7 +179,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   // Canal Asfi
   const [dataApiCanal, setDataApiCanal] = useState([])
   const callApiCanal = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiCanal(options)
@@ -197,7 +192,6 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
     callApiAgencia(1);
     callApiArea(3);
     callApiEntidad(5);
-    //callApiTipoEvento(6);
     callApiCargo(7);
     callApiFuente(8);
     callApiCanal(9);
@@ -209,6 +203,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
       callApiCiudad(2, formik.values.agenciaId.id);
       resetCiudadId();
     }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.agenciaId])
 
   const resetUnidadId = () => { formik.setFieldValue('unidadId', null, false); }
@@ -217,18 +212,26 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
       callApiUnidad(4, formik.values.areaID.id);
       resetUnidadId();
     }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.areaID])
+
+  // Resetea "Entidad" dependiendo del check Entidad afectada
+  const resetEntidad = () => { formik.setFieldValue('entidadId', null, false); }
+  useEffect(() => {
+    if(formik.values.entidadAfectada !== true){
+      resetEntidad();
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.entidadAfectada])
+
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
   return (
     <Fragment>
-     {/*  <div className='content-header'>
-        <h5 className='mb-0'>Datos Iniciales</h5>
-      </div> */}
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
         <Row className='pt-4'>
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
-            <Label className='form-label'> 
+            <Label className='form-label'>
               Fecha Inicio <span className='text-primary h5'><b>*</b></span>
             </Label>
             <CInputReact
@@ -288,6 +291,38 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
               onBlur={formik.handleBlur}
               touched={formik.touched.horaDesc}
               errors={formik.errors.horaDesc}
+            />
+          </FormGroup>
+
+          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+            <Label className='form-label'>
+              Fecha Fin
+            </Label>
+            <CInputReact
+              type={"date"}
+              id={'fechaFin'}
+              placeholder={'Fecha Fin'}
+              value={formik.values.fechaFin}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              touched={formik.touched.fechaFin}
+              errors={formik.errors.fechaFin}
+            />
+          </FormGroup>
+
+          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+            <Label className='form-label'>
+              Hora Fin
+            </Label>
+            <CInputReact
+              type={"time"}
+              id={'horaFin'}
+              placeholder={'Hora Fin'}
+              value={formik.values.horaFin}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              touched={formik.touched.horaFin}
+              errors={formik.errors.horaFin}
             />
           </FormGroup>
 
@@ -359,7 +394,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
             />
           </FormGroup>
 
-          <FormGroup tag={Col} md='6' lg='3' className='mb-0' style={{position: 'sticky'}}>
+          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <CInputCheckbox
               type={"checkbox"}
               id={'comercioAfectado'}
@@ -371,7 +406,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
             />
           </FormGroup>
 
-          <FormGroup tag={Col} md='6' lg='3' className='mb-0' style={{position: 'sticky'}}>
+          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <CInputCheckbox
               type={"checkbox"}
               id={'entidadAfectada'}
@@ -403,7 +438,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
-              Cargo persona afectada ASFI <span className='text-primary h5'><b>*</b></span>
+              Cargos Involucrados ASFI <span className='text-primary h5'><b>*</b></span>
             </Label>
             <CSelectReact
               type={"select"}
@@ -472,7 +507,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
           <FormGroup tag={Col} sm='12' className='mb-0'>
             <Label className='form-label'>
               Descripción <span className='text-primary h5'><b>*</b></span>
-            </Label> 
+            </Label>
             <CInputReact
               type={"textarea"}
               id={'descripcion'}

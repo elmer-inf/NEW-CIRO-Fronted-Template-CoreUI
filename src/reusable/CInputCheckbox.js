@@ -13,7 +13,7 @@ const CInputCheckbox = (props) => {
                 onChange={props.onChange}
                 onBlur={props.onBlur} 
                 checked={props.value}
-
+                disabled={props.disabled || false}
                 label={props.label} 
                //valid={props.touched && !props.errors && props.value !== ''}
                 //invalid={props.touched && !!props.errors}

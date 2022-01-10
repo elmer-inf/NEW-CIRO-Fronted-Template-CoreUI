@@ -1,26 +1,37 @@
-import { React, Fragment, useState, useEffect} from 'react'
+import { React, Fragment, useState, useEffect } from 'react'
 import { ChevronLeft, ChevronRight, Delete } from 'react-feather'
 import { Label, FormGroup, Row, Col, Form, Button } from 'reactstrap'
 
 import { useFormik } from "formik"
 import * as Yup from "yup"
-import { CInputReact } from '../../../reusable/CInputReact'
-import { CSelectReact } from '../../../reusable/CSelectReact'
-import { getTablaDescripcionNivel, getTablaDescripcionNivel2, getTablaDescripcionNivel3 } from '../controller/EventoController';
-import { buildSelectTwo } from '../../../functions/Function'
+import { CInputReact } from 'src/reusable/CInputReact'
+import { CSelectReact } from 'src/reusable/CSelectReact'
+import CInputCheckbox from 'src/reusable/CInputCheckbox'
+import { getTablaDescripcionEventoN1, getTablaDescripcionEventoN2, getTablaDescripcionEventoN3 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
+import { buildSelectThree, buildSelectTwo } from 'src/functions/Function'
+import { getRiesgos } from 'src/views/matrizRiesgo/controller/RiesgoController'
 
-const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, isEdit , tipoEvento, fechaDesc}) => {
+var _ = require('lodash');
 
-   // Obtiene Trimestre a partir de la fechaDesc
-   var trimestreGenerado = '';
-   if(fechaDesc.substring(5, 7) === '01' || fechaDesc.substring(5, 7) === '02' || fechaDesc.substring(5, 7) === '03')
-     trimestreGenerado = 'T1 / '+  fechaDesc.substring(0, 4);
-   if(fechaDesc.substring(5, 7) === '04' || fechaDesc.substring(5, 7) === '05' || fechaDesc.substring(5, 7) === '06')
-     trimestreGenerado = 'T2 / '+  fechaDesc.substring(0, 4);
-   if(fechaDesc.substring(5, 7) === '07' || fechaDesc.substring(5, 7) === '08' || fechaDesc.substring(5, 7) === '09')
-     trimestreGenerado = 'T3 / '+  fechaDesc.substring(0, 4);
-   if(fechaDesc.substring(5, 7) === '10' || fechaDesc.substring(5, 7) === '11' || fechaDesc.substring(5, 7) === '12')
-     trimestreGenerado = 'T4 / '+  fechaDesc.substring(0, 4);
+const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, isEdit, tipoEvento, fechaDesc }) => {
+
+  // Obtiene Trimestre a partir de la fechaDesc
+  const generaTrimestre = ()=>{
+    if(fechaDesc !== undefined){
+      var mes = parseInt(fechaDesc.substring(5, 7));
+      var anio = parseInt(fechaDesc.substring(0, 4));
+      var trimestre = '';
+      if (mes >= 1 && mes <= 3)
+        trimestre = 'T1 / ' + anio;
+      if (mes >= 4 && mes <= 6)
+        trimestre = 'T2 / ' + anio;
+      if (mes >= 7 && mes <= 9)
+        trimestre = 'T3 / ' + anio;
+      if (mes >= 10 && mes <= 12)
+        trimestre = 'T4 / ' + anio;
+      return trimestre;
+    }
+  }
 
   const formik = useFormik({
     initialValues: initValues,
@@ -32,6 +43,8 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         tipoEventoPerdidaId: Yup.mixed().required('Campo obligatorio'),
         subEventoId: Yup.mixed().nullable(),
         claseEventoId:  Yup.mixed().nullable(),
+        otrosAux: Yup.string().nullable(),
+        otros: Yup.string().nullable(),
         detalleEventoCritico: Yup.string().required('Campo obligatorio').nullable(),
         factorRiesgoId: Yup.mixed().required('Campo obligatorio'),
         procesoId: Yup.mixed().required('Campo obligatorio'),
@@ -45,15 +58,19 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         opeProSerId: Yup.mixed().nullable(),
         tipoServicioId: Yup.mixed().nullable(),
         descServicioId: Yup.mixed().nullable(),
-        riesgoRelacionado: Yup.mixed().nullable(),
-        detalleEstado: Yup.string().nullable()
+        detalleEstado: Yup.string().nullable(),
+
+        listMatrizRiesgo:Yup.mixed().nullable()
+       
 
         /* codigoInicial: Yup.string().nullable(),
         subcategorizacionId: Yup.mixed().nullable(),
         trimestre: Yup.string().nullable(),
         tipoEventoPerdidaId: Yup.mixed().nullable(),
         subEventoId: Yup.mixed().nullable(),
-        claseEventoId:  Yup.mixed().nullable(),
+        claseEventoId: Yup.mixed().nullable(),
+        otrosAux: Yup.string().nullable(),
+        otros: Yup.string().nullable(),
         detalleEventoCritico: Yup.string().nullable(),
         factorRiesgoId: Yup.mixed().nullable(),
         procesoId: Yup.mixed().nullable(),
@@ -67,52 +84,59 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         opeProSerId: Yup.mixed().nullable(),
         tipoServicioId: Yup.mixed().nullable(),
         descServicioId: Yup.mixed().nullable(),
-        riesgoRelacionado: Yup.mixed().nullable(),
-        detalleEstado: Yup.string().nullable() */
+        detalleEstado: Yup.string().nullable(),
+
+        listMatrizRiesgo: Yup.mixed().nullable(), */
       }
     ),
 
     onSubmit: values => {
+
+      var arrayIdMatrizRiesgo = [];
+      _.forEach(values.listMatrizRiesgo, function (value, key) {
+        arrayIdMatrizRiesgo.push(_.get(value, 'id', null))
+      });
+
       const data = {
         ...values,
-        subcategorizacionId:(values.subcategorizacionId !== null) ? values.subcategorizacionId.value : 0,
-        tipoEventoPerdidaId:(values.tipoEventoPerdidaId !== null) ? values.tipoEventoPerdidaId.value : 0,
-        subEventoId:        (values.subEventoId !== null) ?         values.subEventoId.value : 0,
-        claseEventoId:      (values.claseEventoId !== null) ?       values.claseEventoId.value : 0,
-        factorRiesgoId:     (values.factorRiesgoId !== null) ?      values.factorRiesgoId.value : 0,
-        procesoId:          (values.procesoId !== null) ?           values.procesoId.value : 0,
-        procedimientoId:    (values.procedimientoId !== null) ?     values.procedimientoId.value : 0,
+        subcategorizacionId: (values.subcategorizacionId !== null) ? values.subcategorizacionId.value : 0,
+        tipoEventoPerdidaId: (values.tipoEventoPerdidaId !== null) ? values.tipoEventoPerdidaId.value : 0,
+        subEventoId: (values.subEventoId !== null) ? values.subEventoId.value : 0,
+        claseEventoId: (values.claseEventoId !== null) ? values.claseEventoId.value : 0,
+        factorRiesgoId: (values.factorRiesgoId !== null) ? values.factorRiesgoId.value : 0,
+        procesoId: (values.procesoId !== null) ? values.procesoId.value : 0,
+        procedimientoId: (values.procedimientoId !== null) ? values.procedimientoId.value : 0,
 
-        lineaAsfiId:    (values.lineaAsfiId !== null) ?     values.lineaAsfiId.value : 0,
-        operacionId:    (values.operacionId !== null) ?     values.operacionId.value : 0,
-        efectoPerdidaId:(values.efectoPerdidaId !== null) ? values.efectoPerdidaId.value : 0,
-        opeProSerId:    (values.opeProSerId !== null) ?     values.opeProSerId.value : 0,
-        tipoServicioId: (values.tipoServicioId !== null) ?  values.tipoServicioId.value : 0,
-        descServicioId: (values.descServicioId !== null) ?  values.descServicioId.value : 0,
+        lineaAsfiId: (values.lineaAsfiId !== null) ? values.lineaAsfiId.value : 0,
+        operacionId: (values.operacionId !== null) ? values.operacionId.value : 0,
+        efectoPerdidaId: (values.efectoPerdidaId !== null) ? values.efectoPerdidaId.value : 0,
+        opeProSerId: (values.opeProSerId !== null) ? values.opeProSerId.value : 0,
+        tipoServicioId: (values.tipoServicioId !== null) ? values.tipoServicioId.value : 0,
+        descServicioId: (values.descServicioId !== null) ? values.descServicioId.value : 0,
 
-        eventoCritico:     (values.eventoCritico !== null) ?      values.eventoCritico.value : null,
-        lineaNegocio:      (values.lineaNegocio !== null) ?       values.lineaNegocio.value : null,
-        riesgoRelacionado: (values.riesgoRelacionado !== null) ?  values.riesgoRelacionado.value : null,
+        eventoCritico: (values.eventoCritico !== null) ? values.eventoCritico.value : null,
+        lineaNegocio: (values.lineaNegocio !== null) ? values.lineaNegocio.value : null,
 
-        trimestre: trimestreGenerado
-     }
-      console.log('datos que se enviaran SECCION 2:', data)
+        trimestre: generaTrimestre(),
+
+        listMatrizRiesgo: arrayIdMatrizRiesgo
+      }
+      console.log('datos que se enviaran SECCION 3:', data)
       setObject(data);
 
-      if (tipoEvento ==='A')
-        nextSection(2);
-      else
+      if (tipoEvento === 'A')
         nextSection(3);
-   }
-  })
+      else
+        nextSection(4);
+    }
+  });
 
- 
 
   /*   P  A  R  A  M  E  T  R  O  S   */
   // Subcategorizaciontipo
   const [dataApiSubcat, setDataApiSubcat] = useState([])
   const callApiSubcat = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiSubcat(options)
@@ -124,7 +148,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   // Tipo de evento de pérdida
   const [dataApiTipoEvento, setDataApiTipo] = useState([])
   const callApiTipoEvento = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiTipo(options)
@@ -136,7 +160,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   // Sub evento - Basilea (Nivel 2), depende de tipo de evento
   const [dataApiSubevento, setDataApiSubevento] = useState([])
   const callApiSubevento = (idTablaDes, idNivel2) => {
-    getTablaDescripcionNivel2(idTablaDes, idNivel2)
+    getTablaDescripcionEventoN2(idTablaDes, idNivel2)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiSubevento(options)
@@ -148,7 +172,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   // Clase evento - Basilea (Nivel 3), depende de Subevento
   const [dataApiClaseEvento, setDataApiClaseEvento] = useState([])
   const callApiClaseEvento = (idTablaDes, idNivel2, idNivel3) => {
-    getTablaDescripcionNivel3(idTablaDes, idNivel2, idNivel3)
+    getTablaDescripcionEventoN3(idTablaDes, idNivel2, idNivel3)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiClaseEvento(options)
@@ -160,7 +184,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   // Factor de riesgo operativo
   const [dataApiFactorRiesgo, setDataApiFactorRiesgo] = useState([])
   const callApiFactorRiesgo = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiFactorRiesgo(options)
@@ -172,7 +196,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   // Proceso
   const [dataApiProceso, setDataApiProceso] = useState([])
   const callApiProceso = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiProceso(options)
@@ -184,9 +208,9 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   // Procedimiento (Nivel 2), depende de proceso
   const [dataApiProcedimiento, setDataApiProcedimiento] = useState([])
   const callApiProcedimiento = (idTablaDes, idNivel2) => {
-    getTablaDescripcionNivel2(idTablaDes, idNivel2)
+    getTablaDescripcionEventoN2(idTablaDes, idNivel2)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
+        const options = buildSelectTwo(res.data, 'id', 'descripcion', true)
         setDataApiProcedimiento(options)
       }).catch((error) => {
         console.log('Error: ', error)
@@ -199,16 +223,16 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
     { value: 'No crítico', label: 'No crítico' }
   ]
 
-   // Línea de negocio
-   const optionsLineaAsfi = [
-    { value: 'Línea de Negocio Emisor', label: 'Línea de Negocio Emisor' },
-    { value: 'Línea de Negocio Adquirente', label: 'Línea de Negocio Adquirente' }
+  // Línea de negocio
+  const optionsLineaAsfi = [
+    { value: '1. Línea de Negocio Emisor', label: '1. Línea de Negocio Emisor' },
+    { value: '2. Línea de Negocio Adquirente', label: '2. Línea de Negocio Adquirente' }
   ]
 
   // Linea de negocio ASFI
   const [dataApiLineaAsfi, setDataApiLineaAsfi] = useState([])
   const callApiLineaAsfi = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiLineaAsfi(options)
@@ -220,7 +244,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   // Operaciones ASFI
   const [dataApiOperacion, setDataApiOperacion] = useState([])
   const callApiOperacion = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiOperacion(options)
@@ -232,7 +256,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   // Efecto de perdida
   const [dataApiEfectoPerdida, setDataApiEfectoPerdida] = useState([])
   const callApiEfectoPerdida = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiEfectoPerdida(options)
@@ -241,17 +265,10 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
       })
   }
 
-  // Riesgo relacionado
-  const optionsRiesgoRelacionado = [
-    { value: 'Riesgo relacionado 1', label: 'Riesgo relacionado 1' },
-    { value: 'Riesgo relacionado 2', label: 'Riesgo relacionado 2' },
-    { value: 'Riesgo relacionado 3', label: 'Riesgo relacionado 3' }
-  ]
-
   // Operación, producto o servicio afectado
   const [dataApiOpeProSer, setDataApiOpeProSer] = useState([])
   const callApiOpeProSer = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiOpeProSer(options)
@@ -260,10 +277,10 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
       })
   }
 
-  // Tipo de servicio (Nivel 2), depende de Operación, producto o servicio
+  // Tipo de servicio (Nivel 1)
   const [dataApiTipoServicio, setDataApiTipoServicio] = useState([])
-  const callApiTipoServicio = (idTablaDes, idNivel2) => {
-    getTablaDescripcionNivel2(idTablaDes, idNivel2)
+  const callApiTipoServicio = (idTablaDes) => {
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiTipoServicio(options)
@@ -272,10 +289,10 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
       })
   }
 
-  // Descripción de servicio (Nivel 3), depende de Tipo de servicio
+  // Descripción de servicio (Nivel 2), depende de Tipo de servicio
   const [dataApiServicioDesc, setDataApiServicioDesc] = useState([])
-  const callApiServicioDesc = (idTablaDes, idNivel2, idNivel3) => {
-    getTablaDescripcionNivel3(idTablaDes, idNivel2, idNivel3)
+  const callApiServicioDesc = (idTablaDes, idNivel2) => {
+    getTablaDescripcionEventoN2(idTablaDes, idNivel2)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiServicioDesc(options)
@@ -287,67 +304,90 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   useEffect(() => {
     callApiSubcat(10);
     callApiTipoEvento(11);
-    callApiFactorRiesgo(14);
+    callApiFactorRiesgo(26);
     callApiProceso(15);
     callApiLineaAsfi(17);
     callApiOperacion(18);
     callApiEfectoPerdida(19);
     callApiOpeProSer(20);
+    callApiTipoServicio(21);
+    callLListMatrizRiesgos();
   }, [])
 
   // Sub evento (nivel 2)
-  const resetSubeventoYclase = () => { formik.setFieldValue('subEventoId', null, false); formik.setFieldValue('claseEventoId', null, false);}
+  const resetSubeventoYclase = () => { formik.setFieldValue('subEventoId', null, false); formik.setFieldValue('claseEventoId', null, false); }
   useEffect(() => {
-    if(formik.values.tipoEventoPerdidaId !== null){
+    if (formik.values.tipoEventoPerdidaId !== null) {
       callApiSubevento(12, formik.values.tipoEventoPerdidaId.id);
       resetSubeventoYclase();
     }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.tipoEventoPerdidaId])
 
   // Clase evento (nivel 3)
   const resetClaseEvento = () => { formik.setFieldValue('claseEventoId', null, false); }
   useEffect(() => {
-    if(formik.values.subEventoId !== null){
+    if (formik.values.subEventoId !== null) {
       callApiClaseEvento(13, formik.values.subEventoId.id, formik.values.tipoEventoPerdidaId.id);
+      console.log('13, ', formik.values.subEventoId.id, ', ', formik.values.tipoEventoPerdidaId.id);
       resetClaseEvento();
     }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.subEventoId])
 
   // Procedimiento (nivel 2)
-  const resetProcedimiento = () => { formik.setFieldValue('procedimientoId', null, false);}
+  const resetProcedimiento = () => { formik.setFieldValue('procedimientoId', null, false); }
   useEffect(() => {
-    if(formik.values.procesoId !== null){
+    if (formik.values.procesoId !== null) {
       callApiProcedimiento(16, formik.values.procesoId.id);
       resetProcedimiento();
     }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.procesoId])
 
-  // Tipo de servicio (nivel 2)
-  const resetTipoYservicio = () => { formik.setFieldValue('tipoServicioId', null, false); formik.setFieldValue('descServicioId', null, false);}
-  useEffect(() => {
-    if(formik.values.opeProSerId !== null){
-      callApiTipoServicio(21, formik.values.opeProSerId.id);
-      resetTipoYservicio();
-    }
-  }, [formik.values.opeProSerId])
-
-  //  Descripción de servicio (nivel 3)
+  // Descripción de servicio (nivel 2)
   const resetServicioDesc = () => { formik.setFieldValue('descServicioId', null, false); }
   useEffect(() => {
-    if(formik.values.tipoServicioId !== null){
-      callApiServicioDesc(22, formik.values.tipoServicioId.id, formik.values.opeProSerId.id);
+    if (formik.values.tipoServicioId !== null) {
+      callApiServicioDesc(22, formik.values.tipoServicioId.id);
       resetServicioDesc();
     }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.tipoServicioId])
+
+  // Resetea "otros" dependiendo del check
+  const resetOtros = () => { formik.setFieldValue('otros', null, false); }
+  useEffect(() => {
+    if (formik.values.otrosAux !== true) {
+      resetOtros();
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.otrosAux])
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
+
+  // Riesgos realcionados:
+
+  const [listRiesgoRel, setListRiesgoRel] = useState([]);
+
+  const callLListMatrizRiesgos = () => {
+    //console.log('llegoo: ');
+    getRiesgos()
+      .then(res => {
+        const options = buildSelectThree(res.data, 'id', 'codigo', 'definicion', true)
+        //console.log('resssponseeee riesgo realcionado:: ', options);
+        setListRiesgoRel(options)
+      }).catch((error) => {
+        console.log('Error: ', error)
+      })
+  }
 
   return (
     <Fragment>
-      {/* <div className='content-header'>
-        <h5 className='mb-0'>Categoria</h5>
-      </div> */}
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
-        <Row className='pt-4'>
+        <div className='divider divider-left divider-dark pt-2'>
+          <div className='divider-text'><span className='text-label'>Categoria</span></div>
+        </div>
+        <Row>
           <FormGroup tag={Col} md='6' lg='3'>
             <Label className='form-label'>
               Código inicial
@@ -368,7 +408,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
             <Label className='form-label'>
               Sub categorización
             </Label>
-            <CSelectReact 
+            <CSelectReact
               type={"select"}
               id={'subcategorizacionId'}
               placeholder={'Seleccionar'}
@@ -389,7 +429,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
               type={"text"}
               id={'trimestre'}
               //placeholder={'Trimestre'}
-              value={trimestreGenerado}
+              value={generaTrimestre()}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               touched={formik.touched.trimestre}
@@ -449,7 +489,36 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
             />
           </FormGroup>
 
-          <FormGroup tag={Col} md='6' lg='6' className='mb-0'>
+          <FormGroup tag={Col} md='6' lg='3' className='mb-0' style={{ position: 'sticky' }}>
+            <CInputCheckbox
+              id={'otrosAux'}
+              type={"checkbox"}
+              value={formik.values.otrosAux}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              label='Otros (Clase evento - Basilea - ASFI)'
+            />
+          </FormGroup>
+
+          {formik.values.otrosAux === true ?
+            <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+              <Label className='form-label'>
+                Otros (Clase evento - Basilea - ASFI)
+              </Label>
+              <CInputReact
+                type={"text"}
+                id={'otros'}
+                placeholder={'Otros'}
+                value={formik.values.otros}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                touched={formik.touched.otros}
+                errors={formik.errors.otros}
+              />
+            </FormGroup>
+            : null}
+
+          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
               Detalle evento crítico <span className='text-primary h5'><b>*</b></span>
             </Label>
@@ -484,7 +553,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
-              Proceso <span className='text-primary h5'><b>*</b></span>
+              Macroproceso <span className='text-primary h5'><b>*</b></span>
             </Label>
             <CSelectReact
               type={"select"}
@@ -532,9 +601,28 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
               options={optionsEventoCritico}
             />
           </FormGroup>
+          <FormGroup tag={Col} md='12' className='mb-0'>
+            <Label className='form-label'>
+              Riesgo(s) relacionado(s) {/* <span className='text-primary h5'><b>*</b></span> */}
+            </Label>
+            <CSelectReact
+              type={"select"}
+              id={'listMatrizRiesgo'}
+              placeholder={'Seleccionar'}
+              value={formik.values.listMatrizRiesgo}
+              onChange={formik.setFieldValue}
+              onBlur={formik.setFieldTouched}
+              error={formik.errors.listMatrizRiesgo}
+              touched={formik.touched.listMatrizRiesgo}
+              options={listRiesgoRel}
+              isMulti={true}
+            />
+          </FormGroup>
         </Row>
-       <hr/>
-        <Row className="pt-2">
+        <div className='divider divider-left divider-dark pt-2'>
+          <div className='divider-text'><span className='text-label'>Línea de negocio</span></div>
+        </div>
+        <Row>
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
               Línea de negocio <span className='text-primary h5'><b>*</b></span>
@@ -583,23 +671,6 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
               error={formik.errors.efectoPerdidaId}
               touched={formik.touched.efectoPerdidaId}
               options={dataApiEfectoPerdida}
-            />
-          </FormGroup>
-
-          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
-            <Label className='form-label'>
-              Riesgo relacionado
-            </Label>
-            <CSelectReact
-              type={"select"}
-              id={'riesgoRelacionado'}
-              placeholder={'Seleccionar'}
-              value={formik.values.riesgoRelacionado}
-              onChange={formik.setFieldValue}
-              onBlur={formik.setFieldTouched}
-              error={formik.errors.riesgoRelacionado}
-              touched={formik.touched.riesgoRelacionado}
-              options={optionsRiesgoRelacionado}
             />
           </FormGroup>
 
@@ -691,33 +762,33 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
 
         <div className='d-flex justify-content-between pt-4'>
           <Button
-            style={{width: '130px'}}
+            style={{ width: '130px' }}
             className='text-white'
             color="primary"
-            onClick={() => beforeSection(2)}
+            onClick={() => beforeSection(3)}
           >
-            <ChevronLeft size={17} className='mr-1'/>
+            <ChevronLeft size={17} className='mr-1' />
             Atrás
           </Button>
           <Button
-            style={{width: '130px'}}
+            style={{ width: '130px' }}
             color="dark"
             outline
             onClick={() => { formik.handleReset()/* ; this.reset() */ }}
             disabled={(!formik.dirty || formik.isSubmitting)}
           >
-            <Delete size={17} className='mr-2'/>
+            <Delete size={17} className='mr-2' />
             Limpiar
           </Button>
           <Button
-            style={{width: '130px'}}
+            style={{ width: '130px' }}
             className='text-white'
             color="primary"
             type="submit"
-            //disabled={formik.isSubmitting}
+          //disabled={formik.isSubmitting}
           >
-            Siguiente 
-            <ChevronRight size={17} className='ml-1'/>
+            Siguiente
+            <ChevronRight size={17} className='ml-1' />
           </Button>
         </div>
       </Form>

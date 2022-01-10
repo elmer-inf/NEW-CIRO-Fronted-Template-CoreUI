@@ -1,33 +1,40 @@
 import React, { useState, useEffect } from 'react'
 import { useFormik } from "formik"
 import * as Yup from "yup"
-import { CInputReact } from '../../../../reusable/CInputReact'
-import { FormGroup, Col, Form, Button, Label } from 'reactstrap'
-import { CSelectReact } from '../../../../reusable/CSelectReact'
-import { getTablaLista, getTablaDescripcionNivel } from '../controller/AdminEventoController';
-import { buildSelectTwo } from '../../../../functions/Function'
+import { CInputReact } from 'src/reusable/CInputReact'
+import { FormGroup, Col, Form, Button, Label, Row } from 'reactstrap'
+import { getTablaDescripcionEventoN1 } from '../controller/AdminEventoController';
+import { buildSelectTwo } from 'src/functions/Function'
+import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
 
 /**
- * @param handleOnSubmit : function 
+ * @param handleOnSubmit : function
  * @description handleOnSubmit es una funcionm que se recibe del prop y es usada para realizar el post request (guardar registros)
- * @returns 
+ * @returns
  */
 
-const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
+const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelect }) => {
+  console.log('opt:: ', optionToSelect);
+  const [varListN2, setVarListN2] = useState(optionToSelect.tabla_n2);
+  const [varListN3, setVarListN3] = useState(optionToSelect.tabla_n3);
 
   const formik = useFormik({
     initialValues: initialValuess,
     validationSchema: Yup.object().shape(
       {
         tablaLista: Yup.mixed().required('Campo obligatorio'),
-        clave: Yup.string().min(1).max(50).nullable(),
-        nombre: Yup.string().min(2).max(500).required('Campo obligatorio'),
-        descripcion: Yup.string().min(2).max(1000).nullable(),
+        clave: Yup.string().min(1).max(20).nullable(),
+        nombre: Yup.string().min(1).max(1000).required('Campo obligatorio'),
+        descripcion: Yup.string().min(1).max(1000).nullable(),
+        campoA: Yup.string().min(1).max(1000).nullable(),
+        campoB: Yup.string().min(1).max(1000).nullable(),
+        campoC: Yup.string().min(1).max(1000).nullable(),
+        campoD: Yup.string().min(1).max(1000).nullable(),
+        codigoAsfi: Yup.string().min(1).max(100).nullable(),
         nivel2_id: Yup.mixed(),
         nivel3_id: Yup.mixed(),
       }
     ),
-
     onSubmit: values => {
       const data = {
         ...values,
@@ -41,98 +48,92 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
     }
   })
 
-  /* LISTA LAS TABLAS LISTA*/
-  const [tablaListaOptions, setTablaListaOptions] = useState([])
-
-  const callApi = () => {
-    getTablaLista()
-      .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre_tabla', true)
-        //console.log('El response de tabla: ', res.data)
-        //console.log('options : ', options)
-        setTablaListaOptions(options)
-      }).catch((error) => {
-        //console.log('Error: ', error)
-        //notificationToast('error', Messages.notification.notOk)
-      })
-  }
-
-  useEffect(() => {
-    callApi();
-  }, [])
-
-
   /* LISTA TABLA DESCRIPCION NIVEL 2 */
-  const [dataApi2, setDataApi] = useState([])
-
-  const callApi2 = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+  //const [dataApi2, setDataApi] = useState([])
+  const callApi2 = (idn2) => {
+    console.log('llego callapi2:: ', ' idn2: ', idn2);
+    getTablaDescripcionEventoN1(idn2)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
-        //console.log('El response de tabla call api 2: ', res.data)
         //console.log('options : ', options)
-        setDataApi(options)
+        setVarListN2(options)
       }).catch((error) => {
-        //console.log('Error: ', error)
+        console.log('Error: ', error)
         //notificationToast('error', Messages.notification.notOk)
       })
   }
-
-  const resetValues = () => {
-    formik.setFieldValue('nivel2_id', null, false);
-    formik.setFieldValue('nivel3_id', null, false)
-  }
-
-  useEffect(() => {
-   if( formik.values.tablaLista !== null){
-    const idnivel2 = formik.values.tablaLista.nivel2;
-    callApi2(idnivel2);
-    resetValues();
-   }
-  }, [formik.values.tablaLista])
-
-  useEffect(() => {
-    if( formik.values.tablaLista !== null){
-     console.log('efect 2: ',formik.values.tablaLista.nivel2 )
-     const idnivel2 = formik.values.tablaLista.nivel2;
-     callApi2(idnivel2);
-    }
-   }, [])
-
 
   /* LISTA TABLA DESCRIPCION NIVEL 3 */
-  const [dataApi3, setDataApi3] = useState([])
-
+  //const [dataApi3, setDataApi3] = useState([])
   const callApi3 = (idTablaDes) => {
-    getTablaDescripcionNivel(idTablaDes)
+    getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
-        //console.log('El response de tabla: ', res.data)
-        //console.log('options : ', options)
-        setDataApi3(options)
+        setVarListN3(options)
       }).catch((error) => {
-        //console.log('Error: ', error)
+        console.log('Error: ', error)
         //notificationToast('error', Messages.notification.notOk)
       })
   }
 
-  useEffect(() => {
-   if( formik.values.tablaLista !== null){
-    const idnivel3 = formik.values.tablaLista.nivel3;
-    callApi3(idnivel3);
-    resetValues();
-   }
-  }, [formik.values.tablaLista])
+  const resetAllValues = () => {
+    formik.setFieldValue('clave', '', false);
+    formik.setFieldValue('nombre', '', false);
+    formik.setFieldValue('descripcion', '', false);
+    formik.setFieldValue('campoA', '', false);
+    formik.setFieldValue('campoB', '', false);
+    formik.setFieldValue('campoC', '', false);
+    formik.setFieldValue('campoD', '', false);
+    formik.setFieldValue('cadigoAsfi', '', false);
+    formik.setFieldValue('nivel2_id', null, false);
+    formik.setFieldValue('nivel3_id', null, false);
 
+  }
+
+  /* Get List Level 2v*/
+
+  const clearAllDependences = () => {
+    resetAllValues();
+    setVarListN2([]);
+  }
+
+  const getSelectValueLevel2 = (value) => {
+    console.log('getSelectValue : ', value);
+    if (value.nivel2 !== null && value.nivel2 !== 0) {
+      const idnivel2 = value.nivel2;
+      callApi2(idnivel2);
+    }
+    if (value.nivel3 !== null && value.nivel3 !== 0) {
+      const idnivel3 = value.nivel3;
+      callApi3(idnivel3);
+    }
+  }
+
+  const inputIsClearableLevel2 = (id) => {
+    console.log('inputIsClearable aaa: ', id);
+    //formik.setFieldValue(id, null, false);
+    //clearAllDependences();
+  }
+  console.log('varListN2: ', varListN2);
+  console.log('varListN3: ', varListN3);
+  //Life Cycle
+  useEffect(() => {
+    console.log('optxxxx:: ', optionToSelect);
+    if (isEdit) {
+      setVarListN2(optionToSelect.tabla_n2)
+      setVarListN3(optionToSelect.tabla_n3)
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [optionToSelect]);
 
   return (
     <Form onSubmit={formik.handleSubmit} autoComplete="off">
-      <FormGroup row>
-        <Label sm='3' for='tabla'>
+      <FormGroup row className='justify-content-center'>
+        <Label sm='3' lg='3' for='tabla' className='font-weight-bold'>
           Tabla
         </Label>
-        <Col sm='9'>
-          <CSelectReact
+        <Col sm='9' lg='5'>
+          {/* <CSelectReact
             type={"select"}
             id={'tablaLista'}
             placeholder={'Seleccionar . . . '}
@@ -142,143 +143,451 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit }) => {
             error={formik.errors.tablaLista}
             touched={formik.touched.tablaLista}
             options={tablaListaOptions}
+          /> */}
+
+
+          <CSelectReactTwo
+            label={""}
+            id={'tablaLista'}
+            placeholder={'Seleccione'}
+            value={formik.values.tablaLista}
+            onChange={formik.setFieldValue}
+            onBlur={formik.setFieldTouched}
+            errors={formik.errors.tablaLista}
+            touched={formik.touched.tablaLista}
+            //options={tablaListaOptions}optionToSelect.tablaOp
+            options={optionToSelect.tablaOp || []}
+            obligatorio={true}
+            isClearable={true}
+            isSearchable={true}
+            isDisabled={false}
+            dependence={true}
+            cleareableDependences={clearAllDependences}  //FUNCION PARA LIMPIA LOS VALORES FORMIK...
+            getAddValue={true}
+            getSelectValue={getSelectValueLevel2} // AGGARA EL EL VALOR DEL SELECT VALUE
+            inputIsClearable={inputIsClearableLevel2} // AGGARA EL EL VALOR DEL SELECT VALUE
           />
         </Col>
       </FormGroup>
 
-      <FormGroup row>
-        <Label sm='3' for='clave'>
-          Clave
-        </Label>
-        <Col sm='9'>
-          <CInputReact
-            type={"text"}
-            id={'clave'}
-            placeholder={'Clave'}
-            value={formik.values.clave}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            touched={formik.touched.clave}
-            errors={formik.errors.clave}
-          />
-        </Col>
-      </FormGroup>
-
-      <FormGroup row>
-        <Label sm='3' for='nombre'>
-          Nombre
-        </Label>
-        <Col sm='9'>
-          <CInputReact
-            type={"text"}
-            id={'nombre'}
-            placeholder={'Nombre'}
-            value={formik.values.nombre}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            touched={formik.touched.nombre}
-            errors={formik.errors.nombre}
-          />
-        </Col>
-      </FormGroup>
-
-      <FormGroup row>
-        <Label sm='3' for='descripcion'>
-          Descripción
-        </Label>
-        <Col sm='9'>
-          <CInputReact
-            type={"textarea"}
-            id={'descripcion'}
-            placeholder={'Descripción'}
-            value={formik.values.descripcion}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            touched={formik.touched.descripcion}
-            errors={formik.errors.descripcion}
-            rows={5}
-          />
-        </Col>
-      </FormGroup>
-
-      { (formik.values.tablaLista !== null &&
-        (formik.values.tablaLista.value === 2 ||
-          formik.values.tablaLista.value === 4 ||
-          formik.values.tablaLista.value === 12 ||
-          formik.values.tablaLista.value === 16 ||
-          formik.values.tablaLista.value === 21)) ? // Para nivel 2
-        <FormGroup row>
-          <Label sm='3' for='nivel2_id'>
-            { (formik.values.tablaLista !== null && (formik.values.tablaLista.value === 2 )) ? 'Agencia': null }
-            { (formik.values.tablaLista !== null && (formik.values.tablaLista.value === 4 )) ? 'Área': null }
-            { (formik.values.tablaLista !== null && (formik.values.tablaLista.value === 12 )) ? 'Categoria de tipo de Evento': null }
-            { (formik.values.tablaLista !== null && (formik.values.tablaLista.value === 16 )) ? 'Proceso': null }
-            { (formik.values.tablaLista !== null && (formik.values.tablaLista.value === 21 )) ? 'Operación, producto, servicio': null }
+      {(formik.values.tablaLista !== null &&
+        (formik.values.tablaLista.label === 'Área' ||
+          formik.values.tablaLista.label === 'Unidad' ||
+          formik.values.tablaLista.label === 'Entidad' ||
+          formik.values.tablaLista.label === 'Tipo de evento' ||
+          formik.values.tablaLista.label === 'Macroproceso' ||
+          formik.values.tablaLista.label === 'Proceso' ||
+          formik.values.tablaLista.label === 'Moneda' ||
+          formik.values.tablaLista.label === 'Póliza ATC' ||
+          formik.values.tablaLista.label === 'Reputacional' ||
+          formik.values.tablaLista.label === 'Legal' ||
+          formik.values.tablaLista.label === 'Cumplimiento' ||
+          formik.values.tablaLista.label === 'Estratégico' ||
+          formik.values.tablaLista.label === 'Gobierno' ||
+          formik.values.tablaLista.label === 'Fraude' ||
+          formik.values.tablaLista.label === 'Liquidez' ||
+          formik.values.tablaLista.label === 'Operativo' ||
+          formik.values.tablaLista.label === 'Seguridad de la información'
+          ))
+        ? <FormGroup row className='justify-content-center'>
+          <Label sm='3' lg='3' for='clave'>
+            {(formik.values.tablaLista.label === 'Área' ||
+              formik.values.tablaLista.label === 'Unidad' ||
+              formik.values.tablaLista.label === 'Macroproceso') ? 'Código' : null}
+            {formik.values.tablaLista.label === 'Proceso' ? 'Tipo documento' : null}
+            {(formik.values.tablaLista.label === 'Entidad' ||
+              formik.values.tablaLista.label === 'Tipo de evento') ? 'Sigla' : null}
+            {formik.values.tablaLista.label === 'Moneda' ? 'Abreviatura' : null}
+            {formik.values.tablaLista.label === 'Póliza ATC' ? 'Nro' : null}
+            {(formik.values.tablaLista.label === 'Reputacional' ||
+              formik.values.tablaLista.label === 'Legal' ||
+              formik.values.tablaLista.label === 'Cumplimiento' ||
+              formik.values.tablaLista.label === 'Estratégico' ||
+              formik.values.tablaLista.label === 'Gobierno' ||
+              formik.values.tablaLista.label === 'Fraude' ||
+              formik.values.tablaLista.label === 'Liquidez' ||
+              formik.values.tablaLista.label === 'Operativo') ? 'Nivel' : null}
+            {formik.values.tablaLista.label === 'Seguridad de la información' ? 'Calificación' : null}
           </Label>
-          <Col sm='9'>
-            <CSelectReact
-              type={"select"}
-              id={'nivel2_id'}
-              placeholder={'Seleccionar . . . '}
-              value={formik.values.nivel2_id}
-              onChange={formik.setFieldValue}
-              onBlur={formik.setFieldTouched}
-              error={formik.errors.nivel2_id}
-              touched={formik.touched.nivel2_id}
-              options={dataApi2}
+          <Col sm='9' lg='5'>
+            <CInputReact
+              type={"text"}
+              id={'clave'}
+              value={formik.values.clave}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              touched={formik.touched.clave}
+              errors={formik.errors.clave}
             />
           </Col>
         </FormGroup>
-      : null }
+        : null
+      }
 
-      { (formik.values.tablaLista !== null && (formik.values.tablaLista.value === 13 || formik.values.tablaLista.value === 22)) ? // para  nivel 2 y 3
-        <FormGroup row>
-          <Label sm='3' for='nivel2_id'>
-            { (formik.values.tablaLista !== null && (formik.values.tablaLista.value === 13 )) ? 'Categoria de tipo de Evento': null }
-            { (formik.values.tablaLista !== null && (formik.values.tablaLista.value === 22 )) ? 'Operaciones, productos, servicios': null }
+      {formik.values.tablaLista !== null
+        ? <FormGroup row className='justify-content-center'>
+          <Label sm='3' lg='3' for='nombre'>
+            {formik.values.tablaLista.label === 'Proceso' ? 'Código documento' :
+              (formik.values.tablaLista.label === 'Reputacional' ||
+                formik.values.tablaLista.label === 'Legal' ||
+                formik.values.tablaLista.label === 'Cumplimiento' ||
+                formik.values.tablaLista.label === 'Estratégico' ||
+                formik.values.tablaLista.label === 'Gobierno' ||
+                formik.values.tablaLista.label === 'Fraude' ||
+                formik.values.tablaLista.label === 'Liquidez' ||
+                formik.values.tablaLista.label === 'Operativo' ||
+                formik.values.tablaLista.label === 'Seguridad de la información') ? 'Descriptivo' : formik.values.tablaLista.label === 'Recuperación activo' ? 'Descripción' : 'Nombre'}
           </Label>
-          <Col sm='9'>
-            <CSelectReact
-              type={"select"}
-              id={'nivel2_id'}
-              placeholder={'Seleccionar . . . '}
-              value={formik.values.nivel2_id}
-              onChange={formik.setFieldValue}
-              onBlur={formik.setFieldTouched}
-              error={formik.errors.nivel2_id}
-              touched={formik.touched.nivel2_id}
-              options={dataApi2}
-            />
-          </Col>
-
-          <Label sm='3' for='nivel3'>
-            { (formik.values.tablaLista !== null && (formik.values.tablaLista.value === 13 )) ? 'Sub evento - Basilea': null }
-            { (formik.values.tablaLista !== null && (formik.values.tablaLista.value === 22 )) ? 'Tipo de servicio': null }
-          </Label>
-          <Col sm='9'>
-            <CSelectReact
-              type={"select"}
-              id={'nivel3_id'}
-              placeholder={'Seleccionar . . . '}
-              value={formik.values.nivel3_id}
-              onChange={formik.setFieldValue}
-              onBlur={formik.setFieldTouched}
-              error={formik.errors.nivel3_id}
-              touched={formik.touched.nivel3_id}
-              options={dataApi3}
+          <Col sm='9' lg='5'>
+            <CInputReact
+              type={"text"}
+              id={'nombre'}
+              value={formik.values.nombre}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              touched={formik.touched.nombre}
+              errors={formik.errors.nombre}
             />
           </Col>
         </FormGroup>
-      : null }
+        : null
+      }
 
+      {(formik.values.tablaLista !== null &&
+        (formik.values.tablaLista.label === 'Categoria de tipo de Evento' ||
+          formik.values.tablaLista.label === 'Efecto de pérdida' ||
+          formik.values.tablaLista.label === 'Impacto' ||
+          formik.values.tablaLista.label === 'Reputacional' ||
+          formik.values.tablaLista.label === 'Estratégico' ||
+          formik.values.tablaLista.label === 'Operativo' ||
+          formik.values.tablaLista.label === 'Legal' ||
+          formik.values.tablaLista.label === 'Cumplimiento' ||
+          formik.values.tablaLista.label === 'Gobierno' ||
+          formik.values.tablaLista.label === 'Fraude' ||
+          formik.values.tablaLista.label === 'Liquidez' ||
+          formik.values.tablaLista.label === 'Macroproceso' ||
+          formik.values.tablaLista.label === 'Proceso' ||
+          formik.values.tablaLista.label === 'Seguridad de la información'))
+        ? <FormGroup row className='justify-content-center'>
+          <Label sm='3' lg='3' for='descripcion'>
+            {(formik.values.tablaLista.label === 'Categoria de tipo de Evento' ||
+              formik.values.tablaLista.label === 'Efecto de pérdida' ||
+              formik.values.tablaLista.label === 'Impacto' ||
+              formik.values.tablaLista.label === 'Reputacional' ||
+              formik.values.tablaLista.label === 'Estratégico' ||
+              formik.values.tablaLista.label === 'Operativo' ||
+              formik.values.tablaLista.label === 'Seguridad de la información') ? 'Descripción' : null}
+            {(formik.values.tablaLista.label === 'Legal' || formik.values.tablaLista.label === 'Liquidez') ? 'Impacto regulatorio' : null}
+            {formik.values.tablaLista.label === 'Cumplimiento' ? 'Impacto de cumplimiento' : null}
+            {formik.values.tablaLista.label === 'Gobierno' ? 'Nivel de gobernabilidad #' : null}
+            {formik.values.tablaLista.label === 'Fraude' ? 'Importe reportado fraude (USD)' : null}
+            {formik.values.tablaLista.label === 'Macroproceso' ? 'Nivel' : null}
+            {formik.values.tablaLista.label === 'Proceso' ? 'Nombre documento' : null}
+          </Label>
+          <Col sm='9' lg='5'>
+            <CInputReact
+              type={"textarea"}
+              id={'descripcion'}
+              value={formik.values.descripcion}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              touched={formik.touched.descripcion}
+              errors={formik.errors.descripcion}
+              rows={3}
+            />
+          </Col>
+        </FormGroup>
+        : null
+      }
+
+      {(formik.values.tablaLista !== null &&
+        (formik.values.tablaLista.label === 'Macroproceso' ||
+          formik.values.tablaLista.label === 'Proceso' ||
+          formik.values.tablaLista.label === 'Gobierno' ||
+          formik.values.tablaLista.label === 'Fraude' ||
+          formik.values.tablaLista.label === 'Liquidez' ||
+          formik.values.tablaLista.label === 'Seguridad de la información'))
+        ? <FormGroup row className='justify-content-center'>
+          <Label sm='3' lg='3' for='clave'>
+            {formik.values.tablaLista.label === 'Macroproceso' ? 'Valoración' : null}
+            {formik.values.tablaLista.label === 'Gobierno' ? 'Nivel de gobernabilidad' : null}
+            {formik.values.tablaLista.label === 'Fraude' ? 'Fraude a ventas (USD)' : null}
+            {formik.values.tablaLista.label === 'Liquidez' ? 'Liquidez' : null}
+            {formik.values.tablaLista.label === 'Proceso' ? 'Proceso' : null}
+            {formik.values.tablaLista.label === 'Seguridad de la información' ? 'Plazo de atención hasta' : null}
+          </Label>
+          <Col sm='9' lg='5'>
+            <CInputReact
+              type={"text"}
+              id={'campoA'}
+              value={formik.values.campoA}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              touched={formik.touched.campoA}
+              errors={formik.errors.campoA}
+            />
+          </Col>
+        </FormGroup>
+        : null
+      }
+
+      {(formik.values.tablaLista !== null &&
+        (formik.values.tablaLista.label === 'Proceso' ||
+          formik.values.tablaLista.label === 'Gobierno' ||
+          formik.values.tablaLista.label === 'Fraude' ||
+          formik.values.tablaLista.label === 'Liquidez'))
+        ? <FormGroup row className='justify-content-center'>
+          <Label sm='3' lg='3' for='clave'>
+            {formik.values.tablaLista.label === 'Proceso' ? 'Gerencia' : null}
+            {formik.values.tablaLista.label === 'Gobierno' ? 'Puntuación Autoevaluación' : null}
+            {formik.values.tablaLista.label === 'Fraude' ? 'Importe reportado fraude 2 (USD)' : null}
+            {formik.values.tablaLista.label === 'Liquidez' ? 'Capital de trabajo' : null}
+          </Label>
+          <Col sm='9' lg='5'>
+            <CInputReact
+              type={"text"}
+              id={'campoB'}
+              value={formik.values.campoB}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              touched={formik.touched.campoB}
+              errors={formik.errors.campoB}
+            />
+          </Col>
+        </FormGroup>
+        : null
+      }
+
+      {(formik.values.tablaLista !== null && formik.values.tablaLista.label === 'Fraude')
+        ? <FormGroup row className='justify-content-center'>
+          <Label sm='3' lg='8' for='clave'>
+            {formik.values.tablaLista.label === 'Fraude' ? 'Impacto - severidad' : null}
+          </Label>
+          <Col sm='9' lg='8'>
+            <CInputReact
+              type={"textarea"}
+              id={'campoC'}
+              value={formik.values.campoC}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              touched={formik.touched.campoC}
+              errors={formik.errors.campoC}
+              rows={3}
+            />
+          </Col>
+        </FormGroup>
+        : null
+      }
+
+      {(formik.values.tablaLista !== null && formik.values.tablaLista.label === 'Fraude') ?
+        <FormGroup row className='justify-content-center'>
+          <Label sm='3' lg='8' for='clave'>
+            {formik.values.tablaLista.label === 'Fraude' ? 'Impacto - severidad 2' : null}
+          </Label>
+          <Col sm='9' lg='8'>
+            <CInputReact
+              type={"textarea"}
+              id={'campoD'}
+              value={formik.values.campoD}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              touched={formik.touched.campoD}
+              errors={formik.errors.campoD}
+              rows={3}
+            />
+          </Col>
+        </FormGroup>
+        : null
+      }
+
+      {(formik.values.tablaLista !== null &&
+        (formik.values.tablaLista.label === 'Ciudad' ||
+          formik.values.tablaLista.label === 'Tipo de evento' ||
+          formik.values.tablaLista.label === 'Canal ASFI' ||
+          formik.values.tablaLista.label === 'Clase Evento - Basilea' ||
+          formik.values.tablaLista.label === 'Factor de riesgo' ||
+          formik.values.tablaLista.label === 'Proceso' ||
+          formik.values.tablaLista.label === 'Línea de negocio ASFI' ||
+          formik.values.tablaLista.label === 'Operaciones ASFI' ||
+          formik.values.tablaLista.label === 'Moneda' ||
+          formik.values.tablaLista.label === 'Recuperación activo')) ?
+        <FormGroup row className='justify-content-center'>
+          <Label sm='3' lg='3' for='clave'>
+            Código ASFI
+          </Label>
+          <Col sm='9' lg='5'>
+            <CInputReact
+              type={"text"}
+              id={'codigoAsfi'}
+              value={formik.values.codigoAsfi}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              touched={formik.touched.codigoAsfi}
+              errors={formik.errors.codigoAsfi}
+            />
+          </Col>
+        </FormGroup>
+        : null
+      }
+
+      {
+        (formik.values.tablaLista !== null && // PARA NIVEL 2
+          (formik.values.tablaLista.label === 'Ciudad' ||
+            formik.values.tablaLista.label === 'Unidad' ||
+            formik.values.tablaLista.label === 'Sub evento - Basilea' ||
+            formik.values.tablaLista.label === 'Proceso' ||
+            formik.values.tablaLista.label === 'Sub factor de riesgo' ||
+            formik.values.tablaLista.label === 'Descripción de servicio'))
+          ? <FormGroup row className='justify-content-center'>
+            <Label sm='3' lg='3' for='nivel2_id'>
+              {formik.values.tablaLista.label === 'Ciudad' ? 'Agencia' : null}
+              {formik.values.tablaLista.label === 'Unidad' ? 'Área' : null}
+              {formik.values.tablaLista.label === 'Sub evento - Basilea' ? 'Categoria de tipo de Evento' : null}
+              {formik.values.tablaLista.label === 'Proceso' ? 'Macroproceso' : null}
+              {formik.values.tablaLista.label === 'Sub factor de riesgo' ? 'Factor de riesgo' : null}
+              {formik.values.tablaLista.label === 'Descripción de servicio' ? 'Tipo de servicio' : null}
+            </Label>
+            <Col sm='9' lg='5'>
+              {/*   <CSelectReact
+                // type={"select"}
+                placeholder={'Seleccionaaaaar . . . '}
+                value={formik.values.nivel2_id}
+                onChange={formik.setFieldValue}
+                onBlur={formik.setFieldTouched}
+                error={formik.errors.nivel2_id}
+                touched={formik.touched.nivel2_id}
+                id={'nivel2_id'}
+                label={'ddeddddd'}
+                options={varListN2}
+              /> */}
+
+              <CSelectReactTwo
+                label={""}
+                id={'nivel2_id'}
+                placeholder={'Seleccione'}
+                value={formik.values.nivel2_id}
+                onChange={formik.setFieldValue}
+                onBlur={formik.setFieldTouched}
+                errors={formik.errors.nivel2_id}
+                touched={formik.touched.nivel2_id}
+                options={varListN2}
+                obligatorio={true}
+                isClearable={true}
+                isSearchable={false}
+                isDisabled={false}
+                dependence={false}
+                //cleareableDependences={clearDependencesN2}  //FUNCION PARA LIMPIA LOS VALORES FORMIK...
+                getAddValue={false}
+              //getSelectValue={getSelectValueLevel3} // AGGARA EL EL VALOR DEL SELECT VALUE
+              //inputIsClearable={inputIsClearableLevel3} // AGGARA EL EL VALOR DEL SELECT VALUE
+              />
+
+
+            </Col>
+          </FormGroup>
+          : null
+      }
+
+      {(formik.values.tablaLista !== null && // PARA NIVEL 2 Y 3
+        formik.values.tablaLista.label === 'Clase Evento - Basilea')
+        ?
+        <FormGroup>
+          <Row className='justify-content-center'>
+            <Label sm='3' lg='3' for='nivel2_id'>
+              {formik.values.tablaLista.label === 'Clase Evento - Basilea' ? 'Categoria de tipo de Evento' : null}
+            </Label>
+            <Col sm='9' lg='5'>
+              {/* <CSelectReact
+                type={"select"}
+                id={'nivel2_id'}
+                placeholder={'sssSeleccionar . . . '}
+                value={formik.values.nivel2_id}
+                onChange={formik.setFieldValue}
+                onBlur={formik.setFieldTouched}
+                error={formik.errors.nivel2_id}
+                touched={formik.touched.nivel2_id}
+                options={varListN2}
+              /> */}
+              <CSelectReactTwo
+                label={""}
+                id={'nivel2_id'}
+                placeholder={'Seleccione'}
+                value={formik.values.nivel2_id}
+                onChange={formik.setFieldValue}
+                onBlur={formik.setFieldTouched}
+                errors={formik.errors.nivel2_id}
+                touched={formik.touched.nivel2_id}
+                options={varListN2}
+                obligatorio={true}
+                isClearable={true}
+                isSearchable={false}
+                isDisabled={false}
+                dependence={false}
+                //cleareableDependences={clearDependencesN2}  //FUNCION PARA LIMPIA LOS VALORES FORMIK...
+                getAddValue={false}
+              // getSelectValue={getSelectValueLevel3} // AGGARA EL EL VALOR DEL SELECT VALUE
+              //  inputIsClearable={inputIsClearableLevel3} // AGGARA EL EL VALOR DEL SELECT VALUE
+              />
+
+            </Col>
+          </Row>
+          <Row className='justify-content-center'>
+            <Label sm='3' lg='3' for='nivel3'>
+              {formik.values.tablaLista.label === 'Clase Evento - Basilea' ? 'Sub evento - Basilea' : null}
+              {formik.values.tablaLista.label === 'Descripción de servicio' ? 'Tipo de servicio' : null}
+            </Label>
+            <Col sm='9' lg='5'>
+              {/*  <CSelectReact
+                type={"select"}
+                id={'nivel3_id'}
+                placeholder={'Seleccionar . . . '}
+                value={formik.values.nivel3_id}
+                onChange={formik.setFieldValue}
+                onBlur={formik.setFieldTouched}
+                error={formik.errors.nivel3_id}
+                touched={formik.touched.nivel3_id}
+                options={varListN3}
+              /> */}
+
+
+              <CSelectReactTwo
+                label={""}
+                id={'nivel3_id'}
+                placeholder={'Seleccione'}
+                value={formik.values.nivel3_id}
+                onChange={formik.setFieldValue}
+                onBlur={formik.setFieldTouched}
+                errors={formik.errors.nivel3_id}
+                touched={formik.touched.nivel3_id}
+                options={varListN3}
+                obligatorio={false}
+                isClearable={true}
+                isSearchable={true}
+                isDisabled={false}
+                dependence={false}
+                //cleareableDependences={cleareableDependences}  //FUNCION PARA LIMPIA LOS VALORES FORMIK...
+                getAddValue={false}
+              // getSelectValue={getSelectValue} // AGGARA EL EL VALOR DEL SELECT VALUE
+              // inputIsClearable={inputIsClearable} // AGGARA EL EL VALOR DEL SELECT VALUE
+              />
+
+
+
+            </Col>
+          </Row>
+
+        </FormGroup>
+        : null
+      }
 
       <FormGroup className='mb-0' row>
-        <Col className='d-flex' md={{ size: 9, offset: 3 }}>
+        <Col className='d-flex justify-content-center'>
           <Button
             className='mr-4 text-white'
             color="primary"
             type="submit"
-            disabled={formik.isSubmitting}
+          //disabled={formik.isSubmitting}
+          //disabled={(formik.values.tablaLista !== null && formik.values.tablaLista.label === 'Tasa de cambio')? true : false}
           >
             Guardar
           </Button>

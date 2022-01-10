@@ -8,22 +8,14 @@
   //);
   color: #fff;
   background: rgba(240, 150, 65, 1) !important;
-  /* margin: 0px 10px;
-  border-radius: 5px; */
+  margin: 0px 10px;
+  border-radius: 5px;
 }
 
 .c-sidebar .c-sidebar-nav-link.c-active:hover, .c-sidebar .c-active.c-sidebar-nav-dropdown-toggle {
   color: #fff;
   background: rgba(240, 150, 65, 1) !important;
-  /* margin: 0px 10px;
-  border-radius: 5px; */
 }
-/* .c-sidebar .c-sidebar-nav-link.c-active:after, .c-sidebar .c-active.c-sidebar-nav-dropdown-toggle::after {
-  color: #fff;
-  //background: rgba(240, 150, 65, 1) !important;
-  margin: 0px 10px;
-  border-radius: 5px;
-} */
 
 @media (hover: hover), (-ms-high-contrast: none) {
   .c-sidebar .c-sidebar-nav-link:hover, .c-sidebar .c-sidebar-nav-dropdown-toggle:hover {
@@ -70,11 +62,11 @@ input[type='radio']:checked:after {
   cursor: pointer;
 }
 
-// Tabs personalizados para eventos de riesgo
+// TABS personalizados
 .nav-tabs .nav-link,
 .nav-tabs .nav-item.show .nav-link{
     font-weight: 600;
-    font-size: 16px;
+    font-size: 15px;
     color: rgba(black, 0.7);
     background-color: transparent;
     border-color: transparent;
@@ -85,7 +77,7 @@ input[type='radio']:checked:after {
 .nav-tabs .nav-link.active,
 .nav-tabs .nav-item.show .nav-link{
     font-weight: 700;
-    font-size: 16px;
+    font-size: 15px;
     color: #e79140;
     background-color: transparent;
     border-color: transparent;
@@ -93,7 +85,13 @@ input[type='radio']:checked:after {
 
 .nav-tabs .nav-link:hover, .nav-tabs .nav-link:focus {
     border-color: transparent;
-  }
+}
+
+// Arrow Right para Tab
+.arrow-right-secondary{
+  color: 'black';
+  opacity: 0.6;
+}
 
 //  F U E N T E
 body{
@@ -105,7 +103,7 @@ body{
 
 // Card
 .card {
-  box-shadow: 0 0px 10px 0 rgba(black, 0.1);
+  box-shadow: 0 0px 20px 0 rgba(#7e7d7d, 0.2);
   border: none;
   border-radius: 8px;
 }
@@ -114,6 +112,10 @@ body{
   &:first-child {
     border-radius: 8px 8px 0 0;
   }
+}
+
+.c-subheader {
+  border-radius: 0 0 8px 8px !important;
 }
 
 // Tablas personalizadas
@@ -151,9 +153,15 @@ body{
   opacity: 0.8;
 }
 
-// Estilos varios
+// Estilos varios: para que no colapse
 .sinSalto{
   white-space: nowrap;
+}
+
+.mx-md-4{
+  @media (min-width: 768px) {
+    margin-left: 29px !important; margin-right: 29px !important;
+   }
 }
 
 // BADGES
@@ -175,6 +183,13 @@ body{
   box-shadow: 0 0px 5px 0 rgba(#ff9f44, 0.6);
   font-size: 12;
 }
+.badge-yellow-light{
+  background-color:#f9fab5;
+  color: rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0px 5px 0 rgba(#fbff29, 0.6);
+  font-size: 12;
+  
+}
 .badge-danger{
   background-color:#ea5556;
   color: #fff;
@@ -182,8 +197,132 @@ body{
   font-size: 12;
 }
 
-// Table - hover animation
-/* .table-hover-animation {
+.badge-success{
+  background-color:#2bc871;
+  color: #fff;
+  box-shadow: 0 0px 5px 0 rgba(#2bc871, 0.6);
+  font-size: 12;
+  border-radius: 15px;
+}
+
+.badge-warning{
+  background-color:#e79140;
+  color: #fff;
+  box-shadow: 0 0px 5px 0 rgba(#e79140, 0.6);
+  font-size: 12;
+  border-radius: 15px;
+}
+
+
+// DIVIDER
+.divider {
+  .divider-text {
+    color: rgba(black, 1);
+
+    &::before,
+    &::after {
+      border-color: rgba(black, 0.4);
+    }
+  }
+
+  &.divider-dark {
+    .divider-text {
+      &::before,
+      &::after {
+        border-color: rgba(black, 0.4) !important;
+      }
+    }
+  }
+
+  &.divider-primary {
+    .divider-text {
+      &::before,
+      &::after {
+        border: 1px solid rgba(#ff9f44, 0.3) !important;
+      }
+    }
+  }
+}
+
+
+.divider {
+  display: block;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  margin: 1rem 0;
+
+  // divider text display prop
+  .divider-text {
+    position: relative;
+    display: inline-block;
+    font-size: 0.9375rem;
+    padding: 0 1rem;
+
+    // divider icon font size
+    i,
+    svg {
+      height: 1rem;
+      width: 1rem;
+      font-size: 1rem;
+    }
+
+    // divider border
+    &:before,
+    &:after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 9999px;
+      border-top: 1px solid $border-color;
+    }
+
+    // divider spacing
+    &:before {
+      right: 100%;
+    }
+
+    &:after {
+      left: 100%;
+    }
+  }
+
+  // divider positions config
+  &.divider-left {
+    .divider-text {
+      float: left;
+      padding-left: 0;
+      &:before {
+        display: none;
+      }
+    }
+  }
+  &.divider-left-center {
+    .divider-text {
+      left: -25%;
+    }
+  }
+
+  &.divider-right {
+    .divider-text {
+      float: right;
+      padding-right: 0;
+      &:after {
+        display: none;
+      }
+    }
+  }
+  &.divider-right-center {
+    .divider-text {
+      right: -25%;
+    }
+  }
+}
+
+
+
+// TABLE HOVER ANIMATION
+.table-hover-animation {
   table{
     border-collapse:separate;
     border-spacing: 0 0.7rem;
@@ -192,7 +331,7 @@ body{
   tbody{
     // for table row effects
     tr{
-      background-color: $white;
+      background-color: white;
       box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 20px 0px;
       //cursor: pointer;
       transition: all .3s ease;
@@ -225,8 +364,9 @@ body{
   }
 }
 
+
 // table border radius
-.card .table {
+/*.card .table {
   margin-bottom: 0;
   border-bottom-left-radius: $border-radius;
   border-bottom-right-radius: $border-radius;
@@ -272,3 +412,62 @@ body{
   }
 }
  */
+
+
+/**Scroll*/
+
+.react-bootstrap-table {
+  overflow-y: auto;
+  min-height: 100px;
+  max-height: 600px;
+}
+
+.react-bootstrap-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+/* Just common table stuff. Really. */
+
+.react-bootstrap-table {
+  border-collapse: collapse;
+  width: 100%;
+
+}
+
+th, td {
+  /* padding: 2px 13;
+  min-width: 50px; */
+  margin-top: 35px; margin-bottom: 35px;
+}
+
+th {
+  background-color: #ededed;
+}
+
+
+/**** Sort icon****/
+
+.dropup .caret, .navbar-fixed-bottom .dropdown .caret {
+  content: "";
+  border-top: 0;
+  border-bottom: 4px dashed;
+  border-bottom: 4px solid\9;
+}
+
+.caret {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 2px;
+  vertical-align: middle;
+  border-top: 4px dashed;
+  border-top: 4px solid\9;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+}
+
+.Select.is-open {
+  z-index: 1000 !important;
+}

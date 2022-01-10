@@ -1,33 +1,113 @@
-import { Fragment } from 'react'
-import { Card, CardHeader, CardTitle, CardBody} from 'reactstrap'
+import React, { Fragment, useState, useEffect } from 'react'
+import { Card, CardHeader, CardTitle, CardBody } from 'reactstrap'
 import { useHistory } from 'react-router-dom'
 import Formulario from './component/Formulario'
-import { postListDescripcion } from './controller/AdminEventoController'
+import { getTablaListaEvento, postTablaDescripcionEvento } from './controller/AdminEventoController'
+import { buildSelectTwo } from 'src/functions/Function'
+import { ToastContainer, toast } from 'react-toastify'
+import CCSpinner from 'src/reusable/spinner/CCSpinner'
 
 const AdministracionEventoRegistrar = () => {
 
-  const history = useHistory()
+  const history = useHistory();
+  const [spin, setSpin] = useState(false);
+
   const formValueInitial = {
-      tablaLista: null,
-      nombre: '',
-      clave: '',
-      descripcion: '',
-      nivel2_id: null,
-      nivel3_id: null
+    tablaLista: null,
+    nombre: '',
+    clave: '',
+    descripcion: '',
+    campoA: '',
+    campoB: '',
+    campoC: '',
+    campoD: '',
+    codigoAsfi: '',
+    nivel2_id: null,
+    nivel3_id: null
   }
 
-  const handleOnSubmit = (dataToRequest) =>{
-    postListDescripcion(dataToRequest)
-    .then(response => {
-      console.log('Envio el request : ', response);
-      history.push("/administracion/evento-riesgo/listar")
-    }).catch((error) => {
-      console.log('Error al obtener datos: ', error)
-    })
+  const [tablaListaOptions, setTablaListaOptions] = useState([])
+
+  const optionsToFormik = {
+    tablaOp: tablaListaOptions,
+    tabla_n2: [],
+    tabla_n3: [],
   }
+  const getTablaLista = async () => {
+    await getTablaListaEvento()
+      .then(res => {
+        const options = buildSelectTwo(res.data, 'id', 'nombre_tabla', true)
+        console.log('El response de tablaaaaa: ', res.data)
+        //console.log('options : ', options)
+        setTablaListaOptions(options)
+      }).catch((error) => {
+        //console.log('Error: ', error)
+        //notificationToast('error', Messages.notification.notOk)
+      })
+  }
+
+  const notificationToast = (type, mensaje) => {
+    switch (type) {
+        case 'error':
+            toast.error(mensaje, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            break;
+        case 'success':
+            toast.success(mensaje, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            break;
+
+        default:
+            toast(mensaje, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+            });
+    }
+    setTimeout(() => {
+        history.push('/administracion/evento-riesgo/Listar');
+        setSpin(false);
+    }, 5000);
+  }
+
+  const handleOnSubmit = (dataToRequest) => {
+    setSpin(true);
+    postTablaDescripcionEvento(dataToRequest)
+      .then(res => {
+        if (res.status >= 200 && res.status < 300) {
+          console.log('Envio el request: ', res);
+          notificationToast('success', 'Parámetro de Evento de Riesgo registrado exitósamente');
+        } else {
+          console.log('Hubo un  error ', res);
+          notificationToast('error', 'Algo salió mal, intente nuevamente');
+        }
+      }).catch((error) => {
+        console.log('Error al registrar Parámetro de Evento de Riesgo: ', error);
+        notificationToast('error', 'Algo salió mal, intente nuevamente');
+      })
+  }
+  useEffect(() => {
+    getTablaLista();
+  }, [])
 
   return (
-    <div id=''>
+    <div>
+      <CCSpinner show={spin} />
       <Fragment>
         <Card>
           <CardHeader>
@@ -36,11 +116,24 @@ const AdministracionEventoRegistrar = () => {
           <CardBody className='mt-4'>
             <Formulario
               initialValuess={formValueInitial}
+              optionToSelect={optionsToFormik}
               handleOnSubmit={handleOnSubmit}
+              isEdit={false}
             />
           </CardBody>
         </Card>
       </Fragment>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   )
 }

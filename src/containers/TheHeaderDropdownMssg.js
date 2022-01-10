@@ -35,7 +35,7 @@ const TheHeaderDropdownMssg = () => {
                 <CImg
                   src={'avatars/7.jpg'}
                   className="c-avatar-img"
-                  alt="admin@bootstrapmaster.com"
+                  alt=""
                 />
                 <span className="c-avatar-status bg-success"></span>
               </div>
@@ -60,7 +60,7 @@ const TheHeaderDropdownMssg = () => {
                 <CImg
                   src={'avatars/6.jpg'}
                   className="c-avatar-img"
-                  alt="admin@bootstrapmaster.com"
+                  alt=""
                 />
                 <span className="c-avatar-status bg-warning"></span>
               </div>
@@ -82,7 +82,7 @@ const TheHeaderDropdownMssg = () => {
                 <CImg
                   src={'avatars/5.jpg'}
                   className="c-avatar-img"
-                  alt="admin@bootstrapmaster.com"
+                  alt=""
                 />
                 <span className="c-avatar-status bg-danger"></span>
               </div>
@@ -104,7 +104,7 @@ const TheHeaderDropdownMssg = () => {
                 <CImg
                   src={'avatars/4.jpg'}
                   className="c-avatar-img"
-                  alt="admin@bootstrapmaster.com"
+                  alt=""
                 />
                 <span className="c-avatar-status bg-info"></span>
               </div>

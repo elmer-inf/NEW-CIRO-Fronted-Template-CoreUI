@@ -1,6 +1,6 @@
 import React from 'react'
 import { CDropdown, CDropdownMenu, CDropdownToggle, CDropdownItem, CTooltip } from '@coreui/react';
-import { Edit3, Trash2, FileText, MoreVertical } from 'react-feather'
+import { Edit3, FileText, MoreVertical } from 'react-feather'
 
 const ActionFormatterEvento = ({ cell, row, detailFunction, editFunction }) => {
 
@@ -12,7 +12,7 @@ const ActionFormatterEvento = ({ cell, row, detailFunction, editFunction }) => {
             <MoreVertical size={15} className='text-dark'/>
           </CDropdownToggle>
         </CTooltip>
-        <CDropdownMenu placement="right">
+        <CDropdownMenu placement="left">
           <CDropdownItem onClick={() => {
             // props.deleteRow(props.row)
             detailFunction(row)
