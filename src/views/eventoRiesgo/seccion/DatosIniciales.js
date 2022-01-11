@@ -38,7 +38,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
       canalAsfiId: Yup.mixed().required('Campo obligatorio'),
       descripcion: Yup.string().required('Campo obligatorio'),
       descripcionCompleta: Yup.string().nullable(),
-      files: Yup.mixed().required('Campo obligatorio'),
+      files: Yup.mixed().nullable(),
 
       /* fechaIni: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
       horaIni: Yup.string().nullable(),

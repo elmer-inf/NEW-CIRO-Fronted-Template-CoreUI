@@ -225,7 +225,7 @@ const EventoRiesgoRegistrar = () => {
         });
     }
     setTimeout(() => {
-      history.push('/eventoRiesgo/Listar');
+     history.push('/eventoRiesgo/Listar');
       setSpin(false);
     }, 5000);
   }
@@ -252,16 +252,20 @@ const EventoRiesgoRegistrar = () => {
 
     formData.append('eventoRiesgoPostDTO', JSON.stringify(_.omit(request, ['files'])));
     //formData.append('file', getFiles);
-
-    for (let i = 0; i < getFiles.length; i++) {
-      formData.append("file", getFiles[i]);
+    if (getFiles !== null) {
+      for (let i = 0; i < getFiles.length; i++) {
+        formData.append("file", getFiles[i]);
+      }
+    }else{
+      formData.append("file", new Blob([]));
     }
 
-   /*for (var value of formData.values()) {
-      console.log('===========================================')
-      console.log('--> ', value);
-      console.log('===========================================')
-    }*/
+
+    /*for (var value of formData.values()) {
+       console.log('===========================================')
+       console.log('--> ', value);
+       console.log('===========================================')
+     }*/
 
 
     postEventoRiesgoFormData(formData)
