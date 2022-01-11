@@ -6,13 +6,23 @@ import { typeFormatter } from 'src/reusable/Component';
 import ActionFormatter from 'src/reusable/ActionFormatter';
 import Select from 'react-select'
 import { useHistory } from 'react-router-dom'
-import { getTablaListaRiesgo, getTablaDescripcionRiesgoN1 } from './controller/AdminRiesgoController'
+import { getTablaListaRiesgo, getTablaDescripcionRiesgoN1, deleteTablaDescripcionRiesgoId } from './controller/AdminRiesgoController'
 import { buildSelectTwo, hasPermission } from 'src/functions/Function'
 import { PathContext } from 'src/containers/TheLayout';
 import { ToastContainer, toast } from 'react-toastify';
 import { Messages } from 'src/reusable/variables/Messages';
+import Swal from 'sweetalert2'
 
 const AdministracionMatrizRiesgosListar = () => {
+
+  // Configuracion sweetalert2
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: 'btn btn-primary px-4',
+      cancelButton: 'btn btn-outline-primary px-4 mr-4',
+    },
+    buttonsStyling: false
+  })
 
   //useContext
   const valuePathFromContext = React.useContext(PathContext);
@@ -39,7 +49,8 @@ const AdministracionMatrizRiesgosListar = () => {
     });
   }
 
-  const [labelTabla, setLabelTabla] = useState([])
+  const [labelTabla, setLabelTabla] = useState([]);
+  const [valueTabla, setValueTabla] = useState([]);
 
   const columns = [
     {
@@ -167,14 +178,51 @@ const AdministracionMatrizRiesgosListar = () => {
   ]
 
   const actionFormatter = (cell, row) => {
-    return <ActionFormatter cell={cell} row={row} detailFunction={detailsRow} editFunction={editRow} />
+    return <ActionFormatter cell={cell} row={row} deleteFunction={deleteRow} editFunction={editRow} />
   }
 
-  const detailsRow = (row) => {
-    console.log(row)
-    //loseModal();
-    //return <DetailRestForm row={row} mod={true}/>
+  // Eliminar Parametro
+  const deleteRow = (row) => {
+    swalWithBootstrapButtons.fire({
+      title: '',
+      text:'¿Está seguro de eliminar el Parámetro de Matriz de Riesgo?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si',
+      cancelButtonText: 'No',
+      reverseButtons: true,
+      position: 'top'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteTablaDescripcionRiesgoId(row.id)
+          .then(res => {
+            swalWithBootstrapButtons.fire({
+              title: '',
+              text: 'Operación realizada exitósamente',
+              icon: 'success',
+              position: 'top',
+            }).then(okay => {
+              if (okay) {
+                getTablaDescripcion(valueTabla);
+              }
+            })
+          }).catch((error) => {
+            console.log('Error al eliminar Parámetro de Matriz de Riesgo: ', error);
+          });
+      } else if (
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        swalWithBootstrapButtons.fire({
+          title: '',
+          text: 'Operación cancelada',
+          icon: 'error',
+          position: 'top'
+        })
+      }
+    })
   }
+
+  // Editar Parametro
   const editRow = (row) => {
     //history.push('/administracion/matriz-riesgo/Editar/' + row.id);
     const path = '/administracion/matriz-riesgo/Editar/:id' + row.id;
@@ -212,6 +260,8 @@ const AdministracionMatrizRiesgosListar = () => {
     //console.log('select:  ', result)
     const labelTable = result.label
     setLabelTabla(labelTable)
+    const valueTable = result.value;
+    setValueTabla(valueTable);
     getTablaDescripcion(result.value);
   }
 

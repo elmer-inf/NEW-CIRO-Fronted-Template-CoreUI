@@ -6,14 +6,24 @@ import { typeFormatter } from 'src/reusable/Component';
 import ActionFormatter from 'src/reusable/ActionFormatter';
 import Select from 'react-select'
 import { useHistory } from 'react-router-dom'
-import { getTablaDescripcionOportunidadN1, getTablaListaOportunidad } from './controller/AdminOportunidadController'
+import { getTablaDescripcionOportunidadN1, getTablaListaOportunidad, deleteTablaDescripcionOportunidadId } from './controller/AdminOportunidadController'
 import { buildSelectTwo, hasPermission } from 'src/functions/Function'
 import { Plus } from 'react-feather';
 import { PathContext } from 'src/containers/TheLayout';
 import { ToastContainer, toast } from 'react-toastify';
 import { Messages } from 'src/reusable/variables/Messages';
+import Swal from 'sweetalert2'
 
 const AdministracionMatrizOportunidadListar = () => {
+
+  // Configuracion sweetalert2
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: 'btn btn-primary px-4',
+      cancelButton: 'btn btn-outline-primary px-4 mr-4',
+    },
+    buttonsStyling: false
+  })
 
   //useContext
   const valuePathFromContext = React.useContext(PathContext);
@@ -40,7 +50,9 @@ const AdministracionMatrizOportunidadListar = () => {
     });
   }
 
-  const [labelTabla, setLabelTabla] = useState([])
+
+  const [labelTabla, setLabelTabla] = useState([]);
+  const [valueTabla, setValueTabla] = useState([]);
 
   const columns = [
     {
@@ -123,12 +135,51 @@ const AdministracionMatrizOportunidadListar = () => {
   ]
 
   const actionFormatter = (cell, row) => {
-    return <ActionFormatter cell={cell} row={row} detailFunction={detailsRow} editFunction={editRow} />
+    return <ActionFormatter cell={cell} row={row} deleteFunction={deleteRow} editFunction={editRow} />
   }
 
-  const detailsRow = (row) => {
-    console.log(row)
+  // Eliminar Parametro
+  const deleteRow = (row) => {
+    swalWithBootstrapButtons.fire({
+      title: '',
+      text:'¿Está seguro de eliminar el Parámetro de Matriz de Oportunidad?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si',
+      cancelButtonText: 'No',
+      reverseButtons: true,
+      position: 'top'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteTablaDescripcionOportunidadId(row.id)
+          .then(res => {
+            swalWithBootstrapButtons.fire({
+              title: '',
+              text: 'Operación realizada exitósamente',
+              icon: 'success',
+              position: 'top',
+            }).then(okay => {
+              if (okay) {
+                getTablaDescripcion(valueTabla);
+              }
+            })
+          }).catch((error) => {
+            console.log('Error al eliminar Parámetro de Matriz de Oportunidad: ', error);
+          });
+      } else if (
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        swalWithBootstrapButtons.fire({
+          title: '',
+          text: 'Operación cancelada',
+          icon: 'error',
+          position: 'top'
+        })
+      }
+    })
   }
+
+  // Editar Parametro
   const editRow = (row) => {
     //history.push('/administracion/matriz-oportunidad/Editar/' + row.id);
     const path = '/administracion/matriz-oportunidad/Editar/:id' + row.id;
@@ -165,6 +216,8 @@ const AdministracionMatrizOportunidadListar = () => {
     //console.log('select:  ', result)
     const labelTable = result.label
     setLabelTabla(labelTable)
+    const valueTable = result.value;
+    setValueTabla(valueTable);
     getTablaDescripcion(result.value);
   }
 
@@ -206,7 +259,6 @@ const AdministracionMatrizOportunidadListar = () => {
   return (
     <div className='table-hover-animation'>
       <Fragment>
-        {/* <BreadCrumbs breadCrumbTitle='Eventos de Riesgo' breadCrumbParent='Administración' breadCrumbActive='Eventos de Riesgo' /> */}
         <Card>
           <CardHeader>
             <CardTitle className='float-left h4 pt-2'>Listado de Parámetros de Matriz de oportunidades</CardTitle>

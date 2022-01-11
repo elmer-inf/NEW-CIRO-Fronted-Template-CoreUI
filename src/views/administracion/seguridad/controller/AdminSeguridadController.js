@@ -29,4 +29,9 @@ export const getTablaDescripcionSeguridadId = async (id) => {
     const uri = HOST + 'v1/tablaDescripcionSeguridad/mostrar/' + id;
     const response = await axios.get(uri);
     return response;
-};
+}
+
+export const deleteTablaDescripcionSeguridadId = (id) => {
+    const uri = HOST + 'v1/tablaDescripcionSeguridad/eliminar/' + id;
+    return axios.delete(uri);
+}

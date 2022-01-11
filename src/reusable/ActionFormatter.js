@@ -1,8 +1,8 @@
 import React from 'react'
 import { CDropdown, CDropdownMenu, CDropdownToggle, CDropdownItem, CTooltip } from '@coreui/react';
-import { Edit3, MoreVertical } from 'react-feather'
+import { Edit3, MoreVertical, Trash2 } from 'react-feather'
 
-const ActionFormatter = ({ row, editFunction }) => {
+const ActionFormatter = ({ row, editFunction, deleteFunction }) => {
 
   return (
     <div>
@@ -17,6 +17,12 @@ const ActionFormatter = ({ row, editFunction }) => {
             editFunction(row)
           }} >
             <Edit3 size={15} className='mr-2 text-primary'/>Editar
+          </CDropdownItem>
+
+          <CDropdownItem href="#" onClick={() => {
+            deleteFunction(row)
+          }} >
+            <Trash2 size={15} className='mr-2 text-primary'/>Eliminar
           </CDropdownItem>
         </CDropdownMenu>
       </CDropdown>

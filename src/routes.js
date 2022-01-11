@@ -83,6 +83,9 @@ const SeguridadMostrar = React.lazy(() => import('./views/seguridad/Mostrar'));
 const SeguridadControl = React.lazy(() => import('./views/seguridad/Control'));
 const SeguridadEditar = React.lazy(() => import('./views/seguridad/Editar'));
 
+// Modulo de Reportes
+const ReporteEvento = React.lazy(() => import('./views/reporte/ReporteEvento'));
+
 const routes = [
  /* { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
@@ -170,6 +173,10 @@ const routes = [
   { path: '/seguridad/Registrar', name: 'Registrar Riesgo en Seguridad', component: SeguridadRegistrar },
   { path: '/seguridad/Control', name: 'Control de Riesgo en Seguridad', component: SeguridadControl },
   { path: '/seguridad/Editar/:id', name: 'Editar Riesgo en Seguridad', component: SeguridadEditar },
+
+  // Modulo de Reportes
+  { path: '/reporte', name: 'Reportes', component: SeguridadListar, exact: true },
+  { path: '/reporte/evento-riesgo', name: 'Reportes de Eventos', component: ReporteEvento },
 ];
 
 export default routes;

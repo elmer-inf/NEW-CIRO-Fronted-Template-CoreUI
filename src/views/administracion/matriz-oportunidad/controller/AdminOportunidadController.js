@@ -38,3 +38,8 @@ export const putTablaDescripcionOportunidadId = (id, data) => {
     return response;
 };
 
+export const deleteTablaDescripcionOportunidadId = (id) => {
+    const uri = HOST + 'v1/tablaDescripcionMatrizOportunidad/eliminar/' + id;
+    return axios.delete(uri);
+}
+

@@ -29,4 +29,9 @@ export const getTablaDescripcionRiesgoId = async (id) => {
     const uri = HOST + 'v1/tablaDescripcionMatrizRiesgo/mostrar/' + id;
     const response = await axios.get(uri);
     return response;
-};
+}
+
+export const deleteTablaDescripcionRiesgoId = (id) => {
+    const uri = HOST + 'v1/tablaDescripcionMatrizRiesgo/eliminar/' + id;
+    return axios.delete(uri);
+}

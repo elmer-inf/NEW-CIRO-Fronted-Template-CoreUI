@@ -7,14 +7,24 @@ import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import ActionFormatter from 'src/reusable/ActionFormatter';
 import Select from 'react-select'
 import { useHistory } from 'react-router-dom'
-import { getTablaDescripcionEventoN1, getTablaListaEvento } from './controller/AdminEventoController'
+import { getTablaDescripcionEventoN1, getTablaListaEvento, deleteTablaDescripcionEventoId } from './controller/AdminEventoController'
 import { buildSelectTwo, hasPermission } from 'src/functions/Function'
 import { Plus } from 'react-feather';
 import { PathContext } from 'src/containers/TheLayout';
 import { ToastContainer, toast } from 'react-toastify';
 import { Messages } from 'src/reusable/variables/Messages';
+import Swal from 'sweetalert2'
 
 const AdministracionEventoListar = () => {
+
+  // Configuracion sweetalert2
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: 'btn btn-primary px-4',
+      cancelButton: 'btn btn-outline-primary px-4 mr-4',
+    },
+    buttonsStyling: false
+  })
 
   //useContext
   const valuePathFromContext = React.useContext(PathContext);
@@ -42,7 +52,8 @@ const AdministracionEventoListar = () => {
     });
   }
 
-  const [labelTabla, setLabelTabla] = useState([])
+  const [labelTabla, setLabelTabla] = useState([]);
+  const [valueTabla, setValueTabla] = useState([]);
 
   const pagination = paginationFactory({
     page: 2,
@@ -217,14 +228,51 @@ const AdministracionEventoListar = () => {
   ]
 
   const actionFormatter = (cell, row) => {
-    return <ActionFormatter cell={cell} row={row} detailFunction={detailsRow} editFunction={editRow} />
+    return <ActionFormatter cell={cell} row={row} deleteFunction={deleteRow} editFunction={editRow} />
   }
 
-  const detailsRow = (row) => {
-    console.log(row)
-    //loseModal();
-    //return <DetailRestForm row={row} mod={true}/>
+  // Eliminar Parametro
+  const deleteRow = (row) => {
+    swalWithBootstrapButtons.fire({
+      title: '',
+      text:'¿Está seguro de eliminar el Parámetro de Evento de Riesgo?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si',
+      cancelButtonText: 'No',
+      reverseButtons: true,
+      position: 'top'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteTablaDescripcionEventoId(row.id)
+          .then(res => {
+            swalWithBootstrapButtons.fire({
+              title: '',
+              text: 'Operación realizada exitósamente',
+              icon: 'success',
+              position: 'top',
+            }).then(okay => {
+              if (okay) {
+                getTablaDescripcion(valueTabla);
+              }
+            })
+          }).catch((error) => {
+            console.log('Error al eliminar Parámetro de Evento de Riesgo: ', error);
+          });
+      } else if (
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        swalWithBootstrapButtons.fire({
+          title: '',
+          text: 'Operación cancelada',
+          icon: 'error',
+          position: 'top'
+        })
+      }
+    })
   }
+
+  // Editar Parametro
   const editRow = (row) => {
     //history.push('/administracion/evento-riesgo/Editar/' + row.id);
     const path = '/administracion/evento-riesgo/Editar/:id' + row.id;
@@ -254,22 +302,23 @@ const AdministracionEventoListar = () => {
   }
 
   useEffect(() => {
-    callApi()
+    callApi();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
 
   /* LISTA TABLA DESCRIPCION despendiento de seleccion tabla lista*/
   const handleSelectOnChange = (result) => {
-    console.log('select:  ', result)
-    const labelTable = result.label
-    setLabelTabla(labelTable)
+    const labelTable = result.label;
+    setLabelTabla(labelTable);
+    const valueTable = result.value;
+    setValueTabla(valueTable);
     getTablaDescripcion(result.value);
   }
 
   const getTablaDescripcion = (idTabla) => {
     getTablaDescripcionEventoN1(idTabla)
       .then(res => {
-        console.log('nivel 1: ', res.data)
+        //console.log('nivel 1: ', res.data)
         setDAtaApi(res.data)
       }).catch((error) => {
         console.log('Error: ', error)

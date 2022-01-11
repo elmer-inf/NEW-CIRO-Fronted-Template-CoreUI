@@ -33,15 +33,15 @@ const SeguridadListar = () => {
   const [spin, setSpin] = useState(false);
 
   const redirect = (e) => {
-    history.push('/seguridad/Registrar');
-    /* e.preventDefault();
+    //history.push('/seguridad/Registrar');
+    e.preventDefault();
     const path = '/seguridad/Registrar';
     if (hasPermission(path, valuePathFromContext)) {
       history.push(path);
 
     } else {
       notificationToast();
-    } */
+    }
   }
 
   const notificationToast = () => {
@@ -299,7 +299,7 @@ const SeguridadListar = () => {
             <Card>
               <CardHeader>
                 <CardTitle className='float-left h4 pt-2'>Riesgo en Seguridad</CardTitle>
-                <Button color='primary' onClick={redirect} className='float-right mt-1' style={{ width: '130px' }}>
+                <Button color='primary' onClick={(e) => {redirect(e)}} className='float-right mt-1' style={{ width: '130px' }}>
                   <span className='text-white'>Registrar</span>
                 </Button>
               </CardHeader>

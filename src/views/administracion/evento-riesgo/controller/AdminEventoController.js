@@ -43,3 +43,8 @@ export const putTablaDescripcionEventoId = (id, data) => {
     const uri = HOST + 'v1/tablaDescripcion/editar/' + id;
     return axios.put(uri, data);
 }
+
+export const deleteTablaDescripcionEventoId = (id) => {
+    const uri = HOST + 'v1/tablaDescripcion/eliminar/' + id;
+    return axios.delete(uri);
+}
