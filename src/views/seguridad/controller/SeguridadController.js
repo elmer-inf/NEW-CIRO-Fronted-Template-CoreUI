@@ -18,7 +18,13 @@ export const getSeguridadId = async (id) => {
     const uri = HOST + 'v1/seguridad/mostrar/' + id;
     const response = await axios.get(uri);
     return response;
-};
+}
+
+
+export const putSeguridadId = (id, data) => {
+    const uri = HOST + 'v1/seguridad/editar/' + id;
+    return axios.put(uri, data);
+}
 
 export const getGroupByArea = async () => {
     const uri = HOST.concat('v1/seguridad/agrupaPorArea')

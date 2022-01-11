@@ -1,14 +1,17 @@
-/* import React, { Fragment, useState, useEffect } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import { Card, CardHeader, CardTitle, CardBody } from 'reactstrap'
 import { useHistory } from 'react-router-dom'
 import Formulario from './component/Formulario'
-import { putSeguridadId, getSeguridadId, getTablaListaEvento } from './controller/AdminEventoController'
+import { putSeguridadId, getSeguridadId } from './controller/SeguridadController'
 import { getTablaDescripcionSeguridadN1 } from 'src/views/administracion/seguridad/controller/AdminSeguridadController'
 import { buildSelectTwo } from 'src/functions/Function'
+import { ToastContainer, toast } from 'react-toastify';
+import CCSpinner from 'src/reusable/spinner/CCSpinner'
 
-const AdministracionEventoEditar = ({ match }) => {
+const SeguridadEditar = ({ match }) => {
 
-  const history = useHistory()
+  const history = useHistory();
+
   const formValueInitial = {
     fechaRegistro: '',
     ipUrl: '',
@@ -41,74 +44,111 @@ const AdministracionEventoEditar = ({ match }) => {
   const [formValueToEdit, setformValueToEdit] = useState(formValueInitial)
   const [spin, setSpin] = useState(false)
 
+  const notificationToast = (type, mensaje) => {
+    switch (type) {
+      case 'error':
+        toast.error(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        break;
+      case 'success':
+        toast.success(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        break;
+
+      default:
+        toast(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
+    }
+    setTimeout(() => {
+      history.push('/seguridad/Listar');
+      setSpin(false);
+    }, 5000);
+  }
+
   // functions
   const handleOnSubmit = (dataToRequest) => {
-    console.log('data que se edita: ', dataToRequest)
-    const idTabDesc = match.params.id;
-    putSeguridadId(idTabDesc, dataToRequest)
+    setSpin(true);
+    //console.log('data que se edita: ', dataToRequest)
+    const idSeguridad = match.params.id;
+    putSeguridadId(idSeguridad, dataToRequest)
       .then(res => {
-        console.log('response : ', res);
-        history.push("/administracion/evento-riesgo/listar")
+        if (res.status >= 200 && res.status < 300) {
+          notificationToast('success', 'Riesgo en Seguridad modificado exitósamente');
+        } else {
+          notificationToast('error', 'Algo salió mal, intente nuevamente');
+        }
       }).catch((error) => {
         console.log('Error al obtener datos: ', error);
+        notificationToast('error', 'Algo salió mal, intente nuevamente')
       });
   }
 
-  const macthed = (dataResponse) => {
-    const r = dataResponse.tablaLista;
+  const matched = (dataResponse) =>{
+    var tipoActivoIdAux = {value: dataResponse.tipoActivoId.id, label: dataResponse.tipoActivoId.nombre };
+    var estadoIdAux = {value: dataResponse.estadoId.id, label: dataResponse.estadoId.nombre };
+    var nivelRiesgoIdAux = {value: dataResponse.nivelRiesgoId.id, label: dataResponse.nivelRiesgoId.campoA + ' - ' + dataResponse.nivelRiesgoId.campoB };
+    var areaIdAux = {value: dataResponse.areaId.id, label: dataResponse.areaId.clave + ' - ' + dataResponse.areaId.nombre };
 
-    var nivel1 = { value: dataResponse.tablaLista.id, label: dataResponse.tablaLista.nombre_tabla, nivel2: dataResponse.tablaLista.nivel2, nivel3: dataResponse.tablaLista.nivel3 }
-    var nivel2 = {}
-    var nivel3 = {}
-
-    if (dataResponse.nivel2_id !== null) {
-      nivel2 = { value: dataResponse.nivel2_id.id, label: dataResponse.nivel2_id.nombre }
-    }
-    if (dataResponse.nivel3_id !== null) {
-      nivel3 = { value: dataResponse.nivel3_id.id, label: dataResponse.nivel3_id.nombre }
-    }
+    var redAux = {value: dataResponse.red, label: dataResponse.red };
 
     const valores = {
-      nombre: dataResponse.nombre,
-      clave: dataResponse.clave,
-      descripcion: dataResponse.descripcion,
-      campoA: dataResponse.campoA,
-      campoB: dataResponse.campoB,
-      campoC: dataResponse.campoC,
-      campoD: dataResponse.campoD,
-      codigoAsfi: dataResponse.codigoAsfi,
-      tablaLista: nivel1,
-      nivel2_id: (dataResponse.nivel2_id !== null) ? nivel2 : null,
-      nivel3_id: (dataResponse.nivel3_id !== null) ? nivel3 : null
+      fechaRegistro: dataResponse.fechaRegistro,
+      ipUrl: dataResponse.ipUrl,
+      activoInformacion: dataResponse.activoInformacion,
+      red: dataResponse.red,
+      descripcionRiesgo: dataResponse.descripcionRiesgo,
+      recomendacion: dataResponse.recomendacion,
+      fechaSolucion: dataResponse.fechaSolucion,
+      fechaLimite: dataResponse.fechaLimite,
+      planTrabajo: dataResponse.planTrabajo,
+      informeEmitido: dataResponse.informeEmitido,
+      ciSeguimiento: dataResponse.ciSeguimiento,
+      comentario: dataResponse.comentario,
+
+      tipoActivoId: tipoActivoIdAux,
+      estadoId: estadoIdAux,
+      nivelRiesgoId: nivelRiesgoIdAux,
+      areaId: areaIdAux,
+      red: redAux
     }
-    //console.log('MATCHEDEDED: ', valores)
-    setformValueToEdit(valores);
-    //console.log('mtachhhher: ', dataResponse.tablaLista);
-    if (r.nivel2 !== null && r.nivel2 != 0) {
-      const idnivel2 = r.nivel2;
-      callApi2(idnivel2);
-    }
-    if (r.nivel3 !== null && r.nivel3 != 0) {
-      const idnivel3 = r.nivel3;
-      callApi3(idnivel3);
-    }
+    //console.log('MATCHED: ', valores)
+    setformValueToEdit(valores)
   }
+
 
   const getById = async () => {
     setSpin(true)
-    const idParametro = match.params.id;
-    await getSeguridadId(idParametro)
+    const idSeguridad = match.params.id;
+    await getSeguridadId(idSeguridad)
       .then((response) => {
         const res = response.data;
-        macthed(res)
-        setSpin(false)
-
+        matched(res);
+        setSpin(false);
       }).catch((error) => {
         console.log("Error: ", error);
+        setSpin(false);
       });
   }
 
-  const getTablaLista = async () => {
+ /*  const getTablaLista = async () => {
     await getTablaListaEvento()
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre_tabla', true)
@@ -119,10 +159,10 @@ const AdministracionEventoEditar = ({ match }) => {
         console.log('Error: ', error)
         //notificationToast('error', Messages.notification.notOk)
       })
-  }
+  } */
 
   // LISTA TABLA DESCRIPCION NIVEL 2
-  const callApi2 = (idn2) => {
+ /*  const callApi2 = (idn2) => {
     console.log('llego callapi2:: ', ' idn2: ', idn2);
     getTablaDescripcionEventoN1(idn2)
       .then(res => {
@@ -134,9 +174,9 @@ const AdministracionEventoEditar = ({ match }) => {
         console.log('Error: ', error)
         //notificationToast('error', Messages.notification.notOk)
       })
-  }
+  } */
   // LISTA TABLA DESCRIPCION NIVEL 3
-  const callApi3 = (idTablaDes) => {
+ /*  const callApi3 = (idTablaDes) => {
     console.log('llego callApi3:: ', idTablaDes);
 
     getTablaDescripcionEventoN1(idTablaDes)
@@ -149,17 +189,19 @@ const AdministracionEventoEditar = ({ match }) => {
         console.log('Error: ', error)
         //notificationToast('error', Messages.notification.notOk)
       })
-  }
+  } */
 
   //Life Cycle
   useEffect(() => {
     getById();
-    getTablaLista();
+    //getTablaLista();
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div>
+      <CCSpinner show={spin} />
+
       <Fragment>
         <Card>
           <CardHeader>
@@ -178,8 +220,19 @@ const AdministracionEventoEditar = ({ match }) => {
           </CardBody>
         </Card>
       </Fragment>
+
+      <ToastContainer
+        position="top-center"
+        autoClose={8000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   )
 }
-export default AdministracionEventoEditar
- */
+export default SeguridadEditar

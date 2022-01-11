@@ -33,15 +33,15 @@ const SeguridadListar = () => {
   const [spin, setSpin] = useState(false);
 
   const redirect = (e) => {
-    //history.push('/seguridad/Registrar');
-    e.preventDefault();
+    history.push('/seguridad/Registrar');
+    /* e.preventDefault();
     const path = '/seguridad/Registrar';
     if (hasPermission(path, valuePathFromContext)) {
       history.push(path);
 
     } else {
       notificationToast();
-    }
+    } */
   }
 
   const notificationToast = () => {

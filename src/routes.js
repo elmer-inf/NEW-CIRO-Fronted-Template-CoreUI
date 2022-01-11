@@ -81,7 +81,7 @@ const SeguridadListar = React.lazy(() => import('./views/seguridad/Listar'));
 const SeguridadRegistrar = React.lazy(() => import('./views/seguridad/Registrar'));
 const SeguridadMostrar = React.lazy(() => import('./views/seguridad/Mostrar'));
 const SeguridadControl = React.lazy(() => import('./views/seguridad/Control'));
-
+const SeguridadEditar = React.lazy(() => import('./views/seguridad/Editar'));
 
 const routes = [
  /* { path: '/', exact: true, name: 'Home' },
@@ -169,7 +169,7 @@ const routes = [
   { path: '/seguridad/Listar', name: 'Lista de Riesgos en Seguridad', component: SeguridadListar },
   { path: '/seguridad/Registrar', name: 'Registrar Riesgo en Seguridad', component: SeguridadRegistrar },
   { path: '/seguridad/Control', name: 'Control de Riesgo en Seguridad', component: SeguridadControl },
-
+  { path: '/seguridad/Editar/:id', name: 'Editar Riesgo en Seguridad', component: SeguridadEditar },
 ];
 
 export default routes;

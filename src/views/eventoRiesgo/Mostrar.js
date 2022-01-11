@@ -446,7 +446,7 @@ function base64ToArrayBuffer(data) {
                             <Col xs='12' md='6' className='pt-2'>
                               <div className='text-label'>Archivo(s) adjunto(s): </div>
                               {(dataArchivos !== null && !_.isEmpty(dataArchivos)) ?
-                                <Table responsive size="sm" borderless="false" striped='false'className='mt-2'>
+                                <Table responsive size="sm" borderless="false" className='mt-2'>
                                   <thead>
                                     <tr>
                                       <th>Nombre</th>
