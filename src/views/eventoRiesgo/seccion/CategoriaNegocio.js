@@ -37,7 +37,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
     initialValues: initValues,
     validationSchema: Yup.object().shape(
       {
-        codigoInicial: Yup.string().nullable(),
+        codigoInicial: Yup.string().max(500, 'El campo no debe exceder los 500 caracteres').nullable(),
         subcategorizacionId: Yup.mixed().nullable(),
         trimestre: Yup.string().nullable(),
         tipoEventoPerdidaId: Yup.mixed().required('Campo obligatorio'),
@@ -45,7 +45,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         claseEventoId:  Yup.mixed().nullable(),
         otrosAux: Yup.string().nullable(),
         otros: Yup.string().nullable(),
-        detalleEventoCritico: Yup.string().required('Campo obligatorio').nullable(),
+        detalleEventoCritico: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').required('Campo obligatorio').nullable(),
         factorRiesgoId: Yup.mixed().required('Campo obligatorio'),
         procesoId: Yup.mixed().required('Campo obligatorio'),
         procedimientoId: Yup.mixed().nullable(),
@@ -58,7 +58,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         opeProSerId: Yup.mixed().nullable(),
         tipoServicioId: Yup.mixed().nullable(),
         descServicioId: Yup.mixed().nullable(),
-        detalleEstado: Yup.string().nullable(),
+        detalleEstado: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').nullable(),
 
         listMatrizRiesgo:Yup.mixed().nullable()
        
@@ -519,12 +519,12 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
             </FormGroup>
             : null}
 
-          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+          <FormGroup tag={Col} md='6' lg='6' className='mb-0'>
             <Label className='form-label'>
               Detalle evento crítico <span className='text-primary h5'><b>*</b></span>
             </Label>
             <CInputReact
-              type={"text"}
+              type={"textarea"}
               id={'detalleEventoCritico'}
               placeholder={'Detalle evento crítico'}
               value={formik.values.detalleEventoCritico}
@@ -532,6 +532,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
               onBlur={formik.handleBlur}
               touched={formik.touched.detalleEventoCritico}
               errors={formik.errors.detalleEventoCritico}
+              rows={1}
             />
           </FormGroup>
 

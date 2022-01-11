@@ -16,7 +16,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
   const formik = Yup.object().shape({
     controlId: Yup.mixed().required('Campo obligatorio'),
     controlObjetivo: Yup.mixed().required('Campo obligatorio'),
-    controlComentario:  Yup.string().nullable(),
+    controlComentario:  Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').nullable(),
     // campos solo para mostrar
     controlValoracion: Yup.string().nullable(),
     controlDisminucion: Yup.string().nullable(),
@@ -26,7 +26,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
     controles: Yup.array().of(
       Yup.object().shape({
         nroControl: Yup.number().nullable(),
-        descripcion: Yup.string().nullable(),
+        descripcion: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').nullable(),
         formalizado: Yup.string().nullable(),
         norma: Yup.mixed().nullable(),
         tipo: Yup.mixed().nullable(),

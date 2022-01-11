@@ -36,8 +36,8 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
       estadoReportado: Yup.mixed().nullable(),
       fuenteInfId: Yup.mixed().nullable(),
       canalAsfiId: Yup.mixed().required('Campo obligatorio'),
-      descripcion: Yup.string().required('Campo obligatorio'),
-      descripcionCompleta: Yup.string().nullable(),
+      descripcion: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').required('Campo obligatorio'),
+      descripcionCompleta: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').nullable(),
       files: Yup.mixed().nullable(),
 
       /* fechaIni: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
@@ -82,7 +82,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
         fuenteInfId: (values.fuenteInfId !== null) ? values.fuenteInfId.value : 0,
         canalAsfiId: (values.canalAsfiId !== null) ? values.canalAsfiId.value : 0,
 
-        estadoReportado: (values.estadoReportado !== null) ? values.estadoReportado.value : 0,
+        estadoReportado: (values.estadoReportado !== null) ? values.estadoReportado.value : null,
       }
       console.log('datos que se enviaran SECCION 1:', data)
       setObject(data);

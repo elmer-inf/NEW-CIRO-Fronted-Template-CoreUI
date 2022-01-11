@@ -151,6 +151,7 @@ const Descripcion = ({ nextSection, beforeSection, setObject, initValues, isEdit
               onBlur={formik.handleBlur}
               touched={formik.touched.defConcatenado}
               errors={formik.errors.defConcatenado}
+              disabled={true}
               rows={2}
             />
           </FormGroup>

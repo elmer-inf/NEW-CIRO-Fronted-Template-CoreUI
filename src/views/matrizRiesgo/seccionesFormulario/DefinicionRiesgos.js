@@ -20,10 +20,9 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
     initialValues: {...initValues, otrosAux2: false},
     validationSchema: Yup.object().shape(
       {
-        definicion : Yup.string().required('Campo obligatorio'),
-        causa : Yup.string().required('Campo obligatorio'),
-        consecuencia : Yup.string().required('Campo obligatorio'),
-        defConcatenado : Yup.string().required('Campo obligatorio'),
+        definicion : Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').required('Campo obligatorio'),
+        causa : Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').required('Campo obligatorio'),
+        consecuencia : Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').required('Campo obligatorio'),
         efectoPerdidaOtro: Yup.string().nullable().when('otrosAux2',{
           is:(val) => (val === true),
           then: Yup.string().nullable().required("Campo obligatorio"),
@@ -38,6 +37,8 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
         probabilidadId : Yup.mixed().required("Campo obligatorio"),
         impactoId : Yup.mixed().required("Campo obligatorio"),
         // Campos solo para mostrar
+        // Solo para mostrar
+        defConcatenado : Yup.string().nullable(),
         otrosAux2: Yup.boolean(),
         riesgoInherente : Yup.number().required('Campo obligatorio'),
         valorRiesgoInherente : Yup.string().required('Campo obligatorio'),
@@ -66,6 +67,8 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
         probabilidadId : Yup.mixed().required("Campo obligatorio"),
         impactoId : Yup.mixed().required("Campo obligatorio"),
         // Campos solo para mostrar
+        // Solo para mostrar
+        defConcatenado : Yup.string().nullable(),
         otrosAux2: Yup.boolean(),
         riesgoInherente : Yup.number().nullable(),
         valorRiesgoInherente : Yup.string().nullable(),
@@ -88,7 +91,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
         probabilidadId:(values.probabilidadId !== null) ? values.probabilidadId.value : 0,
         impactoId:(values.impactoId !== null) ? values.impactoId.value : 0,
      }
-      const dataSelect =  _.omit(data, ['probInherente', 'probPorcentaje', 'probValoracion', 'impactoInherente', 'impactoPorcentaje', 'impactoValoracion', 'riesgoInherente', 'valorRiesgoInherente']);
+      const dataSelect =  _.omit(data, ['defConcatenado', 'probInherente', 'probPorcentaje', 'probValoracion', 'impactoInherente', 'impactoPorcentaje', 'impactoValoracion', 'riesgoInherente', 'valorRiesgoInherente']);
       console.log('datos que se enviaran SECCION 2:', dataSelect)
       setObject(dataSelect, values);
       nextSection(2);
@@ -260,7 +263,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
               onBlur={formik.handleBlur}
               touched={formik.touched.definicion}
               errors={formik.errors.definicion}
-              rows={1}
+              rows={2}
             />
           </FormGroup>
 
@@ -277,7 +280,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
               onBlur={formik.handleBlur}
               touched={formik.touched.causa}
               errors={formik.errors.causa}
-              rows={1}
+              rows={2}
             />
           </FormGroup>
 
@@ -294,7 +297,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
               onBlur={formik.handleBlur}
               touched={formik.touched.consecuencia}
               errors={formik.errors.consecuencia}
-              rows={1}
+              rows={2}
             />
           </FormGroup>
 
@@ -312,7 +315,8 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
               onBlur={formik.handleBlur}
               touched={formik.touched.defConcatenado}
               errors={formik.errors.defConcatenado}
-              rows={2}
+              disabled={true}
+              rows={4}
             />
           </FormGroup>
 

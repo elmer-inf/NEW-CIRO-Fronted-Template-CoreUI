@@ -36,7 +36,6 @@ const MatrizRiesgoRegistrar = () => {
     definicion: '',
     causa: '',
     consecuencia: '',
-    defConcatenado: '',
     efectoPerdidaOtro: '',
     efectoPerdidaId: null,
     perdidaAsfiId: null,

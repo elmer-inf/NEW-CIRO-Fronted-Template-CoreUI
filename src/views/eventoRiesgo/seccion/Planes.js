@@ -16,9 +16,9 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
     validationSchema: Yup.object().shape({
         areaResponsableId: Yup.mixed().nullable(),
         cargoResponsableId: Yup.mixed().nullable(),
-        detallePlan: Yup.string().nullable(),
+        detallePlan: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').nullable(),
         fechaFinPlan: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
-        descripcionEstado: Yup.string().nullable(),
+        descripcionEstado: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').nullable(),
         estadoPlan: Yup.mixed().nullable(),
       }
     ),

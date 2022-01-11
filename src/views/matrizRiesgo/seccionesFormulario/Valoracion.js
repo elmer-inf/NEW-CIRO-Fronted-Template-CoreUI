@@ -16,8 +16,8 @@ const Valoracion = ({ beforeSection, initValues, dataAux , dataAux2, isEdit, han
     initialValues: {...initValues, montoRiesgo: 0},
     validationSchema: Yup.object().shape(
       {
-        criterioImpacto: Yup.string().nullable(),
-        criterioprobabilidad: Yup.string().nullable(),
+        criterioImpacto: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').nullable(),
+        criterioprobabilidad: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').nullable(),
         impactoUSD: Yup.number().nullable(),
 
         // Solo para mostrar

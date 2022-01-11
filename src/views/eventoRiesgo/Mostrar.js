@@ -417,8 +417,8 @@ function base64ToArrayBuffer(data) {
                             </Col>
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
-                              <div className='text-label'>Estado: </div>
-                              <div className='text-data'>{dataApi.estadoReportado !== null ? dataApi.estadoReportado.nombre : <i>Sin registro</i>}</div>
+                              <div className='text-label'>Estado: </div> 
+                              <div className='text-data'>{dataApi.estadoReportado !== null ? dataApi.estadoReportado : <i>Sin registro</i>}</div>
                             </Col>
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
@@ -553,7 +553,7 @@ function base64ToArrayBuffer(data) {
                               </Col>
                               : null}
 
-                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                            <Col xs='12' sm='6' md='4' xl='6' className='pt-2'>
                               <div className='text-label'>Detalle evento crítico: </div>
                               <div className='text-data'>{dataApi.detalleEventoCritico !== '' ? dataApi.detalleEventoCritico : <i>Sin registro</i>}</div>
                             </Col>

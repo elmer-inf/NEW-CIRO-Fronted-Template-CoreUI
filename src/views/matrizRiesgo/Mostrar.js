@@ -563,7 +563,11 @@ const MatrizRiesgo = ({ match }) => {
 
                             <Col xs='12' md='12' className='pt-3'>
                               <div className='text-label'>Definición del Riesgo (Riesgo por (EVENTO), debido a (CAUSA), puede ocasionar (IMPACTO))</div>
-                              <div className='text-data'>{dataApi.defConcatenado !== null ? dataApi.defConcatenado : <i>Sin registro</i>}</div>
+                              <div className='text-data'>
+                                RIESGO POR {dataApi.definicion !== null ? dataApi.definicion : ''} DEBIDO A
+                                {dataApi.causa !== null ? ' ' + dataApi.causa : ''} PUEDE OCASIONAR
+                                {dataApi.consecuencia !== null ? ' ' + dataApi.consecuencia : ''}
+                              </div>
                             </Col>
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
