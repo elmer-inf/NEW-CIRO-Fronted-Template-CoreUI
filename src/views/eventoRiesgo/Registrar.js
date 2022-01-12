@@ -5,18 +5,17 @@ import CategoriaNegocio from './seccion/CategoriaNegocio'
 import DatosIniciales from './seccion/DatosIniciales'
 import Planes from './seccion/Planes'
 import { FileText, Activity, DollarSign, BarChart2, ChevronRight, AlertTriangle, CheckSquare } from 'react-feather'
-import { Row, Col, Card, CardBody, CardHeader, CardTitle, TabContent, TabPane, NavLink, NavItem, Nav, FormGroup, Label, Form } from 'reactstrap';
+import { Row, Col, Card, CardBody, CardHeader, CardTitle, TabContent, TabPane, NavLink, NavItem, Nav, FormGroup, Label } from 'reactstrap';
 import CInputRadio from 'src/reusable/CInputRadio'
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames';
 import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
-import { postEventoRiesgo, postEventoRiesgoFormData } from './controller/EventoController';
+import { postEventoRiesgoFormData } from './controller/EventoController';
 import { buildSelectTwo } from 'src/functions/Function'
 import { useFormik } from "formik"
 import * as Yup from "yup"
 import { ToastContainer, toast } from 'react-toastify'
 import CCSpinner from 'src/reusable/spinner/CCSpinner'
-import { CInputFile } from 'src/reusable/CInputFile'
 
 var _ = require('lodash');
 

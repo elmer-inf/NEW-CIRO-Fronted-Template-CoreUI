@@ -43,7 +43,6 @@ const MatrizOportunidadListar = () => {
   const redirect = (e) => {
     //history.push('/matrizOportunidad/Registrar');
     e.preventDefault();
-
     const path = '/matrizOportunidad/Registrar';
     if (hasPermission(path, valuePathFromContext)) {
       history.push(path);

@@ -40,15 +40,15 @@ const MatrizRiesgoListar = () => {
   const [spin, setSpin] = useState(false);
 
   const redirect = (e) => {
-    history.push('/matrizRiesgo/Registrar');
-    /* e.preventDefault();
+    //history.push('/matrizRiesgo/Registrar');
+    e.preventDefault();
     const path = '/matrizRiesgo/Registrar';
     if (hasPermission(path, valuePathFromContext)) {
       history.push(path);
 
     } else {
       notificationToast();
-    } */
+    }
   }
 
   const notificationToast = () => {

@@ -199,14 +199,14 @@ const EventoRiesgo = ({ match }) => {
         window.navigator.msSaveOrOpenBlob(blobStore);
         return;
     }
-    var data = window.URL.createObjectURL(blobStore);
+    var data2 = window.URL.createObjectURL(blobStore);
     var pdfWindow = window.open();
     var link = document.createElement('a');
     document.body.appendChild(link);
-    pdfWindow.location.href = data;
+    pdfWindow.location.href = data2;
     //link.download = "file.pdf";
     link.click();
-    window.URL.revokeObjectURL(data);
+    window.URL.revokeObjectURL(data2);
     link.remove();
 }
 
@@ -449,31 +449,31 @@ function base64ToArrayBuffer(data) {
                                 <Table responsive size="sm" borderless="false" className='mt-2'>
                                   <thead>
                                     <tr>
-                                      <th>Nombre</th>
+                                      <th className='pl-3'>Nombre</th>
                                       <th>Tamaño</th>
                                       <th>Fecha registro</th>
                                       <th>Archivo</th>
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    {dataArchivos.map((archivo, index) => {
+                                    {dataArchivos.map((archivo) => {
                                       return (
-                                        <tr scope="row" key={archivo.id}>
-                                          <td>{archivo.nombreArchivo}</td>
+                                        <tr key={archivo.id}>
+                                          <td className='pl-3'>{archivo.nombreArchivo}</td>
                                           <td>{formatSizeUnits(archivo.size)}</td>
                                           <td>{formatDate(archivo.updated)}</td>
                                           {/* <td><embed type="application/pdf" src={'data:application/pdf;base64,'+archivo.archivoBase64} /></td> */}
                                           <td>
-                                            <a href='' target="_blank" onClick={() => base64toPDF(archivo.archivoBase64)} target="_blank">
+                                            <CButton onClick={() => base64toPDF(archivo.archivoBase64)}>
                                               <CIcon
                                                 className="mb-2"
                                                 src="/icon/pdf.png"
                                                 height={30}
                                               />
-                                            </a>
+                                            </CButton>
                                           </td>
                                         </tr>
-                                      );
+                                      )
                                     })}
                                   </tbody>
                                 </Table>
@@ -542,16 +542,14 @@ function base64ToArrayBuffer(data) {
                               <div className='text-data'>{dataApi.subEventoId !== null ? dataApi.subEventoId.nombre : <i>Sin registro</i>}</div>
                             </Col>
 
-                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                            <Col xs='12' sm='6' md='4' xl='6' className='pt-2'>
                               <div className='text-label'>Clase evento - Basilea - ASFI: </div>
-                              <div className='text-data'>{dataApi.claseEventoId !== null ? dataApi.claseEventoId.nombre : <i>Sin registro</i>}</div>
+                              <div className='text-data'>
+                                {(dataApi.claseEventoId !== null && dataApi.claseEventoId.nombre !== 'Otros')?
+                                    dataApi.claseEventoId.nombre : (dataApi.claseEventoId !== null && dataApi.claseEventoId.nombre === 'Otros')?
+                                        <span className='text-label'>{dataApi.claseEventoId.nombre}</span> :  null}
+                              </div>
                             </Col>
-                            {dataApi.otros !== null ?
-                              <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
-                                <div className='text-label'>Otros (Clase evento - Basilea - ASFI): </div>
-                                <div className='text-data'>{dataApi.otros}</div>
-                              </Col>
-                              : null}
 
                             <Col xs='12' sm='6' md='4' xl='6' className='pt-2'>
                               <div className='text-label'>Detalle evento crítico: </div>

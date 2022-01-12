@@ -3,9 +3,7 @@ import { Card, CardHeader, CardTitle, CardBody } from 'reactstrap'
 import { useHistory } from 'react-router-dom'
 import Formulario from './component/Formulario'
 import { putSeguridadId, getSeguridadId } from './controller/SeguridadController'
-import { getTablaDescripcionSeguridadN1 } from 'src/views/administracion/seguridad/controller/AdminSeguridadController'
-import { buildSelectTwo } from 'src/functions/Function'
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify'
 import CCSpinner from 'src/reusable/spinner/CCSpinner'
 
 const SeguridadEditar = ({ match }) => {
@@ -31,14 +29,6 @@ const SeguridadEditar = ({ match }) => {
     nivelRiesgoId: null,
     areaId: null
   }
-
-  //Lista las tablas Lista
-  const [tablaListaOptions, setTablaListaOptions] = useState([])
-  //LISTA TABLA DESCRIPCION NIVEL 2
-  const [dataApi2, setDataApi2] = useState([]);
-  //LISTA TABLA DESCRIPCION NIVEL 3
-  const [dataApi3, setDataApi3] = useState([]);
-
 
   //useState
   const [formValueToEdit, setformValueToEdit] = useState(formValueInitial)
@@ -113,7 +103,6 @@ const SeguridadEditar = ({ match }) => {
       fechaRegistro: dataResponse.fechaRegistro,
       ipUrl: dataResponse.ipUrl,
       activoInformacion: dataResponse.activoInformacion,
-      red: dataResponse.red,
       descripcionRiesgo: dataResponse.descripcionRiesgo,
       recomendacion: dataResponse.recomendacion,
       fechaSolucion: dataResponse.fechaSolucion,
@@ -148,53 +137,9 @@ const SeguridadEditar = ({ match }) => {
       });
   }
 
- /*  const getTablaLista = async () => {
-    await getTablaListaEvento()
-      .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre_tabla', true)
-        //console.log('El response de tabla: ', res.data)
-        //console.log('options : ', options)
-        setTablaListaOptions(options)
-      }).catch((error) => {
-        console.log('Error: ', error)
-        //notificationToast('error', Messages.notification.notOk)
-      })
-  } */
-
-  // LISTA TABLA DESCRIPCION NIVEL 2
- /*  const callApi2 = (idn2) => {
-    console.log('llego callapi2:: ', ' idn2: ', idn2);
-    getTablaDescripcionEventoN1(idn2)
-      .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
-        console.log('El response de tabla call api 2: ', res.data)
-        //console.log('options : ', options)
-        setDataApi2(options)
-      }).catch((error) => {
-        console.log('Error: ', error)
-        //notificationToast('error', Messages.notification.notOk)
-      })
-  } */
-  // LISTA TABLA DESCRIPCION NIVEL 3
- /*  const callApi3 = (idTablaDes) => {
-    console.log('llego callApi3:: ', idTablaDes);
-
-    getTablaDescripcionEventoN1(idTablaDes)
-      .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
-        console.log('El response de tabla 3 : ', res.data)
-        //console.log('options : ', options)
-        setDataApi3(options)
-      }).catch((error) => {
-        console.log('Error: ', error)
-        //notificationToast('error', Messages.notification.notOk)
-      })
-  } */
-
   //Life Cycle
   useEffect(() => {
     getById();
-    //getTablaLista();
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

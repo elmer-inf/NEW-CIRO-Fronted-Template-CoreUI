@@ -9,6 +9,7 @@ import { CNav, CNavItem, CNavLink, CTabContent, CTabPane, CTabs } from '@coreui/
 const ReporteEventos = () => {
 
   const formValueInitial = {
+    tipo: null,
     anio: '',
     trimestre: null,
   }
@@ -17,8 +18,9 @@ const ReporteEventos = () => {
     initialValues: formValueInitial,
     validationSchema: Yup.object().shape(
       {
+        tipo: Yup.mixed().nullable(),
         anio: Yup.mixed().nullable(),
-        trimestre: Yup.mixed().nullable(),
+        trimestre: Yup.mixed().nullable()
       }
     ),
 
@@ -35,22 +37,51 @@ const ReporteEventos = () => {
 
   }
 
-  // Año Reporte
+  // Opciones Tipo de Reporte
+  const optionsTipo = [
+    { value: 'Tipo 1', label: 'Tipo 1' },
+    { value: 'Tipo 2', label: 'Tipo 2' },
+  ]
+
+  // Opciones Año Reporte
   const dataAnio = ()=>{
     var dataAnio = [];
-    for(var i = 1988 ; i <= (new Date().getFullYear()) ; i++){
+    for(var i = 2021 ; i <= (new Date().getFullYear()) ; i++){
       dataAnio.push({"value": i, "label": i})
     }
     return dataAnio;
   }
 
-  // Trimestre Reporte
+  // Opciones Trimestre Reporte
   const optionsTrimestre = [
     { value: '01-01|03-31', label: 'Enero - Marzo' },
     { value: '04-01|06-30', label: 'Abril - Junio' },
     { value: '07-01|09-30', label: 'Julio - Septiembre' },
     { value: '10-01|12-31', label: 'Octubre - Diciembre' }
   ]
+
+  // Genera Fecha Inicio y fecha Fin para el Reporte (Intervalo)
+  const fechaReporte = (tipo)=>{
+    var anio = formik.values.anio !== null ? formik.values.anio.value : null;
+    var trimestre = formik.values.trimestre !== null ? formik.values.trimestre.value : null;
+    var fechaReporte = '';
+    try{
+      if(anio !== null && trimestre !== null && tipo !== null){
+        if(tipo === 0){
+          fechaReporte = anio + '-' + trimestre.split('|')[0];
+        }else if(tipo === 1){
+          fechaReporte = anio + '-' + trimestre.split('|')[1];
+        }
+      }
+    }
+    catch (error) {
+      console.log('Error al obtener Fecha reporte Inicio/Fin: ', error);
+    }
+    return fechaReporte;
+  }
+
+  console.log('fecha INICIO reporte:', fechaReporte(0)); // anio-mes-dia
+  console.log('fecha FINAL reporte:', fechaReporte(1));
 
   return (
     <div className='table-hover-animation'>
@@ -65,6 +96,23 @@ const ReporteEventos = () => {
             </CardHeader>
             <CardBody>
               <Row className='justify-content-center pt-4'>
+                <FormGroup tag={Col} xs='12' md='6' lg='4' xl='3' className='mb-0'>
+                  <Label className='form-label text-label'>
+                    Tipo de Reporte
+                  </Label>
+                    <CSelectReact
+                      type={"select"}
+                      id={'tipo'}
+                      placeholder={'Seleccionar'}
+                      value={formik.values.tipo}
+                      onChange={formik.setFieldValue}
+                      onBlur={formik.setFieldTouched}
+                      error={formik.errors.tipo}
+                      touched={formik.touched.tipo}
+                      options={optionsTipo}
+                    />
+                </FormGroup>
+
                 <FormGroup tag={Col} xs='12' md='6' lg='4' xl='3' className='mb-0'>
                   <Label className='form-label text-label'>
                     Año

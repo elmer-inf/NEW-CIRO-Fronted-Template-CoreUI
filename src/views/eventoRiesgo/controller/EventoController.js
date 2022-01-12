@@ -3,7 +3,7 @@ import { HOSTURI } from 'src/config'
 import AuthService from 'src/views/authentication/AuthService';
 
 const Auth = new AuthService();
-const header = Auth.getHeader();
+//const header = Auth.getHeader();
 
 
 const HOST = HOSTURI.endpoint_ciro

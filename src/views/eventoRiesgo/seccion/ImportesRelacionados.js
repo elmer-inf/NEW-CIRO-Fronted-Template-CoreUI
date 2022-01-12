@@ -8,7 +8,7 @@ import { CInputReact } from 'src/reusable/CInputReact'
 import { CSelectReact } from 'src/reusable/CSelectReact'
 import CInputRadio from 'src/reusable/CInputRadio'
 import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
-import { buildSelectTwo } from 'src/functions/Function'
+import { buildSelectTwo, buildSelectThree} from 'src/functions/Function'
 
 var _ = require('lodash');
 
@@ -18,7 +18,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
     initialValues: {...initValues, totalPerdida: 0},
     validationSchema: Yup.object().shape(
       {
-        monedaId: Yup.mixed().nullable(),
+        monedaId: Yup.mixed().required('Campo obligatorio'),
         montoPerdida: Yup.number().required('Campo obligatorio'),
         gastoAsociado: Yup.number().required('Campo obligatorio'),
         montoRecuperado: Yup.number().required('Campo obligatorio'),
@@ -34,7 +34,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
         totalRecuperado: Yup.number().nullable()
 
 
-        /* monedaId: Yup.mixed().nullable(),
+        /* monedaId: Yup.mixed().required('Campo obligatorio'),
         montoPerdida: Yup.number().nullable(),
         gastoAsociado: Yup.number().nullable(),
         montoRecuperado: Yup.number().nullable(),

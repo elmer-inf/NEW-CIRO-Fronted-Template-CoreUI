@@ -9,7 +9,7 @@ export const formatSizeUnits = (bytes) => {
         result = (bytes / 1024).toFixed(2) + " KB";
     } else if (bytes > 1) {
         result = bytes + " bytes";
-    } else if (bytes == 1) {
+    } else if (bytes === 1) {
         result = bytes + " byte";
     } else {
         result = "0 bytes";

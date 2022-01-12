@@ -1,7 +1,6 @@
 import { React, Fragment, useState, useEffect } from 'react'
 import { ChevronRight, Delete } from 'react-feather'
 import { Label, FormGroup, Row, Col, Form, Button } from 'reactstrap'
-
 import { useFormik } from "formik"
 import * as Yup from "yup"
 import { CInputReact } from 'src/reusable/CInputReact'
@@ -9,9 +8,7 @@ import { CSelectReact } from 'src/reusable/CSelectReact'
 import CInputCheckbox from 'src/reusable/CInputCheckbox'
 import { getTablaDescripcionEventoN1, getTablaDescripcionEventoN2 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
 import { buildSelectTwo } from 'src/functions/Function'
-import { Messages } from 'src/reusable/variables/Messages'
 import { CInputFile } from 'src/reusable/CInputFile'
-//import { faTemperatureLow } from '@fortawesome/free-solid-svg-icons'
 import { useHistory } from 'react-router-dom'
 
 const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFiles }) => {

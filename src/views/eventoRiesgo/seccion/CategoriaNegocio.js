@@ -43,8 +43,10 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         tipoEventoPerdidaId: Yup.mixed().required('Campo obligatorio'),
         subEventoId: Yup.mixed().nullable(),
         claseEventoId:  Yup.mixed().nullable(),
-        otrosAux: Yup.string().nullable(),
-        otros: Yup.string().nullable(),
+        otros : Yup.string().nullable().when('claseEventoId',{
+          is:(val) =>  (val !== null && val.label === 'Otros'),
+          then: Yup.string().max(300, 'El campo no debe exceder los 300 caracteres').nullable().required("Campo obligatorio"),
+        }),
         detalleEventoCritico: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').required('Campo obligatorio').nullable(),
         factorRiesgoId: Yup.mixed().required('Campo obligatorio'),
         procesoId: Yup.mixed().required('Campo obligatorio'),
@@ -60,8 +62,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         descServicioId: Yup.mixed().nullable(),
         detalleEstado: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').nullable(),
 
-        listMatrizRiesgo:Yup.mixed().nullable()
-       
+        listMatrizRiesgo:Yup.mixed().nullable(),
 
         /* codigoInicial: Yup.string().nullable(),
         subcategorizacionId: Yup.mixed().nullable(),
@@ -69,8 +70,10 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         tipoEventoPerdidaId: Yup.mixed().nullable(),
         subEventoId: Yup.mixed().nullable(),
         claseEventoId: Yup.mixed().nullable(),
-        otrosAux: Yup.string().nullable(),
-        otros: Yup.string().nullable(),
+        otros : Yup.string().nullable().when('claseEventoId',{
+          is:(val) =>  (val !== null && val.label === 'Otros'),
+          then: Yup.string().max(300, 'El campo no debe exceder los 300 caracteres').nullable().required("Campo obligatorio"),
+        }),
         detalleEventoCritico: Yup.string().nullable(),
         factorRiesgoId: Yup.mixed().nullable(),
         procesoId: Yup.mixed().nullable(),
@@ -329,7 +332,6 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   useEffect(() => {
     if (formik.values.subEventoId !== null) {
       callApiClaseEvento(13, formik.values.subEventoId.id, formik.values.tipoEventoPerdidaId.id);
-      console.log('13, ', formik.values.subEventoId.id, ', ', formik.values.tipoEventoPerdidaId.id);
       resetClaseEvento();
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
@@ -356,13 +358,13 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   }, [formik.values.tipoServicioId])
 
   // Resetea "otros" dependiendo del check
-  const resetOtros = () => { formik.setFieldValue('otros', null, false); }
+  const resetOtros = () => { formik.setFieldValue('otros', '', false); }
   useEffect(() => {
-    if (formik.values.otrosAux !== true) {
+    if (formik.values.claseEventoId !== null) {
       resetOtros();
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.otrosAux])
+  }, [formik.values.claseEventoId])
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
   // Riesgos realcionados:
@@ -490,24 +492,13 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
             />
           </FormGroup>
 
-          <FormGroup tag={Col} md='6' lg='3' className='mb-0' style={{ position: 'sticky' }}>
-            <CInputCheckbox
-              id={'otrosAux'}
-              type={"checkbox"}
-              value={formik.values.otrosAux}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              label='Otros (Clase evento - Basilea - ASFI)'
-            />
-          </FormGroup>
-
-          {formik.values.otrosAux === true ?
-            <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+          { formik.values.claseEventoId !== null && formik.values.claseEventoId.label === "Otros"?
+            <FormGroup tag={Col} md='6' lg='6' className='mb-0'>
               <Label className='form-label'>
                 Otros (Clase evento - Basilea - ASFI)
               </Label>
               <CInputReact
-                type={"text"}
+                type={"textarea"}
                 id={'otros'}
                 placeholder={'Otros'}
                 value={formik.values.otros}
@@ -515,9 +506,10 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
                 onBlur={formik.handleBlur}
                 touched={formik.touched.otros}
                 errors={formik.errors.otros}
+                rows={1}
               />
             </FormGroup>
-            : null}
+          : null}
 
           <FormGroup tag={Col} md='6' lg='6' className='mb-0'>
             <Label className='form-label'>

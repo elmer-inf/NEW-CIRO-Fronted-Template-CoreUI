@@ -1,7 +1,8 @@
-/*import React from 'react'
+/* import React from 'react'
 //import { Edit, Circle, Calendar } from 'react-feather'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faCalendarMinus, faChartLine, faChartBar, faShieldAlt, faShieldVirus, faUserShield } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faCalendarMinus, faChartLine, faChartBar, faShieldAlt, faShieldVirus, faUserShield, faPrint } from '@fortawesome/free-solid-svg-icons';
+
 const _nav = [
   {
     _tag: 'CSidebarNavDropdown',
@@ -55,6 +56,7 @@ const _nav = [
       {
         _tag: 'CSidebarNavItem',
         name: 'Riesgos',
+        to: '/matrizRiesgo/Listar',
       }
     ],
   }, {
@@ -86,6 +88,21 @@ const _nav = [
         name: 'Control',
         to: '/seguridad/Control',
       }
-    ],
+    ]
+  }, {
+    _tag: 'CSidebarNavDropdown',
+    name: 'Módulo de Reportes',
+    route: '/reporte',
+    icon: <FontAwesomeIcon style={{ flex: '0 0 56px', marginLeft: '-1rem', fontSize: '18px' }} icon={faPrint} />,
+    _children: [
+      {
+        _tag: 'CSidebarNavItem',
+        name: 'Reporte Eventos',
+        to: '/reporte/evento-riesgo',
+      }
+    ]
+  }
 ]
-export default _nav*/
+
+export default _nav
+ */

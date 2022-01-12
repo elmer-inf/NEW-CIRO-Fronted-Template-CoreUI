@@ -16,9 +16,9 @@ const Descripcion = ({ nextSection, beforeSection, setObject, initValues, isEdit
     initialValues: initValues,
     validationSchema: Yup.object().shape(
       {
-        definicion : Yup.string().required("Campo obligatorio"),
-        causa : Yup.string().required("Campo obligatorio"),
-        consecuencia : Yup.string().required("Campo obligatorio"),
+        definicion : Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').required("Campo obligatorio"),
+        causa : Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').required("Campo obligatorio"),
+        consecuencia : Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').required("Campo obligatorio"),
         factor : Yup.mixed().required("Campo obligatorio"),
         grupoInteresId: Yup.mixed().required("Campo obligatorio"),
         // Solo para mostrar
@@ -99,7 +99,7 @@ const Descripcion = ({ nextSection, beforeSection, setObject, initValues, isEdit
               onBlur={formik.handleBlur}
               touched={formik.touched.definicion}
               errors={formik.errors.definicion}
-              rows={1}
+              rows={2}
             />
           </FormGroup>
 
@@ -116,7 +116,7 @@ const Descripcion = ({ nextSection, beforeSection, setObject, initValues, isEdit
               onBlur={formik.handleBlur}
               touched={formik.touched.causa}
               errors={formik.errors.causa}
-              rows={1}
+              rows={2}
             />
           </FormGroup>
 
@@ -133,7 +133,7 @@ const Descripcion = ({ nextSection, beforeSection, setObject, initValues, isEdit
               onBlur={formik.handleBlur}
               touched={formik.touched.consecuencia}
               errors={formik.errors.consecuencia}
-              rows={1}
+              rows={2}
             />
           </FormGroup>
 
@@ -152,7 +152,7 @@ const Descripcion = ({ nextSection, beforeSection, setObject, initValues, isEdit
               touched={formik.touched.defConcatenado}
               errors={formik.errors.defConcatenado}
               disabled={true}
-              rows={2}
+              rows={4}
             />
           </FormGroup>
 

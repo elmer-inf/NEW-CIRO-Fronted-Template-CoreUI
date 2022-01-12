@@ -16,13 +16,13 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, isEdit }
     // campos solo para mostrar
     fortalezaValoracion: Yup.string().nullable(),
 
-    controlComentario:  Yup.string().nullable(),
+    controlComentario:  Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').nullable(),
     controlesTiene: Yup.string().required('Campo obligatorio'),
     nroControles: Yup.string().nullable(),
     controles: Yup.array().of(
       Yup.object().shape({
         nroControl: Yup.number().nullable(),
-        descripcion: Yup.string().nullable(),
+        descripcion: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').nullable(),
       })
     )
   });

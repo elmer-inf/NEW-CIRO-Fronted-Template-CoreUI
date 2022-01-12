@@ -92,20 +92,20 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, d
   }, [])
 
   // calcula "Probabilidad e impacto residual" del valor "Probabilidad inherente"
-  const disminucionAux = (dataAux.controlIdAux !== undefined && _.find(dataApiControl, ['id', _.toInteger(dataAux.controlIdAux)]) !== null) ? _.find(dataApiControl, ['id', _.toInteger(dataAux.controlIdAux)]).campoB : null
+  const disminucionAux = (dataAux.controlIdAux !== undefined && _.find(dataApiControl, ['id', _.toInteger(dataAux.controlIdAux)]) !== null) ? _.find(dataApiControl, ['id', _.toInteger(dataAux.controlIdAux)]).campoB : null;
   const probInherenteAux = parseInt(dataAux2.probabilidaNivelAux);
   //console.log('disminucionAux: ', disminucionAux);
   const impactoInherenteAux = parseInt(dataAux2.impactoNivelAux);
   useEffect(() => {
     if(dataAux.controlObjetivoAux === 'Ambos'){
-      formik.setFieldValue('probabilidad', reduceProbabilidadImpacto(probInherenteAux, parseInt(disminucionAux)) , false)
-      formik.setFieldValue('impacto', reduceProbabilidadImpacto(impactoInherenteAux, parseInt(disminucionAux)) , false)
+      formik.setFieldValue('probabilidad', reduceProbabilidadImpacto(probInherenteAux, parseInt(disminucionAux)) , false);
+      formik.setFieldValue('impacto', reduceProbabilidadImpacto(impactoInherenteAux, parseInt(disminucionAux)) , false);
     } else if(dataAux.controlObjetivoAux === 'Probabilidad'){
-      formik.setFieldValue('probabilidad', reduceProbabilidadImpacto(probInherenteAux, parseInt(disminucionAux)) , false)
-      formik.setFieldValue('impacto', impactoInherenteAux , false)
+      formik.setFieldValue('probabilidad', reduceProbabilidadImpacto(probInherenteAux, parseInt(disminucionAux)) , false);
+      formik.setFieldValue('impacto', impactoInherenteAux , false);
     } else if(dataAux.controlObjetivoAux === 'Impacto'){
-      formik.setFieldValue('impacto', reduceProbabilidadImpacto(impactoInherenteAux, parseInt(disminucionAux)) , false)
-      formik.setFieldValue('probabilidad', probInherenteAux , false)
+      formik.setFieldValue('impacto', reduceProbabilidadImpacto(impactoInherenteAux, parseInt(disminucionAux)) , false);
+      formik.setFieldValue('probabilidad', probInherenteAux , false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataAux,dataAux2]);

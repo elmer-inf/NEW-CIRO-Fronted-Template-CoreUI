@@ -3,9 +3,12 @@ import { CBadge, CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle } from
 import { Bell, Calendar } from 'react-feather'
 import { getDiezDiasAntes, getCincoDiasAntes, getPlanVencido } from 'src/views/eventoRiesgo/controller/EventoController'
 import { buildSelectTwo } from 'src/functions/Function'
-import { ListGroup, ListGroupItem } from 'reactstrap'
+import { Button, ListGroup, ListGroupItem } from 'reactstrap'
+import { Link, Redirect, Route, useHistory } from 'react-router-dom'
 
 const TheHeaderDropdownNotif = () => {
+
+  const history = useHistory();
 
   // Eventos 10 dias antes de vencer el plan
   const [listDiezDiasAntes, setDiezDiasAntes] = useState([])
@@ -53,6 +56,7 @@ const TheHeaderDropdownNotif = () => {
   }, [])
 
 
+
   return (
     <CDropdown
       inNav
@@ -71,7 +75,10 @@ const TheHeaderDropdownNotif = () => {
             <ListGroup flush className='pt-2'>
               {listDiezDiasAntes.map((evento) => {
                 return  <ListGroupItem className='py-1' key={evento.value}>
-                          <Calendar size={15} className='text-success mr-1 mb-1'/> {evento.id} | {evento.codigo !== null ? evento.codigo : <span>Sin código</span>} | {evento.fechaFinPlan}
+                          <Calendar size={15} className='text-success mr-2'/>
+                          {/* <Link to={{ pathname: '/eventoRiesgo/Mostrar/' + evento.id }} className='text-dark'> */}
+                            {evento.id} | {evento.codigo !== null ? evento.codigo : <span>Sin código</span>} | {evento.fechaFinPlan}
+                          {/* </Link> */}
                         </ListGroupItem>
               })}
             </ListGroup>
@@ -85,7 +92,10 @@ const TheHeaderDropdownNotif = () => {
             <ListGroup flush className='pt-2'>
               {listCincoDiasAntes.map((evento) => {
                 return  <ListGroupItem className='py-1' key={evento.value}>
-                          <Calendar size={15} className='text-primary mr-1 mb-1'/> {evento.id} | {evento.codigo !== null ? evento.codigo : <span>Sin código</span>} | {evento.fechaFinPlan}
+                          <Calendar size={15} className='text-primary mr-2'/>
+                          {/* <Link to={{ pathname: '/eventoRiesgo/Mostrar/' + evento.id }} className='text-dark'> */}
+                            {evento.id} | {evento.codigo !== null ? evento.codigo : <span>Sin código</span>} | {evento.fechaFinPlan}
+                          {/* </Link> */}
                         </ListGroupItem>
               })}
             </ListGroup>
@@ -99,7 +109,10 @@ const TheHeaderDropdownNotif = () => {
             <ListGroup flush className='pt-2'>
               {listPlanVencido.map((evento) => {
                 return  <ListGroupItem className='py-1' key={evento.value}>
-                          <Calendar size={15} className='text-danger mr-1 mb-1'/> {evento.id} | {evento.codigo !== null ? evento.codigo : <span>Sin código</span>} | {evento.fechaFinPlan}
+                          {/* <Link to={{ pathname: '/eventoRiesgo/Mostrar/' + evento.id }} className='text-dark'> */}
+                            <Calendar size={15} className='text-danger mr-2'/>
+                            {evento.id} | {evento.codigo !== null ? evento.codigo : <span>Sin código</span>} | {evento.fechaFinPlan}
+                          {/* </Link> */}
                         </ListGroupItem>
               })}
             </ListGroup>
