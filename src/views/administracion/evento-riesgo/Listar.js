@@ -251,6 +251,7 @@ const AdministracionEventoListar = () => {
               title: '',
               text: 'Operación realizada exitósamente',
               icon: 'success',
+              confirmButtonText: 'Aceptar',
               position: 'top',
             }).then(okay => {
               if (okay) {
@@ -267,6 +268,7 @@ const AdministracionEventoListar = () => {
           title: '',
           text: 'Operación cancelada',
           icon: 'error',
+          confirmButtonText: 'Aceptar',
           position: 'top'
         })
       }

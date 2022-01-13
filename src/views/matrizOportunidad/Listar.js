@@ -209,6 +209,7 @@ const MatrizOportunidadListar = () => {
                     title: '',
                     text: 'Operación realizada exitósamente',
                     icon: 'success',
+                    confirmButtonText: 'Aceptar',
                     position: 'top',
                   }).then(okay => {
                     if (okay) {
@@ -225,6 +226,7 @@ const MatrizOportunidadListar = () => {
                 title: '',
                 text: 'Operación cancelada',
                 icon: 'error',
+                confirmButtonText: 'Aceptar',
                 position: 'top'
               })
             }
@@ -235,6 +237,7 @@ const MatrizOportunidadListar = () => {
               title: '',
               text: 'Un registro Descartado no se puede Autorizar',
               icon: 'error',
+              confirmButtonText: 'Aceptar',
               position: 'top'
             })
           }
@@ -243,6 +246,7 @@ const MatrizOportunidadListar = () => {
               title: '',
               text: 'El registro ya está Autorizado',
               icon: 'error',
+              confirmButtonText: 'Aceptar',
               position: 'top'
             })
           }
@@ -274,6 +278,7 @@ const MatrizOportunidadListar = () => {
                 title: '',
                 text: 'Operación realizada exitósamente',
                 icon: 'success',
+                confirmButtonText: 'Aceptar',
                 position: 'top',
               }).then(okay => {
                 if (okay) {
@@ -290,6 +295,7 @@ const MatrizOportunidadListar = () => {
             title: '',
             text: 'Operación cancelada',
             icon: 'error',
+            confirmButtonText: 'Aceptar',
             position: 'top'
           })
         }
@@ -300,6 +306,7 @@ const MatrizOportunidadListar = () => {
           title: '',
           text: 'Un registro Autorizado no se puede Descartar',
           icon: 'error',
+          confirmButtonText: 'Aceptar',
           position: 'top'
         })
       }
@@ -308,11 +315,11 @@ const MatrizOportunidadListar = () => {
           title: '',
           text: 'El registro ya está Descartado',
           icon: 'error',
+          confirmButtonText: 'Aceptar',
           position: 'top'
         })
       }
     }
-    
   }
 
   /* LISTA TABLA LISTA */

@@ -200,6 +200,7 @@ const AdministracionMatrizRiesgosListar = () => {
               title: '',
               text: 'Operación realizada exitósamente',
               icon: 'success',
+              confirmButtonText: 'Aceptar',
               position: 'top',
             }).then(okay => {
               if (okay) {
@@ -216,6 +217,7 @@ const AdministracionMatrizRiesgosListar = () => {
           title: '',
           text: 'Operación cancelada',
           icon: 'error',
+          confirmButtonText: 'Aceptar',
           position: 'top'
         })
       }

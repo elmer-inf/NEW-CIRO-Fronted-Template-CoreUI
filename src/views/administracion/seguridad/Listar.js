@@ -101,6 +101,7 @@ const AdministracionSeguridadListar = () => {
               title: '',
               text: 'Operación realizada exitósamente',
               icon: 'success',
+              confirmButtonText: 'Aceptar',
               position: 'top',
             }).then(okay => {
               if (okay) {
@@ -117,6 +118,7 @@ const AdministracionSeguridadListar = () => {
           title: '',
           text: 'Operación cancelada',
           icon: 'error',
+          confirmButtonText: 'Aceptar',
           position: 'top'
         })
       }
