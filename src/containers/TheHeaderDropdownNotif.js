@@ -3,12 +3,11 @@ import { CBadge, CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle } from
 import { Bell, Calendar } from 'react-feather'
 import { getDiezDiasAntes, getCincoDiasAntes, getPlanVencido } from 'src/views/eventoRiesgo/controller/EventoController'
 import { buildSelectTwo } from 'src/functions/Function'
-import { Button, ListGroup, ListGroupItem } from 'reactstrap'
-import { Link, Redirect, Route, useHistory } from 'react-router-dom'
+import { ListGroup, ListGroupItem } from 'reactstrap'
 
 const TheHeaderDropdownNotif = () => {
 
-  const history = useHistory();
+  //const history = useHistory();
 
   // Eventos 10 dias antes de vencer el plan
   const [listDiezDiasAntes, setDiezDiasAntes] = useState([])
@@ -54,7 +53,6 @@ const TheHeaderDropdownNotif = () => {
     callApiCincoDiasAntes();
     callApiPlanVencido();
   }, [])
-
 
 
   return (

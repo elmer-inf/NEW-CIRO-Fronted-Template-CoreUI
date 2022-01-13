@@ -39,6 +39,7 @@ const EventoRiesgoRegistrar = () => {
   const obtainFiles = (f) => {
     setGetFiles(f)
   }
+
   useEffect(() => {
     callApiTipoEvento(6);
   }, [])
@@ -77,7 +78,8 @@ const EventoRiesgoRegistrar = () => {
     canalAsfiId: null,
     descripcion: '',
     descripcionCompleta: '',
-    files: null
+    files: null,
+    responsableElaborador: ''
   }
 
   const formValueInitialPlanes = {

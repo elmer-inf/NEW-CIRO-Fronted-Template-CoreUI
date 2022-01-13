@@ -10,8 +10,13 @@ import { getTablaDescripcionEventoN1, getTablaDescripcionEventoN2 } from 'src/vi
 import { buildSelectTwo } from 'src/functions/Function'
 import { CInputFile } from 'src/reusable/CInputFile'
 import { useHistory } from 'react-router-dom'
+import AuthService from 'src/views/authentication/AuthService';
 
 const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFiles }) => {
+
+  const Auth = new AuthService();
+  const profile = Auth.getProfile();
+  const user = profile.usuario;
 
   const formik = useFormik({
     initialValues: initValues,
@@ -64,6 +69,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
       const data = {
         ...values,
         estadoRegistro: 'Pendiente',
+        responsableElaborador: user.nombre  + ' ' + user.primerApellido,
         estadoEvento: (values.horaFin !== null && values.fechaFin !== null) ? 'Solución' : 'Seguimiento',
 
         horaIni: (values.horaIni !== null) ? values.horaIni + ':00' : null,

@@ -8,7 +8,7 @@ import { CInputReact } from 'src/reusable/CInputReact'
 import { CSelectReact } from 'src/reusable/CSelectReact'
 import CInputRadio from 'src/reusable/CInputRadio'
 import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
-import { buildSelectTwo, buildSelectThree} from 'src/functions/Function'
+import { buildSelectTwo } from 'src/functions/Function'
 
 var _ = require('lodash');
 

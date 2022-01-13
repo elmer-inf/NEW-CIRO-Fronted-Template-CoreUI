@@ -111,20 +111,17 @@ const TheHeaderDropdown = () => {
 
   const toggle2 = () => {
     setdropdownOpen2(!dropdownOpen2);
-
   }
   const closeModal = () => setModal(!modal);
 
   const askIfIsLoggedIn = () => {
-
     if (!Auth.loggedIn()) {
       history.push('/login')
       Auth.logout();
     }
-
   }
 
-  const closeSession = () => {
+  const closeSession = () => { 
     Auth.logout();
     history.push('/login')
   }
@@ -137,7 +134,6 @@ const TheHeaderDropdown = () => {
 
   return (
     <Nav className="ml-auto" navbar>
-
       <Dropdown isOpen={dropdownOpen2} toggle={toggle2} >
         <DropdownToggle nav>
           <div>
@@ -163,5 +159,4 @@ const TheHeaderDropdown = () => {
 
   )
 }
-
 export default TheHeaderDropdown

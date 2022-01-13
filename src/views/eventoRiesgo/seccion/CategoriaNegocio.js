@@ -1,12 +1,10 @@
 import { React, Fragment, useState, useEffect } from 'react'
 import { ChevronLeft, ChevronRight, Delete } from 'react-feather'
 import { Label, FormGroup, Row, Col, Form, Button } from 'reactstrap'
-
 import { useFormik } from "formik"
 import * as Yup from "yup"
 import { CInputReact } from 'src/reusable/CInputReact'
 import { CSelectReact } from 'src/reusable/CSelectReact'
-import CInputCheckbox from 'src/reusable/CInputCheckbox'
 import { getTablaDescripcionEventoN1, getTablaDescripcionEventoN2, getTablaDescripcionEventoN3 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
 import { buildSelectThree, buildSelectTwo } from 'src/functions/Function'
 import { getRiesgos } from 'src/views/matrizRiesgo/controller/RiesgoController'

@@ -127,13 +127,13 @@ const AdministracionEventoListar = () => {
               'IMPACTO REGULATORIO' : (labelTabla === 'Cumplimiento') ?
                 "IMPACTO DE CUMPLIMIENTO" : (labelTabla === 'Gobierno') ?
                   'NIVEL DE GOB #' : (labelTabla === 'Fraude') ?
-                    'Imp reportado ($)' : '',
+                    'Imp reportado ($)' : (labelTabla === 'Responsable') ? 'CARGO' : '',
       sort: true,
       hidden: (labelTabla === 'Categoria de tipo de Evento' || labelTabla === 'Efecto de pérdida' || labelTabla === 'Impacto' ||
         labelTabla === 'Reputacional' || labelTabla === 'Estratégico' || labelTabla === 'Operativo' ||
         labelTabla === 'Seguridad de la información' || labelTabla === 'Macroproceso' || labelTabla === 'Proceso' ||
         labelTabla === 'Legal' || labelTabla === 'Liquidez' || labelTabla === 'Cumplimiento' ||
-        labelTabla === 'Gobierno' || labelTabla === 'Fraude') ? false : true,
+        labelTabla === 'Gobierno' || labelTabla === 'Fraude' || labelTabla === 'Responsable') ? false : true,
       filter: textFilter({
         placeholder: 'Buscar'
       }),
@@ -146,10 +146,11 @@ const AdministracionEventoListar = () => {
             'NIVEL DE GOB' : (labelTabla === 'Fraude') ?
               'Fraude a ventas ($)' : (labelTabla === 'Liquidez') ?
                 'LIQUIDEZ' : (labelTabla === 'Seguridad de la información') ?
-                  'PLAZO HASTA' : '',
+                  'PLAZO HASTA' : (labelTabla === 'Responsable') ? 'DESCRIPCION' : '',
       sort: true,
       hidden: (labelTabla === 'Macroproceso' || labelTabla === 'Proceso' || labelTabla === 'Gobierno' ||
-        labelTabla === 'Fraude' || labelTabla === 'Liquidez' || labelTabla === 'Seguridad de la información') ? false : true,
+        labelTabla === 'Fraude' || labelTabla === 'Liquidez' || labelTabla === 'Seguridad de la información' ||
+        labelTabla === 'Responsable') ? false : true,
       filter: textFilter({
         placeholder: 'Buscar'
       }),
@@ -160,19 +161,19 @@ const AdministracionEventoListar = () => {
         'GERENCIA' : (labelTabla === 'Gobierno') ?
           'PUNTUACION AUTOEVAL' : (labelTabla === 'Fraude') ?
             'Imp reportado 2 ($)' : (labelTabla === 'Liquidez') ?
-              "CAPITAL DE TRABAJO" : '',
+              "CAPITAL DE TRABAJO" : (labelTabla === 'Responsable') ? 'USUARIO' : '',
       sort: true,
       hidden: (labelTabla === 'Proceso' || labelTabla === 'Gobierno' ||
-        labelTabla === 'Fraude' || labelTabla === 'Liquidez') ? false : true,
+        labelTabla === 'Fraude' || labelTabla === 'Liquidez' || labelTabla === 'Responsable') ? false : true,
       filter: textFilter({
         placeholder: 'Buscar'
       }),
       headerFormatter: typeFormatter,
     }, {
       dataField: 'campoC',
-      text: (labelTabla === 'Fraude') ? "IMPACTO - SEVERIDAD" : '',
+      text: (labelTabla === 'Fraude') ? "IMPACTO - SEVERIDAD" : (labelTabla === 'Responsable') ? 'TIPO' : '',
       sort: true,
-      hidden: (labelTabla === 'Fraude') ? false : true,
+      hidden: (labelTabla === 'Fraude' || labelTabla === 'Responsable') ? false : true,
       filter: textFilter({
         placeholder: 'Buscar'
       }),
@@ -274,13 +275,13 @@ const AdministracionEventoListar = () => {
 
   // Editar Parametro
   const editRow = (row) => {
-    //history.push('/administracion/evento-riesgo/Editar/' + row.id);
-    const path = '/administracion/evento-riesgo/Editar/:id' + row.id;
+    history.push('/administracion/evento-riesgo/Editar/' + row.id);
+    /* const path = '/administracion/evento-riesgo/Editar/:id' + row.id;
     if (hasPermission(path, valuePathFromContext)) {
       history.push(path);
     } else {
       notificationToast();
-    }
+    } */
   }
 
   const [tablaListaOptions, setTablaListaOptions] = useState([])

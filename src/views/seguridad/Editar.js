@@ -96,7 +96,6 @@ const SeguridadEditar = ({ match }) => {
     var estadoIdAux = {value: dataResponse.estadoId.id, label: dataResponse.estadoId.nombre };
     var nivelRiesgoIdAux = {value: dataResponse.nivelRiesgoId.id, label: dataResponse.nivelRiesgoId.campoA + ' - ' + dataResponse.nivelRiesgoId.campoB };
     var areaIdAux = {value: dataResponse.areaId.id, label: dataResponse.areaId.clave + ' - ' + dataResponse.areaId.nombre };
-
     var redAux = {value: dataResponse.red, label: dataResponse.red };
 
     const valores = {

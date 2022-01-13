@@ -100,11 +100,14 @@ const AdministracionEventoEditar = ({ match }) => {
   }
 
   const macthed = (dataResponse) => {
+    console.log('dataresponse: ', dataResponse);
     const r = dataResponse.tablaLista;
 
     var nivel1 = { value: dataResponse.tablaLista.id, label: dataResponse.tablaLista.nombre_tabla, nivel2: dataResponse.tablaLista.nivel2, nivel3: dataResponse.tablaLista.nivel3 }
     var nivel2 = {}
     var nivel3 = {}
+    var descripcionAux = (nivel1.label === 'Responsable')? {value: dataResponse.descripcion, label: dataResponse.descripcion } : dataResponse.descripcion;
+    var campoCAux = (nivel1.label === 'Responsable')? {value: dataResponse.campoC, label: dataResponse.campoC } : dataResponse.campoC;
 
     if (dataResponse.nivel2_id !== null) {
       nivel2 = { value: dataResponse.nivel2_id.id, label: dataResponse.nivel2_id.nombre }
@@ -116,15 +119,18 @@ const AdministracionEventoEditar = ({ match }) => {
     const valores = {
       nombre: dataResponse.nombre,
       clave: dataResponse.clave,
-      descripcion: dataResponse.descripcion,
+      //descripcion: dataResponse.descripcion,
       campoA: dataResponse.campoA,
       campoB: dataResponse.campoB,
-      campoC: dataResponse.campoC,
+      //campoC: dataResponse.campoC,
       campoD: dataResponse.campoD,
       codigoAsfi: dataResponse.codigoAsfi,
       tablaLista: nivel1,
       nivel2_id: (dataResponse.nivel2_id !== null) ? nivel2 : null,
-      nivel3_id: (dataResponse.nivel3_id !== null) ? nivel3 : null
+      nivel3_id: (dataResponse.nivel3_id !== null) ? nivel3 : null,
+
+      descripcion: descripcionAux,
+      campoC: campoCAux
     }
     //console.log('MATCHEDEDED: ', valores)
     setformValueToEdit(valores);

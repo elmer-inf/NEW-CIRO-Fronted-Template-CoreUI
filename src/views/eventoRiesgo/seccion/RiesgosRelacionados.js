@@ -28,7 +28,6 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
     ),
 
     onSubmit: values => {
-      console.log('entra');
       const data = {
        ...values,
         operativoId:    (values.operativoId !== null) ?     values.operativoId.value : 0,

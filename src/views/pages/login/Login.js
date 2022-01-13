@@ -1,9 +1,6 @@
 import React, { useState } from 'react'
 import { CCard, CCardBody, CCardGroup, CCol, CContainer, CRow } from '@coreui/react'
-import {
-  Button, Form, FormGroup, Alert
-} from 'reactstrap';
-
+import { Button, Form, FormGroup, Alert } from 'reactstrap';
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useHistory } from 'react-router-dom'
@@ -15,6 +12,7 @@ import CIcon from '@coreui/icons-react';
 import { Messages } from 'src/reusable/variables/Messages';
 import { LogIn } from 'react-feather';
 import CInputCheckbox from 'src/reusable/CInputCheckbox'
+import Swal from 'sweetalert2'
 
 const Login = () => {
 
@@ -25,6 +23,7 @@ const Login = () => {
   const [typeInput, setTypeInput] = useState('password');
 
   const Auth = new AuthService();
+
   const formik = useFormik({
     initialValues: {
       username: '',
@@ -49,10 +48,17 @@ const Login = () => {
     postAuthentication(dataLogin)
       .then((response) => {
         Auth.setToken(response.data.accessToken);
-        //return Promise.resolve(response);
+        //return Promise.resolve(response); 
         // history.go(0)
         history.push('/')
-        window.location.reload();
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'Bienvenido',
+          showConfirmButton: false,
+          timer: 1500
+        })
+        //window.location.reload();
         setSpin(false);
       }).catch((error) => {
         console.log("Error de autenticación:\n ", error);
