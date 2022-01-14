@@ -2,7 +2,7 @@ import axios from 'axios';
 import { HOSTURI } from 'src/config';
 import AuthService from './AuthService';
 
-const HOST = HOSTURI.endpoint_ciro;
+const HOST = HOSTURI.endpoint_riesgos;
 const Auth = new AuthService();
 
 const header = Auth.getHeaderWithOutToken();

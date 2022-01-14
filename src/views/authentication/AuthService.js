@@ -36,19 +36,19 @@ export default class AuthService {
     }
 
     setToken(idToken) {
-        window.localStorage.setItem('sired_access', idToken);
+        window.localStorage.setItem('riesgos_access', idToken);
     }
 
     getToken() {
         // Retrieves the user token from localStorage
-        var token = window.localStorage.getItem('sired_access');
+        var token = window.localStorage.getItem('riesgos_access');
         return (token !== null && token !== undefined) ? token : null;
 
     }
 
     logout() {
         // Clear user token and profile data from localStorage
-        localStorage.removeItem('sired_access');
+        localStorage.removeItem('riesgos_access');
     }
 
     getProfile() {

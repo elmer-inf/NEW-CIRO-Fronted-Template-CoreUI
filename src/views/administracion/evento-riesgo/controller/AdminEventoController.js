@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { HOSTURI } from 'src/config'
 
-const HOST = HOSTURI.endpoint_ciro
+const HOST = HOSTURI.endpoint_riesgos
 
 export const getTablaListaEvento = async () => {
     const uri = HOST.concat('v1/tablaLista/listar')

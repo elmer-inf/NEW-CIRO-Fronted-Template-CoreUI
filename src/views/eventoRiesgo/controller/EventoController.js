@@ -6,7 +6,7 @@ const Auth = new AuthService();
 //const header = Auth.getHeader();
 
 
-const HOST = HOSTURI.endpoint_ciro
+const HOST = HOSTURI.endpoint_riesgos
 
 export const getEventos = async () => {
     const uri = HOST.concat('v1/eventoRiesgo/listar')

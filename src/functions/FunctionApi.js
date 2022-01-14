@@ -4,7 +4,7 @@ import AuthService from 'src/views/authentication/AuthService';
 //import AuthService from 'src/views/authentication/AuthService';
 
 
-const HOST = HOSTURI.endpoint_ciro;
+const HOST = HOSTURI.endpoint_riesgos;
 const Auth = new AuthService();
 
 const header = Auth.getHeader();
