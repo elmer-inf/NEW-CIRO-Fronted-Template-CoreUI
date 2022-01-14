@@ -28,8 +28,8 @@ const AdministracionSeguridadListar = () => {
   const valuePathFromContext = React.useContext(PathContext);
 
   const redirect = (e) => {
+    //history.push('/administracion/seguridad/Registrar');
     e.preventDefault();
-
     const path = '/administracion/seguridad/Registrar';
     if (hasPermission(path, valuePathFromContext)) {
       history.push(path);
@@ -127,13 +127,13 @@ const AdministracionSeguridadListar = () => {
 
   // Editar Parametro
   const editRow = (row) => {
-    //history.push('/administracion/seguridad/Editar/' + row.id);
-    const path = '/administracion/seguridad/Editar/:id' + row.id;
+    history.push('/administracion/seguridad/Editar/' + row.id);
+    /* const path = '/administracion/seguridad/Editar/:id' + row.id;
     if (hasPermission(path, valuePathFromContext)) {
       history.push(path);
     } else {
       notificationToast();
-    }
+    } */
   }
 
   const [tablaListaOptions, setTablaListaOptions] = useState([])

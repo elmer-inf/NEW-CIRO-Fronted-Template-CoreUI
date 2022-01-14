@@ -40,8 +40,8 @@ const EventoRiesgoListar = () => {
   const [spin, setSpin] = useState(false);
 
   const redirect = (e) => {
+    //history.push('/eventoRiesgo/Registrar');
     e.preventDefault();
-
     const path = '/eventoRiesgo/Registrar';
     if (hasPermission(path, valuePathFromContext)) {
       history.push(path);

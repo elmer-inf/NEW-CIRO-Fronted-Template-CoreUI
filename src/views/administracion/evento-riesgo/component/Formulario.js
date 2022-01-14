@@ -276,7 +276,8 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
                 formik.values.tablaLista.label === 'Fraude' ||
                 formik.values.tablaLista.label === 'Liquidez' ||
                 formik.values.tablaLista.label === 'Operativo' ||
-                formik.values.tablaLista.label === 'Seguridad de la información') ? 'Descriptivo' : formik.values.tablaLista.label === 'Recuperación activo' ? 'Descripción' : 'Nombre'}
+                formik.values.tablaLista.label === 'Seguridad de la información') ? 
+                  'Descriptivo' : (formik.values.tablaLista.label === 'Recuperación activo' || formik.values.tablaLista.label === 'Cuenta contable') ? 'Descripción' : 'Nombre'}
           </Label>
           <Col sm='9' lg='5'>
             <CInputReact
@@ -486,7 +487,8 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
           formik.values.tablaLista.label === 'Línea de negocio ASFI' ||
           formik.values.tablaLista.label === 'Operaciones ASFI' ||
           formik.values.tablaLista.label === 'Moneda' ||
-          formik.values.tablaLista.label === 'Recuperación activo')) ?
+          formik.values.tablaLista.label === 'Recuperación activo' ||
+          formik.values.tablaLista.label === 'Cuenta contable')) ?
         <FormGroup row className='justify-content-center'>
           <Label sm='3' lg='3' for='clave'>
             Código ASFI

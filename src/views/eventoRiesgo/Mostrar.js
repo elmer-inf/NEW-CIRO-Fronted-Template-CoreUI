@@ -710,6 +710,16 @@ function base64ToArrayBuffer(data) {
                                   {_.round(calculaCambio() - totalRecuperado(), 2)}
                                 </div>
                               </Col>
+
+                              <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                                <div className='text-label'>Cuenta contable: </div>
+                                <div className='text-data'>{dataApi.cuentaContableId !== null ? dataApi.cuentaContableId.nombre : <i>Sin registro</i>}</div>
+                              </Col>
+
+                              <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                                <div className='text-label'>Fecha de registro de la cuenta contable: </div>
+                                <div className='text-data'>{dataApi.fechaContable !== null ? dataApi.fechaContable : <i>Sin registro</i>}</div>
+                              </Col>
                             </Row>
                           </CTabPane>
                           : null}

@@ -130,6 +130,8 @@ const EventoRiesgoRegistrar = () => {
     montoRecuperadoSeguro: '',
     recuperacionActivoId: null,
     perdidaMercado: '',
+    cuentaContableId: null,
+    fechaContable: ''
   }
 
   const formValueInitialRiesgos = {

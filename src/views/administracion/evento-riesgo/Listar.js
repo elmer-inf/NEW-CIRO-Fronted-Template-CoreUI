@@ -104,7 +104,7 @@ const AdministracionEventoListar = () => {
           labelTabla === 'Liquidez' ||
           labelTabla === 'Operativo' ||
           labelTabla === 'Seguridad de la información') ?
-          'DESCRIPTIVO' : (labelTabla === 'Recuperación activo') ?
+          'DESCRIPTIVO' : (labelTabla === 'Recuperación activo' || labelTabla === 'Cuenta contable') ?
             'DESCRIPCION' : 'NOMBRE',
       sort: true,
       hidden: (labelTabla.length !== 0) ? false : true,
@@ -198,12 +198,13 @@ const AdministracionEventoListar = () => {
         labelTabla === 'Línea de negocio ASFI' ||
         labelTabla === 'Operaciones ASFI' ||
         labelTabla === 'Moneda' ||
-        labelTabla === 'Recuperación activo') ? "COD ASFI" : '',
+        labelTabla === 'Recuperación activo' ||
+        labelTabla === 'Cuenta contable') ? "COD ASFI" : '',
       sort: true,
       hidden: (labelTabla === 'Ciudad' || labelTabla === 'Tipo de evento' || labelTabla === 'Canal ASFI' ||
         labelTabla === 'Clase Evento - Basilea' || labelTabla === 'Factor de riesgo' || labelTabla === 'Proceso' ||
         labelTabla === 'Línea de negocio ASFI' || labelTabla === 'Operaciones ASFI' || labelTabla === 'Moneda' ||
-        labelTabla === 'Recuperación activo') ? false : true,
+        labelTabla === 'Recuperación activo' || labelTabla === 'Cuenta contable') ? false : true,
       filter: textFilter({
         placeholder: 'Buscar'
       }),

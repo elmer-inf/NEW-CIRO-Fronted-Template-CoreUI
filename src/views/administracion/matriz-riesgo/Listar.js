@@ -28,8 +28,8 @@ const AdministracionMatrizRiesgosListar = () => {
   const valuePathFromContext = React.useContext(PathContext);
 
   const redirect = (e) => {
+    //history.push('/administracion/matriz-riesgo/Registrar');
     e.preventDefault();
-
     const path = '/administracion/matriz-riesgo/Registrar';
     if (hasPermission(path, valuePathFromContext)) {
       history.push(path);
@@ -226,13 +226,13 @@ const AdministracionMatrizRiesgosListar = () => {
 
   // Editar Parametro
   const editRow = (row) => {
-    //history.push('/administracion/matriz-riesgo/Editar/' + row.id);
-    const path = '/administracion/matriz-riesgo/Editar/:id' + row.id;
+    history.push('/administracion/matriz-riesgo/Editar/' + row.id);
+    /* const path = '/administracion/matriz-riesgo/Editar/:id' + row.id;
     if (hasPermission(path, valuePathFromContext)) {
       history.push(path);
     } else {
       notificationToast();
-    }
+    } */
   }
 
   const [tablaListaOptions, setTablaListaOptions] = useState([])

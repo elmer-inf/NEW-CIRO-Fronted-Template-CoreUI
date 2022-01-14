@@ -82,12 +82,12 @@ const _nav = [
         _tag: 'CSidebarNavItem',
         name: 'Seguridad',
         to: '/seguridad/Listar',
-      },
-      {
-        _tag: 'CSidebarNavItem',
-        name: 'Control',
-        to: '/seguridad/Control',
-      }
+      }//,
+      //{
+       // _tag: 'CSidebarNavItem',
+       // name: 'Control',
+        //to: '/seguridad/Control',
+      //}
     ]
   }, {
     _tag: 'CSidebarNavDropdown',

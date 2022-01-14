@@ -28,6 +28,8 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
         montoRecuperadoSeguro: Yup.number().nullable(),
         recuperacionActivoId: Yup.mixed().required('Campo obligatorio'),
         perdidaMercado: Yup.number().required('Campo obligatorio'),
+        cuentaContableId: Yup.mixed().nullable(),
+        fechaContable: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
         // Solo para mostrar
         montoPerdidaRiesgo: Yup.number().nullable(),
         totalPerdida: Yup.number().nullable(),
@@ -44,6 +46,8 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
         montoRecuperadoSeguro: Yup.number().nullable(),
         recuperacionActivoId: Yup.mixed().nullable(),
         perdidaMercado: Yup.number().nullable(),
+        cuentaContableId: Yup.mixed().nullable(),
+        fechaContable: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
         // Solo para mostrar
         montoPerdidaRiesgo: Yup.number().nullable(),
         totalPerdida: Yup.number().nullable(),
@@ -58,7 +62,8 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
         monedaId: (values.monedaId !== null) ? values.monedaId.value : 0,
         impactoId: (values.impactoId !== null) ? values.impactoId.value : 0,
         polizaSeguroId: (values.polizaSeguroId !== null) ? values.polizaSeguroId.value : 0,
-        recuperacionActivoId: (values.recuperacionActivoId !== null) ? values.recuperacionActivoId.value : 0
+        recuperacionActivoId: (values.recuperacionActivoId !== null) ? values.recuperacionActivoId.value : 0,
+        cuentaContableId: (values.cuentaContableId !== null) ? values.cuentaContableId.value : 0
       }
       const dataSelect =  _.omit(data, ['montoPerdidaRiesgo', 'totalPerdida', 'totalRecuperado']);
 
@@ -133,6 +138,18 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
       })
   }
 
+  // CuentaContable
+  const [dataApiCuentaContable, setDataApiCuentaContable] = useState([])
+  const callApiCuentaContable = (idTablaDes) => {
+    getTablaDescripcionEventoN1(idTablaDes)
+      .then(res => {
+        const options = buildSelectTwo(res.data, 'id', 'nombre', false)
+        setDataApiCuentaContable(options)
+      }).catch((error) => {
+        console.log('Error: ', error)
+      })
+  }
+
   // Cobertura seguro
   const optionCobertura = [
     { value: true, label: 'Si' },
@@ -145,6 +162,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
     callApiPoliza(25);
     callApiTasaCambio(14);
     callApiRecuperacionActivo(37);
+    callApiCuentaContable(39);
   }, [])
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
@@ -427,6 +445,38 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
               touched={formik.touched.totalPerdida}
               errors={formik.errors.totalPerdida}
               disabled={true}
+            />
+          </FormGroup>
+
+          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+            <Label className='form-label'>
+              Cuenta contable
+            </Label>
+            <CSelectReact
+              type={"select"}
+              id={'cuentaContableId'}
+              placeholder={'Seleccionar'}
+              value={formik.values.cuentaContableId}
+              onChange={formik.setFieldValue}
+              onBlur={formik.setFieldTouched}
+              error={formik.errors.cuentaContableId}
+              touched={formik.touched.cuentaContableId}
+              options={dataApiCuentaContable}
+            />
+          </FormGroup>
+
+          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+            <Label className='form-label'>
+              Fecha de registro de la cuenta contable
+            </Label>
+            <CInputReact
+              type={"date"}
+              id={'fechaContable'}
+              value={formik.values.fechaContable}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              touched={formik.touched.fechaContable}
+              errors={formik.errors.fechaContable}
             />
           </FormGroup>
         </Row>
