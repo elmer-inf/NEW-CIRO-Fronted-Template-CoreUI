@@ -1,4 +1,4 @@
-import React, { Fragment, useState,useEffect } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import { Card, CardHeader, CardBody, CardTitle, Button, Col, Label, Row, FormGroup, Form } from 'reactstrap'
 import { Delete, Printer, Save } from 'react-feather';
 import { useFormik } from "formik"
@@ -6,8 +6,14 @@ import * as Yup from "yup"
 import { CSelectReact } from 'src/reusable/CSelectReact';
 import { Messages } from 'src/reusable/variables/Messages';
 import ViewReportCIRO from './component/ViewReportCIRO';
+import { exportFile } from 'src/functions/Function';
+import CCSpinner from 'src/reusable/spinner/CCSpinner';
+import { generateAllReport } from './controller/ReporteCiroController';
+
+var _ = require('lodash');
 
 const ReporteEventos = () => {
+  const [spin, setSpin] = useState(false);
 
   const [showCiroReport, setshowCiroReport] = useState(false);
 
@@ -39,6 +45,20 @@ const ReporteEventos = () => {
     { value: '10-01|12-31', label: 'Octubre - Diciembre' }
   ];
 
+
+  // nombre de archivos
+  const nameFiles = {
+    fileA: 'RO<%= periodoEnvio %>A.ATATC',
+    fileB: 'RO<%= periodoEnvio %>B.ATATC',
+    fileC: 'RO<%= periodoEnvio %>C.ATATC',
+    fileD: 'RO<%= periodoEnvio %>D.ATATC',
+    fileE: 'RO<%= periodoEnvio %>E.ATATC',
+    fileF: 'RO<%= periodoEnvio %>F.ATATC',
+    fileG: 'RO<%= periodoEnvio %>G.ATATC',
+    fileH: 'RO<%= periodoEnvio %>H.ATATC',
+    fileI: 'RO<%= periodoEnvio %>I.ATATC',
+  }
+
   const formik = useFormik({
     initialValues: formValueInitial,
     validationSchema: Yup.object().shape(
@@ -66,7 +86,8 @@ const ReporteEventos = () => {
 
 
     }
-  })
+  });
+
 
   const generateReportCiro = (dataToRequest) => {
     console.log('llego: ', dataToRequest);
@@ -75,6 +96,58 @@ const ReporteEventos = () => {
     //console.log('fecha FINAL reporte:', fechaReporte(1));
 
     setshowCiroReport(true)
+  }
+
+
+  const generateAllReportCiro = async () => {
+    const dateFormat = fechaReporte(1)
+    setSpin(true);
+    const sendRequest = {
+      fechaIniTrim: fechaReporte(0),
+      fechaFinTrim: fechaReporte(1)
+    }
+    var formatDate = _.replace(sendRequest.fechaFinTrim, new RegExp("-", "g"), ""); // _.replace(sendRequest.fechaFinTrim, '-', '');
+    const dateFile = {
+      'periodoEnvio': formatDate
+    }
+    var compiledA = _.template(nameFiles.fileA);
+    var compiledB = _.template(nameFiles.fileB);
+    var compiledC = _.template(nameFiles.fileC);
+    var compiledD = _.template(nameFiles.fileD);
+    var compiledE = _.template(nameFiles.fileE);
+    var compiledF = _.template(nameFiles.fileF);
+    var compiledG = _.template(nameFiles.fileG);
+    var compiledH = _.template(nameFiles.fileH);
+    var compiledI = _.template(nameFiles.fileI);
+
+    var resultFileNameA = compiledA(dateFile);
+    var resultFileNameB = compiledB(dateFile);
+    var resultFileNameC = compiledC(dateFile);
+    var resultFileNameD = compiledD(dateFile);
+    var resultFileNameE = compiledE(dateFile);
+    var resultFileNameF = compiledF(dateFile);
+    var resultFileNameG = compiledG(dateFile);
+    var resultFileNameH = compiledH(dateFile);
+    var resultFileNameI = compiledI(dateFile);
+
+    await generateAllReport(sendRequest)
+      .then((response) => {
+        exportFile(response.data.reportA, resultFileNameA)
+        exportFile(response.data.reportB, resultFileNameB)
+        exportFile(response.data.reportC, resultFileNameC)
+        exportFile(response.data.reportD, resultFileNameD)
+        exportFile(response.data.reportE, resultFileNameE)
+        exportFile(response.data.reportF, resultFileNameF)
+        exportFile(response.data.reportG, resultFileNameG)
+        exportFile(response.data.reportH, resultFileNameH)
+        exportFile(response.data.reportI, resultFileNameI)
+
+        setSpin(false)
+      }).catch((error) => {
+        console.log("Error: ", error);
+        setSpin(false)
+      })
+
   }
 
   // Genera Fecha Inicio y fecha Fin para el Reporte (Intervalo)
@@ -98,11 +171,6 @@ const ReporteEventos = () => {
   }
 
 
-
-  const generateAllReportCiro = () => {
-    console.log('Genererar todos los reortes CIRO');
-  }
-
   useEffect(() => { //componentWillMount
     if (formik.values.tipo === null || formik.values.tipo.value !== 'ciro') {
       setshowCiroReport(false)
@@ -114,16 +182,18 @@ const ReporteEventos = () => {
 
   return (
     <div className='table-hover-animation'>
+      <CCSpinner show={spin} />
+
       <Fragment>
         <Card>
           <CardHeader>
             <CardTitle className='float-left h4 pt-2'>Reporte de Eventos de Riesgo</CardTitle>
             {
-              (formik.values.tipo !== null && formik.values.tipo.value === 'ciro')
+              ((formik.values.tipo !== null && formik.values.tipo.value === 'ciro' ) && (formik.values.trimestre !== null))
                 ? <Button
                   color='primary'
                   className='float-right mt-1 text-white'
-                  onClick={() => generateAllReportCiro}
+                  onClick={() => generateAllReportCiro()}
                 >
                   <Printer size={15} className='mr-2' /><span>Generar 9 reportes</span>
                 </Button>
@@ -198,7 +268,7 @@ const ReporteEventos = () => {
                     color="dark"
                     outline
                     onClick={() => { formik.handleReset() }}
-                    disabled={!formik.dirty || formik.isSubmitting}
+                  // disabled={!formik.dirty || formik.isSubmitting}
                   >
                     <Delete size={17} className='mr-2' />
                     Limpiar
@@ -211,7 +281,7 @@ const ReporteEventos = () => {
                     className='text-white'
                     color="primary"
                     type="submit"
-                  //disabled={formik.isSubmitting}
+                    disabled={formik.isSubmitting}
                   >
                     <Save size={17} className='mr-2' />
                     Generar
@@ -221,7 +291,7 @@ const ReporteEventos = () => {
               </Row>
 
             </Form>
-<hr/>
+            <hr />
             {
 
               (formik.values.tipo !== null && formik.values.tipo.value === 'ciro' && showCiroReport === true)

@@ -12,6 +12,13 @@ const base = '/v1/reporte/ciro/';
 
 
 
+export const generateAllReport= async (dataDates) => {
+    const uri = HOST + base + '/allFiles';
+    const response = await axios.post(uri, dataDates)
+    return response
+}
+
+
 export const reportRiesgoOperativo = async (dataDates) => {
     const uri = HOST + base + '/riesgooperativoA';
     const response = await axios.post(uri, dataDates)

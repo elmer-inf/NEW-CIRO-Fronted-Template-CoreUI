@@ -132,13 +132,22 @@ export const deleteRowOfTable = (rowToDelete, data, field) => {
 }
 export const hasPermission = (path, pathRoutes) => {
   const permission = _.find(pathRoutes, function (o) {
-      return o.path === path;
+    return o.path === path;
   });
   if (!_.isEmpty(permission)) {
-      console.log('Tiene permiso')
+    console.log('Tiene permiso')
 
-      return true;
+    return true;
   }
   console.log('NO Tiene permiso')
   return false;
+}
+
+export const exportFile = (dataRespose, nameFileWithExtention) => {
+
+  const blob = new Blob([dataRespose], { type: 'text/plain;charset=utf-8' });
+  const FileSaver = require('file-saver');
+ //var date = new Date().toLocaleDateString();
+  FileSaver.saveAs(blob, nameFileWithExtention);
+
 }
