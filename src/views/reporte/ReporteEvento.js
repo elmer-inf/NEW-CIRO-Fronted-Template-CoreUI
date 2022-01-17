@@ -225,7 +225,7 @@ const ReporteEventos = () => {
             {
 
               (formik.values.tipo !== null && formik.values.tipo.value === 'ciro' && showCiroReport === true)
-                ? <ViewReportCIRO fechaInicio={fechaReporte(0)} fechaFin={fechaReporte(0)} trimestre={formik.values.trimestre} />
+                ? <ViewReportCIRO fechaInicio={fechaReporte(0)} fechaFin={fechaReporte(1)} trimestre={formik.values.trimestre} />
                 : <h6><center>{'Seleccione un tipo de reporte'}</center></h6>
             }
           </CardBody>

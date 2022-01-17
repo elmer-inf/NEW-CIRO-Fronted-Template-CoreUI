@@ -4,17 +4,22 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import { reportOpreacion } from '../../controller/ReporteCiroController';
 import CCSpinner from 'src/reusable/spinner/CCSpinner';
 import { Card,  CardBody,  Col,  Row } from 'reactstrap'
+import paginationFactory from 'react-bootstrap-table2-paginator';
 
 
-const OperacionG = () => {
+const OperacionG = ({fechaIniTrim,fechaFinTrim}) => {
     const [spin, setSpin] = useState(false);
     const [dataApi, setdataApi] = useState([]);
-
+const sendRequest ={
+    fechaIniTrim:fechaIniTrim,
+    fechaFinTrim: fechaFinTrim
+}
     const columns = [
         {
             dataField: 'id',
-            text: 'Id',
-            hidden: true
+            text: 'Nro',
+            hidden: false,
+    fechaFinTrim: fechaFinTrim
         },
         {
             dataField: 'codigoEnvio',
@@ -71,10 +76,12 @@ const OperacionG = () => {
             formatter: (cell, row) => actionFormatter(cell, row)
         } */
     ];
-
-    const getOperacion = async (e) => {
+    const paging = paginationFactory({
+        page: 1,
+      });
+    const getOperacion = async (data) => {
         setSpin(true)
-        await reportOpreacion()
+        await reportOpreacion(data)
             .then((response) => {
                 console.log('ressssponseee: ', response);
                 setdataApi(response.data);
@@ -86,7 +93,7 @@ const OperacionG = () => {
     }
    // Cycle life
    useEffect(() => {
-    getOperacion();
+    getOperacion(sendRequest);
     // eslint-disable-next-line react-hooks/exhaustive-deps
 }, []);
 
@@ -100,15 +107,18 @@ const OperacionG = () => {
                     <Row className="d-flex justify-content-center">
                         <Col sm="12" md={{ size: 12, offset: 0 }}>
                             <BootstrapTable
-                                noDataIndication={'No se encontraron resultados'}
-                                keyField='id'
-                                data={dataApi}
-                                columns={columns}
-                                bordered={false}
-                                striped={true}
-                                condensed={true}
-                                wrapperClasses="table-responsive"
-                              /// filter={filterFactory()}
+                               classes={'table-hover-animation'}
+                               bootstrap4={true}
+                               noDataIndication={'No se encontraron resultados'}
+                               keyField='id'
+                               data={dataApi}
+                               columns={columns}
+                               bordered={false}
+                               striped={true}
+                               hover={false}
+                               condensed={true}
+                               wrapperClasses="table-responsive"
+                               pagination={ paging }
 
                             />
 

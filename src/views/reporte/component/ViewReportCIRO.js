@@ -79,7 +79,7 @@ const ViewReportCIRO = ({fechaInicio,fechaFin, trimestre}) => {
               <CTabPane>
                 <Row className='pt-3'>
                   <Col xs='12'>
-                    <RiesgooperativoA />
+                    <RiesgooperativoA fechaIniTrim={fechaInicio} fechaFinTrim={fechaFin} />
                   </Col>
                 </Row>
               </CTabPane>
@@ -87,7 +87,15 @@ const ViewReportCIRO = ({fechaInicio,fechaFin, trimestre}) => {
               <CTabPane>
                 <Row className='pt-3'>
                   <Col xs='12'>
-                    <CuentasContablesB />
+                    <CuentasContablesB fechaIniTrim={fechaInicio} fechaFinTrim={fechaFin} />
+                  </Col>
+                </Row>
+              </CTabPane>
+
+           <CTabPane>
+                <Row className='pt-3'>
+                  <Col xs='12'>
+                    <TipoEventoC fechaIniTrim={fechaInicio} fechaFinTrim={fechaFin} />
                   </Col>
                 </Row>
               </CTabPane>
@@ -95,7 +103,7 @@ const ViewReportCIRO = ({fechaInicio,fechaFin, trimestre}) => {
               <CTabPane>
                 <Row className='pt-3'>
                   <Col xs='12'>
-                    <TipoEventoC />
+                    <PuntoAtencionD fechaIniTrim={fechaInicio} fechaFinTrim={fechaFin} />
                   </Col>
                 </Row>
               </CTabPane>
@@ -103,7 +111,7 @@ const ViewReportCIRO = ({fechaInicio,fechaFin, trimestre}) => {
               <CTabPane>
                 <Row className='pt-3'>
                   <Col xs='12'>
-                    <PuntoAtencionD />
+                    <CanalE fechaIniTrim={fechaInicio} fechaFinTrim={fechaFin} />
                   </Col>
                 </Row>
               </CTabPane>
@@ -111,7 +119,7 @@ const ViewReportCIRO = ({fechaInicio,fechaFin, trimestre}) => {
               <CTabPane>
                 <Row className='pt-3'>
                   <Col xs='12'>
-                    <CanalE />
+                    <ProcesoF fechaIniTrim={fechaInicio} fechaFinTrim={fechaFin} />
                   </Col>
                 </Row>
               </CTabPane>
@@ -119,7 +127,7 @@ const ViewReportCIRO = ({fechaInicio,fechaFin, trimestre}) => {
               <CTabPane>
                 <Row className='pt-3'>
                   <Col xs='12'>
-                    <ProcesoF />
+                    <OperacionG fechaIniTrim={fechaInicio} fechaFinTrim={fechaFin} />
                   </Col>
                 </Row>
               </CTabPane>
@@ -127,7 +135,7 @@ const ViewReportCIRO = ({fechaInicio,fechaFin, trimestre}) => {
               <CTabPane>
                 <Row className='pt-3'>
                   <Col xs='12'>
-                    <OperacionG />
+                    <LugarH fechaIniTrim={fechaInicio} fechaFinTrim={fechaFin} />
                   </Col>
                 </Row>
               </CTabPane>
@@ -135,18 +143,10 @@ const ViewReportCIRO = ({fechaInicio,fechaFin, trimestre}) => {
               <CTabPane>
                 <Row className='pt-3'>
                   <Col xs='12'>
-                    <LugarH />
+                    <LineaNegocioI fechaIniTrim={fechaInicio} fechaFinTrim={fechaFin} />
                   </Col>
                 </Row>
-              </CTabPane>
-
-              <CTabPane>
-                <Row className='pt-3'>
-                  <Col xs='12'>
-                    <LineaNegocioI />
-                  </Col>
-                </Row>
-              </CTabPane>
+              </CTabPane> 
 
             </CTabContent>
           </CTabs>

@@ -12,65 +12,65 @@ const base = '/v1/reporte/ciro/';
 
 
 
-export const reportRiesgoOperativo = async () => {
+export const reportRiesgoOperativo = async (dataDates) => {
     const uri = HOST + base + '/riesgooperativoA';
-    const response = await axios.get(uri)
+    const response = await axios.post(uri, dataDates)
     return response
 }
 
 
 
-export const reportCuentasContables = async () => {
+export const reportCuentasContables = async (dataDates) => {
     const uri = HOST + base + '/cuentascontablesB';
-    const response = await axios.get(uri)
+    const response = await axios.post(uri, dataDates)
     return response
 }
 
 
-export const reporteTipoEvento = async () => {
+export const reporteTipoEvento = async (dataDates) => {
     const uri = HOST + base + '/tipoevebtoC';
-    const response = await axios.get(uri)
+    const response = await axios.post(uri, dataDates)
     return response
 }
 
-export const reportAtencionFinanciera = async () => {
+export const reportAtencionFinanciera = async (dataDates) => {
     const uri = HOST + base + '/atencionfinancieraD';
-    const response = await axios.get(uri)
+    const response = await axios.post(uri, dataDates)
     return response
 }
 
 
-export const reportCanal = async () => {
+export const reportCanal = async (dataDates) => {
     const uri = HOST + base + '/canalE';
-    const response = await axios.get(uri)
+    const response = await axios.post(uri, dataDates)
     return response
 }
 
 
-export const reportProceso = async () => {
+export const reportProceso = async (dataDates) => {
     const uri = HOST + base + '/procesoF';
-    const response = await axios.get(uri)
+    const response = await axios.post(uri, dataDates)
     return response
 }
 
 
-export const reportOpreacion = async () => {
+export const reportOpreacion = async (dataDates) => {
     const uri = HOST + base + '/operacionG';
-    const response = await axios.get(uri)
+    const response = await axios.post(uri, dataDates)
     return response
 }
 
 
-export const reportLugar = async () => {
+export const reportLugar = async (dataDates) => {
     const uri = HOST + base + '/lugarH';
-    const response = await axios.get(uri)
+    const response = await axios.post(uri, dataDates)
     return response
 }
 
 
-export const reportLineaNegocio = async () => {
+export const reportLineaNegocio = async (dataDates) => {
     const uri = HOST + base + '/lineanegocioI';
-    const response = await axios.get(uri)
+    const response = await axios.post(uri, dataDates)
     return response
 }
 
