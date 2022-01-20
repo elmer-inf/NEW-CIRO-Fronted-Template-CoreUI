@@ -184,9 +184,9 @@ const AdministracionMatrizOportunidadListar = () => {
   // Editar Parametro
   const editRow = (row) => {
     //history.push('/administracion/matriz-oportunidad/Editar/' + row.id);
-    const path = '/administracion/matriz-oportunidad/Editar/:id' + row.id;
+    const path = '/administracion/matriz-oportunidad/Editar/:id';
     if (hasPermission(path, valuePathFromContext)) {
-      history.push(path);
+      history.push('/administracion/matriz-oportunidad/Editar/' + row.id);
     } else {
       notificationToast();
     }

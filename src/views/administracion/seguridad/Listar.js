@@ -86,7 +86,7 @@ const AdministracionSeguridadListar = () => {
   const deleteRow = (row) => {
     swalWithBootstrapButtons.fire({
       title: '',
-      text:'¿Está seguro de eliminar el Parámetro de Seguridad?',
+      text: '¿Está seguro de eliminar el Parámetro de Seguridad?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Si',
@@ -127,13 +127,13 @@ const AdministracionSeguridadListar = () => {
 
   // Editar Parametro
   const editRow = (row) => {
-    history.push('/administracion/seguridad/Editar/' + row.id);
-    /* const path = '/administracion/seguridad/Editar/:id' + row.id;
+    //history.push('/administracion/seguridad/Editar/' + row.id);
+    const path = '/administracion/seguridad/Editar/:id';
     if (hasPermission(path, valuePathFromContext)) {
-      history.push(path);
+      history.push('/administracion/seguridad/Editar/' + row.id);
     } else {
       notificationToast();
-    } */
+    }
   }
 
   const [tablaListaOptions, setTablaListaOptions] = useState([])
@@ -207,7 +207,7 @@ const AdministracionSeguridadListar = () => {
         <Card>
           <CardHeader>
             <CardTitle className='float-left h4 pt-2'>Listado de Parámetros de Seguridad</CardTitle>
-            <Button color='primary' onClick={(e) => {redirect(e)}} className='float-right mt-1' style={{ width: '130px' }}>
+            <Button color='primary' onClick={(e) => { redirect(e) }} className='float-right mt-1' style={{ width: '130px' }}>
               <span className='text-white'>Registrar</span>
             </Button>
           </CardHeader>

@@ -226,13 +226,13 @@ const AdministracionMatrizRiesgosListar = () => {
 
   // Editar Parametro
   const editRow = (row) => {
-    history.push('/administracion/matriz-riesgo/Editar/' + row.id);
-    /* const path = '/administracion/matriz-riesgo/Editar/:id' + row.id;
+    //history.push('/administracion/matriz-riesgo/Editar/' + row.id);
+    const path = '/administracion/matriz-riesgo/Editar/:id';
     if (hasPermission(path, valuePathFromContext)) {
-      history.push(path);
+      history.push('/administracion/matriz-riesgo/Editar/' + row.id);
     } else {
       notificationToast();
-    } */
+    }
   }
 
   const [tablaListaOptions, setTablaListaOptions] = useState([])

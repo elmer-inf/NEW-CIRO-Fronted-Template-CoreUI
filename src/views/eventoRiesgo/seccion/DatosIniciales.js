@@ -13,6 +13,7 @@ import { useHistory } from 'react-router-dom'
 import AuthService from 'src/views/authentication/AuthService';
 
 const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFiles }) => {
+console.log('Edit initValues::: ', initValues);
 
   const Auth = new AuthService();
   const profile = Auth.getProfile();

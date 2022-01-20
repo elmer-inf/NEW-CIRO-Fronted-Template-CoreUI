@@ -278,13 +278,13 @@ const AdministracionEventoListar = () => {
 
   // Editar Parametro
   const editRow = (row) => {
-    history.push('/administracion/evento-riesgo/Editar/' + row.id);
-    /* const path = '/administracion/evento-riesgo/Editar/:id' + row.id;
+   // history.push('/administracion/evento-riesgo/Editar/' + row.id);
+     const path = '/administracion/evento-riesgo/Editar/:id';
     if (hasPermission(path, valuePathFromContext)) {
-      history.push(path);
+      history.push('/administracion/evento-riesgo/Editar/' + row.id);
     } else {
       notificationToast();
-    } */
+    } 
   }
 
   const [tablaListaOptions, setTablaListaOptions] = useState([])
