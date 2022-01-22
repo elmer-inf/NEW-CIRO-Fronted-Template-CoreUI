@@ -83,24 +83,18 @@ const ReporteEventos = () => {
       if (values.tipo.value === 'ciro') {
         generateReportCiro(data)
       }
-
-
     }
   });
 
-
   const generateReportCiro = (dataToRequest) => {
     console.log('llego: ', dataToRequest);
-
     //console.log('fecha INICIO reporte:', fechaReporte(0)); // anio-mes-dia
     //console.log('fecha FINAL reporte:', fechaReporte(1));
-
     setshowCiroReport(true)
   }
 
-
   const generateAllReportCiro = async () => {
-    const dateFormat = fechaReporte(1)
+    //const dateFormat = fechaReporte(1)
     setSpin(true);
     const sendRequest = {
       fechaIniTrim: fechaReporte(0),

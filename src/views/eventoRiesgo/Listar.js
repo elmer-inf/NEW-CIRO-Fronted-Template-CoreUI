@@ -25,7 +25,7 @@ const EventoRiesgoListar = () => {
   // Configuracion sweetalert2
   const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
-      confirmButton: 'btn btn-primary px-4',
+      confirmButton: 'btn btn-primary text-white px-4',
       cancelButton: 'btn btn-outline-primary px-4 mr-4',
     },
     buttonsStyling: false
@@ -40,14 +40,14 @@ const EventoRiesgoListar = () => {
   const [spin, setSpin] = useState(false);
 
   const redirect = (e) => {
-    //history.push('/eventoRiesgo/Registrar');
-    e.preventDefault();
+    history.push('/eventoRiesgo/Registrar');
+   /*  e.preventDefault();
     const path = '/eventoRiesgo/Registrar';
     if (hasPermission(path, valuePathFromContext)) {
       history.push(path);
     } else {
       notificationToast();
-    }
+    } */
   }
 
   const notificationToast = () => {
@@ -211,7 +211,6 @@ const EventoRiesgoListar = () => {
 
   const editRow = (row) => {
     console.log(row)
-    // history.push('./editar/' + row.id);
     history.push('/eventoRiesgo/Editar/' + row.id);
   }
 

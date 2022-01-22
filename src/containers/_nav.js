@@ -1,7 +1,7 @@
 /* import React from 'react'
 //import { Edit, Circle, Calendar } from 'react-feather'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faCalendarMinus, faChartLine, faChartBar, faShieldAlt, faShieldVirus, faUserShield, faPrint } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faCalendarMinus, faChartLine, faChartBar, faShieldAlt, faPrint } from '@fortawesome/free-solid-svg-icons';
 
 const _nav = [
   {

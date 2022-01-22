@@ -205,18 +205,19 @@ const MatrizRiesgo = ({ match }) => {
     var probabilidadR = 0;
     var disminucion = dataApi.controlId.campoB;
     if (dataApi.controlObjetivo === 'Ambos' || dataApi.controlObjetivo === 'Probabilidad')
-      probabilidadR = reduceProbabilidadImpacto(dataApi.probabilidadId.campoA, parseInt(disminucion));
+      probabilidadR = dataApi.probabilidadId !== null? reduceProbabilidadImpacto(dataApi.probabilidadId.campoA, disminucion) : 'Sin registro';
     else
-      probabilidadR = dataApi.probabilidadId.campoA;
+      probabilidadR = dataApi.probabilidadId !== null? dataApi.probabilidadId.campoA : 'Sin registro';
+      //console.log('probabilidadR: ', probabilidadR);
     return probabilidadR;
   }
 
   const valorProbabilidad = () => {
     var valorProb = '';
     if (dataApi.controlObjetivo === 'Ambos' || dataApi.controlObjetivo === 'Probabilidad')
-      valorProb = buscaValorLiteral(dataApiProbabilidad, probabilidadResidual())
+      valorProb = dataApi.probabilidadId !== null? buscaValorLiteral(dataApiProbabilidad, probabilidadResidual()) : 'Sin registro';
     else
-      valorProb = buscaValorLiteral(dataApiProbabilidad, dataApi.probabilidadId.campoA)
+      valorProb = dataApi.probabilidadId !== null? buscaValorLiteral(dataApiProbabilidad, dataApi.probabilidadId.campoA) : 'Sin registro';
     return valorProb;
   }
 
@@ -224,9 +225,9 @@ const MatrizRiesgo = ({ match }) => {
     var impactoR = 0;
     var disminucion = dataApi.controlId.campoB;
     if (dataApi.controlObjetivo === 'Ambos' || dataApi.controlObjetivo === 'Impacto')
-      impactoR = reduceProbabilidadImpacto(dataApi.impactoId.campoA, parseInt(disminucion));
+      impactoR = dataApi.impactoId !== null? reduceProbabilidadImpacto(dataApi.impactoId.campoA, disminucion) : 'Sin registro';
     else
-      impactoR = dataApi.impactoId.campoA;
+      impactoR = dataApi.impactoId !== null? dataApi.impactoId.campoA : 'Sin registro';
     return impactoR;
   }
 
@@ -246,15 +247,46 @@ const MatrizRiesgo = ({ match }) => {
   }
 
   const valorRiesgo = (prob, imp) => {
-    var valorRiesgoI = '';
+    var valorRiesgoI = 'Sin registro';
     valorRiesgoI = buscaValorLiteralRiesgoI(dataApiRiesgoI, riesgo(prob, imp));
     return valorRiesgoI;
   }
 
   const calculaMontoRiesgo = () => {
-    return _.find(dataApiProbabilidad, ['campoA', probabilidadResidual() + '']).campoE * dataApi.impactoUSD;
+    return _.find(dataApiProbabilidad, ['campoA', _.toString(probabilidadResidual())]) ? _.find(dataApiProbabilidad, ['campoA', _.toString(probabilidadResidual())]).campoE * dataApi.impactoUSD : 0;
   }
 
+  // Busca veces anio - probabilidad
+  const probabilidadVecesAnio = ()=>{
+    var vecesAnio;
+    if(dataApi.probabilidadId !== null){
+      var prob = probabilidadResidual();
+      for (var dataProb of dataApiProbabilidad){
+        if(dataProb.campoA === prob + ''){
+          vecesAnio = dataProb.campoE;
+        }
+      }
+    } else{
+      vecesAnio = 'Sin registro';
+    }
+    return vecesAnio;
+  }
+
+  // Busca numero dias - probabilidad
+  const probabilidadDias = ()=>{
+    var numeroDias;
+    if(dataApi.probabilidadId !== null){
+      var prob = probabilidadResidual();
+      for (var dataProb of dataApiProbabilidad){
+        if(dataProb.campoA === prob + ''){
+          numeroDias = dataProb.campoD;
+        }
+      }
+    } else{
+      numeroDias = 'Sin registro';
+    }
+    return numeroDias;
+  }
   /* FIN CALCULO RIESGOS */
 
   // Obtiene la ultima observacion del evento
@@ -601,22 +633,22 @@ const MatrizRiesgo = ({ match }) => {
                           <Row>
                             <Col xs='12' sm='6' md='4' xl='4' className='pt-2'>
                               <div className='text-label'>Probabilidad - Cuán probable es que el riesgo ocurra: </div>
-                              <div className='text-data'>{dataApi.probabilidadId.campoD}</div>
+                              <div className='text-data'>{dataApi.probabilidadId !== null ? dataApi.probabilidadId.campoD : <i>Sin registro</i>}</div>
                             </Col>
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Probabilidad (Inherente): </div>
-                              <div className='text-data'>{dataApi.probabilidadId.campoA}</div>
+                              <div className='text-data'>{dataApi.probabilidadId !== null ? dataApi.probabilidadId.campoA: <i>Sin registro</i>}</div>
                             </Col>
 
                             <Col xs='12' sm='6' md='4' xl='2' className='pt-2'>
                               <div className='text-label'>% de Ocurrencia: </div>
-                              <div className='text-data'>{dataApi.probabilidadId.campoG}</div>
+                              <div className='text-data'>{dataApi.probabilidadId !== null ? dataApi.probabilidadId.campoG : <i>Sin registro</i>}</div>
                             </Col>
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Valoración - Probabilidad (Inherente): </div>
-                              <div className='text-data'>{dataApi.probabilidadId.nombre}</div>
+                              <div className='text-data'>{dataApi.probabilidadId !== null ? dataApi.probabilidadId.nombre : <i>Sin registro</i>}</div>
                             </Col>
 
                             <Col xs='12' sm='6' md='4' xl='4' className='pt-2'>
@@ -642,14 +674,14 @@ const MatrizRiesgo = ({ match }) => {
                             <Col xs='12' sm='6' md='4' xl='4' className='pt-2'>
                               <div className='text-label'>Riesgo (Inherente): </div>
                               <div className='text-data'>
-                                {riesgo(dataApi.probabilidadId.campoA, dataApi.impactoId.campoA)}
+                                {riesgo(dataApi.probabilidadId?.campoA || '0', dataApi.impactoId.campoA)}
                               </div>
                             </Col>
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Valoración Riesgo (Inherente): </div>
                               <div className='text-data'>
-                                {valorRiesgo(dataApi.probabilidadId.campoA, dataApi.impactoId.campoA)}
+                                {valorRiesgo(dataApi.probabilidadId?.campoA || '0', dataApi.impactoId.campoA)}
                               </div>
                             </Col>
                           </Row>
@@ -902,7 +934,7 @@ const MatrizRiesgo = ({ match }) => {
                             <Col xs='12' sm='6' md='6' className='pt-2'>
                               <div className='text-label'>Numero dias (veces) en relación a un año Probabilidad: </div>
                               <div className='text-data'>
-                                {_.find(dataApiProbabilidad, ['campoA', probabilidadResidual() + '']).campoD}
+                                {probabilidadDias()}
                               </div>
                             </Col>
 
@@ -919,7 +951,7 @@ const MatrizRiesgo = ({ match }) => {
                             <Col xs='12' sm='6' md='6' className='pt-2'>
                               <div className='text-label'>Veces al año - Probabilidad: </div>
                               <div className='text-data'>
-                                {_.find(dataApiProbabilidad, ['campoA', probabilidadResidual() + '']).campoE}
+                                {probabilidadVecesAnio()}
                               </div>
                             </Col>
 

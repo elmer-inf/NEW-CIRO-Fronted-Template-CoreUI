@@ -121,7 +121,7 @@ const TheHeaderDropdown = () => {
     }
   }
 
-  const closeSession = () => { 
+  const closeSession = () => {
     Auth.logout();
     history.push('/login')
   }

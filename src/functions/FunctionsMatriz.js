@@ -85,10 +85,10 @@ export const buscaValorLiteral = (arrayData, prob_Imp) => {
 
 // Encuentra valor literal de Riesgo
 export const buscaValorLiteralRiesgoI = (arrayData, riesgo) => {
-  var riesgoVal = null;
+  var riesgoVal = 'Sin registro';
   try {
-    if (Array.isArray(arrayData) && riesgo !== null && riesgo !== undefined) {
-      riesgoVal = (_.find(arrayData, ['campoA', riesgo + '']) !== undefined) ? _.find(arrayData, ['campoA', riesgo + '']).campoB : null
+    if (Array.isArray(arrayData) && riesgo !== null && riesgo !== undefined && riesgo !== 0) {
+      riesgoVal = (_.find(arrayData, ['campoA', riesgo + '']) !== undefined) ? _.find(arrayData, ['campoA', riesgo + '']).campoB : null;
     }
   } catch (error) {
     console.log('Error al obtener valor literal del Riesgo: ', error);

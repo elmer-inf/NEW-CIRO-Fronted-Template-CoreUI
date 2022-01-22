@@ -8,7 +8,7 @@ import 'src/reusable/drag-and-drop/drag-and-drop.scss'
 import { ReactSortable } from 'react-sortablejs'
 import { List, AlertTriangle } from 'react-feather'
 
-/* var _ = require('lodash'); */
+var _ = require('lodash');
 
 const FormEvaluaEvento = ({ initialValuess, handleOnSubmit }) => {
 
@@ -90,7 +90,7 @@ const FormEvaluaEvento = ({ initialValuess, handleOnSubmit }) => {
     },{
       text: 'Riesgo relacionado'
     },{
-      text: 'Operación, producto o servicio afectado'
+      text: 'Operación - producto o servicio afectado'
     },{
       text: 'Tipo de servicio'
     },{
@@ -167,38 +167,28 @@ const FormEvaluaEvento = ({ initialValuess, handleOnSubmit }) => {
     validationSchema: Yup.object().shape(
       {
         estadoRegistro: Yup.string().required(),
-        /* listaObservacion: Yup.string().required('Campo obligatorio'),
-        nota: Yup.string().min(1).max(500).required('Campo obligatorio'), */
         listaObservacion: Yup.string().nullable(),
-        nota: Yup.string().nullable(),
+        nota: Yup.string().nullable().when('estadoRegistro',{
+          is:(val) => (val === 'Observado'),
+          then: Yup.string().max(900, 'El campo no debe exceder los 900 caracteres').nullable().required("Campo obligatorio"),
+        }),
         estado: Yup.string().nullable(),
       }
     ),
 
     onSubmit: values => {
-      if(Object.keys(observados).length !== 0){
-        var i = 1;
-        var cadenaObjeto = "";
-        observados.map(obj =>{
-          if(i !== Object.keys(observados).length){
-            cadenaObjeto = cadenaObjeto + obj.text + ',';
-          }else{
-            cadenaObjeto = cadenaObjeto + obj.text;
-          }
-          i++;
-        });
-      }
-
       const data = {
         ...values,
         modulo: "Evento",
-        listaObservacion: (Object.keys(observados).length !== 0) ? cadenaObjeto: null,
+        listaObservacion: (Object.keys(observados).length !== 0) ? JSON.stringify(_.map(observados, 'text')).replace(/['"[\]]/g, ''): null,
       }
       handleOnSubmit(data)
     }
   })
 
-//console.log('observados: ', JSON.stringify(_.map(observados, 'text')) );
+  /* var string = JSON.stringify(_.map(observados, 'text'));
+  console.log('observados string : ', string);
+  console.log('observados json  convert : ', JSON.parse(string)) ; */
 
   return (
     <Form onSubmit={formik.handleSubmit} autoComplete="off">

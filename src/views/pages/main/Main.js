@@ -2,7 +2,6 @@ import React from 'react'
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import CIcon from '@coreui/icons-react';
 
-
 const Main = () => {
   //const [spin, setSpin] = useState(false);
 

@@ -70,6 +70,7 @@ console.log('Edit initValues::: ', initValues);
       const data = {
         ...values,
         estadoRegistro: 'Pendiente',
+        fechaDescAux: values.fechaDesc.substring(0, 4),
         responsableElaborador: user.nombre  + ' ' + user.primerApellido,
         estadoEvento: (values.horaFin !== null && values.fechaFin !== null) ? 'Solución' : 'Seguimiento',
 
