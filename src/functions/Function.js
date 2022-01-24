@@ -51,6 +51,24 @@ export const buildSelectThree = (data, fieldValue, fieldLabel, fieldLabel2, mant
   return select;
 }
 
+export const buildOptionSelect = (data, fieldValue, fieldLabel, mantainAllData,nameData) => {
+  var optionSelect = null;
+  try {
+    if (mantainAllData === true) {
+      optionSelect = { value: data[fieldValue], label: data[fieldLabel], ...data }
+    } else {
+      optionSelect = { value: data[fieldValue], label: data[fieldLabel]}
+    }
+
+  } catch (error) {
+    console.log('Error in ' + nameData + ' - buildOptionSelect : ', error)
+
+  }
+  return optionSelect;
+}
+
+
+
 export const buildSelectTwo = (data, fieldValue, fieldLabel, mantainAllData) => {
   //console.log('dataselect:: ', data)
   const select = [];
@@ -147,7 +165,7 @@ export const exportFile = (dataRespose, nameFileWithExtention) => {
 
   const blob = new Blob([dataRespose], { type: 'text/plain;charset=utf-8' });
   const FileSaver = require('file-saver');
- //var date = new Date().toLocaleDateString();
+  //var date = new Date().toLocaleDateString();
   FileSaver.saveAs(blob, nameFileWithExtention);
 
 }

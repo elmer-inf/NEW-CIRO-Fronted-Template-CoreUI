@@ -386,6 +386,7 @@ const EventoRiesgoRegistrar = () => {
                       setObject={setObject}
                       initValues={formValueInitialDatos}
                       obtainFiles={obtainFiles}
+                      isEdit={false}
                     />
                   </TabPane>
 

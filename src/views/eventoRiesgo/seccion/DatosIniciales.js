@@ -11,9 +11,10 @@ import { buildSelectTwo } from 'src/functions/Function'
 import { CInputFile } from 'src/reusable/CInputFile'
 import { useHistory } from 'react-router-dom'
 import AuthService from 'src/views/authentication/AuthService';
+import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
 
 const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFiles }) => {
-console.log('Edit initValues::: ', initValues);
+  //console.log('Edit initValues::: ', initValues);
 
   const Auth = new AuthService();
   const profile = Auth.getProfile();
@@ -71,7 +72,7 @@ console.log('Edit initValues::: ', initValues);
         ...values,
         estadoRegistro: 'Pendiente',
         fechaDescAux: values.fechaDesc.substring(0, 4),
-        responsableElaborador: user.nombre  + ' ' + user.primerApellido,
+        responsableElaborador: user.nombre + ' ' + user.primerApellido,
         estadoEvento: (values.horaFin !== null && values.fechaFin !== null) ? 'Solución' : 'Seguimiento',
 
         horaIni: (values.horaIni !== null) ? values.horaIni + ':00' : null,
@@ -96,6 +97,13 @@ console.log('Edit initValues::: ', initValues);
     }
   })
 
+  useEffect(() => {
+    if (isEdit) {
+      formik.setValues({ ...initValues })
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initValues])
+
   /*   P  A  R  A  M  E  T  R  O  S   */
   /* Agencia */
   const [dataApiAgencia, setDataApiAgencia] = useState([])
@@ -114,6 +122,7 @@ console.log('Edit initValues::: ', initValues);
   const callApiCiudad = (idTablaDes, idNivel2) => {
     getTablaDescripcionEventoN2(idTablaDes, idNivel2)
       .then(res => {
+        console.log('res ciudad: :::', res.data);
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiCiudad(options)
       }).catch((error) => {
@@ -209,20 +218,24 @@ console.log('Edit initValues::: ', initValues);
     callApiCanal(9);
   }, [])
 
-  const resetCiudadId = () => { formik.setFieldValue('ciudadId', null, false); }
+  /*const resetCiudadId = () => { formik.setFieldValue('ciudadId', null, false); }
+*/
   useEffect(() => {
-    if (formik.values.agenciaId !== null) {
-      callApiCiudad(2, formik.values.agenciaId.id);
-      resetCiudadId();
+    if (isEdit && initValues.agenciaId !== null) {
+      console.log('use effect AGENCIA TO CIUDAD: ', initValues.agenciaId);
+      callApiCiudad(2, initValues.agenciaId.id);
+      //resetCiudadId();
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.agenciaId])
+  }, [])
 
-  const resetUnidadId = () => { formik.setFieldValue('unidadId', null, false); }
+  /* const resetUnidadId = () => { formik.setFieldValue('unidadId', null, false); }*/
   useEffect(() => {
-    if (formik.values.areaID !== null) {
-      callApiUnidad(4, formik.values.areaID.id);
-      resetUnidadId();
+    if (isEdit && initValues.areaID !== null) {
+      console.log('use effect area  TO unidad: ', initValues.areaID);
+
+      callApiUnidad(4, initValues.areaID.id);
+      //resetUnidadId();
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.areaID])
@@ -240,9 +253,57 @@ console.log('Edit initValues::: ', initValues);
 
   const history = useHistory();
   const redirect = (e) => {
-      history.push('/eventoRiesgo/Listar');
+    history.push('/eventoRiesgo/Listar');
   }
 
+
+  const resetFormikValue = (field, valueToReset) => {
+    formik.setFieldValue(field, valueToReset, false);
+  }
+
+  /*  Values of AGENCIA */
+  const clearDependenceOfAgencia = () => {
+    console.log('leego a clean dependeces');
+    resetFormikValue('ciudadId', null)
+    setDataApiCiudad([]);
+  }
+  const getValueAgencia = (value) => {
+    console.log('getSelectValue : ', value);
+
+    if (value !== null) {
+      console.log('ingrdssoooo');
+      callApiCiudad(2, value.id);
+    }
+
+  }
+  const clearInputAgencia = (id) => {
+    console.log('inputIsClearable aaa: ', id);
+    formik.setFieldValue(id, null, false);
+    //clearAllDependences();
+  }
+  /* FIN  Values of AGENCIA */
+
+  /*  Values of AREA */
+  const clearDependenceOfArea = () => {
+    console.log('leego a clean dependeces');
+    resetFormikValue('unidadId', null)
+    setDataApiUnidad([]);
+  }
+  const getValueArea = (value) => {
+    console.log('getSelectValue : ', value);
+
+    if (value !== null) {
+      console.log('ingrdssoooo');
+      callApiUnidad(4, value.id);
+    }
+
+  }
+  const clearInputArea = (id) => {
+    console.log('inputIsClearable aaa: ', id);
+    formik.setFieldValue(id, null, false);
+    //clearAllDependences();
+  }
+  /* FIN  Values of AREA */
   return (
     <Fragment>
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
@@ -347,7 +408,7 @@ console.log('Edit initValues::: ', initValues);
             <Label className='form-label'>
               Agencia
             </Label>
-            <CSelectReact
+            {/*  <CSelectReact
               type={"select"}
               id={'agenciaId'}
               placeholder={'Seleccionar'}
@@ -357,6 +418,26 @@ console.log('Edit initValues::: ', initValues);
               error={formik.errors.agenciaId}
               touched={formik.touched.agenciaId}
               options={dataApiAgencia}
+            /> */}
+            <CSelectReactTwo
+              //label={""}
+              id={'agenciaId'}
+              placeholder={'Seleccionar'}
+              value={formik.values.agenciaId}
+              onChange={formik.setFieldValue}
+              onBlur={formik.setFieldTouched}
+              errors={formik.errors.agenciaId}
+              touched={formik.touched.agenciaId}
+              options={dataApiAgencia}
+              obligatorio={false}
+              isClearable={true}
+              isSearchable={true}
+              isDisabled={false}
+              dependence={true}
+              cleareableDependences={clearDependenceOfAgencia}  //FUNCION PARA LIMPIA LOS VALORES FORMIK...
+              getAddValue={true}
+              getSelectValue={getValueAgencia} // AGGARA EL EL VALOR DEL SELECT VALUE
+              inputIsClearable={clearInputAgencia} // AGGARA EL EL VALOR DEL SELECT VALUE
             />
           </FormGroup>
 
@@ -381,7 +462,7 @@ console.log('Edit initValues::: ', initValues);
             <Label className='form-label'>
               Área <span className='text-primary h5'><b>*</b></span>
             </Label>
-            <CSelectReact
+            {/*  <CSelectReact
               type={"select"}
               id={'areaID'}
               placeholder={'Seleccionar'}
@@ -391,6 +472,26 @@ console.log('Edit initValues::: ', initValues);
               error={formik.errors.areaID}
               touched={formik.touched.areaID}
               options={dataApiArea}
+            /> */}
+            <CSelectReactTwo
+              //label={""}
+              id={'areaID'}
+              placeholder={'Seleccionar'}
+              value={formik.values.areaID}
+              onChange={formik.setFieldValue}
+              onBlur={formik.setFieldTouched}
+              errors={formik.errors.areaID}
+              touched={formik.touched.areaID}
+              options={dataApiArea}
+              obligatorio={false}
+              isClearable={true}
+              isSearchable={true}
+              isDisabled={false}
+              dependence={true}
+              cleareableDependences={clearDependenceOfArea}  //FUNCION PARA LIMPIA LOS VALORES FORMIK...
+              getAddValue={true}
+              getSelectValue={getValueArea} // AGGARA EL EL VALOR DEL SELECT VALUE
+              inputIsClearable={clearInputArea} // AGGARA EL EL VALOR DEL SELECT VALUE
             />
           </FormGroup>
 
@@ -575,7 +676,7 @@ console.log('Edit initValues::: ', initValues);
             style={{ width: '130px' }}
             color="primary"
             outline
-            onClick={(e) => {redirect(e)}}
+            onClick={(e) => { redirect(e) }}
           >
             Cancelar
           </Button>

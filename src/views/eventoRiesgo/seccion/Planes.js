@@ -9,7 +9,7 @@ import { CSelectReact } from 'src/reusable/CSelectReact'
 import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
 import { buildSelectTwo } from 'src/functions/Function'
 
-const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdit }) => {
+const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdit, options}) => {
 
   const formik = useFormik({
     initialValues: initValues,
@@ -61,12 +61,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
       })
   }
 
-  // Estado de evento
-  const optionsEstado = [
-    { value: 'No iniciado', label: 'No iniciado' },
-    { value: 'En proceso', label: 'En proceso' },
-    { value: 'Concluido', label: 'Concluido' }
-  ]
+ 
 
   useEffect(() => {
     callApiArea(3);
@@ -158,7 +153,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
               onBlur={formik.setFieldTouched}
               error={formik.errors.estadoPlan}
               touched={formik.touched.estadoPlan}
-              options={optionsEstado}
+              options={options.optEstado}
             />
           </FormGroup>
 

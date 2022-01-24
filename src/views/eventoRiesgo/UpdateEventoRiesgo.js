@@ -11,7 +11,7 @@ import { useHistory } from 'react-router-dom'
 import classnames from 'classnames';
 import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
 import { postEventoRiesgoFormData } from './controller/EventoController';
-import { buildSelectTwo } from 'src/functions/Function'
+import { buildOptionSelect, buildSelectTwo } from 'src/functions/Function'
 import { useFormik } from "formik"
 import * as Yup from "yup"
 import { ToastContainer, toast } from 'react-toastify'
@@ -26,7 +26,7 @@ var _ = require('lodash');
 const UpdateEventoRiesgo = ({ match }) => {
 
   const history = useHistory();
-  const [spin, setSpin] = useState(false);
+  const [spin, setSpin] = useState(true);
   const [getFiles, setGetFiles] = useState(null)
   const [dataApiTipoEvento, setDataApiTipoEvento] = useState([])
 
@@ -34,6 +34,16 @@ const UpdateEventoRiesgo = ({ match }) => {
     setGetFiles(f)
   }
 
+  // Estado de evento
+  const optionsEstado = [
+    { value: 'No iniciado', label: 'No iniciado' },
+    { value: 'En proceso', label: 'En proceso' },
+    { value: 'Concluido', label: 'Concluido' }
+  ];
+
+  const optionSelect = {
+    optEstado: optionsEstado
+  }
 
   const formValueInitialTipoEvento = {
     tipoEvento: null,
@@ -179,32 +189,69 @@ const UpdateEventoRiesgo = ({ match }) => {
       horaDesc: args.horaDesc,
       fechaFin: args.fechaFin,
       horaFin: args.horaFin,
-      agenciaId: {...args.agenciaId.id, value:args.agenciaId.id, label: args.agenciaId.nombre},
-      ciudadId: null,
-      areaID: null,
-      unidadId: null,
+      agenciaId: buildOptionSelect(args.agenciaId, 'id', 'nombre', true, 'agenciaId'),// { ...args.agenciaId.id, value: args.agenciaId.id, label: args.agenciaId.nombre ,'agenciaId'},
+      ciudadId: buildOptionSelect(args.ciudadId, 'id', 'nombre', true, 'ciudadId'),
+      areaID: buildOptionSelect(args.areaID, 'id', 'nombre', true, 'areaID'),
+      unidadId: buildOptionSelect(args.unidadId, 'id', 'nombre', true, 'unidadId'),
       entidadAfectada: args.entidadAfectada,
       comercioAfectado: args.comercioAfectado,
-      entidadId: null,
-      cargoId: null,
+      entidadId: buildOptionSelect(args.entidadId, 'id', 'nombre', true, 'entidadId'),
+      cargoId: buildOptionSelect(args.cargoId, 'id', 'nombre', true, 'cargoId'),
       estadoReportado: args.estadoReportado,
-      fuenteInfId: null,
-      canalAsfiId: null,
+      fuenteInfId: buildOptionSelect(args.fuenteInfId, 'id', 'nombre', true, 'fuenteInfId'),
+      canalAsfiId: buildOptionSelect(args.canalAsfiId, 'id', 'nombre', true, 'canalAsfiId'),
       descripcion: args.descripcion,
       descripcionCompleta: args.descripcionCompleta,
-      files: null,
+      files: null,//buildOptionSelect(args.files, 'id', 'nombre', true),
       responsableElaborador: args.responsableElaborador,
     };
-    const planesAccion = {};
-    const categoria = {};
+    const planesAccion = {
+      areaResponsableId: buildOptionSelect(args.areaResponsableId, 'id', 'nombre', true, 'areaResponsableId'),
+      cargoResponsableId: buildOptionSelect(args.cargoResponsableId, 'id', 'nombre', true, 'cargoResponsableId'),
+      detallePlan: args.detallePlan,
+      fechaFinPlan: args.fechaFinPlan,
+      descripcionEstado: args.descripcionEstado,
+      estadoPlan: { value: args.estadoPlan, label: args.estadoPlan },
+
+    };
+    const categoria = {
+      codigoInicial: args.codigoInicial,
+      subcategorizacionId: buildOptionSelect(args.subcategorizacionId, 'id', 'nombre', true, 'subcategorizacionId'),
+      trimestre: args.trimestre,
+      tipoEventoPerdidaId: buildOptionSelect(args.tipoEventoPerdidaId, 'id', 'nombre', true, 'tipoEventoPerdidaId'),
+      subEventoId: buildOptionSelect(args.subEventoId, 'id', 'nombre', true, 'subEventoId'),
+      claseEventoId: buildOptionSelect(args.claseEventoId, 'id', 'nombre', true, 'claseEventoId'),
+      otros: args.otros,
+      detalleEventoCritico: args.detalleEventoCritico,
+      factorRiesgoId: buildOptionSelect(args.factorRiesgoId, 'id', 'nombre', true, 'factorRiesgoId'),
+      procesoId: buildOptionSelect(args.procesoId, 'id', 'nombre', true, 'procesoId'),
+      procedimientoId: buildOptionSelect(args.procedimientoId, 'id', 'nombre', true, 'procedimientoId'),
+      eventoCritico: args.eventoCritico,
+
+      lineaNegocio: args.lineaNegocio,
+      lineaAsfiId: buildOptionSelect(args.lineaAsfiId, 'id', 'nombre', true, 'lineaAsfiId'),
+      operacionId: buildOptionSelect(args.operacionId, 'id', 'nombre', true, 'operacionId'),
+      efectoPerdidaId: buildOptionSelect(args.efectoPerdidaId, 'id', 'nombre', true, 'efectoPerdidaId'),
+      opeProSerId: buildOptionSelect(args.opeProSerId, 'id', 'nombre', true, 'opeProSerId'),
+      tipoServicioId: buildOptionSelect(args.tipoServicioId, 'id', 'nombre', true, 'tipoServicioId'),
+      descServicioId: buildOptionSelect(args.descServicioId, 'id', 'nombre', true, 'descServicioId'),
+      riesgoRelacionado: args.riesgoRelacionado,
+      detalleEstado: args.detalleEstado,
+
+      //listMatrizRiesgo: buildOptionSelect(args.listMatrizRiesgo, 'id', 'nombre', true, 'listMatrizRiesgo')
+
+    };
     const importes = {};
     const riesgos = {};
 
+
+    console.log('Lo que se enviara en datosIniciales:: ', datosInciales);
+
     setformValueInitialDatosSec(datosInciales);
-    /*setformValueInitialPlanesSec();
-    setformValueInitialCategoriaSec();
-    setformValueInitialImportesSec();
-    setformValueInitialRiesgosSec();*/
+    setformValueInitialPlanesSec(planesAccion);
+    setformValueInitialCategoriaSec(categoria);
+    //setformValueInitialImportesSec();
+   // setformValueInitialRiesgosSec();
   }
   const getById = async (idEventoRiesgo) => {
     setSpin(true)
@@ -381,134 +428,144 @@ const UpdateEventoRiesgo = ({ match }) => {
 
     <div>
       <CCSpinner show={spin} />
-      <Card>
-        <CardHeader>
-          <CardTitle className='float-left h4 pt-2'>Registrar Evento de Riesgo</CardTitle>
-        </CardHeader>
-        <CardBody>
+      {
+        (spin === false)
+          ?
+          <Card>
+            <CardHeader>
+              <CardTitle className='float-left h4 pt-2'>Registrar Evento de Riesgo</CardTitle>
+            </CardHeader>
+            <CardBody>
 
-          <FormGroup row>
-            <Col xs='12' md='6' xl='2'>
-              <Label className='form-label font-weight-bold'>
-                Tipo de Evento
-              </Label>
-            </Col>
-            <Col xs='12' md='6' xl='4'>
-              <CInputRadio
-                data={dataApiTipoEvento}
-                id={'tipoEvento'}
-                value={formik.values.tipoEvento}
-                onChange={formik.setFieldValue}
-                onBlur={formik.setFieldTouched}
-                touched={formik.touched.tipoEvento}
-                errors={formik.errors.tipoEvento}
-                sendValue={false}
-              />
-            </Col>
-          </FormGroup>
+              <FormGroup row>
+                <Col xs='12' md='6' xl='2'>
+                  <Label className='form-label font-weight-bold'>
+                    Tipo de Evento
+                  </Label>
+                </Col>
+                <Col xs='12' md='6' xl='4'>
+                  <CInputRadio
+                    data={dataApiTipoEvento}
+                    id={'tipoEvento'}
+                    value={formik.values.tipoEvento}
+                    onChange={formik.setFieldValue}
+                    onBlur={formik.setFieldTouched}
+                    touched={formik.touched.tipoEvento}
+                    errors={formik.errors.tipoEvento}
+                    sendValue={false}
+                  />
+                </Col>
+              </FormGroup>
 
-          {(formik.values.tipoEvento !== null) ?
-            <Row>
-              <Col xs="12" md="12" className="mb-4">
-                <Nav tabs className='justify-content-center'>
+              {((formik.values.tipoEvento !== null)) ?
+                <Row>
+                  <Col xs="12" md="12" className="mb-4">
+                    <Nav tabs className='justify-content-center'>
 
-                  <NavItem>
-                    <NavLink className={classnames({ active: activeTab === '1' })}>
-                      <span className={activeTab === '1' ? '' : 'd-none'}></span>
-                      <FileText size={20} /><span className='pl-2 h6 font-weight-bold'>Datos iniciales</span>
-                      <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
-                    </NavLink>
-                  </NavItem>
+                      <NavItem>
+                        <NavLink className={classnames({ active: activeTab === '1' })}>
+                          <span className={activeTab === '1' ? '' : 'd-none'}></span>
+                          <FileText size={20} /><span className='pl-2 h6 font-weight-bold'>Datos iniciales</span>
+                          <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
+                        </NavLink>
+                      </NavItem>
 
-                  <NavItem>
-                    <NavLink className={classnames({ active: activeTab === '2' })}>
-                      <span className={activeTab === '2' ? '' : 'd-none'}></span>
-                      <CheckSquare size={20} /><span className='pl-2 h6 font-weight-bold'>Planes de acción</span>
-                      <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
-                    </NavLink>
-                  </NavItem>
+                      <NavItem>
+                        <NavLink className={classnames({ active: activeTab === '2' })}>
+                          <span className={activeTab === '2' ? '' : 'd-none'}></span>
+                          <CheckSquare size={20} /><span className='pl-2 h6 font-weight-bold'>Planes de acción</span>
+                          <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
+                        </NavLink>
+                      </NavItem>
 
-                  <NavItem>
-                    <NavLink className={classnames({ active: activeTab === '3' })}>
-                      <span className={activeTab === '3' ? '' : 'd-none'}></span>
-                      <BarChart2 size={20} /><span className='pl-2 h6 font-weight-bold'>Categoria y Línea de negocio</span>
-                      <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
-                    </NavLink>
-                  </NavItem>
+                      <NavItem>
+                        <NavLink className={classnames({ active: activeTab === '3' })}>
+                          <span className={activeTab === '3' ? '' : 'd-none'}></span>
+                          <BarChart2 size={20} /><span className='pl-2 h6 font-weight-bold'>Categoria y Línea de negocio</span>
+                          <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
+                        </NavLink>
+                      </NavItem>
 
-                  {(formik.values.tipoEvento === 'A') ?
-                    <NavItem>
-                      <NavLink className={classnames({ active: activeTab === '4' })}>
-                        <span className={activeTab === '4' ? '' : 'd-none'}></span>
-                        <DollarSign size={20} /><span className='pl-2 h6 font-weight-bold'>Importes relacionados</span>
-                        <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
-                      </NavLink>
-                    </NavItem>
-                    : null}
+                      {(formik.values.tipoEvento === 'A') ?
+                        <NavItem>
+                          <NavLink className={classnames({ active: activeTab === '4' })}>
+                            <span className={activeTab === '4' ? '' : 'd-none'}></span>
+                            <DollarSign size={20} /><span className='pl-2 h6 font-weight-bold'>Importes relacionados</span>
+                            <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
+                          </NavLink>
+                        </NavItem>
+                        : null}
 
-                  <NavItem>
-                    <NavLink className={classnames({ active: activeTab === '5' })}>
-                      <span className={activeTab === '5' ? '' : 'd-none'}></span>
-                      <Activity size={20} /><span className='pl-2 h6 font-weight-bold'>Riesgos relacionados</span>
-                    </NavLink>
-                  </NavItem>
-                </Nav>
+                      <NavItem>
+                        <NavLink className={classnames({ active: activeTab === '5' })}>
+                          <span className={activeTab === '5' ? '' : 'd-none'}></span>
+                          <Activity size={20} /><span className='pl-2 h6 font-weight-bold'>Riesgos relacionados</span>
+                        </NavLink>
+                      </NavItem>
+                    </Nav>
 
-                <TabContent activeTab={activeTab}>
-                  <TabPane tabId="1">
-                    <DatosIniciales
-                      nextSection={nextSection}
-                      setObject={setObject}
-                      initValues={formValueInitialDatosSec}
-                      obtainFiles={obtainFiles}
-                    />
-                  </TabPane>
+                    <TabContent activeTab={activeTab}>
+                      <TabPane tabId="1">
+                        <DatosIniciales
+                          nextSection={nextSection}
+                          setObject={setObject}
+                          initValues={formValueInitialDatosSec}
+                          obtainFiles={obtainFiles}
+                          isEdit={true}
+                        />
+                      </TabPane>
 
-                  <TabPane tabId="2">
-                    <Planes
-                      nextSection={nextSection}
-                      beforeSection={beforeSection}
-                      setObject={setObject}
-                      initValues={formValueInitialPlanesSec}
-                    />
-                  </TabPane>
+                      <TabPane tabId="2">
+                        <Planes
+                          nextSection={nextSection}
+                          beforeSection={beforeSection}
+                          setObject={setObject}
+                          initValues={formValueInitialPlanesSec}
+                          options={optionSelect}
+                        />
+                      </TabPane>
 
-                  <TabPane tabId="3">
-                    <CategoriaNegocio
-                      nextSection={nextSection}
-                      beforeSection={beforeSection}
-                      setObject={setObject}
-                      initValues={formValueInitialCategoriaSec}
-                      tipoEvento={formik.values.tipoEvento}
-                      fechaDesc={requestData.fechaDesc}
-                    />
-                  </TabPane>
+                      <TabPane tabId="3">
+                        <CategoriaNegocio
+                          nextSection={nextSection}
+                          beforeSection={beforeSection}
+                          setObject={setObject}
+                          initValues={formValueInitialCategoriaSec}
+                          tipoEvento={formik.values.tipoEvento}
+                          fechaDesc={requestData.fechaDesc}
+                        />
+                      </TabPane>
 
-                  <TabPane tabId="4">
-                    <ImportesRelacionados
-                      nextSection={nextSection}
-                      beforeSection={beforeSection}
-                      setObject={setObject}
-                      initValues={formValueInitialImportesSec}
-                    />
-                  </TabPane>
+                      <TabPane tabId="4">
+                        <ImportesRelacionados
+                          nextSection={nextSection}
+                          beforeSection={beforeSection}
+                          setObject={setObject}
+                          initValues={formValueInitialImportesSec}
+                        />
+                      </TabPane>
 
-                  <TabPane tabId="5">
-                    <RiesgosRelacionados
-                      beforeSection={beforeSection}
-                      initValues={formValueInitialRiesgosSec}
-                      tipoEvento={formik.values.tipoEvento}
-                      handleOnSubmmit={handleOnSubmmit}
-                    />
-                  </TabPane>
+                      <TabPane tabId="5">
+                        <RiesgosRelacionados
+                          beforeSection={beforeSection}
+                          initValues={formValueInitialRiesgosSec}
+                          tipoEvento={formik.values.tipoEvento}
+                          handleOnSubmmit={handleOnSubmmit}
+                        />
+                      </TabPane>
 
-                </TabContent>
-              </Col>
-            </Row>
-            : <div className='text-danger'><AlertTriangle size={15} /> Debe seleccionar el Tipo de Evento</div>
-          }
-        </CardBody>
-      </Card>
+                    </TabContent>
+                  </Col>
+                </Row>
+                : <div className='text-danger'><AlertTriangle size={15} /> Debe seleccionar el Tipo de Evento</div>
+              }
+            </CardBody>
+          </Card>
+
+          : null
+      }
+
+
       <ToastContainer
         position="top-center"
         autoClose={5000}
