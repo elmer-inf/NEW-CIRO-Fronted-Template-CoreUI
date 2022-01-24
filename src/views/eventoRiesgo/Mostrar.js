@@ -520,7 +520,7 @@ function base64ToArrayBuffer(data) {
                           <Row className='pt-3'>
                             <Col xs='12' sm='6' md='4' xl='6' className='pt-2'>
                               <div className='text-label'>Código inicial: </div>
-                              <div className='text-data'>{dataApi.codigoInicial !== '' ? dataApi.codigoInicial : <i>Sin registro</i>}</div>
+                              <div className='text-data'>{dataApi.codigoInicial !== '' || dataApi.codigoInicial !== null? dataApi.codigoInicial : <i>Sin registro</i>}</div>
                             </Col>
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Sub categorización: </div>
@@ -568,7 +568,7 @@ function base64ToArrayBuffer(data) {
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Procedimiento: </div>
-                              <div className='text-data'>{dataApi.procedimientoId !== null ? dataApi.procedimientoId.nombre : <i>Sin registro</i>}</div>
+                              <div className='text-data'>{dataApi.procedimientoId !== null ? dataApi.procedimientoId.descripcion : <i>Sin registro</i>}</div>
                             </Col>
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>

@@ -7,11 +7,12 @@ import { CInputReact } from 'src/reusable/CInputReact'
 import { CSelectReact } from 'src/reusable/CSelectReact'
 import { getTablaDescripcionEventoN1, getTablaDescripcionEventoN2, getTablaDescripcionEventoN3 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
 import { buildSelectThree, buildSelectTwo } from 'src/functions/Function'
+import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
 import { getRiesgos } from 'src/views/matrizRiesgo/controller/RiesgoController'
 
 var _ = require('lodash');
 
-const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, isEdit, tipoEvento, fechaDesc }) => {
+const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, isEdit, tipoEvento, fechaDesc, optionsCritico, optionsAsfi }) => {
 
   // Obtiene Trimestre a partir de la fechaDesc
   const generaTrimestre = ()=>{
@@ -218,18 +219,6 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
       })
   }
 
-  // Evento critico
-  const optionsEventoCritico = [
-    { value: 'Crítico', label: 'Crítico' },
-    { value: 'No crítico', label: 'No crítico' }
-  ]
-
-  // Línea de negocio
-  const optionsLineaAsfi = [
-    { value: '1. Línea de Negocio Emisor', label: '1. Línea de Negocio Emisor' },
-    { value: '2. Línea de Negocio Adquirente', label: '2. Línea de Negocio Adquirente' }
-  ]
-
   // Linea de negocio ASFI
   const [dataApiLineaAsfi, setDataApiLineaAsfi] = useState([])
   const callApiLineaAsfi = (idTablaDes) => {
@@ -315,45 +304,100 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
     callLListMatrizRiesgos();
   }, [])
 
-  // Sub evento (nivel 2)
-  const resetSubeventoYclase = () => { formik.setFieldValue('subEventoId', null, false); formik.setFieldValue('claseEventoId', null, false); }
+  // Para el despliegue del select llenado al EDITAR
   useEffect(() => {
-    if (formik.values.tipoEventoPerdidaId !== null) {
-      callApiSubevento(12, formik.values.tipoEventoPerdidaId.id);
-      resetSubeventoYclase();
+    if (isEdit && initValues.tipoEventoPerdidaId !== null) {
+      callApiSubevento(12, initValues.tipoEventoPerdidaId.id);
     }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.tipoEventoPerdidaId])
+    if (isEdit && initValues.subEventoId !== null && initValues.tipoEventoPerdidaId !== null) {
+      console.log('use effect subEventoId TO clase evento: ', initValues.subEventoId);
+      callApiClaseEvento(13, initValues.subEventoId.id, initValues.tipoEventoPerdidaId.id);
+    }
+    if (isEdit && initValues.procesoId !== null) {
+      callApiProcedimiento(16, initValues.procesoId.id);
+    }
 
-  // Clase evento (nivel 3)
-  const resetClaseEvento = () => { formik.setFieldValue('claseEventoId', null, false); }
-  useEffect(() => {
-    if (formik.values.subEventoId !== null) {
-      callApiClaseEvento(13, formik.values.subEventoId.id, formik.values.tipoEventoPerdidaId.id);
-      resetClaseEvento();
+    if (isEdit && initValues.tipoServicioId !== null) {
+      callApiServicioDesc(22, initValues.tipoServicioId.id);
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.subEventoId])
+  }, [])
 
-  // Procedimiento (nivel 2)
-  const resetProcedimiento = () => { formik.setFieldValue('procedimientoId', null, false); }
-  useEffect(() => {
-    if (formik.values.procesoId !== null) {
-      callApiProcedimiento(16, formik.values.procesoId.id);
-      resetProcedimiento();
-    }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.procesoId])
 
-  // Descripción de servicio (nivel 2)
-  const resetServicioDesc = () => { formik.setFieldValue('descServicioId', null, false); }
-  useEffect(() => {
-    if (formik.values.tipoServicioId !== null) {
-      callApiServicioDesc(22, formik.values.tipoServicioId.id);
-      resetServicioDesc();
+  // FORMIK RESET VALUE REUTILIZABLE
+  const resetFormikValue = (field, valueToReset) => {
+    formik.setFieldValue(field, valueToReset, false);
+  }
+
+  /*  Values of TIPO DE EVENTO DE PERDIDA N1*/
+  const clearDependenceOfTipoEventoP = () => {
+    resetFormikValue('subEventoId', null);
+    resetFormikValue('claseEventoId', null);
+    setDataApiSubevento([]);
+    setDataApiClaseEvento([]);
+  }
+  const getValueTipoEventoP = (value) => {
+    if (value !== null) {
+      callApiSubevento(12, value.id);
     }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.tipoServicioId])
+  }
+  const clearInputTipoEventoP = (id) => {
+    formik.setFieldValue(id, null, false); // limpia el select N1
+    resetFormikValue('subEventoId', null); // limpiar el valor del select N2
+    resetFormikValue('claseEventoId', null); // limpiar el valor del select N3
+  }
+  /* FIN  Values of TIPO DE EVENTO DE PERDIDA N1*/
+
+  /*  Values of SUB EVENTO N2 */
+  const clearDependenceOfSubEvento = () => {
+    resetFormikValue('claseEventoId', null);
+    setDataApiClaseEvento([]);
+  }
+  const getValueSubEvento = (value) => {
+    if (value !== null && formik.values.tipoEventoPerdidaId !== null) {
+      callApiClaseEvento(13, value.id, formik.values.tipoEventoPerdidaId.id);
+    }
+  }
+  const clearInputSubEvento = (id) => {
+    formik.setFieldValue(id, null, false); // limpia el select N1
+    resetFormikValue('claseEventoId', null) // limpiar el valor del select N2
+  }
+  /* FIN  Values of SUB EVENTO N2 */
+
+  /*  Values of PROCESO N1 */
+  const clearDependenceOfProceso = () => {
+    resetFormikValue('procedimientoId', null);
+    setDataApiProcedimiento([]);
+  }
+  const getValueProceso = (value) => {
+    if (value !== null) {
+      callApiProcedimiento(16, value.id);
+    }
+  }
+  const clearInputProceso = (id) => {
+    formik.setFieldValue(id, null, false);
+    resetFormikValue('procedimientoId', null);
+  }
+  /* FIN  Values of PROCESO N1 */
+
+    /*  Values of TIPO DE SERVICIO N1 */
+    const clearDependenceOfTipoServicio = () => {
+      resetFormikValue('descServicioId', null);
+      setDataApiServicioDesc([]);
+    }
+    const getValueTipoServicio = (value) => {
+      if (value !== null) {
+        callApiServicioDesc(22, value.id);
+      }
+    }
+    const clearInputTipoServicio = (id) => {
+      formik.setFieldValue(id, null, false);
+      resetFormikValue('descServicioId', null);
+    }
+    /* FIN  Values of TIPO DE SERVICIO N1 */
+
+
+
 
   // Resetea "otros" dependiendo del check
   const resetOtros = () => { formik.setFieldValue('otros', '', false); }
@@ -365,8 +409,8 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   }, [formik.values.claseEventoId])
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
-  // Riesgos realcionados:
 
+  // Riesgos realcionados:
   const [listRiesgoRel, setListRiesgoRel] = useState([]);
 
   const callLListMatrizRiesgos = () => {
@@ -441,18 +485,26 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
-              Tipo de evento de pérdida - Basilea<span className='text-primary h5'><b>*</b></span>
+              Tipo de evento de pérdida - Basilea <span className='text-primary h5'><b>*</b></span>
             </Label>
-            <CSelectReact
-              type={"select"}
+            <CSelectReactTwo
               id={'tipoEventoPerdidaId'}
               placeholder={'Seleccionar'}
               value={formik.values.tipoEventoPerdidaId}
               onChange={formik.setFieldValue}
               onBlur={formik.setFieldTouched}
-              error={formik.errors.tipoEventoPerdidaId}
+              errors={formik.errors.tipoEventoPerdidaId}
               touched={formik.touched.tipoEventoPerdidaId}
               options={dataApiTipoEvento}
+              obligatorio={false}
+              isClearable={true}
+              isSearchable={true}
+              isDisabled={false}
+              dependence={true}
+              cleareableDependences={clearDependenceOfTipoEventoP}
+              getAddValue={true}
+              getSelectValue={getValueTipoEventoP}
+              inputIsClearable={clearInputTipoEventoP}
             />
           </FormGroup>
 
@@ -460,16 +512,24 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
             <Label className='form-label'>
               Sub evento - Basilea
             </Label>
-            <CSelectReact
-              type={"select"}
+            <CSelectReactTwo
               id={'subEventoId'}
               placeholder={'Seleccionar'}
               value={formik.values.subEventoId}
               onChange={formik.setFieldValue}
               onBlur={formik.setFieldTouched}
-              error={formik.errors.subEventoId}
+              errors={formik.errors.subEventoId}
               touched={formik.touched.subEventoId}
               options={dataApiSubevento}
+              obligatorio={false}
+              isClearable={true}
+              isSearchable={true}
+              isDisabled={false}
+              dependence={true}
+              cleareableDependences={clearDependenceOfSubEvento}
+              getAddValue={true}
+              getSelectValue={getValueSubEvento}
+              inputIsClearable={clearInputSubEvento}
             />
           </FormGroup>
 
@@ -547,16 +607,24 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
             <Label className='form-label'>
               Macroproceso <span className='text-primary h5'><b>*</b></span>
             </Label>
-            <CSelectReact
-              type={"select"}
+            <CSelectReactTwo
               id={'procesoId'}
               placeholder={'Seleccionar'}
               value={formik.values.procesoId}
               onChange={formik.setFieldValue}
               onBlur={formik.setFieldTouched}
-              error={formik.errors.procesoId}
+              errors={formik.errors.procesoId}
               touched={formik.touched.procesoId}
               options={dataApiProceso}
+              obligatorio={false}
+              isClearable={true}
+              isSearchable={true}
+              isDisabled={false}
+              dependence={true}
+              cleareableDependences={clearDependenceOfProceso}
+              getAddValue={true}
+              getSelectValue={getValueProceso}
+              inputIsClearable={clearInputProceso}
             />
           </FormGroup>
 
@@ -590,7 +658,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
               onBlur={formik.setFieldTouched}
               error={formik.errors.eventoCritico}
               touched={formik.touched.eventoCritico}
-              options={optionsEventoCritico}
+              options={optionsCritico}
             />
           </FormGroup>
           <FormGroup tag={Col} md='12' className='mb-0'>
@@ -628,7 +696,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
               onBlur={formik.setFieldTouched}
               error={formik.errors.lineaNegocio}
               touched={formik.touched.lineaNegocio}
-              options={optionsLineaAsfi}
+              options={optionsAsfi}
             />
           </FormGroup>
 
@@ -687,16 +755,24 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
             <Label className='form-label'>
               Tipo de servicio
             </Label>
-            <CSelectReact
-              type={"select"}
+            <CSelectReactTwo
               id={'tipoServicioId'}
               placeholder={'Seleccionar'}
               value={formik.values.tipoServicioId}
               onChange={formik.setFieldValue}
               onBlur={formik.setFieldTouched}
-              error={formik.errors.tipoServicioId}
+              errors={formik.errors.tipoServicioId}
               touched={formik.touched.tipoServicioId}
               options={dataApiTipoServicio}
+              obligatorio={false}
+              isClearable={true}
+              isSearchable={true}
+              isDisabled={false}
+              dependence={true}
+              cleareableDependences={clearDependenceOfTipoServicio}
+              getAddValue={true}
+              getSelectValue={getValueTipoServicio}
+              inputIsClearable={clearInputTipoServicio}
             />
           </FormGroup>
 

@@ -67,6 +67,22 @@ export const buildOptionSelect = (data, fieldValue, fieldLabel, mantainAllData,n
   return optionSelect;
 }
 
+export const buildOptionSelectThree = (data, fieldValue, fieldLabel, fieldLabel2, mantainAllData,nameData) => {
+  var optionSelect = null;
+  try {
+    if (mantainAllData === true) {
+      optionSelect = { value: data[fieldValue], label: data[fieldLabel] + ' - ' + data[fieldLabel2], ...data }
+    } else {
+      optionSelect = { value: data[fieldValue], label: data[fieldLabel] + ' - ' + data[fieldLabel2]}
+    }
+
+  } catch (error) {
+    console.log('Error in ' + nameData + ' - buildOptionSelect : ', error)
+
+  }
+  return optionSelect;
+}
+
 
 
 export const buildSelectTwo = (data, fieldValue, fieldLabel, mantainAllData) => {
@@ -167,5 +183,32 @@ export const exportFile = (dataRespose, nameFileWithExtention) => {
   const FileSaver = require('file-saver');
   //var date = new Date().toLocaleDateString();
   FileSaver.saveAs(blob, nameFileWithExtention);
+
+}
+
+
+export const covierteMoneda = (moneda, monto, tc) => {
+  var mountCoverted = 0;
+  try {
+
+    //     if(typeof )
+
+    if (moneda !== null && moneda !== '') {
+      if (moneda === 'BOB' || moneda === 'Bs') {
+        mountCoverted = monto;
+      } else {
+        if (moneda === 'USD' || moneda === '$') {
+          mountCoverted = monto * tc;
+
+        }
+      }
+    }
+
+
+  } catch (error) {
+    console.error('Error en coversion ', error);
+  }
+
+  return mountCoverted;
 
 }

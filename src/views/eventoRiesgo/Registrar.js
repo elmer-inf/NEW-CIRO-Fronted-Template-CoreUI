@@ -56,6 +56,37 @@ const EventoRiesgoRegistrar = () => {
     })
   })
 
+  // Estado de evento - SECCION 1
+   const optionsEstado = [
+    { value: 'Reportado', label: 'Reportado' },
+    { value: 'No reportado', label: 'No reportado' }
+  ]
+
+  // Estado de Planes de accion - SECCION 2
+  const optionEstadoPlanes = [
+    { value: 'No iniciado', label: 'No iniciado' },
+    { value: 'En proceso', label: 'En proceso' },
+    { value: 'Concluido', label: 'Concluido' }
+  ]
+
+  // Evento critico - SECCION 3
+  const optionsEventoCritico = [
+    { value: 'Crítico', label: 'Crítico' },
+    { value: 'No crítico', label: 'No crítico' }
+  ]
+
+  // Línea de negocio - SECCION 3
+  const optionsLineaAsfi = [
+    { value: '1. Línea de Negocio Emisor', label: '1. Línea de Negocio Emisor' },
+    { value: '2. Línea de Negocio Adquirente', label: '2. Línea de Negocio Adquirente' }
+  ]
+
+  // Cobertura seguro - SECCION 4
+  const optionsCobertura = [
+    { value: true, label: 'Si' },
+    { value: false, label: 'No' }
+  ]
+
   const formValueInitialDatos = {
     estadoRegistro: '',
     estadoEvento: '',
@@ -386,6 +417,7 @@ const EventoRiesgoRegistrar = () => {
                       setObject={setObject}
                       initValues={formValueInitialDatos}
                       obtainFiles={obtainFiles}
+                      optionsEstado={optionsEstado}
                       isEdit={false}
                     />
                   </TabPane>
@@ -396,6 +428,8 @@ const EventoRiesgoRegistrar = () => {
                       beforeSection={beforeSection}
                       setObject={setObject}
                       initValues={formValueInitialPlanes}
+                      optionsPlanes={optionEstadoPlanes}
+                      isEdit={false}
                     />
                   </TabPane>
 
@@ -407,6 +441,9 @@ const EventoRiesgoRegistrar = () => {
                       initValues={formValueInitialCategoria}
                       tipoEvento={formik.values.tipoEvento}
                       fechaDesc={requestData.fechaDesc}
+                      optionsCritico={optionsEventoCritico}
+                      optionsAsfi={optionsLineaAsfi}
+                      isEdit={false}
                     />
                   </TabPane>
 
@@ -416,6 +453,8 @@ const EventoRiesgoRegistrar = () => {
                       beforeSection={beforeSection}
                       setObject={setObject}
                       initValues={formValueInitialImportes}
+                      optionsCobertura={optionsCobertura}
+                      isEdit={false}
                     />
                   </TabPane>
 

@@ -8,14 +8,15 @@ import { CInputReact } from 'src/reusable/CInputReact'
 import { CSelectReact } from 'src/reusable/CSelectReact'
 import CInputRadio from 'src/reusable/CInputRadio'
 import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
-import { buildSelectTwo } from 'src/functions/Function'
+import { buildSelectTwo, covierteMoneda } from 'src/functions/Function'
+import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
 
 var _ = require('lodash');
 
-const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValues, isEdit }) => {
+const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValues, isEdit, optionsCobertura }) => {
 
   const formik = useFormik({
-    initialValues: {...initValues, totalPerdida: 0},
+    initialValues: { ...initValues, totalPerdida: 0 },
     validationSchema: Yup.object().shape(
       {
         monedaId: Yup.mixed().required('Campo obligatorio'),
@@ -65,7 +66,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
         recuperacionActivoId: (values.recuperacionActivoId !== null) ? values.recuperacionActivoId.value : 0,
         cuentaContableId: (values.cuentaContableId !== null) ? values.cuentaContableId.value : 0
       }
-      const dataSelect =  _.omit(data, ['montoPerdidaRiesgo', 'totalPerdida', 'totalRecuperado']);
+      const dataSelect = _.omit(data, ['montoPerdidaRiesgo', 'totalPerdida', 'totalRecuperado']);
 
       console.log('datos que se enviaran SECCION 4:', dataSelect)
       setObject(dataSelect);
@@ -108,7 +109,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
-        setDataApiImpacto(_.orderBy(options, ['value' ], ['desc']))
+        setDataApiImpacto(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -150,12 +151,6 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
       })
   }
 
-  // Cobertura seguro
-  const optionCobertura = [
-    { value: true, label: 'Si' },
-    { value: false, label: 'No' }
-  ]
-
   useEffect(() => {
     callApiMoneda(23);
     callApiImpacto(24);
@@ -164,6 +159,13 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
     callApiRecuperacionActivo(37);
     callApiCuentaContable(39);
   }, [])
+
+  useEffect(() => {
+    if (isEdit) {
+      formik.setValues({ ...initValues })
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initValues])
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
   // Resetea "Poliza de seguro" y "Monto recuperado del seguro" dependiendo del check Cobertura seguro
@@ -178,21 +180,51 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.coberturaSeguro])
 
-  // Calcula "Monto de perdida" en bs en "Valor contable - monto perdida"
-  useEffect(() => {
+
+
+   // Calcula "Monto de perdida" en bs en "Valor contable - monto perdida"
+   useEffect(() => {
     if (formik.values.monedaId !== null) {
-      if (formik.values.monedaId.label === 'BOB' || formik.values.monedaId.label === 'Bs') {
-        formik.setFieldValue('montoPerdidaRiesgo', formik.values.montoPerdida, false)
-      } else {
-        if (formik.values.monedaId.label === 'USD' || formik.values.monedaId.label === '$') {
-          formik.setFieldValue('montoPerdidaRiesgo', formik.values.montoPerdida * dataApiTasaCambio, false)
-        } else {
-          formik.setFieldValue('montoPerdidaRiesgo', 0, false)
-        }
-      }
+      var mount = covierteMoneda(formik.values.monedaId.label, formik.values.montoPerdida, dataApiTasaCambio)
+      formik.setFieldValue('montoPerdidaRiesgo', mount, false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.monedaId, formik.values.montoPerdida]);
+
+
+  // Para el despliegue del select llenado al EDITAR
+  useEffect(() => {
+    if (isEdit && initValues.monedaId !== null) {
+      var result = covierteMoneda(initValues.monedaId.clave, formik.values.montoPerdida, formik.values.tasaCambioId)
+      formik.setFieldValue('montoPerdidaRiesgo', result, false);
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+
+  // FORMIK RESET VALUE REUTILIZABLE
+  const resetFormikValue = (field, valueToReset) => {
+    formik.setFieldValue(field, valueToReset, false);
+  }
+
+  /*  Values of MONEDA */
+  const clearDependenceOfMoneda = () => {
+    //resetFormikValue('ciudadId', null)
+    //setDataApiCiudad([]);
+  }
+  const getValueMoneda = (value) => {
+    if (value !== null) {
+      var result = covierteMoneda(value.clave, formik.values.montoPerdida, formik.values.tasaCambioId)
+      formik.setFieldValue('montoPerdidaRiesgo', result, false);
+    }
+  }
+  const clearInputMoneda = (id) => {
+    var result = covierteMoneda(formik.values.monedaId.clave, formik.values.montoPerdida, formik.values.tasaCambioId)
+    formik.setFieldValue('montoPerdidaRiesgo', result, false);
+    //resetFormikValue('ciudadId', null) // limpiar el valro de mi select hijo
+  }
+  /* FIN  Values of MONEDA */
+
 
   // Calcula "Monto total recuperado"
   useEffect(() => {
@@ -208,7 +240,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
   useEffect(() => {
     var a = _.toNumber(formik.values.montoPerdidaRiesgo);
     var b = _.toNumber(formik.values.totalRecuperado);
-    if(!_.isNaN(a - b))
+    if (!_.isNaN(a - b))
       formik.setFieldValue('totalPerdida', a - b, false)
 
     else
@@ -234,9 +266,9 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
-              Moneda
+              Moneda <span className='text-primary h5'><b>*</b></span>
             </Label>
-            <CSelectReact
+            {/* <CSelectReact
               type={"select"}
               id={'monedaId'}
               placeholder={'Seleccionar'}
@@ -246,6 +278,25 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
               error={formik.errors.monedaId}
               touched={formik.touched.monedaId}
               options={dataApiMoneda}
+            /> */}
+            <CSelectReactTwo
+              id={'monedaId'}
+              placeholder={'Seleccionar'}
+              value={formik.values.monedaId}
+              onChange={formik.setFieldValue}
+              onBlur={formik.setFieldTouched}
+              errors={formik.errors.monedaId}
+              touched={formik.touched.monedaId}
+              options={dataApiMoneda}
+              obligatorio={false}
+              isClearable={true}
+              isSearchable={true}
+              isDisabled={false}
+              dependence={true}
+              cleareableDependences={clearDependenceOfMoneda}
+              getAddValue={true}
+              getSelectValue={getValueMoneda}
+              inputIsClearable={clearInputMoneda}
             />
           </FormGroup>
 
@@ -274,10 +325,12 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
               id={'montoPerdidaRiesgo'}
               placeholder={'Valor contable - Monto de pérdida (BOB)'}
               value={formik.values.montoPerdidaRiesgo}
+              //value={covierteMoneda(formik.values.monedaId.label, formik.values.montoPerdida, dataApiTasaCambio)}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               touched={formik.touched.montoPerdidaRiesgo}
               errors={formik.errors.montoPerdidaRiesgo}
+              disabled={true}
             />
           </FormGroup>
 
@@ -335,7 +388,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
               Cobertura seguro
             </Label>
             <CInputRadio
-              data={optionCobertura}
+              data={optionsCobertura}
               id={'coberturaSeguro'}
               value={formik.values.coberturaSeguro}
               onChange={formik.setFieldValue}

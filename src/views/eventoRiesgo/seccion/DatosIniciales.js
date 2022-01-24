@@ -10,11 +10,11 @@ import { getTablaDescripcionEventoN1, getTablaDescripcionEventoN2 } from 'src/vi
 import { buildSelectTwo } from 'src/functions/Function'
 import { CInputFile } from 'src/reusable/CInputFile'
 import { useHistory } from 'react-router-dom'
-import AuthService from 'src/views/authentication/AuthService';
+import AuthService from 'src/views/authentication/AuthService'
 import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
+var _ = require('lodash');
 
-const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFiles }) => {
-  //console.log('Edit initValues::: ', initValues);
+const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFiles, optionsEstado }) => {
 
   const Auth = new AuthService();
   const profile = Auth.getProfile();
@@ -75,9 +75,12 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
         responsableElaborador: user.nombre + ' ' + user.primerApellido,
         estadoEvento: (values.horaFin !== null && values.fechaFin !== null) ? 'Solución' : 'Seguimiento',
 
-        horaIni: (values.horaIni !== null) ? values.horaIni + ':00' : null,
-        horaDesc: (values.horaDesc !== null) ? values.horaDesc + ':00' : null,
-        horaFin: (values.horaFin !== null) ? values.horaFin + ':00' : null,
+
+        //hh:mm = 5 => add(''00)
+        //hh:mm:ss = 8 > not add
+        horaIni: (values.horaIni !== null) ? formatTime(values.horaIni) : null,
+        horaDesc: (values.horaDesc !== null) ? formatTime(values.horaDesc) : null,
+        horaFin: (values.horaFin !== null) ? formatTime(values.horaFin) : null,
 
         agenciaId: (values.agenciaId !== null) ? values.agenciaId.value : 0,
         ciudadId: (values.ciudadId !== null) ? values.ciudadId.value : 0,
@@ -96,6 +99,21 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
       nextSection(1);
     }
   })
+
+
+  const formatTime = (hora)=>{
+    var time = null;
+    try{
+      if(_.size(hora) === 5){
+        time = hora + ':00';
+      }else if(_.size(hora) === 8){
+        time = hora;
+      }
+    }catch(error){
+      console.error('Error en Funcion formatTime: ', error);
+    }
+    return time;
+  }
 
   useEffect(() => {
     if (isEdit) {
@@ -166,7 +184,6 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
       })
   }
 
-
   // Cargos
   const [dataApiCargo, setDataApiCargo] = useState([])
   const callApiCargo = (idTablaDes) => {
@@ -178,12 +195,6 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
         console.log('Error: ', error)
       })
   }
-
-  // Estado de evento
-  const optionsEstado = [
-    { value: 'Reportado', label: 'Reportado' },
-    { value: 'No reportado', label: 'No reportado' }
-  ]
 
   // Fuente de informacion
   const [dataApiFuente, setDataApiFuente] = useState([])
@@ -218,19 +229,13 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
     callApiCanal(9);
   }, [])
 
-  /*const resetCiudadId = () => { formik.setFieldValue('ciudadId', null, false); }
-*/
+
+  // Para el despliegue del select llenado al EDITAR
   useEffect(() => {
     if (isEdit && initValues.agenciaId !== null) {
       console.log('use effect AGENCIA TO CIUDAD: ', initValues.agenciaId);
       callApiCiudad(2, initValues.agenciaId.id);
-      //resetCiudadId();
     }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  /* const resetUnidadId = () => { formik.setFieldValue('unidadId', null, false); }*/
-  useEffect(() => {
     if (isEdit && initValues.areaID !== null) {
       console.log('use effect area  TO unidad: ', initValues.areaID);
 
@@ -239,6 +244,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
 
   // Resetea "Entidad" dependiendo del check Entidad afectada
   const resetEntidad = () => { formik.setFieldValue('entidadId', null, false); }
@@ -257,6 +263,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
   }
 
 
+  // FORMIK RESET VALUE REUTILIZABLE
   const resetFormikValue = (field, valueToReset) => {
     formik.setFieldValue(field, valueToReset, false);
   }
@@ -269,12 +276,10 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
   }
   const getValueAgencia = (value) => {
     console.log('getSelectValue : ', value);
-
     if (value !== null) {
       console.log('ingrdssoooo');
       callApiCiudad(2, value.id);
     }
-
   }
   const clearInputAgencia = (id) => {
     console.log('inputIsClearable aaa: ', id);
@@ -304,6 +309,8 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
     //clearAllDependences();
   }
   /* FIN  Values of AREA */
+
+
   return (
     <Fragment>
       <Form onSubmit={formik.handleSubmit} autoComplete="off">

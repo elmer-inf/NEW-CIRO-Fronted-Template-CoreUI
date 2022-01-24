@@ -5,23 +5,20 @@ import CategoriaNegocio from './seccion/CategoriaNegocio'
 import DatosIniciales from './seccion/DatosIniciales'
 import Planes from './seccion/Planes'
 import { FileText, Activity, DollarSign, BarChart2, ChevronRight, AlertTriangle, CheckSquare } from 'react-feather'
-import { Row, Col, Card, CardBody, CardHeader, CardTitle, TabContent, TabPane, NavLink, NavItem, Nav, FormGroup, Label } from 'reactstrap';
+import { Row, Col, Card, CardBody, CardHeader, CardTitle, TabContent, TabPane, NavLink, NavItem, Nav, FormGroup, Label, Badge } from 'reactstrap';
 import CInputRadio from 'src/reusable/CInputRadio'
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames';
 import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
-import { postEventoRiesgoFormData } from './controller/EventoController';
-import { buildOptionSelect, buildSelectTwo } from 'src/functions/Function'
+import { putEventoRiesgoId } from './controller/EventoController';
+import { buildOptionSelect, buildOptionSelectThree, buildSelectThree, buildSelectTwo, covierteMoneda } from 'src/functions/Function'
 import { useFormik } from "formik"
 import * as Yup from "yup"
 import { ToastContainer, toast } from 'react-toastify'
 import CCSpinner from 'src/reusable/spinner/CCSpinner'
-
-
 import { getEventoRiesgoId } from './controller/EventoController';
 
 var _ = require('lodash');
-
 
 const UpdateEventoRiesgo = ({ match }) => {
 
@@ -34,17 +31,6 @@ const UpdateEventoRiesgo = ({ match }) => {
     setGetFiles(f)
   }
 
-  // Estado de evento
-  const optionsEstado = [
-    { value: 'No iniciado', label: 'No iniciado' },
-    { value: 'En proceso', label: 'En proceso' },
-    { value: 'Concluido', label: 'Concluido' }
-  ];
-
-  const optionSelect = {
-    optEstado: optionsEstado
-  }
-
   const formValueInitialTipoEvento = {
     tipoEvento: null,
   }
@@ -55,6 +41,38 @@ const UpdateEventoRiesgo = ({ match }) => {
       //tipoEvento: Yup.mixed().required('Tipo de Evento de riesgo obligatorio'),
     })
   })
+
+  // Estado de evento - SECCION 1
+  const optionsEstado = [
+    { value: 'Reportado', label: 'Reportado' },
+    { value: 'No reportado', label: 'No reportado' }
+  ]
+
+  // Estado de Planes de accion - SECCION 2
+  const optionEstadoPlanes = [
+    { value: 'No iniciado', label: 'No iniciado' },
+    { value: 'En proceso', label: 'En proceso' },
+    { value: 'Concluido', label: 'Concluido' }
+  ]
+
+  // Evento critico - SECCION 3
+  const optionsEventoCritico = [
+    { value: 'Crítico', label: 'Crítico' },
+    { value: 'No crítico', label: 'No crítico' }
+  ]
+
+  // Línea de negocio - SECCION 3
+  const optionsLineaAsfi = [
+    { value: '1. Línea de Negocio Emisor', label: '1. Línea de Negocio Emisor' },
+    { value: '2. Línea de Negocio Adquirente', label: '2. Línea de Negocio Adquirente' }
+  ]
+
+  // Cobertura seguro - SECCION 4
+  const optionsCobertura = [
+    { value: true, label: 'Si' },
+    { value: false, label: 'No' }
+  ]
+
   const formValueInitialDatos = {
     estadoRegistro: '',
     estadoEvento: '',
@@ -145,15 +163,11 @@ const UpdateEventoRiesgo = ({ match }) => {
     seguridadId: null,
   }
 
-
   const [formValueInitialDatosSec, setformValueInitialDatosSec] = useState(formValueInitialDatos)
   const [formValueInitialPlanesSec, setformValueInitialPlanesSec] = useState(formValueInitialPlanes)
   const [formValueInitialCategoriaSec, setformValueInitialCategoriaSec] = useState(formValueInitialCategoria)
   const [formValueInitialImportesSec, setformValueInitialImportesSec] = useState(formValueInitialImportes)
   const [formValueInitialRiesgosSec, setformValueInitialRiesgosSec] = useState(formValueInitialRiesgos)
-
-
-
 
   const dataResult = {
     ...formValueInitialDatosSec,
@@ -163,7 +177,6 @@ const UpdateEventoRiesgo = ({ match }) => {
     ...formValueInitialRiesgosSec,
     ...formValueInitialTipoEvento
   }
-
 
 
   // Tipo de evento
@@ -180,7 +193,7 @@ const UpdateEventoRiesgo = ({ match }) => {
   const macthedValues = (args) => {
     formik.setFieldValue('tipoEvento', args.tipoEvento, false);
 
-    const datosInciales = {
+    const datosIniciales = {
       estadoRegistro: args.estadoRegistro,
       estadoEvento: args.estadoEvento,
       fechaIni: args.fechaIni,
@@ -197,7 +210,7 @@ const UpdateEventoRiesgo = ({ match }) => {
       comercioAfectado: args.comercioAfectado,
       entidadId: buildOptionSelect(args.entidadId, 'id', 'nombre', true, 'entidadId'),
       cargoId: buildOptionSelect(args.cargoId, 'id', 'nombre', true, 'cargoId'),
-      estadoReportado: args.estadoReportado,
+      estadoReportado: { value: args.estadoReportado, label: args.estadoReportado },
       fuenteInfId: buildOptionSelect(args.fuenteInfId, 'id', 'nombre', true, 'fuenteInfId'),
       canalAsfiId: buildOptionSelect(args.canalAsfiId, 'id', 'nombre', true, 'canalAsfiId'),
       descripcion: args.descripcion,
@@ -211,8 +224,7 @@ const UpdateEventoRiesgo = ({ match }) => {
       detallePlan: args.detallePlan,
       fechaFinPlan: args.fechaFinPlan,
       descripcionEstado: args.descripcionEstado,
-      estadoPlan: { value: args.estadoPlan, label: args.estadoPlan },
-
+      estadoPlan: { value: args.estadoPlan, label: args.estadoPlan }
     };
     const categoria = {
       codigoInicial: args.codigoInicial,
@@ -225,10 +237,10 @@ const UpdateEventoRiesgo = ({ match }) => {
       detalleEventoCritico: args.detalleEventoCritico,
       factorRiesgoId: buildOptionSelect(args.factorRiesgoId, 'id', 'nombre', true, 'factorRiesgoId'),
       procesoId: buildOptionSelect(args.procesoId, 'id', 'nombre', true, 'procesoId'),
-      procedimientoId: buildOptionSelect(args.procedimientoId, 'id', 'nombre', true, 'procedimientoId'),
-      eventoCritico: args.eventoCritico,
+      procedimientoId: buildOptionSelect(args.procedimientoId, 'id', 'descripcion', true, 'procedimientoId'),
+      eventoCritico: { value: args.eventoCritico, label: args.eventoCritico },
 
-      lineaNegocio: args.lineaNegocio,
+      lineaNegocio: { value: args.lineaNegocio, label: args.lineaNegocio },
       lineaAsfiId: buildOptionSelect(args.lineaAsfiId, 'id', 'nombre', true, 'lineaAsfiId'),
       operacionId: buildOptionSelect(args.operacionId, 'id', 'nombre', true, 'operacionId'),
       efectoPerdidaId: buildOptionSelect(args.efectoPerdidaId, 'id', 'nombre', true, 'efectoPerdidaId'),
@@ -238,20 +250,40 @@ const UpdateEventoRiesgo = ({ match }) => {
       riesgoRelacionado: args.riesgoRelacionado,
       detalleEstado: args.detalleEstado,
 
-      //listMatrizRiesgo: buildOptionSelect(args.listMatrizRiesgo, 'id', 'nombre', true, 'listMatrizRiesgo')
-
+      listMatrizRiesgo: buildSelectThree(args.riesgoRelacionado, 'id', 'codigo', 'definicion', true)
     };
-    const importes = {};
-    const riesgos = {};
+    const importes = {
+      tasaCambioId: args.tasaCambioId,
+      monedaId: buildOptionSelect(args.monedaId, 'id', 'clave', true, 'monedaId'),
+      montoPerdida: args.montoPerdida,
+      gastoAsociado: args.gastoAsociado,
+      montoRecuperado: args.montoRecuperado,
+      impactoId: buildOptionSelect(args.impactoId, 'id', 'nombre', true, 'impactoId'),
+      coberturaSeguro: args.coberturaSeguro,
+      polizaSeguroId: buildOptionSelect(args.polizaSeguroId, 'id', 'nombre', true, 'polizaSeguroId'),
+      montoRecuperadoSeguro: args.montoRecuperadoSeguro,
+      recuperacionActivoId: buildOptionSelect(args.recuperacionActivoId, 'id', 'nombre', true, 'recuperacionActivoId'),
+      perdidaMercado: args.perdidaMercado,
+      cuentaContableId: buildOptionSelect(args.cuentaContableId, 'id', 'nombre', true, 'cuentaContableId'),
+      fechaContable: args.fechaContable,
+    };
+    const riesgos = {
+      operativoId: buildOptionSelectThree(args.operativoId, 'id', 'clave', 'nombre', true, 'operativoId'),
+      liquidezId: buildOptionSelectThree(args.liquidezId, 'id', 'clave', 'nombre', true, 'liquidezId'),
+      fraudeId: buildOptionSelectThree(args.fraudeId, 'id', 'clave', 'nombre', true, 'fraudeId'),
+      legalId: buildOptionSelectThree(args.legalId, 'id', 'clave', 'nombre', true, 'legalId'),
+      reputacionalId: buildOptionSelectThree(args.reputacionalId, 'id', 'clave', 'nombre', true, 'reputacionalId'),
+      cumplimientoId: buildOptionSelectThree(args.cumplimientoId, 'id', 'clave', 'nombre', true, 'cumplimientoId'),
+      estrategicoId: buildOptionSelectThree(args.estrategicoId, 'id', 'clave', 'nombre', true, 'estrategicoId'),
+      gobiernoId: buildOptionSelectThree(args.gobiernoId, 'id', 'clave', 'nombre', true, 'gobiernoId'),
+      seguridadId: buildOptionSelectThree(args.seguridadId, 'id', 'clave', 'nombre', true, 'seguridadId'),
+    };
 
-
-    console.log('Lo que se enviara en datosIniciales:: ', datosInciales);
-
-    setformValueInitialDatosSec(datosInciales);
+    setformValueInitialDatosSec(datosIniciales);
     setformValueInitialPlanesSec(planesAccion);
     setformValueInitialCategoriaSec(categoria);
-    //setformValueInitialImportesSec();
-   // setformValueInitialRiesgosSec();
+    setformValueInitialImportesSec(importes);
+    setformValueInitialRiesgosSec(riesgos);
   }
   const getById = async (idEventoRiesgo) => {
     setSpin(true)
@@ -372,40 +404,56 @@ const UpdateEventoRiesgo = ({ match }) => {
     }
     //console.log('Lo que se enviara en el request: ', request)
     // console.log('JSON.stringify(request) ', JSON.stringify(request))
-    var formData = new FormData();
+  //  var formData = new FormData();
     console.log('REQUEEEST:: ', request);
-    formData.append('eventoRiesgoPostDTO', JSON.stringify(_.omit(request, ['files'])));
+   // formData.append('eventoRiesgoPostDTO', JSON.stringify(_.omit(request, ['files'])));
     //formData.append('file', getFiles);
-    if (getFiles !== null) {
+   /* if (getFiles !== null) {
       for (let i = 0; i < getFiles.length; i++) {
         formData.append("file", getFiles[i]);
       }
     } else {
       formData.append("file", new Blob([]));
-    }
+    }*/
+/*
 
-
-    /*for (var value of formData.values()) {
+    for (var value of formData.values()) {
        console.log('===========================================')
        console.log('--> ', value);
        console.log('===========================================')
      }*/
 
 
-    /* postEventoRiesgoFormData(formData)
+     console.log('Datos que se edita:  ',  _.omit(request, ['files','riesgoRelacionado']))
+     const idEvento = match.params.id;
+     putEventoRiesgoId(idEvento, _.omit(request, ['files','riesgoRelacionado']))
        .then(res => {
          if (res.status >= 200 && res.status < 300) {
            console.log('Envio el request: ', res);
-           notificationToast('success', 'Evento de Riesgo registrado exitósamente');
-           //history.push("/eventoRiesgo/listar")
+           notificationToast('success', 'Evento de Riesgo modificado exitósamente');
          } else {
            console.log('Hubo un  error ', res);
-           notificationToast('error', 'Algo salió mal, intente nuevamente');
+          notificationToast('error', 'Algo salió mal, intente nuevamente');
          }
        }).catch((error) => {
-         console.log('Error al registrar Evento de Riesgo: ', error);
+         console.log('Error al modificar Evento de Riesgo: ', error);
          notificationToast('error', 'Algo salió mal, intente nuevamente');
-       });*/
+       });
+
+  /*   postEventoRiesgoFormData(formData)
+      .then(res => {
+        if (res.status >= 200 && res.status < 300) {
+          console.log('Envio el request: ', res);
+          notificationToast('success', 'Evento de Riesgo registrado exitósamente');
+          //history.push("/eventoRiesgo/listar")
+        } else {
+          console.log('Hubo un  error ', res);
+          notificationToast('error', 'Algo salió mal, intente nuevamente');
+        }
+      }).catch((error) => {
+        console.log('Error al registrar Evento de Riesgo: ', error);
+        notificationToast('error', 'Algo salió mal, intente nuevamente');
+      }); */
 
 
     /*  postEventoRiesgo(request)
@@ -433,7 +481,26 @@ const UpdateEventoRiesgo = ({ match }) => {
           ?
           <Card>
             <CardHeader>
-              <CardTitle className='float-left h4 pt-2'>Registrar Evento de Riesgo</CardTitle>
+              <CardTitle className='float-left h4 pt-2'>
+                <span className='pr-3'>Editar Evento de Riesgo</span>
+
+                {(formValueInitialDatosSec.estadoRegistro === 'Autorizado') ?
+                  <span className='pr-3 text-primary font-weight-bold'>{formValueInitialDatosSec.codigo}</span>
+                  : null}
+
+                {(formValueInitialDatosSec.estadoRegistro === 'Autorizado') ?
+                  <Badge className="px-4 badge-success-light">{formValueInitialDatosSec.estadoRegistro}</Badge>
+                  : null}
+                {(formValueInitialDatosSec.estadoRegistro === 'Descartado') ?
+                  <Badge className="px-4 badge-danger">{formValueInitialDatosSec.estadoRegistro}</Badge>
+                  : null}
+                {(formValueInitialDatosSec.estadoRegistro === 'Pendiente') ?
+                  <Badge className="px-4 badge-warning-light">{formValueInitialDatosSec.estadoRegistro}</Badge>
+                  : null}
+                {(formValueInitialDatosSec.estadoRegistro === 'Observado') ?
+                  <Badge className="px-4 badge-danger-light">{formValueInitialDatosSec.estadoRegistro}</Badge>
+                  : null}
+              </CardTitle>
             </CardHeader>
             <CardBody>
 
@@ -511,6 +578,7 @@ const UpdateEventoRiesgo = ({ match }) => {
                           setObject={setObject}
                           initValues={formValueInitialDatosSec}
                           obtainFiles={obtainFiles}
+                          optionsEstado={optionsEstado}
                           isEdit={true}
                         />
                       </TabPane>
@@ -521,7 +589,8 @@ const UpdateEventoRiesgo = ({ match }) => {
                           beforeSection={beforeSection}
                           setObject={setObject}
                           initValues={formValueInitialPlanesSec}
-                          options={optionSelect}
+                          optionsPlanes={optionEstadoPlanes}
+                          isEdit={true}
                         />
                       </TabPane>
 
@@ -533,6 +602,9 @@ const UpdateEventoRiesgo = ({ match }) => {
                           initValues={formValueInitialCategoriaSec}
                           tipoEvento={formik.values.tipoEvento}
                           fechaDesc={requestData.fechaDesc}
+                          optionsCritico={optionsEventoCritico}
+                          optionsAsfi={optionsLineaAsfi}
+                          isEdit={true}
                         />
                       </TabPane>
 
@@ -542,6 +614,8 @@ const UpdateEventoRiesgo = ({ match }) => {
                           beforeSection={beforeSection}
                           setObject={setObject}
                           initValues={formValueInitialImportesSec}
+                          optionsCobertura={optionsCobertura}
+                          isEdit={true}
                         />
                       </TabPane>
 
@@ -565,7 +639,6 @@ const UpdateEventoRiesgo = ({ match }) => {
           : null
       }
 
-
       <ToastContainer
         position="top-center"
         autoClose={5000}
@@ -578,9 +651,6 @@ const UpdateEventoRiesgo = ({ match }) => {
         pauseOnHover
       />
     </div>
-
-
   )
 }
-
 export default UpdateEventoRiesgo

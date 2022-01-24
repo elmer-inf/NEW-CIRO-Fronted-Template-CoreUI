@@ -9,7 +9,7 @@ import { CSelectReact } from 'src/reusable/CSelectReact'
 import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
 import { buildSelectTwo } from 'src/functions/Function'
 
-const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdit, options}) => {
+const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdit, optionsPlanes}) => {
 
   const formik = useFormik({
     initialValues: initValues,
@@ -61,13 +61,10 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
       })
   }
 
- 
-
   useEffect(() => {
     callApiArea(3);
     callApiCargo(7);
   }, [])
-
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
   return (
@@ -153,7 +150,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
               onBlur={formik.setFieldTouched}
               error={formik.errors.estadoPlan}
               touched={formik.touched.estadoPlan}
-              options={options.optEstado}
+              options={optionsPlanes}
             />
           </FormGroup>
 

@@ -19,6 +19,11 @@ export const postEventoRiesgo = (data) => {
     return axios.post(uri, data);
 }
 
+export const putEventoRiesgoId = (id, data) => {
+    const uri = HOST + 'v1/eventoRiesgo/editar/' + id;
+    return axios.put(uri, data);
+}
+
 export const postEventoRiesgoFormData = (data) => {
     const uri = HOST.concat('v1/eventoRiesgo/registrarwithfiles')
     const headerFormData = Auth.getHeaderFormData(data);
