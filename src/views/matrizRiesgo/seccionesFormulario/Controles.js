@@ -12,6 +12,7 @@ import Select from "react-select";
 var _ = require('lodash');
 
 const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux, isEdit }) => {
+  console.log('initValues CONTROLES edit : \n', initValues);
 
   const formik = Yup.object().shape({
     controlId: Yup.mixed().required('Campo obligatorio'),
@@ -170,23 +171,17 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
     control: (styles,) => ({
       ...styles,
       boxShadow: 'none'
-    }),
-    /* option: (styles, { isDisabled, isSelected }) => {
-      return {
-        ...styles,
-        backgroundColor: isSelected ? '#e79140' : 'white',
-        cursor: isDisabled ? 'not-allowed' : 'default',
-        ':active': {
-          backgroundColor: '#e79140',
-          color: 'white'
-        },
-        ':hover': {
-          backgroundColor: isSelected ? '#e79140' : '#fbf3eb',
-          color: isSelected ? 'white' : '#e79140'
-        }
-      }
-    } */
+    })
   }
+
+
+  // Rellena datos al firmulario para editar
+  /* useEffect(() => {
+    if (isEdit) {
+      formik.setValues({...initValues})
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initValues]) */
 
   return (
     <Formik initialValues={initValues} validationSchema={formik} onSubmit={onSubmit}>
@@ -354,7 +349,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
                         <Select
                           placeholder="Seleccionar"
                           onChange={selectedOption => {
-                            setFieldValue(`planesAccion.${i}.norma`, selectedOption.label , false)
+                            setFieldValue(`controles.${i}.norma`, selectedOption.label , false)
                           }}
                           options={dataApiProcedimiento}
                           name={`controles.${i}.norma`}

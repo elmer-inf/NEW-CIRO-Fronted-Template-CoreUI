@@ -1,4 +1,4 @@
-import { React, useState } from 'react'
+import { React, useEffect, useState } from 'react'
 import DatosIniciales from './seccionesFormulario/DatosIniciales'
 import DefinicionRiesgos from './seccionesFormulario/DefinicionRiesgos'
 import Controles from './seccionesFormulario/Controles'
@@ -12,8 +12,12 @@ import classnames from 'classnames';
 import { postRiesgo } from './controller/RiesgoController';
 import { ToastContainer, toast } from 'react-toastify';
 import CCSpinner from 'src/reusable/spinner/CCSpinner'
+import { getRiesgoId } from './controller/RiesgoController';
 
-const MatrizRiesgoRegistrar = () => {
+var _ = require('lodash');
+
+
+const MatrizRiesgoEditar = ({ match }) => {
 
   const history = useHistory();
   const [spin, setSpin] = useState(false);
@@ -69,6 +73,12 @@ const MatrizRiesgoRegistrar = () => {
     impactoUSD: 0
   }
 
+  const [formValueInitialDatosToEdit, setformValueInitialDatosToEdit] = useState(formValueInitialDatosIniciales);
+  const [formValueInitialDefinicionToEdit, setformValueInitialDefinicionToEdit] = useState(formValueInitialDefinicionRiesgos);
+  const [formValueInitialControlesToEdit, setformValueInitialControlesToEdit] = useState(formValueInitialControles);
+  const [formValueInitialPlanesToEdit, setformValueInitialPlanesToEdit] = useState(formValueInitialPlanesSeguimiento);
+  const [formValueInitialValorToEdit, setformValueInitialValorToEdit] = useState(formValueInitialValoracion);
+
   const dataResult = {
     ...formValueInitialDatosIniciales,
     ...formValueInitialDefinicionRiesgos,
@@ -76,6 +86,82 @@ const MatrizRiesgoRegistrar = () => {
     ...formValueInitialPlanesSeguimiento,
     ...formValueInitialValoracion
   }
+
+  const macthedValues = (args) => {
+    const datosIniciales = {
+      areaId:  {...args.areaId.id, value:args.areaId.id, label: args.areaId.nombre},
+      unidadId:  {...args.unidadId.id, value:args.unidadId.id, label: args.unidadId.nombre},
+      procesoId:  {...args.procesoId.id, value:args.procesoId.id, label: args.procesoId.nombre},
+      procedimientoId: {...args.procedimientoId.id, value:args.procedimientoId.id, label: args.procedimientoId.nombre},
+      duenoCargoId: {...args.duenoCargoId.id, value:args.duenoCargoId.id, label: args.duenoCargoId.nombre},
+      responsableCargoId: {...args.responsableCargoId.id, value:args.responsableCargoId.id, label: args.responsableCargoId.nombre},
+      fechaEvaluacion: args.fechaEvaluacion,
+      identificadoId: {...args.identificadoId.id, value:args.identificadoId.id, label: args.identificadoId.nombre},
+      identificadoOtro: args.identificadoOtro,
+      eventoRiesgoId: {...args.eventoRiesgoId.id, value:args.eventoRiesgoId.id, label: args.eventoRiesgoId.id + ' - ' + args.eventoRiesgoId.codigo},
+      eventoMaterializado: args.eventoMaterializado,
+    };
+
+    const definicionRiesgos = {
+      definicion: args.definicion,
+      causa: args.causa,
+      consecuencia: args.consecuencia,
+      efectoPerdidaOtro: args.efectoPerdidaOtro,
+      efectoPerdidaId: {...args.efectoPerdidaId.id, value:args.efectoPerdidaId.id, label: args.efectoPerdidaId.nombre},
+      perdidaAsfiId: {...args.perdidaAsfiId.id, value:args.perdidaAsfiId.id, label: args.perdidaAsfiId.nombre},
+      monetario:  args.monetario,
+      factorRiesgoId: {...args.factorRiesgoId.id, value:args.factorRiesgoId.id, label: args.factorRiesgoId.nombre},
+
+      probabilidadId: {...args.probabilidadId.id, value:args.probabilidadId.id, label: args.probabilidadId.campoD},
+      impactoId: {...args.impactoId.id, value:args.impactoId.id, label: args.impactoId.campoD},
+    };
+
+    const controles = {
+      controlId: {...args.controlId.id, value:args.controlId.id, label: args.controlId.campoA},
+      controlObjetivo: {value:args.controlObjetivo, label: args.controlObjetivo},
+      controlComentario: args.controlComentario,
+
+      controlesTiene: args.controlesTiene,
+      nroControles: '',
+      controles: []
+    };
+
+    const planesAccion = {
+      nroPlanes: '',
+      planesAccion: []
+    };
+
+    const valoracion = {
+      criterioImpacto: '',
+      criterioprobabilidad: '',
+      impactoUSD: 0
+    };
+
+    setformValueInitialDatosToEdit(datosIniciales);
+    setformValueInitialDefinicionToEdit(definicionRiesgos);
+    setformValueInitialControlesToEdit(controles);
+    setformValueInitialPlanesToEdit(planesAccion);
+    setformValueInitialValorToEdit(valoracion);
+  }
+  const getById = async (idEventoRiesgo) => {
+    setSpin(true)
+
+    await getRiesgoId(idEventoRiesgo)
+      .then((response) => {
+        const res = response.data;
+        console.log('For update Matriz Riesgo: ', res);
+        macthedValues(res)
+        setSpin(false)
+      }).catch((error) => {
+        console.log("Error: ", error);
+      });
+  }
+
+  //Life Cycle
+  useEffect(() => {
+    getById(match.params.id);
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const [requestData, setRequestData] = useState(dataResult);
   const [activeTab, setActiveTap] = useState('1');
@@ -139,6 +225,7 @@ const MatrizRiesgoRegistrar = () => {
         probabilidaNivelAux: realValues.probabilidadId.campoA,
         impactoNivelAux: realValues.impactoId.campoA,
       }
+      console.log('recupera seccion 2 aux: ', dataAuxSeccion2);
       setDataAuxSeccion2(dataAuxSeccion2)
     }
     // FIN Obtiene valores auxiliares de "Definicion y Riesgo inherente" para "Valoracion cuantitativa y Riesgo residual"
@@ -222,7 +309,7 @@ const MatrizRiesgoRegistrar = () => {
 
     console.log('Lo que se enviara en el request: ', dataValues)
 
-    postRiesgo(dataValues)
+    /* postRiesgo(dataValues)
       .then(res => {
         if (res.status >= 200 && res.status < 300) {
           console.log('Envio el request: ', res);
@@ -235,7 +322,7 @@ const MatrizRiesgoRegistrar = () => {
       }).catch((error) => {
         console.log('Error al obtener datos: ', error);
         notificationToast('error', 'Algo salió mal, intente nuevamente');
-      });
+      }); */
   }
 
   return (
@@ -243,7 +330,7 @@ const MatrizRiesgoRegistrar = () => {
       <CCSpinner show={spin} />
       <Card>
         <CardHeader>
-          <CardTitle className='float-left h4 pt-2'>Registrar Matriz de Riesgo</CardTitle>
+          <CardTitle className='float-left h4 pt-2'>Editar Matriz de Riesgo</CardTitle>
         </CardHeader>
         <CardBody>
           <Row>
@@ -303,8 +390,8 @@ const MatrizRiesgoRegistrar = () => {
                   <DatosIniciales
                     nextSection={nextSection}
                     setObject={setObject}
-                    initValues={formValueInitialDatosIniciales}
-                  //isEdit={false}
+                    initValues={formValueInitialDatosToEdit}
+                    isEdit={true}
                   />
                 </TabPane>
 
@@ -313,9 +400,8 @@ const MatrizRiesgoRegistrar = () => {
                     nextSection={nextSection}
                     beforeSection={beforeSection}
                     setObject={setObject}
-                    initValues={formValueInitialDefinicionRiesgos}
-                  //isEdit={false}
-                  //arrayCampoSelected={[]}
+                    initValues={formValueInitialDefinicionToEdit}
+                    isEdit={true}
                   />
                 </TabPane>
 
@@ -324,10 +410,9 @@ const MatrizRiesgoRegistrar = () => {
                     nextSection={nextSection}
                     beforeSection={beforeSection}
                     setObject={setObject}
-                    initValues={formValueInitialControles}
+                    initValues={formValueInitialControlesToEdit}
                     dataAux={dataAuxSeccion1}
-                  //isEdit={true}
-                  //arrayColumnaSelected={[]}
+                    isEdit={true}
                   />
                 </TabPane>
 
@@ -339,8 +424,6 @@ const MatrizRiesgoRegistrar = () => {
                     initValues={formValueInitialRiesgoResidual}
                     dataAux={dataAuxSeccion3}
                     dataAux2={dataAuxSeccion2}
-                  //isEdit={true}
-                  //arrayColumnaSelected={[]}
                   />
                 </TabPane>
 
@@ -349,20 +432,17 @@ const MatrizRiesgoRegistrar = () => {
                     nextSection={nextSection}
                     beforeSection={beforeSection}
                     setObject={setObject}
-                    initValues={formValueInitialPlanesSeguimiento}
-                  //isEdit={true}
-                  //arrayColumnaSelected={[]}
+                    initValues={formValueInitialPlanesToEdit}
                   />
                 </TabPane>
 
                 <TabPane tabId="6">
                   <Valoracion
                     beforeSection={beforeSection}
-                    initValues={formValueInitialValoracion}
+                    initValues={formValueInitialValorToEdit}
                     dataAux={dataAuxSeccion2}
                     dataAux2={dataAuxSeccion4}
                     handleOnSubmmit={handleOnSubmmit}
-                  //isEdit={true}
                   />
                 </TabPane>
               </TabContent>
@@ -384,4 +464,5 @@ const MatrizRiesgoRegistrar = () => {
     </div>
   )
 }
-export default MatrizRiesgoRegistrar
+
+export default MatrizRiesgoEditar

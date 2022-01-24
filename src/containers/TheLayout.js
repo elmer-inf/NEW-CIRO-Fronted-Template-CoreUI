@@ -5,7 +5,9 @@ import {
   TheFooter,
   TheHeader
 } from './index'
+
 const TheLayout = () => {
+
   return (
     <div className="c-app c-default-layout">
       <TheSidebar/>
@@ -19,12 +21,16 @@ const TheLayout = () => {
     </div>
   )
 }
+
 export default TheLayout
  */
 
 
 import React, { useState, useEffect } from 'react'
-
+// sidebar nav config --quitar
+import nav from './_nav'
+// routes config
+import rou from '../routes'
 import { faBox } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -47,6 +53,10 @@ import { iconList } from 'src/reusable/variables/Variables';
 
 export const PathContext = React.createContext([]);
 
+
+
+
+
 var _ = require('lodash');
 
 const TheLayout = () => {
@@ -55,8 +65,8 @@ const TheLayout = () => {
   // Cycle life
   useEffect(() => {
     if (Auth.loggedIn()) {
-      getNavigate();
-      getPathListByToken();
+     // getNavigate();
+    //  getPathListByToken();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -65,8 +75,10 @@ const TheLayout = () => {
   const Auth = new AuthService();
 
   const [spin, setSpin] = useState(false);
-  const [navigation, setNavigation] = useState([]);
-  const [route, setRoute] = useState([]);
+  //const [navigation, setNavigation] = useState([]);
+  const [navigation, setNavigation] = useState(nav);
+  //const [route, setRoute] = useState([]);
+  const [route, setRoute] = useState(rou);
   const [pathList, setPathList] = useState([]);
 
 

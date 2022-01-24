@@ -15,6 +15,7 @@ import { calculaRiesgo, buscaValorLiteralRiesgoI } from 'src/functions/Functions
 var _ = require('lodash');
 
 const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) => {
+  console.log('initValues DEFINICION RIESGOS edit : \n', initValues);
 
   const formik = useFormik({
     initialValues: {...initValues, otrosAux2: false},
@@ -242,6 +243,14 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
   }, [formik.values.otrosAux2])
 
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
+
+  // Rellena datos al firmulario para editar
+  useEffect(() => {
+    if (isEdit) {
+      formik.setValues({...initValues})
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initValues])
 
   return (
     <Fragment>

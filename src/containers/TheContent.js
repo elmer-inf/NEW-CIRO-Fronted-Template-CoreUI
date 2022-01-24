@@ -71,7 +71,7 @@ const TheContent = ({ routesProp }) => {
   const matching = () => {
     setSpin(true);
 
-    const newRoute = [];
+    /* const newRoute = [];
     newRoute.push(routes[0]);
     newRoute.push(routes[1]);
     newRoute.push(routes[2]);
@@ -84,8 +84,8 @@ const TheContent = ({ routesProp }) => {
       if (searching !== null && searching !== undefined) {
         newRoute.push(searching)
       }
-    });
-    setListRoute(newRoute);
+    }); */
+    setListRoute(routes);
     setSpin(false);
 
   }

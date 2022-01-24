@@ -175,7 +175,7 @@ const MatrizRiesgoListar = () => {
 
   const editRow = (row) => {
     console.log(row)
-   // history.push('./editar/' + row.id);
+    history.push('/matrizRiesgo/Editar/' + row.id);
   }
 
   const actionFormatterEvaluar = (cell, row) => {

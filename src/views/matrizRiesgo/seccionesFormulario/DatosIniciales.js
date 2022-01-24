@@ -17,6 +17,7 @@ import { useHistory } from 'react-router-dom'
 var _ = require('lodash');
 
 const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
+  console.log('initValues DATOS INICIALES edit : \n', initValues);
 
   const [relEventoRiesgo, setRelEventoRiesgo] = useState([]);
 
@@ -293,10 +294,20 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.fechaEvaluacion]) */
 
+
+  // Redirecciona a Listar
   const history = useHistory();
   const redirect = (e) => {
       history.push('/matrizRiesgo/Listar');
   }
+
+  // Rellena datos al firmulario para editar
+  useEffect(() => {
+    if (isEdit) {
+      formik.setValues({...initValues})
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initValues])
 
   return (
     <Fragment>

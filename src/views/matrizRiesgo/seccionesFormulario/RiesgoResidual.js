@@ -11,6 +11,7 @@ import { buscaValorLiteral, buscaValorLiteralRiesgoI, calculaRiesgo, reduceProba
 var _ = require('lodash');
 
 const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, dataAux2, isEdit}) => {
+  console.log('dataAux RIESGO RESIDUAL edit : \n', dataAux2);
 
   const formik = useFormik({
     initialValues: initValues,
@@ -142,7 +143,6 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, d
     formik.setFieldValue('riesgoVal', riesgoValAux, false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.riesgo])
-
 
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
