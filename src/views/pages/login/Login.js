@@ -1,11 +1,6 @@
 import React, { useState } from 'react'
 import { CCard, CCardBody, CCardGroup, CCol, CContainer, CRow } from '@coreui/react'
-import {
-  Button, Form, FormGroup,
-  Input,
-  Label, Alert
-} from 'reactstrap';
-
+import { Button, Form, FormGroup, Alert } from 'reactstrap';
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useHistory } from 'react-router-dom'
@@ -16,6 +11,8 @@ import { postAuthentication } from 'src/views/authentication/AuthController';
 import CIcon from '@coreui/icons-react';
 import { Messages } from 'src/reusable/variables/Messages';
 import { LogIn } from 'react-feather';
+import CInputCheckbox from 'src/reusable/CInputCheckbox'
+import Swal from 'sweetalert2'
 
 const Login = () => {
 
@@ -26,6 +23,7 @@ const Login = () => {
   const [typeInput, setTypeInput] = useState('password');
 
   const Auth = new AuthService();
+
   const formik = useFormik({
     initialValues: {
       username: '',
@@ -46,16 +44,21 @@ const Login = () => {
 
   const handleOnSubmit = (dataLogin) => {
     setSpin(true);
-    history.push('/main')
-    setSpin(false);
 
-   /* postAuthentication(dataLogin)
+    postAuthentication(dataLogin)
       .then((response) => {
         Auth.setToken(response.data.accessToken);
-        //return Promise.resolve(response);
+        //return Promise.resolve(response); 
         // history.go(0)
         history.push('/')
-        window.location.reload();
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'Bienvenido',
+          showConfirmButton: false,
+          timer: 1500
+        })
+        //window.location.reload();
         setSpin(false);
       }).catch((error) => {
         console.log("Error de autenticación:\n ", error);
@@ -63,7 +66,7 @@ const Login = () => {
         setAlertOpen(true)
 
         setSpin(false);
-      });*/
+      });
 
   }
   const showPassword = (event) => {
@@ -140,11 +143,17 @@ background: linear-gradient(153deg, rgba(0,171,181,1) 0%, rgba(0,183,198,1) 26%)
                     </CCol>
                     <CCol xs="12" sm="12" className="text-right">
                       <FormGroup check>
-                        <Input type="checkbox" onChange={(e) => { showPassword(e) }} />
+                      <CInputCheckbox
+                        id={'otrosAux'}
+                        type={"checkbox"}
+                        onChange={(e) => { showPassword(e) }}
+                        label='Mostrar password'
+                      />
+                        {/* <Input type="checkbox" onChange={(e) => { showPassword(e) }} />
                         {' '}
                         <Label check>
                           Mostrar password
-                        </Label>
+                        </Label> */}
                       </FormGroup>
                     </CCol>
                     {/*   <CRow> */}
