@@ -238,7 +238,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
       //resetUnidadId();
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.areaID])
+  }, [])
 
   // Resetea "Entidad" dependiendo del check Entidad afectada
   const resetEntidad = () => { formik.setFieldValue('entidadId', null, false); }
@@ -278,8 +278,8 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
   }
   const clearInputAgencia = (id) => {
     console.log('inputIsClearable aaa: ', id);
-    formik.setFieldValue(id, null, false);
-    //clearAllDependences();
+    formik.setFieldValue(id, null, false); // likmia el select principal
+    resetFormikValue('ciudadId', null) // limpiar el valro de mi select hijo
   }
   /* FIN  Values of AGENCIA */
 
