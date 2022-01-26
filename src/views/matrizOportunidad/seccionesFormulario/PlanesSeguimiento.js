@@ -41,7 +41,7 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
     const previousNumber = parseInt(field.value || '0');
     if (previousNumber < nroPlanes) {
       for (let i = previousNumber; i < nroPlanes; i++) {
-        planesAccion.push({ nroPlan: i+1, estrategia: '', descripcion: '', cargo: '', fechaAccion: '', fechaImpl: '', estado: '', fechaSeg: '', comenConcluido: '',comenEnProceso: '' });
+        planesAccion.push({ nroPlan: i+1, estrategia: '', descripcion: '', cargo: '', fechaAccion: '', fechaImpl: '', estado: '', fechaSeg: '', comenConcluido: '', comenEnProceso: '' });
       }
     } else {
       for (let i = previousNumber; i >= nroPlanes; i--) {

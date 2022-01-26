@@ -14,6 +14,11 @@ export const postOportunidad = (data) => {
     return axios.post(uri, data);
 }
 
+export const putOportunidadId = (id, data) => {
+    const uri = HOST + 'v1/matrizOportunidad/editar/' + id;
+    return axios.put(uri, data);
+}
+
 export const getOportunidadId = async (id) => {
     const uri = HOST + 'v1/matrizOportunidad/mostrar/' + id;
     const response = await axios.get(uri);

@@ -8,11 +8,11 @@ import { CSelectReact } from 'src/reusable/CSelectReact'
 import CInputCheckbox from 'src/reusable/CInputCheckbox'
 import { getTablaDescripcionEventoN1, getTablaDescripcionEventoN2 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
 import { buildSelectTwo } from 'src/functions/Function'
+import { formatTime } from 'src/functions/FunctionEvento'
 import { CInputFile } from 'src/reusable/CInputFile'
 import { useHistory } from 'react-router-dom'
 import AuthService from 'src/views/authentication/AuthService'
 import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
-var _ = require('lodash');
 
 const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFiles, optionsEstado }) => {
 
@@ -75,9 +75,6 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
         responsableElaborador: user.nombre + ' ' + user.primerApellido,
         estadoEvento: (values.horaFin !== null && values.fechaFin !== null) ? 'Solución' : 'Seguimiento',
 
-
-        //hh:mm = 5 => add(''00)
-        //hh:mm:ss = 8 > not add
         horaIni: (values.horaIni !== null) ? formatTime(values.horaIni) : null,
         horaDesc: (values.horaDesc !== null) ? formatTime(values.horaDesc) : null,
         horaFin: (values.horaFin !== null) ? formatTime(values.horaFin) : null,
@@ -100,21 +97,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
     }
   })
 
-
-  const formatTime = (hora)=>{
-    var time = null;
-    try{
-      if(_.size(hora) === 5){
-        time = hora + ':00';
-      }else if(_.size(hora) === 8){
-        time = hora;
-      }
-    }catch(error){
-      console.error('Error en Funcion formatTime: ', error);
-    }
-    return time;
-  }
-
+  // Rellena Datos para Editar
   useEffect(() => {
     if (isEdit) {
       formik.setValues({ ...initValues })
@@ -140,7 +123,6 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
   const callApiCiudad = (idTablaDes, idNivel2) => {
     getTablaDescripcionEventoN2(idTablaDes, idNivel2)
       .then(res => {
-        console.log('res ciudad: :::', res.data);
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiCiudad(options)
       }).catch((error) => {
@@ -160,7 +142,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
       })
   }
 
-  // Unidad (Nivel 2), depende de area 
+  // Unidad (Nivel 2), depende de area
   const [dataApiUnidad, setDataApiUnidad] = useState([])
   const callApiUnidad = (idTablaDes, idNivel2) => {
     getTablaDescripcionEventoN2(idTablaDes, idNivel2)
@@ -233,14 +215,10 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
   // Para el despliegue del select llenado al EDITAR
   useEffect(() => {
     if (isEdit && initValues.agenciaId !== null) {
-      console.log('use effect AGENCIA TO CIUDAD: ', initValues.agenciaId);
       callApiCiudad(2, initValues.agenciaId.id);
     }
     if (isEdit && initValues.areaID !== null) {
-      console.log('use effect area  TO unidad: ', initValues.areaID);
-
       callApiUnidad(4, initValues.areaID.id);
-      //resetUnidadId();
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -261,7 +239,6 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
   const redirect = (e) => {
     history.push('/eventoRiesgo/Listar');
   }
-
 
   // FORMIK RESET VALUE REUTILIZABLE
   const resetFormikValue = (field, valueToReset) => {
@@ -296,20 +273,16 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
   }
   const getValueArea = (value) => {
     console.log('getSelectValue : ', value);
-
     if (value !== null) {
       console.log('ingrdssoooo');
       callApiUnidad(4, value.id);
     }
-
   }
   const clearInputArea = (id) => {
     console.log('inputIsClearable aaa: ', id);
     formik.setFieldValue(id, null, false);
-    //clearAllDependences();
   }
   /* FIN  Values of AREA */
-
 
   return (
     <Fragment>
@@ -415,17 +388,6 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
             <Label className='form-label'>
               Agencia
             </Label>
-            {/*  <CSelectReact
-              type={"select"}
-              id={'agenciaId'}
-              placeholder={'Seleccionar'}
-              value={formik.values.agenciaId}
-              onChange={formik.setFieldValue}
-              onBlur={formik.setFieldTouched}
-              error={formik.errors.agenciaId}
-              touched={formik.touched.agenciaId}
-              options={dataApiAgencia}
-            /> */}
             <CSelectReactTwo
               //label={""}
               id={'agenciaId'}
@@ -469,17 +431,6 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
             <Label className='form-label'>
               Área <span className='text-primary h5'><b>*</b></span>
             </Label>
-            {/*  <CSelectReact
-              type={"select"}
-              id={'areaID'}
-              placeholder={'Seleccionar'}
-              value={formik.values.areaID}
-              onChange={formik.setFieldValue}
-              onBlur={formik.setFieldTouched}
-              error={formik.errors.areaID}
-              touched={formik.touched.areaID}
-              options={dataApiArea}
-            /> */}
             <CSelectReactTwo
               //label={""}
               id={'areaID'}

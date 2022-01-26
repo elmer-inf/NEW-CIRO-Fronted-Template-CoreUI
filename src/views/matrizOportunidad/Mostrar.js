@@ -441,7 +441,7 @@ const MatrizOportunidad = ({ match }) => {
 
                             <Col xs='12' sm='6' className='pt-3'>
                               <div className='text-label'>Grupo de Interés Relacionado: </div>
-                              <div className='text-data'>{dataApi.grupoInteresId !== null ? dataApi.grupoInteresId.nombre : <i>Sin registro</i>}</div>
+                              <div className='text-data'>{dataApi.grupoInteresId !== null ? dataApi.grupoInteresId.campoA + ' - ' + dataApi.grupoInteresId.nombre : <i>Sin registro</i>}</div>
                             </Col>
 
                           </Row>

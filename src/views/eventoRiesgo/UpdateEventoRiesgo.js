@@ -10,13 +10,12 @@ import CInputRadio from 'src/reusable/CInputRadio'
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames';
 import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
-import { putEventoRiesgoId } from './controller/EventoController';
-import { buildOptionSelect, buildOptionSelectThree, buildSelectThree, buildSelectTwo, covierteMoneda } from 'src/functions/Function'
+import { getEventoRiesgoId, putEventoRiesgoId } from './controller/EventoController';
+import { buildOptionSelect, buildOptionSelectThree, buildSelectThree, buildSelectTwo } from 'src/functions/Function'
 import { useFormik } from "formik"
 import * as Yup from "yup"
 import { ToastContainer, toast } from 'react-toastify'
 import CCSpinner from 'src/reusable/spinner/CCSpinner'
-import { getEventoRiesgoId } from './controller/EventoController';
 
 var _ = require('lodash');
 
@@ -38,7 +37,7 @@ const UpdateEventoRiesgo = ({ match }) => {
   const formik = useFormik({
     initialValues: formValueInitialTipoEvento,
     validationSchema: Yup.object().shape({
-      //tipoEvento: Yup.mixed().required('Tipo de Evento de riesgo obligatorio'),
+      tipoEvento: Yup.mixed().required('Campo obligatorio'),
     })
   })
 
@@ -74,6 +73,7 @@ const UpdateEventoRiesgo = ({ match }) => {
   ]
 
   const formValueInitialDatos = {
+    codigo: '',
     estadoRegistro: '',
     estadoEvento: '',
     fechaIni: '',
@@ -163,11 +163,11 @@ const UpdateEventoRiesgo = ({ match }) => {
     seguridadId: null,
   }
 
-  const [formValueInitialDatosSec, setformValueInitialDatosSec] = useState(formValueInitialDatos)
-  const [formValueInitialPlanesSec, setformValueInitialPlanesSec] = useState(formValueInitialPlanes)
-  const [formValueInitialCategoriaSec, setformValueInitialCategoriaSec] = useState(formValueInitialCategoria)
-  const [formValueInitialImportesSec, setformValueInitialImportesSec] = useState(formValueInitialImportes)
-  const [formValueInitialRiesgosSec, setformValueInitialRiesgosSec] = useState(formValueInitialRiesgos)
+  const [formValueInitialDatosSec, setformValueInitialDatosSec] = useState(formValueInitialDatos);
+  const [formValueInitialPlanesSec, setformValueInitialPlanesSec] = useState(formValueInitialPlanes);
+  const [formValueInitialCategoriaSec, setformValueInitialCategoriaSec] = useState(formValueInitialCategoria);
+  const [formValueInitialImportesSec, setformValueInitialImportesSec] = useState(formValueInitialImportes);
+  const [formValueInitialRiesgosSec, setformValueInitialRiesgosSec] = useState(formValueInitialRiesgos);
 
   const dataResult = {
     ...formValueInitialDatosSec,
@@ -191,9 +191,11 @@ const UpdateEventoRiesgo = ({ match }) => {
   }
 
   const macthedValues = (args) => {
+
     formik.setFieldValue('tipoEvento', args.tipoEvento, false);
 
     const datosIniciales = {
+      codigo: args.codigo,
       estadoRegistro: args.estadoRegistro,
       estadoEvento: args.estadoEvento,
       fechaIni: args.fechaIni,
@@ -285,16 +287,16 @@ const UpdateEventoRiesgo = ({ match }) => {
     setformValueInitialImportesSec(importes);
     setformValueInitialRiesgosSec(riesgos);
   }
+
+  // Evento de riesgo ID
   const getById = async (idEventoRiesgo) => {
     setSpin(true)
-
     await getEventoRiesgoId(idEventoRiesgo)
       .then((response) => {
         const res = response.data;
         console.log('For update Evento Riesgo: ', res);
-        macthedValues(res)
+        macthedValues(res);
         setSpin(false)
-
       }).catch((error) => {
         console.log("Error: ", error);
       });
@@ -302,7 +304,6 @@ const UpdateEventoRiesgo = ({ match }) => {
 
   //Life Cycle
   useEffect(() => {
-    // const idEventoRiesgo = ;
     callApiTipoEvento(6);
     getById(match.params.id);
     //eslint-disable-next-line react-hooks/exhaustive-deps
@@ -343,6 +344,7 @@ const UpdateEventoRiesgo = ({ match }) => {
       ...requestData,
       ...result
     }
+    console.log('DATA PARA GUARDAR : ', values);
     setRequestData(values);
     return values;
   }

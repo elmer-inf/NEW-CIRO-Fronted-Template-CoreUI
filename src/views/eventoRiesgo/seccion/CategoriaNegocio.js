@@ -310,13 +310,11 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
       callApiSubevento(12, initValues.tipoEventoPerdidaId.id);
     }
     if (isEdit && initValues.subEventoId !== null && initValues.tipoEventoPerdidaId !== null) {
-      console.log('use effect subEventoId TO clase evento: ', initValues.subEventoId);
       callApiClaseEvento(13, initValues.subEventoId.id, initValues.tipoEventoPerdidaId.id);
     }
     if (isEdit && initValues.procesoId !== null) {
       callApiProcedimiento(16, initValues.procesoId.id);
     }
-
     if (isEdit && initValues.tipoServicioId !== null) {
       callApiServicioDesc(22, initValues.tipoServicioId.id);
     }
@@ -380,24 +378,21 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   }
   /* FIN  Values of PROCESO N1 */
 
-    /*  Values of TIPO DE SERVICIO N1 */
-    const clearDependenceOfTipoServicio = () => {
-      resetFormikValue('descServicioId', null);
-      setDataApiServicioDesc([]);
+  /*  Values of TIPO DE SERVICIO N1 */
+  const clearDependenceOfTipoServicio = () => {
+    resetFormikValue('descServicioId', null);
+    setDataApiServicioDesc([]);
+  }
+  const getValueTipoServicio = (value) => {
+    if (value !== null) {
+      callApiServicioDesc(22, value.id);
     }
-    const getValueTipoServicio = (value) => {
-      if (value !== null) {
-        callApiServicioDesc(22, value.id);
-      }
-    }
-    const clearInputTipoServicio = (id) => {
-      formik.setFieldValue(id, null, false);
-      resetFormikValue('descServicioId', null);
-    }
-    /* FIN  Values of TIPO DE SERVICIO N1 */
-
-
-
+  }
+  const clearInputTipoServicio = (id) => {
+    formik.setFieldValue(id, null, false);
+    resetFormikValue('descServicioId', null);
+  }
+  /* FIN  Values of TIPO DE SERVICIO N1 */
 
   // Resetea "otros" dependiendo del check
   const resetOtros = () => { formik.setFieldValue('otros', '', false); }

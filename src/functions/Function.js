@@ -83,8 +83,6 @@ export const buildOptionSelectThree = (data, fieldValue, fieldLabel, fieldLabel2
   return optionSelect;
 }
 
-
-
 export const buildSelectTwo = (data, fieldValue, fieldLabel, mantainAllData) => {
   //console.log('dataselect:: ', data)
   const select = [];
@@ -178,37 +176,8 @@ export const hasPermission = (path, pathRoutes) => {
 }
 
 export const exportFile = (dataRespose, nameFileWithExtention) => {
-
   const blob = new Blob([dataRespose], { type: 'text/plain;charset=utf-8' });
   const FileSaver = require('file-saver');
   //var date = new Date().toLocaleDateString();
   FileSaver.saveAs(blob, nameFileWithExtention);
-
-}
-
-
-export const covierteMoneda = (moneda, monto, tc) => {
-  var mountCoverted = 0;
-  try {
-
-    //     if(typeof )
-
-    if (moneda !== null && moneda !== '') {
-      if (moneda === 'BOB' || moneda === 'Bs') {
-        mountCoverted = monto;
-      } else {
-        if (moneda === 'USD' || moneda === '$') {
-          mountCoverted = monto * tc;
-
-        }
-      }
-    }
-
-
-  } catch (error) {
-    console.error('Error en coversion ', error);
-  }
-
-  return mountCoverted;
-
 }

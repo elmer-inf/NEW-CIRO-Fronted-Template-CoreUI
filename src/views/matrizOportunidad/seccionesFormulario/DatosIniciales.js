@@ -1,4 +1,4 @@
-import { React, Fragment, useState, useEffect} from 'react'
+import { React, Fragment, useState, useEffect } from 'react'
 import { ChevronRight, Delete } from 'react-feather'
 import { Label, FormGroup, Row, Col, Form, Button } from 'reactstrap'
 import { useFormik } from "formik"
@@ -9,6 +9,7 @@ import { getTablaDescripcionEventoN1, getTablaDescripcionEventoN2 } from 'src/vi
 import { getTablaDescripcionOportunidadN1, getTablaDescripcionOportunidadN2 } from 'src/views/administracion/matriz-oportunidad/controller/AdminOportunidadController';
 import { buildSelectTwo } from 'src/functions/Function'
 import { useHistory } from 'react-router-dom'
+import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
 
 var _ = require('lodash');
 
@@ -17,17 +18,17 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   const formik = useFormik({
     initialValues: initValues,
     validationSchema: Yup.object().shape({
-      areaId : Yup.mixed().required("Campo obligatorio"),
-      unidadId : Yup.mixed().required("Campo obligatorio"),
-      procesoId : Yup.mixed().required("Campo obligatorio"),
-      procedimientoId : Yup.mixed().required("Campo obligatorio"),
-      duenoCargoId : Yup.mixed().required("Campo obligatorio"),
-      responsableCargoId : Yup.mixed().required("Campo obligatorio"),
-      fechaEvaluacion : Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").required("Campo obligatorio"),
-      fodaId : Yup.mixed().nullable(),
+      areaId: Yup.mixed().required("Campo obligatorio"),
+      unidadId: Yup.mixed().required("Campo obligatorio"),
+      procesoId: Yup.mixed().required("Campo obligatorio"),
+      procedimientoId: Yup.mixed().required("Campo obligatorio"),
+      duenoCargoId: Yup.mixed().required("Campo obligatorio"),
+      responsableCargoId: Yup.mixed().required("Campo obligatorio"),
+      fechaEvaluacion: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").required("Campo obligatorio"),
+      fodaId: Yup.mixed().nullable(),
       fodaDesccripcionId: Yup.mixed().nullable(),
       // Campos solo para mostrar:
-      macroNombre : Yup.string().nullable(),
+      macroNombre: Yup.string().nullable(),
 
 
       /* areaId : Yup.mixed().nullable(),
@@ -41,22 +42,22 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
       fodaDescripcionId: Yup.mixed().nullable(),
       // Campos solo para mostrar:
       macroNombre : Yup.string().nullable(), */
-      }
+    }
     ),
 
     onSubmit: values => {
-       const data = {
+      const data = {
         ...values,
         estadoRegistro: 'Pendiente',
 
-        areaId : (values.areaId !== null) ? values.areaId.value : 0,
-        unidadId : (values.unidadId !== null) ? values.unidadId.value : 0,
-        procesoId : (values.procesoId !== null) ? values.procesoId.value : 0,
-        procedimientoId : (values.procedimientoId !== null) ? values.procedimientoId.value : 0,
-        duenoCargoId : (values.duenoCargoId !== null) ?   values.duenoCargoId.value : 0,
-        responsableCargoId : (values.responsableCargoId !== null) ? values.responsableCargoId.value : 0,
-        fodaId : (values.fodaId !== null) ?   values.fodaId.value : 0,
-        fodaDescripcionId : (values.fodaDescripcionId !== null) ? values.fodaDescripcionId.value : 0,
+        areaId: (values.areaId !== null) ? values.areaId.value : 0,
+        unidadId: (values.unidadId !== null) ? values.unidadId.value : 0,
+        procesoId: (values.procesoId !== null) ? values.procesoId.value : 0,
+        procedimientoId: (values.procedimientoId !== null) ? values.procedimientoId.value : 0,
+        duenoCargoId: (values.duenoCargoId !== null) ? values.duenoCargoId.value : 0,
+        responsableCargoId: (values.responsableCargoId !== null) ? values.responsableCargoId.value : 0,
+        fodaId: (values.fodaId !== null) ? values.fodaId.value : 0,
+        fodaDescripcionId: (values.fodaDescripcionId !== null) ? values.fodaDescripcionId.value : 0,
       }
       console.log('datos que se enviaran SECCION 1:', data)
       setObject(data);
@@ -64,8 +65,30 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
     }
   })
 
-  /*   P  A  R  A  M  E  T  R  O  S   */
+  // Rellena Datos para Editar
+  useEffect(() => {
+    if (isEdit) {
+      formik.setValues({ ...initValues })
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initValues])
 
+
+  // Para el despliegue del select llenado al EDITAR
+  useEffect(() => {
+    if (isEdit && initValues.areaId !== null) {
+      callApiUnidad(4, initValues.areaId.id);
+    }
+    if (isEdit && initValues.procesoId !== null) {
+      callApiProcedimiento(16, initValues.procesoId.id);
+    }
+    if (isEdit && initValues.fodaId !== null) {
+      callApiFodaDesc(2, initValues.fodaId.id);
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  /*   P  A  R  A  M  E  T  R  O  S   */
   // Area
   const [dataApiArea, setDataApiArea] = useState([])
   const callApiArea = (idTablaDes) => {
@@ -157,39 +180,91 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
     callApiCargo(7);
   }, [])
 
+
+  // FORMIK RESET VALUE REUTILIZABLE
+  const resetFormikValue = (field, valueToReset) => {
+    formik.setFieldValue(field, valueToReset, false);
+  }
+
+  /*  Values of AREA */
+  const clearDependenceOfArea = () => {
+    resetFormikValue('unidadId', null);
+    setDataApiUnidad([]);
+  }
+  const getValueArea = (value) => {
+    if (value !== null) {
+      callApiUnidad(4, value.id);
+    }
+  }
+  const clearInputArea = (id) => {
+    formik.setFieldValue(id, null, false);
+  }
+  /* FIN  Values of AREA */
+
+  /*  Values of AREA */
+  const clearDependenceOfMacroproceso = () => {
+    resetFormikValue('procedimientoId', null);
+    setDataApiProcedimiento([]);
+  }
+  const getValueMacroproceso = (value) => {
+    if (value !== null) {
+      callApiProcedimiento(16, value.id);
+    }
+  }
+  const clearInputMacroproceso = (id) => {
+    formik.setFieldValue(id, null, false);
+  }
+  /* FIN  Values of AREA */
+
+  /*  Values of MATRIZ FODA */
+  const clearDependenceOfFoda = () => {
+    resetFormikValue('fodaDescripcionId', null);
+    setDataApiFodaDesc([]);
+  }
+  const getValueFoda = (value) => {
+    console.log('VALUESSSoportunidad: ', value );
+    if (value !== null) {
+      callApiFodaDesc(2, value.value);
+    }
+  }
+  const clearInputFoda = (id) => {
+    formik.setFieldValue(id, null, false);
+  }
+  /* FIN  Values of MATRIZ FODA */
+
   // Reset Unidad (nivel 2)
-  const resetUnidadId = () => { formik.setFieldValue('unidadId', null, false); }
+  /* const resetUnidadId = () => { formik.setFieldValue('unidadId', null, false); }
   useEffect(() => {
     if(formik.values.areaId !== null){
       callApiUnidad(4, formik.values.areaId.id);
       resetUnidadId();
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.areaId])
+  }, [formik.values.areaId]) */
 
   // Reset Procedimiento (nivel 2)
-  const resetProcedimiento = () => { formik.setFieldValue('procedimientoId', null, false);}
+  /* const resetProcedimiento = () => { formik.setFieldValue('procedimientoId', null, false);}
   useEffect(() => {
     if(formik.values.procesoId !== null){
       callApiProcedimiento(16, formik.values.procesoId.id);
       resetProcedimiento();
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.procesoId])
+  }, [formik.values.procesoId]) */
 
-   // Reset FODA descripcion (nivel 2)
-   const resetFodaDescripcion = () => { formik.setFieldValue('fodaDescripcionId', null, false);}
-   useEffect(() => {
-    if(formik.values.fodaId !== null){
+  // Reset FODA descripcion (nivel 2)
+/*   const resetFodaDescripcion = () => { formik.setFieldValue('fodaDescripcionId', null, false); }
+  useEffect(() => {
+    if (formik.values.fodaId !== null) {
       callApiFodaDesc(2, formik.values.fodaId.value);
       resetFodaDescripcion();
     }
-     //eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [formik.values.fodaId])
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.fodaId]) */
 
   // Autocompleta codigo de Macroproceso
   useEffect(() => {
-    if(formik.values.procesoId !== null){
+    if (formik.values.procesoId !== null) {
       formik.setFieldValue('macroNombre', formik.values.procesoId.clave, false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -199,7 +274,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
 
   const history = useHistory();
   const redirect = (e) => {
-      history.push('/matrizOportunidad/Listar');
+    history.push('/matrizOportunidad/Listar');
   }
 
   return (
@@ -211,16 +286,24 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
             <Label className='form-label'>
               Área <span className='text-primary h5'><b>*</b></span>
             </Label>
-            <CSelectReact
-              type={"select"}
+            <CSelectReactTwo
               id={'areaId'}
               placeholder={'Seleccionar'}
               value={formik.values.areaId}
               onChange={formik.setFieldValue}
               onBlur={formik.setFieldTouched}
-              error={formik.errors.areaId}
+              errors={formik.errors.areaId}
               touched={formik.touched.areaId}
               options={dataApiArea}
+              obligatorio={false}
+              isClearable={true}
+              isSearchable={true}
+              isDisabled={false}
+              dependence={true}
+              cleareableDependences={clearDependenceOfArea}
+              getAddValue={true}
+              getSelectValue={getValueArea}
+              inputIsClearable={clearInputArea}
             />
           </FormGroup>
 
@@ -245,16 +328,24 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
             <Label className='form-label'>
               Macroproceso <span className='text-primary h5'><b>*</b></span>
             </Label>
-            <CSelectReact
-              type={"select"}
+            <CSelectReactTwo
               id={'procesoId'}
               placeholder={'Seleccionar'}
               value={formik.values.procesoId}
               onChange={formik.setFieldValue}
               onBlur={formik.setFieldTouched}
-              error={formik.errors.procesoId}
+              errors={formik.errors.procesoId}
               touched={formik.touched.procesoId}
               options={dataApiMacroproceso}
+              obligatorio={false}
+              isClearable={true}
+              isSearchable={true}
+              isDisabled={false}
+              dependence={true}
+              cleareableDependences={clearDependenceOfMacroproceso}  //FUNCION PARA LIMPIA LOS VALORES FORMIK...
+              getAddValue={true}
+              getSelectValue={getValueMacroproceso} // AGGARA EL EL VALOR DEL SELECT VALUE
+              inputIsClearable={clearInputMacroproceso} // AGGARA EL EL VALOR DEL SELECT VALUE
             />
           </FormGroup>
 
@@ -345,16 +436,24 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
             <Label className='form-label'>
               FODA:
             </Label>
-            <CSelectReact
-              type={"select"}
+            <CSelectReactTwo
               id={'fodaId'}
               placeholder={'Seleccionar'}
               value={formik.values.fodaId}
               onChange={formik.setFieldValue}
               onBlur={formik.setFieldTouched}
-              error={formik.errors.fodaId}
+              errors={formik.errors.fodaId}
               touched={formik.touched.fodaId}
               options={dataApiFoda}
+              obligatorio={false}
+              isClearable={true}
+              isSearchable={true}
+              isDisabled={false}
+              dependence={true}
+              cleareableDependences={clearDependenceOfFoda}
+              getAddValue={true}
+              getSelectValue={getValueFoda}
+              inputIsClearable={clearInputFoda}
             />
           </FormGroup>
 
@@ -378,31 +477,31 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
 
         <div className='d-flex justify-content-between pt-4'>
           <Button
-              style={{width: '130px'}}
-              color="primary"
-              outline
-              onClick={(e) => {redirect(e)}}
-            >
-              Cancelar
+            style={{ width: '130px' }}
+            color="primary"
+            outline
+            onClick={(e) => { redirect(e) }}
+          >
+            Cancelar
           </Button>
           <Button
-            style={{width: '130px'}}
+            style={{ width: '130px' }}
             color="dark"
             outline
             onClick={() => { formik.handleReset() }}
             disabled={!formik.dirty || formik.isSubmitting}
           >
-            <Delete size={17} className='mr-2'/>
+            <Delete size={17} className='mr-2' />
             Limpiar
           </Button>
           <Button
-            style={{width: '130px'}}
+            style={{ width: '130px' }}
             className='text-white'
             color="primary"
             type="submit"
           >
             Siguiente
-            <ChevronRight size={17} className='ml-1'/>
+            <ChevronRight size={17} className='ml-1' />
           </Button>
         </div>
 

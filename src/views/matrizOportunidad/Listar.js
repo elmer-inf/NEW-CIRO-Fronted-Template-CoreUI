@@ -41,15 +41,15 @@ const MatrizOportunidadListar = () => {
 
 
   const redirect = (e) => {
-    //history.push('/matrizOportunidad/Registrar');
-    e.preventDefault();
+    history.push('/matrizOportunidad/Registrar');
+    /* e.preventDefault();
     const path = '/matrizOportunidad/Registrar';
     if (hasPermission(path, valuePathFromContext)) {
       history.push(path);
 
     } else {
       notificationToast();
-    }
+    } */
   }
 
   const notificationToast = () => {
@@ -86,7 +86,6 @@ const MatrizOportunidadListar = () => {
       filterRenderer: (onFilter, column) =>
         <CFilterDate placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
       headerFormatter: typeFormatter,
-      align: 'right',
     }, {
       dataField: 'procesoId.clave',
       text: 'COD MACRO',
@@ -171,12 +170,11 @@ const MatrizOportunidadListar = () => {
   }
 
   const detailsRow = (row) => {
-    history.push('/matrizOportunidad/mostrar/' + row.id);
+    history.push('/matrizOportunidad/Mostrar/' + row.id);
   }
 
   const editRow = (row) => {
-    //console.log(row)
-    //history.push('./editar/' + row.id);
+    history.push('/matrizOportunidad/Editar/' + row.id);
   }
 
   const actionFormatterEvaluar = (cell, row) => {

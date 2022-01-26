@@ -17,7 +17,6 @@ export const getTablaDescripcionOportunidadN1 = async (idTabla) => {
 
 export const getTablaDescripcionOportunidadN2 = async (idTabla, idNivel2) => {
     const uri = HOST.concat('v1/tablaDescripcionMatrizOportunidad/listarNivel2/',idTabla,'/', idNivel2);
-    console.log('URIII  : ', uri)
     const response = await axios.get(uri)
     return response
 }

@@ -1,14 +1,14 @@
 import { React, Fragment, useState, useEffect } from 'react'
 import { ChevronLeft, ChevronRight, Delete } from 'react-feather'
 import { Label, FormGroup, Row, Col, Form, Button } from 'reactstrap'
-
 import { useFormik } from "formik"
 import * as Yup from "yup"
 import { CInputReact } from 'src/reusable/CInputReact'
 import { CSelectReact } from 'src/reusable/CSelectReact'
 import CInputRadio from 'src/reusable/CInputRadio'
 import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
-import { buildSelectTwo, covierteMoneda } from 'src/functions/Function'
+import { buildSelectTwo } from 'src/functions/Function'
+import { covierteMoneda } from 'src/functions/FunctionEvento'
 import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
 
 var _ = require('lodash');
@@ -200,12 +200,6 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-
-  // FORMIK RESET VALUE REUTILIZABLE
-  const resetFormikValue = (field, valueToReset) => {
-    formik.setFieldValue(field, valueToReset, false);
-  }
 
   /*  Values of MONEDA */
   const clearDependenceOfMoneda = () => {

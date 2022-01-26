@@ -214,12 +214,10 @@ const EventoRiesgoListar = () => {
   }
 
   const detailsRow = (row) => {
-    console.log("objeto:", row)
     history.push('/eventoRiesgo/mostrar/' + row.id);
   }
 
   const editRow = (row) => {
-    console.log(row)
     history.push('/eventoRiesgo/Editar/' + row.id);
   }
 

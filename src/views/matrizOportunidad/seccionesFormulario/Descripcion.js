@@ -10,7 +10,7 @@ import { getTablaDescripcionOportunidadN1 } from 'src/views/administracion/matri
 
 var _ = require('lodash');
 
-const Descripcion = ({ nextSection, beforeSection, setObject, initValues, isEdit}) => {
+const Descripcion = ({ nextSection, beforeSection, setObject, initValues, isEdit, optionsFactores}) => {
 
   const formik = useFormik({
     initialValues: initValues,
@@ -48,14 +48,15 @@ const Descripcion = ({ nextSection, beforeSection, setObject, initValues, isEdit
    }
   })
 
+   // Rellena Datos para Editar
+   useEffect(() => {
+    if (isEdit) {
+      formik.setValues({ ...initValues })
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initValues])
+
   /*   P  A  R  A  M  E  T  R  O  S   */
-
-  // Clasificacion de factores
-  const optionsFactores = [
-    { value: '1. Interno', label: '1. Interno' },
-    { value: '2. Externo', label: '2. Externo' }
-  ]
-
   // Grupo de interes
   const [dataApiGrupoInteres, setDataApiGrupoInteres] = useState([])
   const callApiGrupoInteres = (idTablaDes, idNivel2) => {
