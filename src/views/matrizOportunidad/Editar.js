@@ -15,7 +15,7 @@ import { buildOptionSelect, buildOptionSelectThree, buildSelectTwo } from 'src/f
 import { getTablaDescripcionOportunidadN1 } from 'src/views/administracion/matriz-oportunidad/controller/AdminOportunidadController';
 var _ = require('lodash');
 
-const MatrizRiesgoEditar = ({ match }) => {
+const MatrizOportunidadEditar = ({ match }) => {
 
   const history = useHistory();
   const [spin, setSpin] = useState(true);
@@ -217,7 +217,7 @@ const MatrizRiesgoEditar = ({ match }) => {
         });
     }
     setTimeout(() => {
-     // history.push('/matrizOportunidad/Listar');
+      history.push('/matrizOportunidad/Listar');
       setSpin(false);
     }, 5000);
   }
@@ -231,7 +231,7 @@ const MatrizRiesgoEditar = ({ match }) => {
       planesAccion: JSON.stringify(dataRequest.planesAccion)
     }
 
-    console.log('Lo que se enviara en el request: ', dataValues)
+    console.log('Lo que se enviara en el request: ', dataValues);
 
     const idOportunidad = match.params.id;
     putOportunidadId(idOportunidad, dataValues)
@@ -274,6 +274,7 @@ const MatrizRiesgoEditar = ({ match }) => {
         console.log('Error: ', error)
       })
   }
+
 
   return (
     <div>
@@ -376,7 +377,7 @@ const MatrizRiesgoEditar = ({ match }) => {
                         beforeSection={beforeSection}
                         setObject={setObject}
                         initValues={formValueInitialOportunidadToEdit}
-                        dataApiTratamientoAux={dataApiTratamiento}
+                        dataApiTratamiento={dataApiTratamiento}
                         isEdit={true}
                       />
                     </TabPane>
@@ -423,4 +424,4 @@ const MatrizRiesgoEditar = ({ match }) => {
     </div>
   )
 }
-export default MatrizRiesgoEditar
+export default MatrizOportunidadEditar

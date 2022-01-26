@@ -10,7 +10,7 @@ import { obtieneRiesgoIntervalo, obtieneValorRiesgoIntervalo } from 'src/functio
 
 var _ = require('lodash');
 
-const Valoracion = ({ beforeSection, initValues, dataAux , dataAux2, isEdit, handleOnSubmmit }) => {
+const Valoracion = ({ beforeSection, initValues, dataAux , dataAux2, dataApiProbabilidad, handleOnSubmmit, isEdit }) => {
 
   const formik = useFormik({
     initialValues: {...initValues, montoRiesgo: 0},
@@ -38,19 +38,15 @@ const Valoracion = ({ beforeSection, initValues, dataAux , dataAux2, isEdit, han
    }
   })
 
-  /*  P  A  R  A  M  E  T  R  O  S  (Aux) */
-  // Probabilidad
-  const [dataApiProbabilidad, setDataApiProbabilidad] = useState([])
-  const callApiProbabilidad = (idTablaDes) => {
-    getTablaDescripcionRiesgoN1(idTablaDes)
-      .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'campoD', true)
-        setDataApiProbabilidad(options)
-      }).catch((error) => {
-        console.log('Error: ', error)
-      })
-  }
+  // Rellena Datos para Editar
+  useEffect(() => {
+    if (isEdit) {
+      formik.setValues({ ...initValues })
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initValues])
 
+  /*  P  A  R  A  M  E  T  R  O  S  (Aux) */
    // Impacto de riesgo
    const [dataApiImpacto, setDataApiImpacto] = useState([])
    const callApiImpacto = (idTablaDes) => {
@@ -64,18 +60,31 @@ const Valoracion = ({ beforeSection, initValues, dataAux , dataAux2, isEdit, han
    }
 
   useEffect(() => {
-    callApiProbabilidad(2);
     callApiImpacto(3);
   }, [])
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  (Aux) */
 
-  // Obtiene valor "Veces al anio" y "Probabilidad temporalidad" de la probabilidad"
-  const probVecesAnioAux = (_.find(dataApiProbabilidad, ['campoA', dataAux2.probabilidadAux+ '']) !== undefined) ? _.find(dataApiProbabilidad, ['campoA', dataAux2.probabilidadAux+ '']).campoE : null
-  const probTiempoAux = (_.find(dataApiProbabilidad, ['campoA', dataAux2.probabilidadAux+ '']) !== undefined) ? _.find(dataApiProbabilidad, ['campoA', dataAux2.probabilidadAux+ '']).campoD : null
+  // Obtiene valor "Veces al anio" de la probabilidad
+  const findProbabilidadAnio = (array)=>{
+    var result = null;
+    if(_.find(array, ['campoA', dataAux2.probabilidadAux+ '']) !== undefined){
+      result =  _.find(array, ['campoA', dataAux2.probabilidadAux+ '']).campoE;
+    }
+    return result;
+  }
+
+  // Obtiene valor "Probabilidad temporalidad" de la probabilidad
+  const findProbabilidadTiempo = (array)=>{
+    var result = null;
+    if(_.find(array, ['campoA', dataAux2.probabilidadAux+ '']) !== undefined){
+      result =  _.find(array, ['campoA', dataAux2.probabilidadAux+ '']).campoD;
+    }
+    return result;
+  }
 
   useEffect(() => {
-    formik.setFieldValue('probTiempo', probTiempoAux , false)
-    formik.setFieldValue('probVecesAnio', probVecesAnioAux , false)
+    formik.setFieldValue('probTiempo', findProbabilidadTiempo(dataApiProbabilidad) , false)
+    formik.setFieldValue('probVecesAnio', findProbabilidadAnio(dataApiProbabilidad) , false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataAux2]);
 
@@ -84,9 +93,20 @@ const Valoracion = ({ beforeSection, initValues, dataAux , dataAux2, isEdit, han
     if(formik.values.impactoUSD === 0)
       formik.setFieldValue('montoRiesgo', 0 , false);
     else
-      formik.setFieldValue('montoRiesgo', formik.values.probVecesAnio * formik.values.impactoUSD , false)
+      formik.setFieldValue('montoRiesgo', formik.values.probVecesAnio * formik.values.impactoUSD , false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.impactoUSD]);
+
+  useEffect(() => {
+    if (isEdit) {
+      if(initValues.impactoUSD  === 0)
+        formik.setFieldValue('montoRiesgo', 0 , false);
+      else
+        formik.setFieldValue('montoRiesgo', findProbabilidadAnio(dataApiProbabilidad)  * initValues.impactoUSD  , false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataAux2]);
+
 
   // Asigna valor en Valoracion de riesgo
   useEffect(() => {
@@ -94,6 +114,7 @@ const Valoracion = ({ beforeSection, initValues, dataAux , dataAux2, isEdit, han
     formik.setFieldValue('riesgoIntervalo', obtieneRiesgoIntervalo(dataApiImpacto, formik.values.montoRiesgo), false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.montoRiesgo]);
+
 
   return (
     <Fragment>

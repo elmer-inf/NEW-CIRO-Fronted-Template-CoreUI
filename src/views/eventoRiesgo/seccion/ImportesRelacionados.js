@@ -181,7 +181,6 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
   }, [formik.values.coberturaSeguro])
 
 
-
    // Calcula "Monto de perdida" en bs en "Valor contable - monto perdida"
    useEffect(() => {
     if (formik.values.monedaId !== null) {

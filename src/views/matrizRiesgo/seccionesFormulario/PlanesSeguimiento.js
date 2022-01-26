@@ -58,8 +58,6 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
     const data = {
       ...values,
     }
-    // display form field values on success
-    //alert(JSON.stringify(_.omit(data, ['nroPlanes']), null, 10));
     console.log('datos que se enviaran SECCION 5:', _.omit(data, ['nroPlanes']))
     setObject(_.omit(data, ['nroPlanes']));
     nextSection(5);
@@ -192,6 +190,20 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
     } */
   }
 
+  // Construye objeto para Select CARGO
+  const buildSelectCargo = (i)=>{
+    var result = null;
+    try {
+      if (initValues.planesAccion[i] !== null && initValues.planesAccion[i] !== undefined && initValues.planesAccion[i] !== NaN) {
+        result = { value: initValues.planesAccion[i]['cargo'], label: initValues.planesAccion[i]['cargo'] };
+      }
+    } catch (error) {
+      console.error('Error en Funcion buildSelectCargo: ', error);
+      result = null;
+    }
+    return result;
+  }
+
 
   return (
     <Formik initialValues={initValues} validationSchema={formik} onSubmit={onSubmit}>
@@ -220,7 +232,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
               </Row>
             </Col>
           </Row>
-          {/* {console.log('Valuesdss:', values.planesAccion) */}
+
           <FieldArray name="planesAccion">
             {() => (values.planesAccion.map((plan, i) => {
               const planErrors = (errors.planesAccion?.length && errors.planesAccion[i]) || {};
@@ -267,6 +279,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
                         options={dataApiCargo}
                         name={`planesAccion.${i}.cargo`}
                         styles={customStyles}
+                        defaultValue={buildSelectCargo(i)}
                         className={(planErrors.cargo && planTouched.cargo ? ' is-invalid' : '')}
                       />
                       <ErrorMessage name={`planesAccion.${i}.cargo`} component="div" className="invalid-feedback" />

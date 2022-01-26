@@ -12,7 +12,7 @@ import { calculaRiesgo, buscaValorLiteralRiesgoI } from 'src/functions/Functions
 
 var _ = require('lodash');
 
-const Oportunidad = ({ nextSection, beforeSection, setObject, initValues, dataApiTratamientoAux, isEdit }) => {
+const Oportunidad = ({ nextSection, beforeSection, setObject, initValues, dataApiTratamiento, isEdit }) => {
 
   const formik = useFormik({
     initialValues: initValues,
@@ -48,7 +48,6 @@ const Oportunidad = ({ nextSection, beforeSection, setObject, initValues, dataAp
   useEffect(() => {
     callApiProbabilidad(2);
     callApiImpactoOpor(4);
-    callApiTratamiento(5);
   }, [])
 
   // Rellena Datos para Editar
@@ -116,32 +115,15 @@ const Oportunidad = ({ nextSection, beforeSection, setObject, initValues, dataAp
       })
   }
 
-  // Tratamiento
-  const [dataApiTratamiento, setDataApiTratamiento] = useState([])
-  const callApiTratamiento = (idTablaDes, idNivel2) => {
-    getTablaDescripcionOportunidadN1(idTablaDes, idNivel2)
-      .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'campoB', true)
-        setDataApiTratamiento(options)
-      }).catch((error) => {
-        console.log('Error: ', error)
-      })
-  }
-
-  // Obtiene el Riesgo y si valoracion (Formula entre Probabilidad e impacto)
+  // Obtiene el Riesgo y su valoracion (Formula entre Probabilidad e impacto)
   const calculoRiesgoInerente = () => {
     if (formik.values.probabilidadId !== null && formik.values.impactoOporId !== null) {
       const prob = parseInt(formik.values.probabilidadId.campoA);
       const imp = parseInt(formik.values.impactoOporId.campoA);
       const riesgo = calculaRiesgo(prob, imp);
       formik.setFieldValue('nivelOportunidad', riesgo, false)
-      if(isEdit === true){
-        var riesgoValAux = buscaValorLiteralRiesgoI(dataApiTratamientoAux, riesgo);
-        //console.log('dataApiTratamientoAux: ', dataApiTratamientoAux);
-      } else if(isEdit === false){
-        var riesgoValAux = buscaValorLiteralRiesgoI(dataApiTratamiento, riesgo);
-        //console.log('dataApiTratamiento: ', dataApiTratamiento);
-      }
+      var riesgoValAux = buscaValorLiteralRiesgoI(dataApiTratamiento, riesgo);
+      //console.log('dataApiTratamiento: ', dataApiTratamiento);
       formik.setFieldValue('valorOportunidad', riesgoValAux, false);
     }
   }

@@ -11,19 +11,22 @@ import Select from "react-select";
 
 var _ = require('lodash');
 
-const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux, isEdit }) => {
-  console.log('initValues CONTROLES edit : \n', initValues);
+const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux, dataApiControl, optionsObjetivo, isEdit }) => {
 
   const formik = Yup.object().shape({
     controlId: Yup.mixed().required('Campo obligatorio'),
     controlObjetivo: Yup.mixed().required('Campo obligatorio'),
-    controlComentario:  Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').nullable(),
+    controlComentario: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').nullable(),
     // campos solo para mostrar
     controlValoracion: Yup.string().nullable(),
     controlDisminucion: Yup.string().nullable(),
 
     controlesTiene: Yup.string().required('Campo obligatorio'),
-    nroControles: Yup.string().nullable(),
+    nroControles: Yup.string().nullable().when('controlesTiene', {
+      is: (val) => (val === 'true'),
+      then: Yup.string().nullable().required("Campo obligatorio"),
+    }),
+
     controles: Yup.array().of(
       Yup.object().shape({
         nroControl: Yup.number().nullable(),
@@ -43,7 +46,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
     const previousNumber = parseInt(field.value || '0');
     if (previousNumber < nroControles) {
       for (let i = previousNumber; i < nroControles; i++) {
-        controles.push({ nroControl: i+1, descripcion: '', formalizado: false, norma: '', tipo: '', nivel: '' });
+        controles.push({ nroControl: i + 1, descripcion: '', formalizado: false, norma: '', tipo: '', nivel: '' });
       }
     } else {
       for (let i = previousNumber; i >= nroControles; i--) {
@@ -51,18 +54,32 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
       }
     }
     setValues({ ...values, controles });
-
     // call formik onChange method
     field.onChange(e);
   }
 
   function onSubmit(values) {
+    /* if(typeof values.controlObjetivo === 'object'){
+      console.log('SI es objeto');
+    } else{
+      console.log('NO es objeto');
+    } */
     const data = {
       ...values,
-      controlesTiene:Boolean(values.controlesTiene)
+      controlesTiene: Boolean(values.controlesTiene),
+
+      controlId: (values.controlId !== null)
+        ? (Number.isInteger(values.controlId))
+          ? values.controlId
+          : values.controlId.value
+        : 0,
+
+      controlObjetivo: (values.controlObjetivo !== null)
+        ? (typeof values.controlObjetivo === 'object')
+          ? values.controlObjetivo.value
+          : values.controlObjetivo
+        : "",
     }
-    // display form field values on success
-    //alert(JSON.stringify(_.omit(data, ['nroControles']), null, 10));
     console.log('datos que se enviaran SECCION 3:', _.omit(data, ['nroControles']));
 
     setObject(_.omit(data, ['nroControles']), values);
@@ -79,7 +96,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
         setDataApiProcedimiento(_.filter(options, ['campoA', dataAux.procedimientoAux])); /* campoA */
         /* setDataApiProcedimiento(options); */
       }).catch((error) => {
-        console.log('Error: ', error) 
+        console.log('Error: ', error)
       })
   }
 
@@ -107,35 +124,12 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
       })
   }
 
-  // Control
-  const [dataApiControl, setDataApiControl] = useState([])
-  const callApiControl = (idTablaDes) => {
-    getTablaDescripcionRiesgoN1(idTablaDes)
-      .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'campoA', true)
-        setDataApiControl(_.orderBy(options, ['value' ], ['desc']))
-      }).catch((error) => {
-        console.log('Error: ', error)
-      })
-  }
-
   useEffect(() => {
     callApiProcedimiento(16);
     callApiTipoControl(6);
     callApiNivelAuto(7);
-    callApiControl(5);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataAux])
-
-  // Despliegue de dataApi Parametros en options (Select)
-  /* const optionsProcedimiento = () => {
-    const deployOption = dataApiProcedimiento.map((item, i) => {
-      return (
-        <option key={i} value={item.label + ' - ' + item.descripcion}>{item.label + ' - ' + item.descripcion}</option>
-      )
-    });
-    return deployOption;
-  } */
 
   const optionsTipoControl = () => {
     const deployOption = dataApiTipoControl.map((item, i) => {
@@ -154,15 +148,6 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
     });
     return deployOption;
   }
-
-  const optionsControl = () => {
-    const deployOption = dataApiControl.map((item, i) => {
-      return (
-        <option key={i} value={item.value}>{item.label}</option>
-      )
-    });
-    return deployOption;
-  }
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
   // Style Select
@@ -171,17 +156,67 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
     control: (styles,) => ({
       ...styles,
       boxShadow: 'none'
-    })
+    }),
+    option: (styles, { isDisabled, isSelected }) => {
+      return {
+        ...styles,
+        backgroundColor: isSelected ? '#e79140' : 'white',
+        cursor: isDisabled ? 'not-allowed' : 'default',
+        ':active': {
+          backgroundColor: '#e79140',
+          color: 'white'
+        },
+        ':hover': {
+          backgroundColor: isSelected ? '#e79140' : '#fbf3eb',
+          color: isSelected ? 'white' : '#e79140'
+        }
+      }
+    }
   }
 
-
-  // Rellena datos al firmulario para editar
-  /* useEffect(() => {
-    if (isEdit) {
-      formik.setValues({...initValues})
+  // Busca valor del Control
+  const findValorControl = (args) => {
+    var result = '';
+    if (Number.isInteger(args)) {
+      if (args !== '' && _.find(dataApiControl, ['id', _.toInteger(args)]) !== undefined) {
+        result = _.find(dataApiControl, ['id', _.toInteger(args)]).campoA + '. ' + _.find(dataApiControl, ['id', _.toInteger(args)]).nombre;
+      }
+    } else {
+      if (args !== null && _.find(dataApiControl, ['id', _.toInteger(args.value)]) !== undefined) {
+        result = _.find(dataApiControl, ['id', _.toInteger(args.value)]).campoA + '. ' + _.find(dataApiControl, ['id', _.toInteger(args.value)]).nombre;
+      }
     }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initValues]) */
+    return result;
+  }
+
+  // Busca Disminucion del Control
+  const findDisminucionControl = (args) => {
+    var result = '';
+    if (Number.isInteger(args)) {
+      if (args !== '' && _.find(dataApiControl, ['id', _.toInteger(args)]) !== undefined) {
+        result = _.find(dataApiControl, ['id', _.toInteger(args)]).campoB;
+      }
+    } else {
+      if (args !== null && _.find(dataApiControl, ['id', _.toInteger(args.value)]) !== undefined) {
+        result = _.find(dataApiControl, ['id', _.toInteger(args.value)]).campoB;
+      }
+    }
+    return result;
+  }
+
+  // Construye objeto para Select NORMA
+  const buildSelectNorma = (i) => {
+    var result = null;
+    try {
+      if (initValues.controles[i] !== null && initValues.controles[i] !== undefined && initValues.controles[i] !== NaN) {
+        result = { value: initValues.controles[i]['norma'], label: initValues.controles[i]['norma'] };
+      }
+    } catch (error) {
+      console.error('Error en funcion buildSelectNorma: ', error);
+      result = null;
+    }
+    return result;
+  }
 
   return (
     <Formik initialValues={initValues} validationSchema={formik} onSubmit={onSubmit}>
@@ -190,14 +225,17 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
           <Row className='pt-4'>
             <Col sm='12' md='12' xl='3'>
               <Label>Ponderación Control</Label>
-              <Field
-                name='controlId'
-                className={'form-control' + (errors.controlId && touched.controlId ? ' is-invalid' : '')}
-                as={"select"}
-              >
-                <option value="" disabled>Seleccionar</option>
-                {optionsControl()}
-              </Field>
+              <Select
+                placeholder="Seleccionar"
+                onChange={selectedOption => {
+                  setFieldValue('controlId', selectedOption.value, false)
+                }}
+                options={dataApiControl}
+                name={'controlId'}
+                styles={customStyles}
+                defaultValue={initValues.controlId}
+                className={(errors.controlId && touched.controlId ? ' is-invalid' : '')}
+              />
               <ErrorMessage name="controlId" component="div" className="invalid-feedback" />
             </Col>
 
@@ -208,7 +246,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
               <CInputReact
                 type={"textarea"}
                 id={'controlValoracion'}
-                value={(values.controlId !== "" && _.find(dataApiControl, ['id', _.toInteger(values.controlId)]) !== null) ? (_.find(dataApiControl, ['id', _.toInteger(values.controlId)]).campoA + '. ' + _.find(dataApiControl, ['id', _.toInteger(values.controlId)]).nombre) : ""}
+                value={findValorControl(values.controlId)}
                 disabled={true}
                 rows={1}
               />
@@ -221,23 +259,24 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
               <CInputReact
                 type={"text"}
                 id={'controlDisminucion'}
-                value={(values.controlId !== "" && _.find(dataApiControl, ['id', _.toInteger(values.controlId)]) !== null) ? _.find(dataApiControl, ['id', _.toInteger(values.controlId)]).campoB : ""}
+                value={findDisminucionControl(values.controlId)}
                 disabled={true}
               />
             </Col>
 
             <Col sm='12' md='6' xl='6'>
               <Label>Objetivo Control</Label>
-              <Field
-                name='controlObjetivo'
-                className={'form-control' + (errors.controlObjetivo && touched.controlObjetivo ? ' is-invalid' : '')}
-                as={"select"}
-              >
-                <option value="" disabled>Seleccionar</option>
-                <option value="Probabilidad">Probabilidad</option>
-                <option value="Impacto">Impacto</option>
-                <option value="Ambos">Ambos</option>
-              </Field>
+              <Select
+                placeholder="Seleccionar"
+                onChange={selectedOption => {
+                  setFieldValue('controlObjetivo', selectedOption.value, false)
+                }}
+                options={optionsObjetivo}
+                name={'controlObjetivo'}
+                styles={customStyles}
+                defaultValue={initValues.controlObjetivo}
+                className={(errors.controlObjetivo && touched.controlObjetivo ? ' is-invalid' : '')}
+              />
               <ErrorMessage name="controlObjetivo" component="div" className="invalid-feedback" />
             </Col>
 
@@ -246,9 +285,9 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
               <Row>
                 <Label xs='6' md='6' xl='6' className='text-label'>¿Tiene Controles?</Label>
                 <Col xs='6' md='6' xl='6'>
-                  <Field type="radio" name="controlesTiene" value="true" className={(errors.controlesTiene && touched.controlesTiene ? ' is-invalid' : '')}/>
+                  <Field type="radio" name="controlesTiene" value="true" className={(errors.controlesTiene && touched.controlesTiene ? ' is-invalid' : '')} />
                   <Label className='px-3'>Si</Label>
-                  <Field type="radio" name="controlesTiene" value="false" className={(errors.controlesTiene && touched.controlesTiene ? ' is-invalid' : '')}/>
+                  <Field type="radio" name="controlesTiene" value="false" className={(errors.controlesTiene && touched.controlesTiene ? ' is-invalid' : '')} />
                   <Label className='pl-3'>No</Label>
                   <ErrorMessage name="controlesTiene" component="div" className="invalid-feedback" />
                 </Col>
@@ -265,7 +304,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
                 />
                 <ErrorMessage name="controlComentario" component="div" className="invalid-feedback" />
               </Col>
-            : null}
+              : null}
 
             {values.controlesTiene === 'true' ?
               <Col sm='12' md='6'>
@@ -286,13 +325,12 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
                   </Col>
                 </Row>
               </Col>
-            : null}
+              : null}
           </Row>
 
           {values.controlesTiene === 'true' ?
             <FieldArray name="controles">
               {() => (values.controles.map((control, i) => {
-                /* console.log('Console log control: ', control); */
                 const controlErrors = (errors.controles?.length && errors.controles[i]) || {};
                 const controlTouched = (touched.controles?.length && touched.controles[i]) || {};
                 return (
@@ -318,43 +356,42 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
                           className={'mr-2' + (controlErrors.formalizado && controlTouched.formalizado ? ' is-invalid' : '')}
                         />
                         <Label>¿Está Formalizado?</Label> */}
-                          <Label>¿Está Formalizado?</Label><br/>
-                          <Field
-                            type="radio"
-                            name={`controles.${i}.formalizado`}
-                            value="true"
-                            className={'mr-2' + (controlErrors.formalizado && controlTouched.formalizado ? ' is-invalid' : '')}/>
-                          <Label className='px-3'>Si</Label>
-                          <Field
-                            type="radio"
-                            name={`controles.${i}.formalizado`}
-                            value="false"
-                            className={'mr-2' + (controlErrors.formalizado && controlTouched.formalizado ? ' is-invalid' : '')}/>
-                          <Label className='pl-3'>No</Label>
+                        <Label>¿Está Formalizado?</Label><br />
+                        <Field
+                          type="radio"
+                          name={`controles.${i}.formalizado`}
+                          value="true"
+                          className={'mr-2' + (controlErrors.formalizado && controlTouched.formalizado ? ' is-invalid' : '')} />
+                        <Label className='px-3'>Si</Label>
+                        <Field
+                          type="radio"
+                          name={`controles.${i}.formalizado`}
+                          value="false"
+                          className={'mr-2' + (controlErrors.formalizado && controlTouched.formalizado ? ' is-invalid' : '')}
+                          onChange={ () => {
+                            setFieldValue(`controles.${i}.formalizado`, 'false', false);
+                            setFieldValue(`controles.${i}.norma`, '', true)
+                          }}
+                          />
+                        <Label className='pl-3'>No</Label>
                         <ErrorMessage name={`controles.${i}.formalizado`} component="div" className="invalid-feedback" />
                       </FormGroup>
 
                       <FormGroup tag={Col} md='6' lg='6' className='mb-2'>
                         <Label>Norma/procedimiento en la que está formalizado</Label>
-                       {/*  <Field
-                          name={`controles.${i}.norma`}
-                          className={'form-control' + (controlErrors.norma && controlTouched.norma ? ' is-invalid' : '')}
-                          as={"select"}
-                          disabled={control.formalizado === 'true' ? false : true}
-                        >
-                          <option value='null' >Seleccionar</option>
-                          {optionsProcedimiento()}
-                        </Field> */}
-
                         <Select
                           placeholder="Seleccionar"
                           onChange={selectedOption => {
-                            setFieldValue(`controles.${i}.norma`, selectedOption.label , false)
+                            setFieldValue(`controles.${i}.norma`, selectedOption.label, false)
                           }}
+                          // onInputChange={e =>{return (control.formalizado=== 'false' || control.formalizado === false)?setFieldValue(`controles.${i}.norma`, null, false):null}}
+                          //value={selectedOption =>   console.log('selectedOption: ', selectedOption)                        }
                           options={dataApiProcedimiento}
                           name={`controles.${i}.norma`}
                           styles={customStyles}
+                          defaultValue={buildSelectNorma(i)}
                           className={(controlErrors.norma && controlTouched.norma ? ' is-invalid' : '')}
+                          //isClearable={true}
                           isDisabled={control.formalizado === 'true' ? false : true}
                         />
                         <ErrorMessage name={`controles.${i}.norma`} component="div" className="invalid-feedback" />
@@ -367,7 +404,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
                           className={'form-control' + (controlErrors.tipo && controlTouched.tipo ? ' is-invalid' : '')}
                           as={"select"}
                         >
-                          <option value="" disabled>Seleccionar</option>
+                          <option value="">Seleccionar</option>
                           {optionsTipoControl()}
                         </Field>
                         <ErrorMessage name={`controles.${i}.tipo`} component="div" className="invalid-feedback" />
@@ -380,7 +417,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
                           className={'form-control' + (controlErrors.nivel && controlTouched.nivel ? ' is-invalid' : '')}
                           as={"select"}
                         >
-                          <option value="" disabled>Seleccionar</option>
+                          <option value="">Seleccionar</option>
                           {optionsNivelAuto()}
                         </Field>
                         <ErrorMessage name={`controles.${i}.nivel`} component="div" className="invalid-feedback" />
@@ -391,7 +428,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
                 );
               }))}
             </FieldArray>
-          : null}
+            : null}
 
           <div className='d-flex justify-content-between pt-4'>
             <Button
@@ -400,7 +437,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
               color="primary"
               onClick={() => beforeSection(3)}
             >
-              <ChevronLeft size={17} className='mr-1'/>
+              <ChevronLeft size={17} className='mr-1' />
               Atrás
             </Button>
             <Button
@@ -411,7 +448,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
             /* onClick={() => { formik.handleReset() }}
             disabled={(!formik.dirty || formik.isSubmitting)} */
             >
-              <Delete size={17} className='mr-2'/>
+              <Delete size={17} className='mr-2' />
               Limpiar
             </Button>
             <Button
@@ -419,10 +456,10 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
               className='text-white'
               color="primary"
               type="submit"
-              //disabled={formik.isSubmitting}
+            //disabled={formik.isSubmitting}
             >
               Siguiente
-              <ChevronRight size={17} className='ml-1'/>
+              <ChevronRight size={17} className='ml-1' />
             </Button>
           </div>
 

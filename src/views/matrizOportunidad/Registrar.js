@@ -73,7 +73,7 @@ const MatrizRiesgoRegistrar = () => {
   }
 
   const [requestData, setRequestData] = useState(dataResult);
-  const [activeTab, setActiveTap] = useState('4');
+  const [activeTab, setActiveTap] = useState('1');
   /* manejo de botones siguiente */
   const nextSection = (tab) => {
     if (tab === 1) {
@@ -177,6 +177,19 @@ const MatrizRiesgoRegistrar = () => {
       });
   }
 
+  // Tratamiento
+  const [dataApiTratamiento, setDataApiTratamiento] = useState([])
+  const callApiTratamiento = (idTablaDes, idNivel2) => {
+    getTablaDescripcionOportunidadN1(idTablaDes, idNivel2)
+      .then(res => {
+        const options = buildSelectTwo(res.data, 'id', 'campoB', true)
+        setDataApiTratamiento(options)
+
+      }).catch((error) => {
+        console.log('Error: ', error)
+      })
+  }
+
   // Tipo Control
   const [dataApiFortaleza, setDataApiFortaleza] = useState([])
   const callApiFortaleza = (idTablaDes) => {
@@ -191,10 +204,12 @@ const MatrizRiesgoRegistrar = () => {
       })
   }
 
-   useEffect(() => {
+  useEffect(() => {
+    callApiTratamiento(5);
     callApiFortaleza(6);
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
 
   return (
     <div>
@@ -275,6 +290,7 @@ const MatrizRiesgoRegistrar = () => {
                     beforeSection={beforeSection}
                     setObject={setObject}
                     initValues={formValueInitialOportunidad}
+                    dataApiTratamiento={dataApiTratamiento}
                     isEdit={false}
                   />
                 </TabPane>

@@ -17,7 +17,6 @@ import { useHistory } from 'react-router-dom'
 var _ = require('lodash');
 
 const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
-  console.log('initValues DATOS INICIALES edit : \n', initValues);
 
   const [relEventoRiesgo, setRelEventoRiesgo] = useState([]);
 
@@ -105,8 +104,27 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
     }
   })
 
-  /*   P  A  R  A  M  E  T  R  O  S   */
+  // Rellena Datos para Editar
+  useEffect(() => {
+    if (isEdit) {
+      formik.setValues({ ...initValues })
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initValues])
 
+
+  // Para el despliegue del select llenado al EDITAR
+  useEffect(() => {
+    if (isEdit && initValues.areaId !== null) {
+      callApiUnidad(4, initValues.areaId.id);
+    }
+    if (isEdit && initValues.procesoId !== null) {
+      callApiProcedimiento(16, initValues.procesoId.id);
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  /*   P  A  R  A  M  E  T  R  O  S   */
   // Area
   const [dataApiArea, setDataApiArea] = useState([])
   const callApiArea = (idTablaDes) => {
@@ -194,27 +212,44 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Reset Unidad (nivel 2)
-  const resetUnidadId = () => { formik.setFieldValue('unidadId', null, false); }
-  useEffect(() => {
-    if (formik.values.areaId !== null) {
-      callApiUnidad(4, formik.values.areaId.id);
-      resetUnidadId();
-    }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.areaId])
 
-  // Reset Procedimiento (nivel 2)
-  const resetProcedimiento = () => { formik.setFieldValue('procedimientoId', null, true); }
-  useEffect(() => {
-    if (formik.values.procesoId !== null) {
-      callApiProcedimiento(16, formik.values.procesoId.id);
-      resetProcedimiento();
-    }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.procesoId])
+  // FORMIK RESET VALUE REUTILIZABLE
+  const resetFormikValue = (field, valueToReset) => {
+    formik.setFieldValue(field, valueToReset, false);
+  }
 
-  // Autocompleta nombre, criticidad y valoracion de Macroproceso
+  /*  Values of AREA */
+  const clearDependenceOfArea = () => {
+    resetFormikValue('unidadId', null);
+    setDataApiUnidad([]);
+  }
+  const getValueArea = (value) => {
+    if (value !== null) {
+      callApiUnidad(4, value.id);
+    }
+  }
+  const clearInputArea = (id) => {
+    formik.setFieldValue(id, null, false);
+  }
+  /* FIN  Values of AREA */
+
+  /*  Values of MACROPROCESO */
+  const clearDependenceOfMacroproceso = () => {
+    resetFormikValue('procedimientoId', null);
+    setDataApiProcedimiento([]);
+  }
+  const getValueMacroproceso = (value) => {
+    if (value !== null) {
+      callApiProcedimiento(16, value.id);
+    }
+  }
+  const clearInputMacroproceso = (id) => {
+    formik.setFieldValue(id, null, false);
+  }
+  /* FIN  Values of MACROPROCESO */
+
+
+  // Autocompleta codigo, criticidad y valoracion de Macroproceso
   useEffect(() => {
     if (formik.values.procesoId !== null) {
       formik.setFieldValue('macroNombre', formik.values.procesoId.clave, false)
@@ -301,13 +336,6 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
       history.push('/matrizRiesgo/Listar');
   }
 
-  // Rellena datos al firmulario para editar
-  useEffect(() => {
-    if (isEdit) {
-      formik.setValues({...initValues})
-    }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initValues])
 
   return (
     <Fragment>
@@ -318,16 +346,24 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
             <Label className='form-label'>
               Área <span className='text-primary h5'><b>*</b></span>
             </Label>
-            <CSelectReact
-              type={"select"}
+            <CSelectReactTwo
               id={'areaId'}
               placeholder={'Seleccionar'}
               value={formik.values.areaId}
               onChange={formik.setFieldValue}
               onBlur={formik.setFieldTouched}
-              error={formik.errors.areaId}
+              errors={formik.errors.areaId}
               touched={formik.touched.areaId}
               options={dataApiArea}
+              obligatorio={false}
+              isClearable={true}
+              isSearchable={true}
+              isDisabled={false}
+              dependence={true}
+              cleareableDependences={clearDependenceOfArea}
+              getAddValue={true}
+              getSelectValue={getValueArea}
+              inputIsClearable={clearInputArea}
             />
           </FormGroup>
 
@@ -352,38 +388,24 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
             <Label className='form-label'>
               Macroproceso <span className='text-primary h5'><b>*</b></span>
             </Label>
-            {/*  <CSelectReact
-              type={"select"}
+            <CSelectReactTwo
               id={'procesoId'}
               placeholder={'Seleccionar'}
               value={formik.values.procesoId}
               onChange={formik.setFieldValue}
               onBlur={formik.setFieldTouched}
-              error={formik.errors.procesoId}
-              touched={formik.touched.procesoId}
-              options={dataApiMacroproceso}
-            /> */}
-
-            <CSelectReactTwo
-              label={""}
-              id={'procesoId'}
-              placeholder={'Seleccione'}
-              value={formik.values.procesoId}
-              onChange={formik.setFieldValue}
-              onBlur={formik.setFieldTouched}
               errors={formik.errors.procesoId}
               touched={formik.touched.procesoId}
-              //options={tablaListaOptions}optionToSelect.tablaOp
               options={dataApiMacroproceso}
-              obligatorio={true}
+              obligatorio={false}
               isClearable={true}
               isSearchable={true}
               isDisabled={false}
               dependence={true}
-              cleareableDependences={clearAllDependences}  //FUNCION PARA LIMPIA LOS VALORES FORMIK...
-              getAddValue={false}
-            //  getSelectValue={getSelectValueLevel2} // AGGARA EL EL VALOR DEL SELECT VALUE
-            // inputIsClearable={inputIsClearableLevel2} // AGGARA EL EL VALOR DEL SELECT VALUE
+              cleareableDependences={clearDependenceOfMacroproceso}
+              getAddValue={true}
+              getSelectValue={getValueMacroproceso}
+              inputIsClearable={clearInputMacroproceso}
             />
 
           </FormGroup>

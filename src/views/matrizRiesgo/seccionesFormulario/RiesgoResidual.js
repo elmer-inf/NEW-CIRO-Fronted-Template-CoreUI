@@ -10,8 +10,7 @@ import { buscaValorLiteral, buscaValorLiteralRiesgoI, calculaRiesgo, reduceProba
 
 var _ = require('lodash');
 
-const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, dataAux2, isEdit}) => {
-  console.log('dataAux RIESGO RESIDUAL edit : \n', dataAux2);
+const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, dataAux2, dataApiControl, isEdit}) => {
 
   const formik = useFormik({
     initialValues: initValues,
@@ -73,24 +72,12 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, d
       })
   }
 
-  // Control (Auxiliar para obtener % disminucion)
-  const [dataApiControl, setDataApiControl] = useState([])
-  const callApiControl = (idTablaDes) => {
-    getTablaDescripcionRiesgoN1(idTablaDes)
-      .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'campoA', true)
-        setDataApiControl(options)
-      }).catch((error) => {
-        console.log('Error: ', error)
-      })
-  }
-
   useEffect(() => {
     callApiProbabilidad(2);
     callApiImpacto(3);
     callApiRiesgoI(9);
-    callApiControl(5);
   }, [])
+  /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
   // calcula "Probabilidad e impacto residual" del valor "Probabilidad inherente"
   const disminucionAux = (dataAux.controlIdAux !== undefined && _.find(dataApiControl, ['id', _.toInteger(dataAux.controlIdAux)]) !== null) ? _.find(dataApiControl, ['id', _.toInteger(dataAux.controlIdAux)]).campoB : null;
@@ -144,7 +131,6 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, d
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.riesgo])
 
-  /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
   return (
     <Fragment>

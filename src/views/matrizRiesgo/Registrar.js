@@ -1,4 +1,4 @@
-import { React, useState } from 'react'
+import { React, useEffect, useState } from 'react'
 import DatosIniciales from './seccionesFormulario/DatosIniciales'
 import DefinicionRiesgos from './seccionesFormulario/DefinicionRiesgos'
 import Controles from './seccionesFormulario/Controles'
@@ -12,11 +12,27 @@ import classnames from 'classnames';
 import { postRiesgo } from './controller/RiesgoController';
 import { ToastContainer, toast } from 'react-toastify';
 import CCSpinner from 'src/reusable/spinner/CCSpinner'
+import { getTablaDescripcionRiesgoN1 } from 'src/views/administracion/matriz-riesgo/controller/AdminRiesgoController';
+import { buildSelectTwo } from 'src/functions/Function'
+var _ = require('lodash');
 
 const MatrizRiesgoRegistrar = () => {
 
   const history = useHistory();
   const [spin, setSpin] = useState(false);
+
+  // Options Monetario
+  const optionsMonetario = [
+    { value: true, label: 'Si' },
+    { value: false, label: 'No' }
+  ]
+
+  // Options Objetivo
+  const optionsObjetivo = [
+    { value: 'Probabilidad', label: 'Probabilidad' },
+    { value: 'Impacto', label: 'Impacto' },
+    { value: 'Ambos', label: 'Ambos' },
+  ]
 
   const formValueInitialDatosIniciales = {
     areaId: null,
@@ -51,7 +67,7 @@ const MatrizRiesgoRegistrar = () => {
     controlObjetivo: '',
     controlComentario: '',
 
-    controlesTiene: false,
+    controlesTiene: 'false',
     nroControles: '',
     controles: []
   }
@@ -238,6 +254,51 @@ const MatrizRiesgoRegistrar = () => {
       });
   }
 
+  // Nivel de riesgo inherente
+  const [dataApiRiesgoI, setDataApiRiesgoI] = useState([])
+  const callApiRiesgoI = (idTablaDes) => {
+    getTablaDescripcionRiesgoN1(idTablaDes)
+      .then(res => {
+        const options = buildSelectTwo(res.data, 'id', 'campoD', true);
+        setDataApiRiesgoI(options);
+      }).catch((error) => {
+        console.log('Error: ', error);
+      })
+  }
+
+  // Control
+  const [dataApiControl, setDataApiControl] = useState([])
+  const callApiControl = (idTablaDes) => {
+    getTablaDescripcionRiesgoN1(idTablaDes)
+      .then(res => {
+        const options = buildSelectTwo(res.data, 'id', 'campoA', true);
+        setDataApiControl(_.orderBy(options, ['value'], ['desc']));
+        setSpin(false);
+      }).catch((error) => {
+        console.log('Error: ', error);
+      })
+  }
+
+  // Probabilidad
+  const [dataApiProbabilidad, setDataApiProbabilidad] = useState([])
+  const callApiProbabilidad = (idTablaDes) => {
+    getTablaDescripcionRiesgoN1(idTablaDes)
+      .then(res => {
+        const options = buildSelectTwo(res.data, 'id', 'campoD', true)
+        setDataApiProbabilidad(options)
+      }).catch((error) => {
+        console.log('Error: ', error)
+      })
+  }
+
+  useEffect(() => {
+    callApiRiesgoI(9);
+    callApiControl(5);
+    callApiProbabilidad(2);
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+
   return (
     <div>
       <CCSpinner show={spin} />
@@ -304,7 +365,7 @@ const MatrizRiesgoRegistrar = () => {
                     nextSection={nextSection}
                     setObject={setObject}
                     initValues={formValueInitialDatosIniciales}
-                  //isEdit={false}
+                    isEdit={false}
                   />
                 </TabPane>
 
@@ -314,8 +375,9 @@ const MatrizRiesgoRegistrar = () => {
                     beforeSection={beforeSection}
                     setObject={setObject}
                     initValues={formValueInitialDefinicionRiesgos}
-                  //isEdit={false}
-                  //arrayCampoSelected={[]}
+                    optionsMonetario={optionsMonetario}
+                    dataApiRiesgoI={dataApiRiesgoI}
+                    isEdit={false}
                   />
                 </TabPane>
 
@@ -326,8 +388,9 @@ const MatrizRiesgoRegistrar = () => {
                     setObject={setObject}
                     initValues={formValueInitialControles}
                     dataAux={dataAuxSeccion1}
-                  //isEdit={true}
-                  //arrayColumnaSelected={[]}
+                    dataApiControl={dataApiControl}
+                    optionsObjetivo={optionsObjetivo}
+                    isEdit={false}
                   />
                 </TabPane>
 
@@ -339,8 +402,8 @@ const MatrizRiesgoRegistrar = () => {
                     initValues={formValueInitialRiesgoResidual}
                     dataAux={dataAuxSeccion3}
                     dataAux2={dataAuxSeccion2}
-                  //isEdit={true}
-                  //arrayColumnaSelected={[]}
+                    dataApiControl={dataApiControl}
+                    isEdit={false}
                   />
                 </TabPane>
 
@@ -350,8 +413,7 @@ const MatrizRiesgoRegistrar = () => {
                     beforeSection={beforeSection}
                     setObject={setObject}
                     initValues={formValueInitialPlanesSeguimiento}
-                  //isEdit={true}
-                  //arrayColumnaSelected={[]}
+                    isEdit={false}
                   />
                 </TabPane>
 
@@ -361,8 +423,9 @@ const MatrizRiesgoRegistrar = () => {
                     initValues={formValueInitialValoracion}
                     dataAux={dataAuxSeccion2}
                     dataAux2={dataAuxSeccion4}
+                    dataApiProbabilidad={dataApiProbabilidad}
                     handleOnSubmmit={handleOnSubmmit}
-                  //isEdit={true}
+                    isEdit={false}
                   />
                 </TabPane>
               </TabContent>

@@ -14,6 +14,11 @@ export const postRiesgo = (data) => {
     return axios.post(uri, data);
 }
 
+export const putRiesgoId = (id, data) => {
+    const uri = HOST + 'v1/matrizRiesgo/editar/' + id;
+    return axios.put(uri, data);
+}
+
 export const getRiesgoId = async (id) => {
     const uri = HOST + 'v1/matrizRiesgo/mostrar/' + id;
     const response = await axios.get(uri);

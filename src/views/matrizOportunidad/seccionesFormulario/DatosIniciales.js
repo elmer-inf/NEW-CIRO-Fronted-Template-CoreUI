@@ -201,7 +201,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   }
   /* FIN  Values of AREA */
 
-  /*  Values of AREA */
+  /*  Values of MACROPROCESO */
   const clearDependenceOfMacroproceso = () => {
     resetFormikValue('procedimientoId', null);
     setDataApiProcedimiento([]);
@@ -214,7 +214,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   const clearInputMacroproceso = (id) => {
     formik.setFieldValue(id, null, false);
   }
-  /* FIN  Values of AREA */
+  /* FIN  Values of MACROPROCESO */
 
   /*  Values of MATRIZ FODA */
   const clearDependenceOfFoda = () => {
@@ -222,7 +222,6 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
     setDataApiFodaDesc([]);
   }
   const getValueFoda = (value) => {
-    console.log('VALUESSSoportunidad: ', value );
     if (value !== null) {
       callApiFodaDesc(2, value.value);
     }
@@ -231,36 +230,6 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
     formik.setFieldValue(id, null, false);
   }
   /* FIN  Values of MATRIZ FODA */
-
-  // Reset Unidad (nivel 2)
-  /* const resetUnidadId = () => { formik.setFieldValue('unidadId', null, false); }
-  useEffect(() => {
-    if(formik.values.areaId !== null){
-      callApiUnidad(4, formik.values.areaId.id);
-      resetUnidadId();
-    }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.areaId]) */
-
-  // Reset Procedimiento (nivel 2)
-  /* const resetProcedimiento = () => { formik.setFieldValue('procedimientoId', null, false);}
-  useEffect(() => {
-    if(formik.values.procesoId !== null){
-      callApiProcedimiento(16, formik.values.procesoId.id);
-      resetProcedimiento();
-    }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.procesoId]) */
-
-  // Reset FODA descripcion (nivel 2)
-/*   const resetFodaDescripcion = () => { formik.setFieldValue('fodaDescripcionId', null, false); }
-  useEffect(() => {
-    if (formik.values.fodaId !== null) {
-      callApiFodaDesc(2, formik.values.fodaId.value);
-      resetFodaDescripcion();
-    }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.fodaId]) */
 
   // Autocompleta codigo de Macroproceso
   useEffect(() => {

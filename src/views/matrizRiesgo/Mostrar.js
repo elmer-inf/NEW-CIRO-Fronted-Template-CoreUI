@@ -696,7 +696,7 @@ const MatrizRiesgo = ({ match }) => {
 
                             <Col xs='12' md='9' className='pt-2'>
                               <div className='text-label'>Valoración de Control: </div>
-                              <div className='text-data'>{dataApi.controlId !== null ? dataApi.controlId.nombre : <i>Sin registro</i>}</div>
+                              <div className='text-data'>{dataApi.controlId !== null ? dataApi.controlId.campoA + '. ' + dataApi.controlId.nombre : <i>Sin registro</i>}</div>
                             </Col>
 
                             <Col xs='12' sm='6' md='6' className='pt-2'>

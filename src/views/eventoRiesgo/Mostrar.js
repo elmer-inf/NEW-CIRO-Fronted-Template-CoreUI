@@ -728,51 +728,65 @@ function base64ToArrayBuffer(data) {
                           <Row className='pt-3'>
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Operativo: </div>
-                              <div className='text-data'>{dataApi.operativoId !== null ? dataApi.operativoId.nombre : <i>Sin registro</i>}</div>
+                              <div className='text-data'>
+                                {dataApi.operativoId !== null ? dataApi.operativoId.clave + ' - ' + dataApi.operativoId.nombre : <i>Sin registro</i>}
+                              </div>
                             </Col>
-                            {/* <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
-                            <div className='text-label'>Seguridad de la información: </div>
-                            <div className='text-data'>{dataApi.seguridadId !== null ? dataApi.seguridadId.nombre : <i>Sin registro</i>}</div>
-                          </Col> */}
+
+                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                              <div className='text-label'>Seguridad de la información: </div>
+                              <div className='text-data'>
+                                {dataApi.seguridadId !== null ? dataApi.seguridadId.clave + ' - ' + dataApi.seguridadId.nombre : <i>Sin registro</i>}
+                              </div>
+                            </Col>
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Liquidez y mercado: </div>
-                              <div className='text-data'>{dataApi.liquidezId !== null ? dataApi.liquidezId.nombre : <i>Sin registro</i>}</div>
+                              <div className='text-data'>
+                                {dataApi.liquidezId !== null ? dataApi.liquidezId.clave + ' - ' + dataApi.liquidezId.nombre : <i>Sin registro</i>}
+                              </div>
                             </Col>
-
-                            {/* <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
-                            <div className='text-label'>LGI FT y/o DP: </div>
-                            <div className='text-data'>{dataApi.lgiId !== null ? dataApi.lgiId.nombre : <i>Sin registro</i>}</div>
-                          </Col> */}
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Fraude con medios de pago electrónico: </div>
-                              <div className='text-data'>{dataApi.fraudeId !== null ? dataApi.fraudeId.nombre : <i>Sin registro</i>}</div>
+                              <div className='text-data'>
+                                {dataApi.fraudeId !== null ? dataApi.fraudeId.clave + ' - ' + dataApi.fraudeId.nombre : <i>Sin registro</i>}
+                              </div>
                             </Col>
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Legal y regulatorio: </div>
-                              <div className='text-data'>{dataApi.legalId !== null ? dataApi.legalId.nombre : <i>Sin registro</i>}</div>
+                              <div className='text-data'>
+                                {dataApi.legalId !== null ? dataApi.legalId.clave + ' - ' + dataApi.legalId.nombre : <i>Sin registro</i>}
+                              </div>
                             </Col>
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Reputacional: </div>
-                              <div className='text-data'>{dataApi.reputacionalId !== null ? dataApi.reputacionalId.nombre : <i>Sin registro</i>}</div>
+                              <div className='text-data'>
+                                {dataApi.reputacionalId !== null ? dataApi.reputacionalId.clave + ' - ' + dataApi.reputacionalId.nombre : <i>Sin registro</i>}
+                              </div>
                             </Col>
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Cumplimiento: </div>
-                              <div className='text-data'>{dataApi.cumplimientoId !== null ? dataApi.cumplimientoId.nombre : <i>Sin registro</i>}</div>
+                              <div className='text-data'>
+                                {dataApi.cumplimientoId !== null ? dataApi.cumplimientoId.clave + ' - ' + dataApi.cumplimientoId.nombre : <i>Sin registro</i>}
+                              </div>
                             </Col>
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Estratégico: </div>
-                              <div className='text-data'>{dataApi.estrategicoId !== null ? dataApi.estrategicoId.nombre : <i>Sin registro</i>}</div>
+                              <div className='text-data'>
+                                {dataApi.estrategicoId !== null ? dataApi.estrategicoId.clave + ' - ' + dataApi.estrategicoId.nombre : <i>Sin registro</i>}
+                              </div>
                             </Col>
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Gobierno corporativo: </div>
-                              <div className='text-data'>{dataApi.gobiernoId !== null ? dataApi.gobiernoId.nombre : <i>Sin registro</i>}</div>
+                              <div className='text-data'>
+                                {dataApi.gobiernoId !== null ? dataApi.gobiernoId.clave + ' - ' + dataApi.gobiernoId.nombre : <i>Sin registro</i>}
+                              </div>
                             </Col>
                           </Row>
                         </CTabPane>

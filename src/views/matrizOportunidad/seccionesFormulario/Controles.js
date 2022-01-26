@@ -1,4 +1,4 @@
-import { React } from 'react'
+import { React, useEffect } from 'react'
 import { ChevronLeft, ChevronRight, Delete } from 'react-feather'
 import { Row, Col, FormGroup, Label, Button, } from 'reactstrap'
 import * as Yup from "yup"
@@ -17,7 +17,10 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataApiF
 
     controlComentario: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').nullable(),
     controlesTiene: Yup.string().required('Campo obligatorio'),
-    nroControles: Yup.string().nullable(),
+    nroControles : Yup.string().nullable().when('controlesTiene',{
+      is:(val) =>  (val === 'true'),
+      then: Yup.string().nullable().required("Campo obligatorio"),
+    }),
     controles: Yup.array().of(
       Yup.object().shape({
         nroControl: Yup.number().nullable(),
@@ -46,19 +49,14 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataApiF
   }
 
   function onSubmit(values) {
-    console.log('LELELLELEGOOOOñ : ', values);
-    console.log('POST fortalezaId: ', values.fortalezaId);
-    console.log('POST fortalezaId.value : ', values.fortalezaId.value);
     const data = {
       ...values,
-
       fortalezaId: (values.fortalezaId !== null)
         ? (Number.isInteger(values.fortalezaId))
           ? values.fortalezaId
           : values.fortalezaId.value
         : 0,
     }
-    console.log('LELELLELEGOOOOñ DATATATA : ', data);
 
     // display form field values on success
     //alert(JSON.stringify(_.omit(data, ['nroControles']), null, 10));
@@ -106,6 +104,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataApiF
     return result;
   }
 
+
   return (
     <Formik initialValues={initValues} validationSchema={formik} onSubmit={onSubmit}>
       {({ errors, values, touched, setValues, setFieldValue }) => (
@@ -113,27 +112,6 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataApiF
           <Row className='pt-4'>
             <Col sm='12' md='12' xl='3'>
               <Label>Ponderación Control/Fortaleza</Label>
-              {/* <Field
-                name='fortalezaId'
-                className={'form-control' + (errors.fortalezaId && touched.fortalezaId ? ' is-invalid' : '')}
-                as={"select"}
-                defaultValue={initValues.fortalezaId.value}
-              >
-                <option value={null}>Seleccionar</option>
-                {optionsFortaleza()}
-              </Field>  */}
-              {/*  {console.log('initValues.fortalezaId.value:::', initValues.fortalezaId)}
-              <select
-                className="form-control"
-                defaultValue={initValues.fortalezaId.label}
-                placeholder="Seleccionar"
-                onChange={selectedOption => {
-                  setFieldValue('fortalezaId', selectedOption.value, false)
-                }}
-              >
-                <option value={null}>Seleccionar</option>
-                {optionsFortaleza()}
-              </select> */}
               <Select
                 placeholder="Seleccionar"
                 onChange={selectedOption => {
@@ -147,8 +125,6 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataApiF
               />
               <ErrorMessage name="fortalezaId" component="div" className="invalid-feedback" />
             </Col>
-
-            {console.log('Fortaleza select:  ', values.fortalezaId)}
 
             <Col sm='12' md='12' xl='9'>
               <Label className='form-label'>
@@ -196,7 +172,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataApiF
                     <Field name="nroControles">
                       {({ field }) => (
                         <select {...field} className={'form-control' + (errors.nroControles && touched.nroControles ? ' is-invalid' : '')} onChange={e => onChangeControles(e, field, values, setValues)}>
-                          <option value="" disabled>Seleccionar</option>
+                          <option value="">Seleccionar</option>
                           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i =>
                             <option key={i} value={i}>{i}</option>
                           )}
