@@ -391,71 +391,83 @@ const UpdateEventoRiesgo = ({ match }) => {
   const handleOnSubmmit = (values) => {
     setSpin(true);
     const dataRequest = setObject(values);
-    var request = {}
-    if (formik.values.tipoEvento === 'A') {
-      request = {
-        ...dataRequest,
-        tipoEvento: formik.values.tipoEvento
-      }
-    } else {
-      request = {
-        ...dataRequest,
-        ...formValueInitialImportesSec,
-        tipoEvento: formik.values.tipoEvento
-      }
+    var request = {
+      ...dataRequest,
+      tipoEvento: formik.values.tipoEvento
     }
+   /* if (formik.values.tipoEvento !== 'A') {
+      request = _.omit(request, ['tasaCambioId', 'monedaId', 'montoPerdida', 'gastoAsociado',
+        'montoRecuperado', 'impactoId', 'coberturaSeguro', 'polizaSeguroId', 'montoRecuperadoSeguro',
+        'recuperacionActivoId', 'perdidaMercado', 'cuentaContableId', 'fechaContable'])
+
+    }*/
+    
+     if (formik.values.tipoEvento === 'A') {
+       request = {
+         ...dataRequest,
+         tipoEvento: formik.values.tipoEvento
+       }
+     } else {
+       request = {
+         ...dataRequest,
+         ...formValueInitialImportes,
+         tipoEvento: formik.values.tipoEvento
+       }
+     }
+ 
+
     //console.log('Lo que se enviara en el request: ', request)
     // console.log('JSON.stringify(request) ', JSON.stringify(request))
-  //  var formData = new FormData();
+    //  var formData = new FormData();
     console.log('REQUEEEST:: ', request);
-   // formData.append('eventoRiesgoPostDTO', JSON.stringify(_.omit(request, ['files'])));
+    // formData.append('eventoRiesgoPostDTO', JSON.stringify(_.omit(request, ['files'])));
     //formData.append('file', getFiles);
-   /* if (getFiles !== null) {
-      for (let i = 0; i < getFiles.length; i++) {
-        formData.append("file", getFiles[i]);
-      }
-    } else {
-      formData.append("file", new Blob([]));
-    }*/
-/*
-
-    for (var value of formData.values()) {
-       console.log('===========================================')
-       console.log('--> ', value);
-       console.log('===========================================')
+    /* if (getFiles !== null) {
+       for (let i = 0; i < getFiles.length; i++) {
+         formData.append("file", getFiles[i]);
+       }
+     } else {
+       formData.append("file", new Blob([]));
      }*/
+    /*
+    
+        for (var value of formData.values()) {
+           console.log('===========================================')
+           console.log('--> ', value);
+           console.log('===========================================')
+         }*/
 
 
-     console.log('Datos que se edita:  ',  _.omit(request, ['files','riesgoRelacionado']))
-     const idEvento = match.params.id;
-     putEventoRiesgoId(idEvento, _.omit(request, ['files','riesgoRelacionado']))
-       .then(res => {
-         if (res.status >= 200 && res.status < 300) {
-           console.log('Envio el request: ', res);
-           notificationToast('success', 'Evento de Riesgo modificado exitósamente');
-         } else {
-           console.log('Hubo un  error ', res);
-          notificationToast('error', 'Algo salió mal, intente nuevamente');
-         }
-       }).catch((error) => {
-         console.log('Error al modificar Evento de Riesgo: ', error);
-         notificationToast('error', 'Algo salió mal, intente nuevamente');
-       });
-
-  /*   postEventoRiesgoFormData(formData)
+    console.log('Datos que se edita:  ', _.omit(request, ['files', 'riesgoRelacionado']))
+    const idEvento = match.params.id;
+    putEventoRiesgoId(idEvento, _.omit(request, ['files', 'riesgoRelacionado']))
       .then(res => {
         if (res.status >= 200 && res.status < 300) {
           console.log('Envio el request: ', res);
-          notificationToast('success', 'Evento de Riesgo registrado exitósamente');
-          //history.push("/eventoRiesgo/listar")
+          notificationToast('success', 'Evento de Riesgo modificado exitósamente');
         } else {
           console.log('Hubo un  error ', res);
           notificationToast('error', 'Algo salió mal, intente nuevamente');
         }
       }).catch((error) => {
-        console.log('Error al registrar Evento de Riesgo: ', error);
+        console.log('Error al modificar Evento de Riesgo: ', error);
         notificationToast('error', 'Algo salió mal, intente nuevamente');
-      }); */
+      });
+
+    /*   postEventoRiesgoFormData(formData)
+        .then(res => {
+          if (res.status >= 200 && res.status < 300) {
+            console.log('Envio el request: ', res);
+            notificationToast('success', 'Evento de Riesgo registrado exitósamente');
+            //history.push("/eventoRiesgo/listar")
+          } else {
+            console.log('Hubo un  error ', res);
+            notificationToast('error', 'Algo salió mal, intente nuevamente');
+          }
+        }).catch((error) => {
+          console.log('Error al registrar Evento de Riesgo: ', error);
+          notificationToast('error', 'Algo salió mal, intente nuevamente');
+        }); */
 
 
     /*  postEventoRiesgo(request)
