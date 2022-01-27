@@ -5,7 +5,6 @@ import {
   Switch
 } from 'react-router-dom'
 import { CContainer, CFade } from '@coreui/react'
-
 // routes config
 import routes from '../routes'
   
@@ -14,7 +13,6 @@ const loading = (
     <div className="sk-spinner sk-spinner-pulse"></div>
   </div>
 )
-
 const TheContent = () => {
   return (
     <main className="c-main">
@@ -42,7 +40,6 @@ const TheContent = () => {
     </main>
   )
 }
-
 export default React.memo(TheContent)*/
 
 
@@ -73,7 +70,7 @@ const TheContent = ({ routesProp }) => {
 
   const matching = () => {
     setSpin(true);
-/*
+
     const newRoute = [];
     newRoute.push(routes[0]);
     newRoute.push(routes[1]);
@@ -88,9 +85,7 @@ const TheContent = ({ routesProp }) => {
         newRoute.push(searching)
       }
     });
-    setListRoute(newRoute);*/
-    setListRoute(routes);
-
+    setListRoute(newRoute);
     setSpin(false);
 
   }
@@ -136,5 +131,3 @@ const TheContent = ({ routesProp }) => {
 }
 
 export default React.memo(TheContent)
-
-

@@ -97,7 +97,6 @@ const EventoRiesgoListar = () => {
       filterRenderer: (onFilter, column) =>
         <CFilterDate placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
       headerFormatter: typeFormatter,
-      align: 'right',
     }, {
       dataField: 'fechaFin',
       text: 'FECHA FIN',
@@ -106,8 +105,6 @@ const EventoRiesgoListar = () => {
       filterRenderer: (onFilter, column) =>
         <CFilterDate placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
       headerFormatter: typeFormatter,
-      align: 'right',
-
     },/*  {
       dataField: 'descripcionCompleta',
       text: 'DESCRIPCION',
