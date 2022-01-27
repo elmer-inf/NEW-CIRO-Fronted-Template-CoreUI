@@ -67,7 +67,11 @@ const MatrizRiesgoListar = () => {
       dataField: 'id',
       text: 'ID',
       sort: true,
-      //hidden: true
+      hidden: false,
+      filter: customFilter(),
+      filterRenderer: (onFilter, column) =>
+        <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
+      headerFormatter: typeFormatter,
     }, {
       dataField: 'codigo',
       text: 'CODIGO',
@@ -377,9 +381,11 @@ const MatrizRiesgoListar = () => {
     if (param['duenoCargoId.nombre'] === '' || _.isEmpty(param['duenoCargoId.nombre'])) {
       delete param['duenoCargoId.nombre'];
     }
-
     if (param['fechaEvaluacion'] === '' || _.isEmpty(param['fechaEvaluacion'])) {
       delete param['fechaEvaluacion'];
+    }
+    if (param['id'] === '' || _.isEmpty(param['id'])) {
+      delete param['id'];
     }
 
     setParams(param)

@@ -428,6 +428,9 @@ const EventoRiesgoListar = () => {
     if (param['fechaDesc'] === '' || _.isEmpty(param['fechaDesc'])) {
       delete param['fechaDesc'];
     }
+    if (param['id'] === '' || _.isEmpty(param['id'])) {
+      delete param['id'];
+    }
 
     setParams(param)
     validatePagination(pagination.page, pagination.size, param);

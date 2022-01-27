@@ -68,7 +68,11 @@ const MatrizOportunidadListar = () => {
       dataField: 'id',
       text: 'ID',
       sort: true,
-      hidden: false
+      hidden: false,
+      filter: customFilter(),
+      filterRenderer: (onFilter, column) =>
+        <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
+      headerFormatter: typeFormatter,
     }, {
       dataField: 'codigo',
       text: 'CODIGO',
@@ -380,6 +384,9 @@ const MatrizOportunidadListar = () => {
     }
     if (param['duenoCargoId.nombre'] === '' || _.isEmpty(param['duenoCargoId.nombre'])) {
       delete param['duenoCargoId.nombre'];
+    }
+    if (param['id'] === '' || _.isEmpty(param['id'])) {
+      delete param['id'];
     }
 
     setParams(param)
