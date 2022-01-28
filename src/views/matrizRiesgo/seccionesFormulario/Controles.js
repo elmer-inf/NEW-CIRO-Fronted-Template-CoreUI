@@ -80,8 +80,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
           : values.controlObjetivo
         : "",
     }
-    console.log('datos que se enviaran SECCION 3:', _.omit(data, ['nroControles']));
-
+    //console.log('datos que se enviaran SECCION 3:', _.omit(data, ['nroControles']));
     setObject(_.omit(data, ['nroControles']), values);
     nextSection(3);
   }
@@ -208,7 +207,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
   const buildSelectNorma = (i) => {
     var result = null;
     try {
-      if (initValues.controles[i] !== null && initValues.controles[i] !== undefined && initValues.controles[i] !== NaN) {
+      if (initValues.controles[i] !== null && initValues.controles[i] !== undefined) {
         result = { value: initValues.controles[i]['norma'], label: initValues.controles[i]['norma'] };
       }
     } catch (error) {
@@ -368,11 +367,11 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
                           name={`controles.${i}.formalizado`}
                           value="false"
                           className={'mr-2' + (controlErrors.formalizado && controlTouched.formalizado ? ' is-invalid' : '')}
-                          onChange={ () => {
+                          onChange={() => {
                             setFieldValue(`controles.${i}.formalizado`, 'false', false);
                             setFieldValue(`controles.${i}.norma`, '', true)
                           }}
-                          />
+                        />
                         <Label className='pl-3'>No</Label>
                         <ErrorMessage name={`controles.${i}.formalizado`} component="div" className="invalid-feedback" />
                       </FormGroup>

@@ -1,4 +1,4 @@
-import { React, Fragment, useState, useEffect} from 'react'
+import { React, Fragment, useState, useEffect } from 'react'
 import { ChevronLeft, ChevronRight, Delete } from 'react-feather'
 import { Label, FormGroup, Row, Col, Form, Button } from 'reactstrap'
 import { useFormik } from "formik"
@@ -10,19 +10,19 @@ import { getTablaDescripcionOportunidadN1 } from 'src/views/administracion/matri
 
 var _ = require('lodash');
 
-const Descripcion = ({ nextSection, beforeSection, setObject, initValues, isEdit, optionsFactores}) => {
+const Descripcion = ({ nextSection, beforeSection, setObject, initValues, isEdit, optionsFactores }) => {
 
   const formik = useFormik({
     initialValues: initValues,
     validationSchema: Yup.object().shape(
       {
-        definicion : Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').required("Campo obligatorio"),
-        causa : Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').required("Campo obligatorio"),
-        consecuencia : Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').required("Campo obligatorio"),
-        factor : Yup.mixed().required("Campo obligatorio"),
+        definicion: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').required("Campo obligatorio"),
+        causa: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').required("Campo obligatorio"),
+        consecuencia: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').required("Campo obligatorio"),
+        factor: Yup.mixed().required("Campo obligatorio"),
         grupoInteresId: Yup.mixed().required("Campo obligatorio"),
         // Solo para mostrar
-        defConcatenado : Yup.string().nullable(),
+        defConcatenado: Yup.string().nullable(),
 
 
         /* definicion : Yup.string().nullable(),
@@ -38,18 +38,18 @@ const Descripcion = ({ nextSection, beforeSection, setObject, initValues, isEdit
     onSubmit: values => {
       const data = {
         ...values,
-        grupoInteresId : (values.grupoInteresId !== null) ?   values.grupoInteresId.value : 0,
-        factor:     (values.factor !== null) ?      values.factor.value : null,
-     }
-      const dataSelect =  _.omit(data, ['defConcatenado']);
-      console.log('datos que se enviaran SECCION 2:', dataSelect)
+        grupoInteresId: (values.grupoInteresId !== null) ? values.grupoInteresId.value : 0,
+        factor: (values.factor !== null) ? values.factor.value : null,
+      }
+      const dataSelect = _.omit(data, ['defConcatenado']);
+      //console.log('datos que se enviaran SECCION 2:', dataSelect)
       setObject(dataSelect);
       nextSection(2);
-   }
+    }
   })
 
-   // Rellena Datos para Editar
-   useEffect(() => {
+  // Rellena Datos para Editar
+  useEffect(() => {
     if (isEdit) {
       formik.setValues({ ...initValues })
     }
@@ -63,7 +63,7 @@ const Descripcion = ({ nextSection, beforeSection, setObject, initValues, isEdit
     getTablaDescripcionOportunidadN1(idTablaDes, idNivel2)
       .then(res => {
         const options = buildSelectThree(res.data, 'id', 'campoA', 'nombre', false)
-        setDataApiGrupoInteres(_.orderBy(options, ['value' ], ['asc']))
+        setDataApiGrupoInteres(_.orderBy(options, ['value'], ['asc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -75,7 +75,7 @@ const Descripcion = ({ nextSection, beforeSection, setObject, initValues, isEdit
 
   // Concatena definicion, causa y consecuencia
   useEffect(() => {
-    if(formik.values.definicion !== '' && formik.values.causa !== '' && formik.values.consecuencia !== ''){
+    if (formik.values.definicion !== '' && formik.values.causa !== '' && formik.values.consecuencia !== '') {
       formik.setFieldValue('defConcatenado', 'OPORTUNIDAD DE ' + formik.values.definicion + ' DEBIDO A ' + formik.values.causa + ' PUEDE OCASIONAR ' + formik.values.consecuencia, false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -195,33 +195,33 @@ const Descripcion = ({ nextSection, beforeSection, setObject, initValues, isEdit
 
         <div className='d-flex justify-content-between pt-4'>
           <Button
-            style={{width: '130px'}}
+            style={{ width: '130px' }}
             className='text-white'
             color="primary"
             onClick={() => beforeSection(2)}
           >
-            <ChevronLeft size={17} className='mr-1'/>
+            <ChevronLeft size={17} className='mr-1' />
             Atrás
           </Button>
           <Button
-            style={{width: '130px'}}
+            style={{ width: '130px' }}
             color="dark"
             outline
-            onClick={() => { formik.handleReset()}}
+            onClick={() => { formik.handleReset() }}
             disabled={(!formik.dirty || formik.isSubmitting)}
           >
-            <Delete size={17} className='mr-2'/>
+            <Delete size={17} className='mr-2' />
             Limpiar
           </Button>
           <Button
-            style={{width: '130px'}}
+            style={{ width: '130px' }}
             className='text-white'
             color="primary"
             type="submit"
-            //disabled={formik.isSubmitting}
+          //disabled={formik.isSubmitting}
           >
             Siguiente
-            <ChevronRight size={17} className='ml-1'/>
+            <ChevronRight size={17} className='ml-1' />
           </Button>
         </div>
       </Form>

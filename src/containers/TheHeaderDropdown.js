@@ -137,20 +137,20 @@ const TheHeaderDropdown = () => {
       <Dropdown isOpen={dropdownOpen2} toggle={toggle2} >
         <DropdownToggle nav>
           <div>
-            <span className='font-weight-bolder'>{user.nombre + ' ' + user.primerApellido}</span><User size={28} className='ml-4 text-dark'/>
-           {/* <FaSortDown/> */}
+            <span className='font-weight-bolder'>{user.nombre + ' ' + user.primerApellido}</span><User size={28} className='ml-4 text-dark' />
+            {/* <FaSortDown/> */}
           </div>
         </DropdownToggle>
         <DropdownMenu right>
 
-          <DropdownItem onClick={()=> closeModal()}>
-            <User size={18} className='text-primary mr-3'/> Perfil
+          <DropdownItem onClick={() => closeModal()}>
+            <User size={18} className='text-primary mr-3' /> Perfil
           </DropdownItem>
 
           <DropdownItem divider />
 
           <DropdownItem onClick={() => closeSession()}>
-          <LogOut size={18} className='text-primary mr-3'/> Cerrar sesión
+            <LogOut size={18} className='text-primary mr-3' /> Cerrar sesión
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>

@@ -59,7 +59,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         fodaId: (values.fodaId !== null) ? values.fodaId.value : 0,
         fodaDescripcionId: (values.fodaDescripcionId !== null) ? values.fodaDescripcionId.value : 0,
       }
-      console.log('datos que se enviaran SECCION 1:', data)
+      //console.log('datos que se enviaran SECCION 1:', data)
       setObject(data);
       nextSection(1);
     }

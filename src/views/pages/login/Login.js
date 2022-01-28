@@ -90,14 +90,12 @@ const Login = () => {
         <CRow className="justify-content-center">
           <CCol md="8">
             {/*   style={{ background:'#00b7c5' }} 
-             <CCard className="text-warning bg-light  py-5 d-md-down-none" style={{ width: '44%' }}>
-             background: 'rgb(0,171,181)';
-background: 'linear-gradient(153deg, rgba(0,171,181,1) 0%, rgba(0,183,198,1) 26%, rgba(245,130,32,1) 100%)';
-background: rgb(0,171,181);
-background: linear-gradient(153deg, rgba(0,171,181,1) 0%, rgba(0,183,198,1) 26%);
-        */}
-
-
+              <CCard className="text-warning bg-light  py-5 d-md-down-none" style={{ width: '44%' }}>
+              background: 'rgb(0,171,181)';
+              background: 'linear-gradient(153deg, rgba(0,171,181,1) 0%, rgba(0,183,198,1) 26%, rgba(245,130,32,1) 100%)';
+              background: rgb(0,171,181);
+              background: linear-gradient(153deg, rgba(0,171,181,1) 0%, rgba(0,183,198,1) 26%);
+            */}
             <CCardGroup>
               <CCard className="text-white py-5 d-md-down-none" style={{ width: '44%', "backgroundColor": "rgba(0, 0, 0, 0.3)" }} >
                 <CCardBody className="text-center">
@@ -143,12 +141,12 @@ background: linear-gradient(153deg, rgba(0,171,181,1) 0%, rgba(0,183,198,1) 26%)
                     </CCol>
                     <CCol xs="12" sm="12" className="text-right">
                       <FormGroup check>
-                      <CInputCheckbox
-                        id={'otrosAux'}
-                        type={"checkbox"}
-                        onChange={(e) => { showPassword(e) }}
-                        label='Mostrar password'
-                      />
+                        <CInputCheckbox
+                          id={'otrosAux'}
+                          type={"checkbox"}
+                          onChange={(e) => { showPassword(e) }}
+                          label='Mostrar password'
+                        />
                         {/* <Input type="checkbox" onChange={(e) => { showPassword(e) }} />
                         {' '}
                         <Label check>
@@ -186,7 +184,7 @@ background: linear-gradient(153deg, rgba(0,171,181,1) 0%, rgba(0,183,198,1) 26%)
           </CCol>
         </CRow>
       </CContainer>
-      {/* 
+      {/*
       <div style={{"WebkitBackdropFilter":" blur(20px)","backdropFilter": "blur(20px)","backgroundColor": "rgba(0, 0, 0, 0.1)"}}>
                     hola mubndo
                     </div> */}

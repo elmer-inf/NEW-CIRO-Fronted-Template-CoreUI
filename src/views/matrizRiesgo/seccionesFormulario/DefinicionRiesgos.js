@@ -90,7 +90,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
         impactoId: (values.impactoId !== null) ? values.impactoId.value : 0,
       }
       const dataSelect = _.omit(data, ['defConcatenado', 'probInherente', 'probPorcentaje', 'probValoracion', 'impactoInherente', 'impactoPorcentaje', 'impactoValoracion', 'riesgoInherente', 'valorRiesgoInherente']);
-      console.log('datos que se enviaran SECCION 2:', dataSelect)
+      //console.log('datos que se enviaran SECCION 2:', dataSelect)
       setObject(dataSelect, values);
       nextSection(2);
     }
@@ -113,7 +113,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
     if (isEdit) {
       calculoRiesgoInerente();
     }
-    // eslint-disableext-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /*   P  A  R  A  M  E  T  R  O  S   */

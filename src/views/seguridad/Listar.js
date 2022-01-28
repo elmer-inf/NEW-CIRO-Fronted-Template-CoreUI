@@ -38,7 +38,6 @@ const SeguridadListar = () => {
     const path = '/seguridad/Registrar';
     if (hasPermission(path, valuePathFromContext)) {
       history.push(path);
-
     } else {
       notificationToast();
     }
@@ -209,8 +208,13 @@ const SeguridadListar = () => {
   }
 
   const editRow = (row) => {
-    console.log(row)
-    history.push('/seguridad/Editar/' + row.id);
+    //history.push('/seguridad/Editar/' + row.id);
+    const path = '/seguridad/Editar/:id';
+    if (hasPermission(path, valuePathFromContext)) {
+      history.push('/seguridad/Editar/' + row.id);
+    } else {
+      notificationToast();
+    }
   }
 
   /* Lista de Seguridad */
@@ -272,7 +276,7 @@ const SeguridadListar = () => {
       search = getParams(toSearch);
     }
 
-    console.log('TO SEARCH:: ', search);
+    //console.log('TO SEARCH:: ', search);
 
     const endpoint = 'v1/seguridad/';
 
@@ -299,7 +303,7 @@ const SeguridadListar = () => {
             <Card>
               <CardHeader>
                 <CardTitle className='float-left h4 pt-2'>Riesgo en Seguridad</CardTitle>
-                <Button color='primary' onClick={(e) => {redirect(e)}} className='float-right mt-1' style={{ width: '130px' }}>
+                <Button color='primary' onClick={(e) => { redirect(e) }} className='float-right mt-1' style={{ width: '130px' }}>
                   <span className='text-white'>Registrar</span>
                 </Button>
               </CardHeader>

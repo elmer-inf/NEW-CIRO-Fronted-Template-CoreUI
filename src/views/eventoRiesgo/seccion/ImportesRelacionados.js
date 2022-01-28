@@ -68,7 +68,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
       }
       const dataSelect = _.omit(data, ['montoPerdidaRiesgo', 'totalPerdida', 'totalRecuperado']);
 
-      console.log('datos que se enviaran SECCION 4:', dataSelect)
+      //console.log('datos que se enviaran SECCION 4:', dataSelect)
       setObject(dataSelect);
       nextSection(4);
     }
@@ -181,8 +181,8 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
   }, [formik.values.coberturaSeguro])
 
 
-   // Calcula "Monto de perdida" en bs en "Valor contable - monto perdida"
-   useEffect(() => {
+  // Calcula "Monto de perdida" en bs en "Valor contable - monto perdida"
+  useEffect(() => {
     if (formik.values.monedaId !== null) {
       var mount = covierteMoneda(formik.values.monedaId.label, formik.values.montoPerdida, dataApiTasaCambio)
       formik.setFieldValue('montoPerdidaRiesgo', mount, false)

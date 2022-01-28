@@ -41,7 +41,7 @@ const TheHeaderDropdownNotif = () => {
     getPlanVencido()
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'codigo', true)
-       // console.log('options : ', options)
+        // console.log('options : ', options)
         setPlanVencido(options)
       }).catch((error) => {
         console.log('Error: ', error)
@@ -64,20 +64,20 @@ const TheHeaderDropdownNotif = () => {
         <Bell size={20} />
         <CBadge shape="pill" color="primary"><span className='text-white'>{listDiezDiasAntes.length + listCincoDiasAntes.length + listPlanVencido.length}</span></CBadge>
       </CDropdownToggle>
-      <CDropdownMenu placement="bottom-end" className="pt-0" style={{maxHeight: '250px', overflowY: 'scroll'}}>
+      <CDropdownMenu placement="bottom-end" className="pt-0" style={{ maxHeight: '250px', overflowY: 'scroll' }}>
         <CDropdownItem header tag="div" className="text-center" color="light">
           <strong>{listDiezDiasAntes.length} Evento(s) a 10 dias de vencer la fecha fin del Plan de Acción</strong>
         </CDropdownItem>
         {
-          listDiezDiasAntes !== null && listDiezDiasAntes.length !== 0?
+          listDiezDiasAntes !== null && listDiezDiasAntes.length !== 0 ?
             <ListGroup flush className='pt-2'>
               {listDiezDiasAntes.map((evento) => {
-                return  <ListGroupItem className='py-1' key={evento.value}>
-                          <Calendar size={15} className='text-success mr-2'/>
-                          {/* <Link to={{ pathname: '/eventoRiesgo/Mostrar/' + evento.id }} className='text-dark'> */}
-                            {evento.id} | {evento.codigo !== null ? evento.codigo : <span>Sin código</span>} | {evento.fechaFinPlan}
-                          {/* </Link> */}
-                        </ListGroupItem>
+                return <ListGroupItem className='py-1' key={evento.value}>
+                  <Calendar size={15} className='text-success mr-2' />
+                  {/* <Link to={{ pathname: '/eventoRiesgo/Mostrar/' + evento.id }} className='text-dark'> */}
+                  {evento.id} | {evento.codigo !== null ? evento.codigo : <span>Sin código</span>} | {evento.fechaFinPlan}
+                  {/* </Link> */}
+                </ListGroupItem>
               })}
             </ListGroup>
             : <CDropdownItem header><i>Sin notificaciones</i></CDropdownItem>
@@ -86,15 +86,15 @@ const TheHeaderDropdownNotif = () => {
           <strong>{listCincoDiasAntes.length} Evento(s) a 5 dias de vencer la fecha fin del Plan de Acción</strong>
         </CDropdownItem>
         {
-          listCincoDiasAntes !== null && listCincoDiasAntes.length !== 0?
+          listCincoDiasAntes !== null && listCincoDiasAntes.length !== 0 ?
             <ListGroup flush className='pt-2'>
               {listCincoDiasAntes.map((evento) => {
-                return  <ListGroupItem className='py-1' key={evento.value}>
-                          <Calendar size={15} className='text-primary mr-2'/>
-                          {/* <Link to={{ pathname: '/eventoRiesgo/Mostrar/' + evento.id }} className='text-dark'> */}
-                            {evento.id} | {evento.codigo !== null ? evento.codigo : <span>Sin código</span>} | {evento.fechaFinPlan}
-                          {/* </Link> */}
-                        </ListGroupItem>
+                return <ListGroupItem className='py-1' key={evento.value}>
+                  <Calendar size={15} className='text-primary mr-2' />
+                  {/* <Link to={{ pathname: '/eventoRiesgo/Mostrar/' + evento.id }} className='text-dark'> */}
+                  {evento.id} | {evento.codigo !== null ? evento.codigo : <span>Sin código</span>} | {evento.fechaFinPlan}
+                  {/* </Link> */}
+                </ListGroupItem>
               })}
             </ListGroup>
             : <CDropdownItem header><i>Sin notificaciones</i></CDropdownItem>
@@ -103,15 +103,15 @@ const TheHeaderDropdownNotif = () => {
           <strong>{listPlanVencido.length} Evento(s) que {listPlanVencido.length === 1 ? 'venció' : 'vencieron'} a la fecha fin del Plan de Acción</strong>
         </CDropdownItem>
         {
-          listPlanVencido !== null && listPlanVencido.length !== 0?
+          listPlanVencido !== null && listPlanVencido.length !== 0 ?
             <ListGroup flush className='pt-2'>
               {listPlanVencido.map((evento) => {
-                return  <ListGroupItem className='py-1' key={evento.value}>
-                          {/* <Link to={{ pathname: '/eventoRiesgo/Mostrar/' + evento.id }} className='text-dark'> */}
-                            <Calendar size={15} className='text-danger mr-2'/>
-                            {evento.id} | {evento.codigo !== null ? evento.codigo : <span>Sin código</span>} | {evento.fechaFinPlan}
-                          {/* </Link> */}
-                        </ListGroupItem>
+                return <ListGroupItem className='py-1' key={evento.value}>
+                  {/* <Link to={{ pathname: '/eventoRiesgo/Mostrar/' + evento.id }} className='text-dark'> */}
+                  <Calendar size={15} className='text-danger mr-2' />
+                  {evento.id} | {evento.codigo !== null ? evento.codigo : <span>Sin código</span>} | {evento.fechaFinPlan}
+                  {/* </Link> */}
+                </ListGroupItem>
               })}
             </ListGroup>
             : <CDropdownItem header><i>Sin notificaciones</i></CDropdownItem>

@@ -51,13 +51,13 @@ export const buildSelectThree = (data, fieldValue, fieldLabel, fieldLabel2, mant
   return select;
 }
 
-export const buildOptionSelect = (data, fieldValue, fieldLabel, mantainAllData,nameData) => {
+export const buildOptionSelect = (data, fieldValue, fieldLabel, mantainAllData, nameData) => {
   var optionSelect = null;
   try {
     if (mantainAllData === true) {
       optionSelect = { value: data[fieldValue], label: data[fieldLabel], ...data }
     } else {
-      optionSelect = { value: data[fieldValue], label: data[fieldLabel]}
+      optionSelect = { value: data[fieldValue], label: data[fieldLabel] }
     }
 
   } catch (error) {
@@ -67,13 +67,13 @@ export const buildOptionSelect = (data, fieldValue, fieldLabel, mantainAllData,n
   return optionSelect;
 }
 
-export const buildOptionSelectThree = (data, fieldValue, fieldLabel, fieldLabel2, mantainAllData,nameData) => {
+export const buildOptionSelectThree = (data, fieldValue, fieldLabel, fieldLabel2, mantainAllData, nameData) => {
   var optionSelect = null;
   try {
     if (mantainAllData === true) {
       optionSelect = { value: data[fieldValue], label: data[fieldLabel] + ' - ' + data[fieldLabel2], ...data }
     } else {
-      optionSelect = { value: data[fieldValue], label: data[fieldLabel] + ' - ' + data[fieldLabel2]}
+      optionSelect = { value: data[fieldValue], label: data[fieldLabel] + ' - ' + data[fieldLabel2] }
     }
 
   } catch (error) {

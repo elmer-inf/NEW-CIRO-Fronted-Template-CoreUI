@@ -12,14 +12,14 @@ const DocsLink = props => {
 
   return (
     <div className="card-header-actions">
-      <CLink 
+      <CLink
         {...rest}
         href={href}
-        rel="noreferrer noopener" 
-        target="_blank" 
-        className="card-header-action"  
+        rel="noreferrer noopener"
+        target="_blank"
+        className="card-header-action"
       >
-        <small className="text-muted">{ text || 'docs' }</small>
+        <small className="text-muted">{text || 'docs'}</small>
       </CLink>
     </div>
   )

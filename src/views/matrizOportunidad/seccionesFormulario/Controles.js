@@ -1,4 +1,4 @@
-import { React, useEffect } from 'react'
+import { React } from 'react'
 import { ChevronLeft, ChevronRight, Delete } from 'react-feather'
 import { Row, Col, FormGroup, Label, Button, } from 'reactstrap'
 import * as Yup from "yup"
@@ -17,8 +17,8 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataApiF
 
     controlComentario: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').nullable(),
     controlesTiene: Yup.string().required('Campo obligatorio'),
-    nroControles : Yup.string().nullable().when('controlesTiene',{
-      is:(val) =>  (val === 'true'),
+    nroControles: Yup.string().nullable().when('controlesTiene', {
+      is: (val) => (val === 'true'),
       then: Yup.string().nullable().required("Campo obligatorio"),
     }),
     controles: Yup.array().of(
@@ -57,10 +57,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataApiF
           : values.fortalezaId.value
         : 0,
     }
-
-    // display form field values on success
-    //alert(JSON.stringify(_.omit(data, ['nroControles']), null, 10));
-    console.log('datos que se enviaran SECCION 4:', _.omit(data, ['nroControles']))
+    //console.log('datos que se enviaran SECCION 4:', _.omit(data, ['nroControles']))
     setObject(_.omit(data, ['nroControles']), values);
     nextSection(4);
   }

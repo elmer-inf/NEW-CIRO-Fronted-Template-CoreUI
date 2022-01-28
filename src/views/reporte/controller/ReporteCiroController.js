@@ -8,7 +8,7 @@ import { HOSTURI } from 'src/config'
 const HOST = HOSTURI.endpoint_riesgos
 const base = '/v1/reporte/ciro/';
 
-export const generateAllReport= async (dataDates) => {
+export const generateAllReport = async (dataDates) => {
     const uri = HOST + base + '/allFiles';
     const response = await axios.post(uri, dataDates)
     return response

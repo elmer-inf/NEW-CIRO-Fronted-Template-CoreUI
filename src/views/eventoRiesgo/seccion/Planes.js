@@ -1,4 +1,4 @@
-import { React, Fragment, useState, useEffect} from 'react'
+import { React, Fragment, useState, useEffect } from 'react'
 import { ChevronLeft, ChevronRight, Delete } from 'react-feather'
 import { Label, FormGroup, Row, Col, Form, Button } from 'reactstrap'
 import { useFormik } from "formik"
@@ -8,28 +8,28 @@ import { CSelectReact } from 'src/reusable/CSelectReact'
 import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
 import { buildSelectTwo } from 'src/functions/Function'
 
-const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdit, optionsPlanes}) => {
+const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdit, optionsPlanes }) => {
 
   const formik = useFormik({
     initialValues: initValues,
     validationSchema: Yup.object().shape({
-        areaResponsableId: Yup.mixed().nullable(),
-        cargoResponsableId: Yup.mixed().nullable(),
-        detallePlan: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').nullable(),
-        fechaFinPlan: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
-        descripcionEstado: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').nullable(),
-        estadoPlan: Yup.mixed().nullable(),
-      }
+      areaResponsableId: Yup.mixed().nullable(),
+      cargoResponsableId: Yup.mixed().nullable(),
+      detallePlan: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').nullable(),
+      fechaFinPlan: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
+      descripcionEstado: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').nullable(),
+      estadoPlan: Yup.mixed().nullable(),
+    }
     ),
 
     onSubmit: values => {
-       const data = {
+      const data = {
         ...values,
-        areaResponsableId:  (values.areaResponsableId !== null) ? values.areaResponsableId.value : 0,
+        areaResponsableId: (values.areaResponsableId !== null) ? values.areaResponsableId.value : 0,
         cargoResponsableId: (values.cargoResponsableId !== null) ? values.cargoResponsableId.value : 0,
         estadoPlan: (values.estadoPlan !== null) ? values.estadoPlan.value : null,
       }
-      console.log('datos que se enviaran SECCION 2:', data)
+      //console.log('datos que se enviaran SECCION 2:', data)
       setObject(data);
       nextSection(2);
     }
@@ -173,32 +173,32 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
 
         <div className='d-flex justify-content-between pt-4'>
           <Button
-              style={{width: '130px'}}
-              className='text-white'
-              color="primary"
-              onClick={() => beforeSection(2)}
-            >
-              <ChevronLeft size={17} className='mr-1'/>
+            style={{ width: '130px' }}
+            className='text-white'
+            color="primary"
+            onClick={() => beforeSection(2)}
+          >
+            <ChevronLeft size={17} className='mr-1' />
             Atrás
           </Button>
           <Button
-            style={{width: '130px'}}
+            style={{ width: '130px' }}
             color="dark"
             outline
             onClick={() => { formik.handleReset() }}
             disabled={!formik.dirty || formik.isSubmitting}
           >
-            <Delete size={17} className='mr-2'/>
+            <Delete size={17} className='mr-2' />
             Limpiar
           </Button>
           <Button
-            style={{width: '130px'}}
+            style={{ width: '130px' }}
             className='text-white'
             color="primary"
             type="submit"
           >
             Siguiente
-            <ChevronRight size={17} className='ml-1'/>
+            <ChevronRight size={17} className='ml-1' />
           </Button>
         </div>
 

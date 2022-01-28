@@ -185,7 +185,7 @@ const AdministracionMatrizRiesgosListar = () => {
   const deleteRow = (row) => {
     swalWithBootstrapButtons.fire({
       title: '',
-      text:'¿Está seguro de eliminar el Parámetro de Matriz de Riesgo?',
+      text: '¿Está seguro de eliminar el Parámetro de Matriz de Riesgo?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Si',
@@ -308,7 +308,7 @@ const AdministracionMatrizRiesgosListar = () => {
         <Card>
           <CardHeader>
             <CardTitle className='float-left h4 pt-2'>Listado de Parámetros de Matriz de Riesgos</CardTitle>
-            <Button color='primary' onClick={(e) => {redirect(e)}} className='float-right mt-1' style={{ width: '130px' }}>
+            <Button color='primary' onClick={(e) => { redirect(e) }} className='float-right mt-1' style={{ width: '130px' }}>
               <span className='text-white'>Registrar</span>
             </Button>
           </CardHeader>

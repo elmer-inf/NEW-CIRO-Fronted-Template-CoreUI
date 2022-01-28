@@ -30,7 +30,6 @@ const AdministracionMatrizOportunidadListar = () => {
 
   const redirect = (e) => {
     e.preventDefault();
-
     const path = '/administracion/matriz-oportunidad/Registrar';
     if (hasPermission(path, valuePathFromContext)) {
       history.push(path);
@@ -142,7 +141,7 @@ const AdministracionMatrizOportunidadListar = () => {
   const deleteRow = (row) => {
     swalWithBootstrapButtons.fire({
       title: '',
-      text:'¿Está seguro de eliminar el Parámetro de Matriz de Oportunidad?',
+      text: '¿Está seguro de eliminar el Parámetro de Matriz de Oportunidad?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Si',
@@ -264,7 +263,7 @@ const AdministracionMatrizOportunidadListar = () => {
         <Card>
           <CardHeader>
             <CardTitle className='float-left h4 pt-2'>Listado de Parámetros de Matriz de oportunidades</CardTitle>
-            <Button color='primary' onClick={(e) => {redirect(e)}} className='float-right mt-1 text-white' style={{ width: '130px' }}>
+            <Button color='primary' onClick={(e) => { redirect(e) }} className='float-right mt-1 text-white' style={{ width: '130px' }}>
               <Plus size={15} className='mr-2' /><span>Registrar</span>
             </Button>
           </CardHeader>

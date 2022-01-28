@@ -1,5 +1,5 @@
 import React from 'react'
-import {  Col,  Row, } from 'reactstrap'
+import { Col, Row, } from 'reactstrap'
 import { CNav, CNavItem, CNavLink, CTabContent, CTabPane, CTabs } from '@coreui/react';
 import { FileText } from 'react-feather';
 import RiesgooperativoA from './secciones/RiesgooperativoA';
@@ -13,7 +13,7 @@ import LugarH from './secciones/LugarH';
 import LineaNegocioI from './secciones/LineaNegocioI';
 
 
-const ViewReportCIRO = ({fechaInicio,fechaFin, trimestre}) => {
+const ViewReportCIRO = ({ fechaInicio, fechaFin, trimestre }) => {
   return (
     <div>
       <Row>
@@ -92,7 +92,7 @@ const ViewReportCIRO = ({fechaInicio,fechaFin, trimestre}) => {
                 </Row>
               </CTabPane>
 
-           <CTabPane>
+              <CTabPane>
                 <Row className='pt-3'>
                   <Col xs='12'>
                     <TipoEventoC fechaIniTrim={fechaInicio} fechaFinTrim={fechaFin} />
@@ -146,7 +146,7 @@ const ViewReportCIRO = ({fechaInicio,fechaFin, trimestre}) => {
                     <LineaNegocioI fechaIniTrim={fechaInicio} fechaFinTrim={fechaFin} />
                   </Col>
                 </Row>
-              </CTabPane> 
+              </CTabPane>
 
             </CTabContent>
           </CTabs>

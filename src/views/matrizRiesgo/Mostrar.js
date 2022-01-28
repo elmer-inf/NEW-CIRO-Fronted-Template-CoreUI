@@ -205,19 +205,19 @@ const MatrizRiesgo = ({ match }) => {
     var probabilidadR = 0;
     var disminucion = dataApi.controlId.campoB;
     if (dataApi.controlObjetivo === 'Ambos' || dataApi.controlObjetivo === 'Probabilidad')
-      probabilidadR = dataApi.probabilidadId !== null? reduceProbabilidadImpacto(dataApi.probabilidadId.campoA, disminucion) : 'Sin registro';
+      probabilidadR = dataApi.probabilidadId !== null ? reduceProbabilidadImpacto(dataApi.probabilidadId.campoA, disminucion) : 'Sin registro';
     else
-      probabilidadR = dataApi.probabilidadId !== null? dataApi.probabilidadId.campoA : 'Sin registro';
-      //console.log('probabilidadR: ', probabilidadR);
+      probabilidadR = dataApi.probabilidadId !== null ? dataApi.probabilidadId.campoA : 'Sin registro';
+    //console.log('probabilidadR: ', probabilidadR);
     return probabilidadR;
   }
 
   const valorProbabilidad = () => {
     var valorProb = '';
     if (dataApi.controlObjetivo === 'Ambos' || dataApi.controlObjetivo === 'Probabilidad')
-      valorProb = dataApi.probabilidadId !== null? buscaValorLiteral(dataApiProbabilidad, probabilidadResidual()) : 'Sin registro';
+      valorProb = dataApi.probabilidadId !== null ? buscaValorLiteral(dataApiProbabilidad, probabilidadResidual()) : 'Sin registro';
     else
-      valorProb = dataApi.probabilidadId !== null? buscaValorLiteral(dataApiProbabilidad, dataApi.probabilidadId.campoA) : 'Sin registro';
+      valorProb = dataApi.probabilidadId !== null ? buscaValorLiteral(dataApiProbabilidad, dataApi.probabilidadId.campoA) : 'Sin registro';
     return valorProb;
   }
 
@@ -225,9 +225,9 @@ const MatrizRiesgo = ({ match }) => {
     var impactoR = 0;
     var disminucion = dataApi.controlId.campoB;
     if (dataApi.controlObjetivo === 'Ambos' || dataApi.controlObjetivo === 'Impacto')
-      impactoR = dataApi.impactoId !== null? reduceProbabilidadImpacto(dataApi.impactoId.campoA, disminucion) : 'Sin registro';
+      impactoR = dataApi.impactoId !== null ? reduceProbabilidadImpacto(dataApi.impactoId.campoA, disminucion) : 'Sin registro';
     else
-      impactoR = dataApi.impactoId !== null? dataApi.impactoId.campoA : 'Sin registro';
+      impactoR = dataApi.impactoId !== null ? dataApi.impactoId.campoA : 'Sin registro';
     return impactoR;
   }
 
@@ -257,32 +257,32 @@ const MatrizRiesgo = ({ match }) => {
   }
 
   // Busca veces anio - probabilidad
-  const probabilidadVecesAnio = ()=>{
+  const probabilidadVecesAnio = () => {
     var vecesAnio;
-    if(dataApi.probabilidadId !== null){
+    if (dataApi.probabilidadId !== null) {
       var prob = probabilidadResidual();
-      for (var dataProb of dataApiProbabilidad){
-        if(dataProb.campoA === prob + ''){
+      for (var dataProb of dataApiProbabilidad) {
+        if (dataProb.campoA === prob + '') {
           vecesAnio = dataProb.campoE;
         }
       }
-    } else{
+    } else {
       vecesAnio = 'Sin registro';
     }
     return vecesAnio;
   }
 
   // Busca numero dias - probabilidad
-  const probabilidadDias = ()=>{
+  const probabilidadDias = () => {
     var numeroDias;
-    if(dataApi.probabilidadId !== null){
+    if (dataApi.probabilidadId !== null) {
       var prob = probabilidadResidual();
-      for (var dataProb of dataApiProbabilidad){
-        if(dataProb.campoA === prob + ''){
+      for (var dataProb of dataApiProbabilidad) {
+        if (dataProb.campoA === prob + '') {
           numeroDias = dataProb.campoD;
         }
       }
-    } else{
+    } else {
       numeroDias = 'Sin registro';
     }
     return numeroDias;
@@ -333,8 +333,8 @@ const MatrizRiesgo = ({ match }) => {
     swalWithBootstrapButtons.fire({
       title: '',
       text: dataToRequest.estadoRegistro === 'Autorizado' ? 'Al autorizar el registro se asignará el siguiente código: ' + codigo + ' ¿Está seguro de generarlo?' :
-            dataToRequest.estadoRegistro === 'Observado' ? '¿Está seguro de modificar el estado de registro a Observado?' :
-            dataToRequest.estadoRegistro === 'Pendiente' ? '¿Está seguro de modificar el estado de registro a Pendiente?' :
+        dataToRequest.estadoRegistro === 'Observado' ? '¿Está seguro de modificar el estado de registro a Observado?' :
+          dataToRequest.estadoRegistro === 'Pendiente' ? '¿Está seguro de modificar el estado de registro a Pendiente?' :
             dataToRequest.estadoRegistro === 'Descartado' ? '¿Está seguro de modificar el estado de registro a Descartado?' : '',
       icon: 'warning',
       showCancelButton: true,
@@ -638,7 +638,7 @@ const MatrizRiesgo = ({ match }) => {
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Probabilidad (Inherente): </div>
-                              <div className='text-data'>{dataApi.probabilidadId !== null ? dataApi.probabilidadId.campoA: <i>Sin registro</i>}</div>
+                              <div className='text-data'>{dataApi.probabilidadId !== null ? dataApi.probabilidadId.campoA : <i>Sin registro</i>}</div>
                             </Col>
 
                             <Col xs='12' sm='6' md='4' xl='2' className='pt-2'>

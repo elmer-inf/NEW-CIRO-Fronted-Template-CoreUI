@@ -21,31 +21,31 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   const [relEventoRiesgo, setRelEventoRiesgo] = useState([]);
 
   const formik = useFormik({
-    initialValues: {...initValues, otrosAux: false},
+    initialValues: { ...initValues, otrosAux: false },
     validationSchema: Yup.object().shape({
-      areaId : Yup.mixed().required('Campo obligatorio'),
-      unidadId : Yup.mixed().required('Campo obligatorio'),
-      procesoId : Yup.mixed().required('Campo obligatorio'),
+      areaId: Yup.mixed().required('Campo obligatorio'),
+      unidadId: Yup.mixed().required('Campo obligatorio'),
+      procesoId: Yup.mixed().required('Campo obligatorio'),
 
       // Campos solo para mostrar:
-      macroNombre : Yup.string().nullable(),
-      macroCriticidad : Yup.string().nullable(),
-      macroValoracion : Yup.string().nullable(),
+      macroNombre: Yup.string().nullable(),
+      macroCriticidad: Yup.string().nullable(),
+      macroValoracion: Yup.string().nullable(),
       otrosAux: Yup.boolean(),
       eventoFechaAux: Yup.date().nullable(),
       eventoDescAux: Yup.string().nullable(),
       // FIN Campos solo para mostrar:
 
-      procedimientoId : Yup.mixed().required('Campo obligatorio'),
-      duenoCargoId : Yup.mixed().required('Campo obligatorio'),
-      responsableCargoId : Yup.mixed().required('Campo obligatorio'),
-      fechaEvaluacion : Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").required('Campo obligatorio'),
-      identificadoId : Yup.mixed().nullable().when('otrosAux',{
-        is:(val) =>  (val === false),
+      procedimientoId: Yup.mixed().required('Campo obligatorio'),
+      duenoCargoId: Yup.mixed().required('Campo obligatorio'),
+      responsableCargoId: Yup.mixed().required('Campo obligatorio'),
+      fechaEvaluacion: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").required('Campo obligatorio'),
+      identificadoId: Yup.mixed().nullable().when('otrosAux', {
+        is: (val) => (val === false),
         then: Yup.mixed().nullable().required("Campo obligatorio"),
       }),
-      identificadoOtro: Yup.string().nullable().when('otrosAux',{
-        is:(val) => (val === true),
+      identificadoOtro: Yup.string().nullable().when('otrosAux', {
+        is: (val) => (val === true),
         then: Yup.string().nullable().required("Campo obligatorio"),
       }),
       eventoRiesgoId: Yup.mixed().nullable(),
@@ -98,7 +98,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         eventoRiesgoId: (values.eventoRiesgoId !== null) ? values.eventoRiesgoId.value : 0,
         //eventoMaterializado: values.eventoMaterializado
       }
-      console.log('datos que se enviaran SECCION 1:', data)
+      //console.log('datos que se enviaran SECCION 1:', data)
       setObject(data, values);
       nextSection(1);
     }
@@ -205,12 +205,14 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
 
   useEffect(() => {
     callApiArea(3);
-    callApiMacro(15); 
+    callApiMacro(15);
     callApiCargo(7);
     callApiIdentificado(8);
     getListEventosRiesgo();
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
 
   // FORMIK RESET VALUE REUTILIZABLE
@@ -269,10 +271,10 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   }, [formik.values.otrosAux])
 
 
-   // Autocompleta "Fecha y Descripcion" de Eventos
-   useEffect(() => {
+  // Autocompleta "Fecha y Descripcion" de Eventos
+  useEffect(() => {
     if (formik.values.eventoRiesgoId !== null) {
-      formik.setFieldValue('eventoFechaAux', formik.values.eventoRiesgoId.fechaDesc !== null? formik.values.eventoRiesgoId.fechaDesc : '', false);
+      formik.setFieldValue('eventoFechaAux', formik.values.eventoRiesgoId.fechaDesc !== null ? formik.values.eventoRiesgoId.fechaDesc : '', false);
       formik.setFieldValue('eventoDescAux', formik.values.eventoRiesgoId.descripcion, false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -285,14 +287,24 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
     formik.setFieldValue('eventoDescAux', '', false);
 
   }
+
+  // Reset codigo, criticidad y valoracion de Macroproceso
+  useEffect(() => {
+    if (formik.values.procesoId === null) {
+      formik.setFieldValue('macroNombre', '', false)
+      formik.setFieldValue('macroCriticidad', '', false)
+      formik.setFieldValue('macroValoracion', '', false)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.procesoId]);
+
+
   useEffect(() => {
     if (formik.values.eventoMaterializado === false) {
       resetDatosEvento();
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.eventoMaterializado])
-
-  /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
 
   /**
@@ -308,32 +320,23 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         console.log('Error: ', error)
       })
   }
-  const resetAllValues = () => {
-    formik.setFieldValue('macroNombre', '', false);
-    formik.setFieldValue('macroCriticidad', '', false);
-    formik.setFieldValue('macroValoracion', '', false);
 
-  }
-  const clearAllDependences = () => {
-    resetAllValues();
-    //setVarListN2([]);
-  }
 
- /*  // Limita El año de la fecha a 3000
-  useEffect(() => {
-    var arrayFecha = formik.values.fechaEvaluacion.split('-')
-    if (arrayFecha[0] > 3000){
-      formik.setFieldValue('fechaEvaluacion', '3000-' + arrayFecha[1] + '-' + arrayFecha[2] , false);
-      //console.log('fecha fff: ', '3000-' + arrayFecha[1] + '-' + arrayFecha[2]);
-    }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.fechaEvaluacion]) */
+  /*  // Limita El año de la fecha a 3000
+   useEffect(() => {
+     var arrayFecha = formik.values.fechaEvaluacion.split('-')
+     if (arrayFecha[0] > 3000){
+       formik.setFieldValue('fechaEvaluacion', '3000-' + arrayFecha[1] + '-' + arrayFecha[2] , false);
+       //console.log('fecha fff: ', '3000-' + arrayFecha[1] + '-' + arrayFecha[2]);
+     }
+     //eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [formik.values.fechaEvaluacion]) */
 
 
   // Redirecciona a Listar
   const history = useHistory();
   const redirect = (e) => {
-      history.push('/matrizRiesgo/Listar');
+    history.push('/matrizRiesgo/Listar');
   }
 
 
@@ -527,7 +530,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
-              Identificado por {formik.values.otrosAux === false? <span className='text-primary h5'><b>*</b></span>: null}
+              Identificado por {formik.values.otrosAux === false ? <span className='text-primary h5'><b>*</b></span> : null}
             </Label>
             <CSelectReact
               type={"select"}
@@ -539,12 +542,12 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
               error={formik.errors.identificadoId}
               touched={formik.touched.identificadoId}
               options={dataApiIdentificado}
-              isDisabled={formik.values.otrosAux === true? true: false}
+              isDisabled={formik.values.otrosAux === true ? true : false}
             />
           </FormGroup>
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
-            <br/>
+            <br />
             <CInputCheckbox
               id={'otrosAux'}
               type={"checkbox"}
@@ -552,14 +555,14 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               label='Otros (Identificado por)'
-              disabled={formik.values.identificadoId !== null? true: false}
+              disabled={formik.values.identificadoId !== null ? true : false}
             />
           </FormGroup>
 
-          {formik.values.otrosAux === true && formik.values.identificadoId === null?
+          {formik.values.otrosAux === true && formik.values.identificadoId === null ?
             <FormGroup tag={Col} md='6' lg='6' className='mb-0'>
               <Label className='form-label'>
-                Otros (Identificado por) {formik.values.otrosAux === true? <span className='text-primary h5'><b>*</b></span>: null}
+                Otros (Identificado por) {formik.values.otrosAux === true ? <span className='text-primary h5'><b>*</b></span> : null}
               </Label>
               <CInputReact
                 type={"textarea"}
@@ -573,10 +576,10 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
                 rows={1}
               />
             </FormGroup>
-          : null}
+            : null}
         </Row>
 
-        <hr/>
+        <hr />
         <Row>
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
@@ -608,7 +611,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
               error={formik.errors.eventoRiesgoId}
               touched={formik.touched.eventoRiesgoId}
               options={relEventoRiesgo}
-              isDisabled={formik.values.eventoMaterializado === true? false : true}
+              isDisabled={formik.values.eventoMaterializado === true ? false : true}
             />
           </FormGroup>
 
@@ -653,7 +656,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
             style={{ width: '130px' }}
             color="primary"
             outline
-            onClick={(e) => {redirect(e)}}
+            onClick={(e) => { redirect(e) }}
           >
             Cancelar
           </Button>

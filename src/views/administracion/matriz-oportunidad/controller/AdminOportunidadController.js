@@ -10,13 +10,13 @@ export const getTablaListaOportunidad = async () => {
 }
 
 export const getTablaDescripcionOportunidadN1 = async (idTabla) => {
-    const uri = HOST.concat('v1/tablaDescripcionMatrizOportunidad/listarNivel1/',idTabla)
+    const uri = HOST.concat('v1/tablaDescripcionMatrizOportunidad/listarNivel1/', idTabla)
     const response = await axios.get(uri)
     return response
 }
 
 export const getTablaDescripcionOportunidadN2 = async (idTabla, idNivel2) => {
-    const uri = HOST.concat('v1/tablaDescripcionMatrizOportunidad/listarNivel2/',idTabla,'/', idNivel2);
+    const uri = HOST.concat('v1/tablaDescripcionMatrizOportunidad/listarNivel2/', idTabla, '/', idNivel2);
     const response = await axios.get(uri)
     return response
 }
@@ -31,7 +31,7 @@ export const putTablaDescripcionOportunidadId = (id, data) => {
     return axios.put(uri, data);
 }
 
- export const getTablaDescripcionOportunidadId = async (id) => {
+export const getTablaDescripcionOportunidadId = async (id) => {
     const uri = HOST + 'v1/tablaDescripcionMatrizOportunidad/mostrar2/' + id;
     const response = await axios.get(uri);
     return response;

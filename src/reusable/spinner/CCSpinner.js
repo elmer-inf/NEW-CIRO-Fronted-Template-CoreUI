@@ -13,18 +13,18 @@ import './style.css';
 //? <div className='spinner' style={{ width: props.width, height: props.height, paddingTop: props.paddingTop }}><CSpinnerIcon /></div >
 
 const CCSpinner = (props) => {
-    return (
-        (props.show === true)? 
-        <div className='spinner' style={{ width: props.width, height: props.height, paddingTop: props.paddingTop }}>
-            <ClassicSpinner
-            size={50}
-            // sizeUnit={'1px'}s
-            color={'orange'}
-            backColor={'orange'}
+  return (
+    (props.show === true) ?
+      <div className='spinner' style={{ width: props.width, height: props.height, paddingTop: props.paddingTop }}>
+        <ClassicSpinner
+          size={50}
+          // sizeUnit={'1px'}s
+          color={'orange'}
+          backColor={'orange'}
         />
-        </div >
-                : null
+      </div >
+      : null
 
-    );
+  );
 }
 export default CCSpinner;

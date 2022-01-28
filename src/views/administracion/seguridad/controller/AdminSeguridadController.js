@@ -10,7 +10,7 @@ export const getTablaListaSeguridad = async () => {
 }
 
 export const getTablaDescripcionSeguridadN1 = async (idTabla) => {
-    const uri = HOST.concat('v1/tablaDescripcionSeguridad/listarNivel1/',idTabla)
+    const uri = HOST.concat('v1/tablaDescripcionSeguridad/listarNivel1/', idTabla)
     const response = await axios.get(uri)
     return response
 }

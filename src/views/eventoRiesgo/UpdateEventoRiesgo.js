@@ -23,12 +23,12 @@ const UpdateEventoRiesgo = ({ match }) => {
 
   const history = useHistory();
   const [spin, setSpin] = useState(true);
-  const [getFiles, setGetFiles] = useState(null)
+  //const [getFiles, setGetFiles] = useState(null)
   const [dataApiTipoEvento, setDataApiTipoEvento] = useState([])
 
-  const obtainFiles = (f) => {
+  /* const obtainFiles = (f) => {
     setGetFiles(f)
-  }
+  } */
 
   const formValueInitialTipoEvento = {
     tipoEvento: null,
@@ -294,7 +294,7 @@ const UpdateEventoRiesgo = ({ match }) => {
     await getEventoRiesgoId(idEventoRiesgo)
       .then((response) => {
         const res = response.data;
-        console.log('For update Evento Riesgo: ', res);
+        console.log('Datos a editar de Evento Riesgo: ', res);
         macthedValues(res);
         setSpin(false)
       }).catch((error) => {
@@ -339,12 +339,12 @@ const UpdateEventoRiesgo = ({ match }) => {
   }
 
   const setObject = (result) => {
-    console.log("result: ", result)
+    //console.log("result: ", result)
     const values = {
       ...requestData,
       ...result
     }
-    console.log('DATA PARA GUARDAR : ', values);
+    //console.log('DATA PARA GUARDAR : ', values);
     setRequestData(values);
     return values;
   }
@@ -395,31 +395,31 @@ const UpdateEventoRiesgo = ({ match }) => {
       ...dataRequest,
       tipoEvento: formik.values.tipoEvento
     }
-   /* if (formik.values.tipoEvento !== 'A') {
-      request = _.omit(request, ['tasaCambioId', 'monedaId', 'montoPerdida', 'gastoAsociado',
-        'montoRecuperado', 'impactoId', 'coberturaSeguro', 'polizaSeguroId', 'montoRecuperadoSeguro',
-        'recuperacionActivoId', 'perdidaMercado', 'cuentaContableId', 'fechaContable'])
-
-    }*/
-    
-     if (formik.values.tipoEvento === 'A') {
-       request = {
-         ...dataRequest,
-         tipoEvento: formik.values.tipoEvento
-       }
-     } else {
-       request = {
-         ...dataRequest,
-         ...formValueInitialImportes,
-         tipoEvento: formik.values.tipoEvento
-       }
-     }
+    /* if (formik.values.tipoEvento !== 'A') {
+       request = _.omit(request, ['tasaCambioId', 'monedaId', 'montoPerdida', 'gastoAsociado',
+         'montoRecuperado', 'impactoId', 'coberturaSeguro', 'polizaSeguroId', 'montoRecuperadoSeguro',
+         'recuperacionActivoId', 'perdidaMercado', 'cuentaContableId', 'fechaContable'])
  
+     }*/
+
+    if (formik.values.tipoEvento === 'A') {
+      request = {
+        ...dataRequest,
+        tipoEvento: formik.values.tipoEvento
+      }
+    } else {
+      request = {
+        ...dataRequest,
+        ...formValueInitialImportes,
+        tipoEvento: formik.values.tipoEvento
+      }
+    }
+
 
     //console.log('Lo que se enviara en el request: ', request)
     // console.log('JSON.stringify(request) ', JSON.stringify(request))
     //  var formData = new FormData();
-    console.log('REQUEEEST:: ', request);
+    //console.log('REQUEEEST:: ', request);
     // formData.append('eventoRiesgoPostDTO', JSON.stringify(_.omit(request, ['files'])));
     //formData.append('file', getFiles);
     /* if (getFiles !== null) {
@@ -430,15 +430,13 @@ const UpdateEventoRiesgo = ({ match }) => {
        formData.append("file", new Blob([]));
      }*/
     /*
-    
+
         for (var value of formData.values()) {
            console.log('===========================================')
            console.log('--> ', value);
            console.log('===========================================')
          }*/
 
-
-    console.log('Datos que se edita:  ', _.omit(request, ['files', 'riesgoRelacionado']))
     const idEvento = match.params.id;
     putEventoRiesgoId(idEvento, _.omit(request, ['files', 'riesgoRelacionado']))
       .then(res => {
@@ -591,7 +589,7 @@ const UpdateEventoRiesgo = ({ match }) => {
                           nextSection={nextSection}
                           setObject={setObject}
                           initValues={formValueInitialDatosSec}
-                          obtainFiles={obtainFiles}
+                          //obtainFiles={obtainFiles}
                           optionsEstado={optionsEstado}
                           isEdit={true}
                         />

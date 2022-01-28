@@ -37,7 +37,7 @@ const AdminFormSeguridad = ({ initialValuess, handleOnSubmit }) => {
         const options = buildSelectTwo(res.data, 'id', 'nombreTabla', true)
         setTablaListaOptions(options)
       }).catch((error) => {
-    })
+      })
   }
 
   useEffect(() => {
@@ -47,7 +47,7 @@ const AdminFormSeguridad = ({ initialValuess, handleOnSubmit }) => {
   return (
     <Form onSubmit={formik.handleSubmit} autoComplete="off">
       <FormGroup row className='justify-content-center'>
-        <Label sm='3'  lg='3' for='tabla'>
+        <Label sm='3' lg='3' for='tabla'>
           Tabla
         </Label>
         <Col sm='9' lg='5'>
@@ -68,8 +68,8 @@ const AdminFormSeguridad = ({ initialValuess, handleOnSubmit }) => {
       {(formik.values.tablaId !== null) ?
         <FormGroup row className='justify-content-center'>
           <Label sm='3' lg='3' for='nombre'>
-            {formik.values.tablaId.label === 'Tipo de activo de información' ? 'Nombre del tipo': null }
-            {formik.values.tablaId.label === 'Tratamiento o estado' ? 'Nombre del estado': null }
+            {formik.values.tablaId.label === 'Tipo de activo de información' ? 'Nombre del tipo' : null}
+            {formik.values.tablaId.label === 'Tratamiento o estado' ? 'Nombre del estado' : null}
           </Label>
           <Col sm='9' lg='5'>
             <CInputReact
@@ -83,7 +83,7 @@ const AdminFormSeguridad = ({ initialValuess, handleOnSubmit }) => {
             />
           </Col>
         </FormGroup>
-      : null}
+        : null}
 
       <FormGroup className='mb-0 mt-4' row>
         <Col className='d-flex justify-content-center'>

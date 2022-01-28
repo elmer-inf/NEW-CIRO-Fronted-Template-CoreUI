@@ -40,14 +40,14 @@ const EventoRiesgoListar = () => {
   const [spin, setSpin] = useState(false);
 
   const redirect = (e) => {
-    history.push('/eventoRiesgo/Registrar');
-   /*  e.preventDefault();
+    //history.push('/eventoRiesgo/Registrar');
+    e.preventDefault();
     const path = '/eventoRiesgo/Registrar';
     if (hasPermission(path, valuePathFromContext)) {
       history.push(path);
     } else {
       notificationToast();
-    } */
+    }
   }
 
   const notificationToast = () => {
@@ -215,7 +215,13 @@ const EventoRiesgoListar = () => {
   }
 
   const editRow = (row) => {
-    history.push('/eventoRiesgo/Editar/' + row.id);
+    //history.push('/eventoRiesgo/Editar/' + row.id);
+    const path = '/eventoRiesgo/UpdateEventoRiesgo/:id';
+    if (hasPermission(path, valuePathFromContext)) {
+      history.push('/eventoRiesgo/UpdateEventoRiesgo/' + row.id);
+    } else {
+      notificationToast();
+    }
   }
 
   const actionFormatterEvaluar = (cell, row) => {
@@ -230,7 +236,7 @@ const EventoRiesgoListar = () => {
     // Genera posible codigo al Autorizar Evento
     await getGeneraCodigo(row.id)
       .then((response) => {
-        if(response.data === 'ERROR EN CODIGO'){
+        if (response.data === 'ERROR EN CODIGO') {
           Swal.fire({
             position: 'top',
             icon: 'error',
@@ -239,67 +245,67 @@ const EventoRiesgoListar = () => {
             showConfirmButton: false,
             timer: 3000
           })
-        } else{
-          if(row.estadoRegistro !== 'Descartado' && row.estadoRegistro !== 'Autorizado'){
+        } else {
+          if (row.estadoRegistro !== 'Descartado' && row.estadoRegistro !== 'Autorizado') {
             swalWithBootstrapButtons.fire({
-             title: '',
-             text: 'Al autorizar el registro se asignará el siguiente código para ASFI: ' + response.data + ' ¿Está seguro de generarlo?',
-             icon: 'warning',
-             showCancelButton: true,
-             confirmButtonText: 'Si',
-             cancelButtonText: 'No',
-             reverseButtons: true,
-             position: 'top',
-           }).then((result) => {
-             if (result.isConfirmed) {
-                 putEvaluaEvento(row.id, data)
-                 .then(res => {
-                   swalWithBootstrapButtons.fire({
-                     title: '',
-                     text: 'Operación realizada exitósamente',
-                     icon: 'success',
-                     confirmButtonText: 'Aceptar',
-                     position: 'top',
-                   }).then(okay => {
-                     if (okay) {
-                       callApi(pagination.page, pagination.size);
-                     }
-                   })
-                 }).catch((error) => {
-                   console.log('Error al obtener datos: ', error);
-                 });
-             } else if (
-               result.dismiss === Swal.DismissReason.cancel
-             ) {
-               swalWithBootstrapButtons.fire({
-                 title: '',
-                 text: 'Operación cancelada',
-                 icon: 'error',
-                 confirmButtonText: 'Aceptar',
-                 position: 'top'
-               })
-             }
-           })
-         }else{
-           if(row.estadoRegistro === 'Descartado'){
-             swalWithBootstrapButtons.fire({
-               title: '',
-               text: 'Un registro Descartado no se puede Autorizar',
-               icon: 'error',
-               confirmButtonText: 'Aceptar',
-               position: 'top'
-             })
-           }
-           if(row.estadoRegistro === 'Autorizado'){
-             swalWithBootstrapButtons.fire({
-               title: '',
-               text: 'El registro ya está Autorizado',
-               icon: 'error',
-               confirmButtonText: 'Aceptar',
-               position: 'top'
-             })
-           }
-         }
+              title: '',
+              text: 'Al autorizar el registro se asignará el siguiente código para ASFI: ' + response.data + ' ¿Está seguro de generarlo?',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Si',
+              cancelButtonText: 'No',
+              reverseButtons: true,
+              position: 'top',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                putEvaluaEvento(row.id, data)
+                  .then(res => {
+                    swalWithBootstrapButtons.fire({
+                      title: '',
+                      text: 'Operación realizada exitósamente',
+                      icon: 'success',
+                      confirmButtonText: 'Aceptar',
+                      position: 'top',
+                    }).then(okay => {
+                      if (okay) {
+                        callApi(pagination.page, pagination.size);
+                      }
+                    })
+                  }).catch((error) => {
+                    console.log('Error al obtener datos: ', error);
+                  });
+              } else if (
+                result.dismiss === Swal.DismissReason.cancel
+              ) {
+                swalWithBootstrapButtons.fire({
+                  title: '',
+                  text: 'Operación cancelada',
+                  icon: 'error',
+                  confirmButtonText: 'Aceptar',
+                  position: 'top'
+                })
+              }
+            })
+          } else {
+            if (row.estadoRegistro === 'Descartado') {
+              swalWithBootstrapButtons.fire({
+                title: '',
+                text: 'Un registro Descartado no se puede Autorizar',
+                icon: 'error',
+                confirmButtonText: 'Aceptar',
+                position: 'top'
+              })
+            }
+            if (row.estadoRegistro === 'Autorizado') {
+              swalWithBootstrapButtons.fire({
+                title: '',
+                text: 'El registro ya está Autorizado',
+                icon: 'error',
+                confirmButtonText: 'Aceptar',
+                position: 'top'
+              })
+            }
+          }
         }
       }).catch((error) => {
         console.log("Error: ", error);
@@ -310,10 +316,10 @@ const EventoRiesgoListar = () => {
     const data = {
       estadoRegistro: 'Descartado'
     }
-    if(row.estadoRegistro !== 'Autorizado' && row.estadoRegistro !== 'Descartado'){
+    if (row.estadoRegistro !== 'Autorizado' && row.estadoRegistro !== 'Descartado') {
       swalWithBootstrapButtons.fire({
         title: '',
-        text:'¿Está seguro de modificar el estado de registro a Descartado?',
+        text: '¿Está seguro de modificar el estado de registro a Descartado?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Si',
@@ -350,8 +356,8 @@ const EventoRiesgoListar = () => {
           })
         }
       })
-    } else{
-      if(row.estadoRegistro === 'Autorizado'){
+    } else {
+      if (row.estadoRegistro === 'Autorizado') {
         swalWithBootstrapButtons.fire({
           title: '',
           text: 'Un registro Autorizado no se puede Descartar',
@@ -360,7 +366,7 @@ const EventoRiesgoListar = () => {
           position: 'top'
         })
       }
-      if(row.estadoRegistro === 'Descartado'){
+      if (row.estadoRegistro === 'Descartado') {
         swalWithBootstrapButtons.fire({
           title: '',
           text: 'El registro ya está Descartado',
@@ -471,7 +477,7 @@ const EventoRiesgoListar = () => {
             <Card>
               <CardHeader>
                 <CardTitle className='float-left h4 pt-2'>Eventos de Riesgo</CardTitle>
-                <Button color='primary' onClick={(e) => {redirect(e)}} className='float-right mt-1' style={{ width: '130px' }}>
+                <Button color='primary' onClick={(e) => { redirect(e) }} className='float-right mt-1' style={{ width: '130px' }}>
                   <span className='text-white'>Registrar</span>
                 </Button>
               </CardHeader>

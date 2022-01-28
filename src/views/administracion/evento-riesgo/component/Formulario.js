@@ -52,7 +52,7 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
         nivel3_id: (values.nivel3_id !== null) ? values.nivel3_id.value : 0,
 
         descripcion: (values.tablaLista.label === 'Responsable') ? values.descripcion.value : values.descripcion,
-        campoC: (values.tablaLista.label=== 'Responsable') ? values.campoC.value : values.campoC,
+        campoC: (values.tablaLista.label === 'Responsable') ? values.campoC.value : values.campoC,
       }
       console.log('datos que se enviaran:', values)
       console.log('datos que se data:', data)
@@ -228,7 +228,7 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
           formik.values.tablaLista.label === 'Liquidez' ||
           formik.values.tablaLista.label === 'Operativo' ||
           formik.values.tablaLista.label === 'Seguridad de la información'
-          ))
+        ))
         ? <FormGroup row className='justify-content-center'>
           <Label sm='3' lg='3' for='clave'>
             {(formik.values.tablaLista.label === 'Área' ||
@@ -276,8 +276,8 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
                 formik.values.tablaLista.label === 'Fraude' ||
                 formik.values.tablaLista.label === 'Liquidez' ||
                 formik.values.tablaLista.label === 'Operativo' ||
-                formik.values.tablaLista.label === 'Seguridad de la información') ? 
-                  'Descriptivo' : (formik.values.tablaLista.label === 'Recuperación activo' || formik.values.tablaLista.label === 'Cuenta contable') ? 'Descripción' : 'Nombre'}
+                formik.values.tablaLista.label === 'Seguridad de la información') ?
+                'Descriptivo' : (formik.values.tablaLista.label === 'Recuperación activo' || formik.values.tablaLista.label === 'Cuenta contable') ? 'Descripción' : 'Nombre'}
           </Label>
           <Col sm='9' lg='5'>
             <CInputReact
@@ -308,7 +308,7 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
           formik.values.tablaLista.label === 'Liquidez' ||
           formik.values.tablaLista.label === 'Macroproceso' ||
           formik.values.tablaLista.label === 'Proceso' ||
-          formik.values.tablaLista.label === 'Seguridad de la información'||
+          formik.values.tablaLista.label === 'Seguridad de la información' ||
           formik.values.tablaLista.label === 'Responsable'))
         ? <FormGroup row className='justify-content-center'>
           <Label sm='3' lg='3' for='descripcion'>
@@ -330,26 +330,26 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
           <Col sm='9' lg='5'>
             {formik.values.tablaLista.label === 'Responsable'
               ? <CSelectReact
-                  type={"select"}
-                  id={'descripcion'}
-                  placeholder={'Seleccionar'}
-                  value={formik.values.descripcion}
-                  onChange={formik.setFieldValue}
-                  onBlur={formik.setFieldTouched}
-                  error={formik.errors.descripcion}
-                  touched={formik.touched.descripcion}
-                  options={dataApiCargo}
-                />
+                type={"select"}
+                id={'descripcion'}
+                placeholder={'Seleccionar'}
+                value={formik.values.descripcion}
+                onChange={formik.setFieldValue}
+                onBlur={formik.setFieldTouched}
+                error={formik.errors.descripcion}
+                touched={formik.touched.descripcion}
+                options={dataApiCargo}
+              />
               : <CInputReact
-                  type={"textarea"}
-                  id={'descripcion'}
-                  value={formik.values.descripcion}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  touched={formik.touched.descripcion}
-                  errors={formik.errors.descripcion}
-                  rows={(formik.values.tablaLista !== null && formik.values.tablaLista.label === 'Responsable')? 1: 3}
-                />
+                type={"textarea"}
+                id={'descripcion'}
+                value={formik.values.descripcion}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                touched={formik.touched.descripcion}
+                errors={formik.errors.descripcion}
+                rows={(formik.values.tablaLista !== null && formik.values.tablaLista.label === 'Responsable') ? 1 : 3}
+              />
             }
           </Col>
         </FormGroup>
@@ -383,7 +383,7 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
               onBlur={formik.handleBlur}
               touched={formik.touched.campoA}
               errors={formik.errors.campoA}
-              rows={(formik.values.tablaLista !== null && formik.values.tablaLista.label === 'Responsable')? 3: 1}
+              rows={(formik.values.tablaLista !== null && formik.values.tablaLista.label === 'Responsable') ? 3 : 1}
             />
           </Col>
         </FormGroup>
@@ -423,33 +423,33 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
         (formik.values.tablaLista.label === 'Fraude' ||
           formik.values.tablaLista.label === 'Responsable'))
         ? <FormGroup row className='justify-content-center'>
-          <Label sm='3' lg={(formik.values.tablaLista !== null && formik.values.tablaLista.label === 'Responsable')? '3': '8'} for='clave'>
+          <Label sm='3' lg={(formik.values.tablaLista !== null && formik.values.tablaLista.label === 'Responsable') ? '3' : '8'} for='clave'>
             {formik.values.tablaLista.label === 'Fraude' ? 'Impacto - severidad' : null}
             {formik.values.tablaLista.label === 'Responsable' ? 'Tipo' : null}
           </Label>
-          <Col sm='9' lg={(formik.values.tablaLista !== null && formik.values.tablaLista.label === 'Responsable')? '5': '8'}>
+          <Col sm='9' lg={(formik.values.tablaLista !== null && formik.values.tablaLista.label === 'Responsable') ? '5' : '8'}>
             {formik.values.tablaLista.label === 'Responsable'
               ? <CSelectReact
-                  type={"select"}
-                  id={'campoC'}
-                  placeholder={'Seleccionar'}
-                  value={formik.values.campoC}
-                  onChange={formik.setFieldValue}
-                  onBlur={formik.setFieldTouched}
-                  error={formik.errors.campoC}
-                  touched={formik.touched.campoC}
-                  options={optionsTipoRes}
-                />
+                type={"select"}
+                id={'campoC'}
+                placeholder={'Seleccionar'}
+                value={formik.values.campoC}
+                onChange={formik.setFieldValue}
+                onBlur={formik.setFieldTouched}
+                error={formik.errors.campoC}
+                touched={formik.touched.campoC}
+                options={optionsTipoRes}
+              />
               : <CInputReact
-                  type={"textarea"}
-                  id={'campoC'}
-                  value={formik.values.campoC}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  touched={formik.touched.campoC}
-                  errors={formik.errors.campoC}
-                  rows={(formik.values.tablaLista !== null && formik.values.tablaLista.label === 'Responsable')? 1: 3}
-                />
+                type={"textarea"}
+                id={'campoC'}
+                value={formik.values.campoC}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                touched={formik.touched.campoC}
+                errors={formik.errors.campoC}
+                rows={(formik.values.tablaLista !== null && formik.values.tablaLista.label === 'Responsable') ? 1 : 3}
+              />
             }
           </Col>
         </FormGroup>

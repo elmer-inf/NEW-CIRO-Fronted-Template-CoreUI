@@ -196,8 +196,8 @@ const EventoRiesgo = ({ match }) => {
     var bufferArray = base64ToArrayBuffer(data);
     var blobStore = new Blob([bufferArray], { type: "application/pdf" });
     if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-        window.navigator.msSaveOrOpenBlob(blobStore);
-        return;
+      window.navigator.msSaveOrOpenBlob(blobStore);
+      return;
     }
     var data2 = window.URL.createObjectURL(blobStore);
     var pdfWindow = window.open();
@@ -208,18 +208,18 @@ const EventoRiesgo = ({ match }) => {
     link.click();
     window.URL.revokeObjectURL(data2);
     link.remove();
-}
+  }
 
-function base64ToArrayBuffer(data) {
-  var bString = window.atob(data);
-  var bLength = bString.length;
-  var bytes = new Uint8Array(bLength);
-  for (var i = 0; i < bLength; i++) {
+  function base64ToArrayBuffer(data) {
+    var bString = window.atob(data);
+    var bLength = bString.length;
+    var bytes = new Uint8Array(bLength);
+    for (var i = 0; i < bLength; i++) {
       var ascii = bString.charCodeAt(i);
       bytes[i] = ascii;
-  }
-  return bytes;
-};
+    }
+    return bytes;
+  };
 
   return (
     <div>
@@ -417,7 +417,7 @@ function base64ToArrayBuffer(data) {
                             </Col>
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
-                              <div className='text-label'>Estado: </div> 
+                              <div className='text-label'>Estado: </div>
                               <div className='text-data'>{dataApi.estadoReportado !== null ? dataApi.estadoReportado : <i>Sin registro</i>}</div>
                             </Col>
 
@@ -477,7 +477,7 @@ function base64ToArrayBuffer(data) {
                                     })}
                                   </tbody>
                                 </Table>
-                              : <i>Sin Archivos</i>}
+                                : <i>Sin Archivos</i>}
                             </Col>
                           </Row>
                         </CTabPane>
@@ -520,7 +520,7 @@ function base64ToArrayBuffer(data) {
                           <Row className='pt-3'>
                             <Col xs='12' sm='6' md='4' xl='6' className='pt-2'>
                               <div className='text-label'>Código inicial: </div>
-                              <div className='text-data'>{dataApi.codigoInicial !== '' || dataApi.codigoInicial !== null? dataApi.codigoInicial : <i>Sin registro</i>}</div>
+                              <div className='text-data'>{dataApi.codigoInicial !== '' || dataApi.codigoInicial !== null ? dataApi.codigoInicial : <i>Sin registro</i>}</div>
                             </Col>
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Sub categorización: </div>
@@ -545,9 +545,9 @@ function base64ToArrayBuffer(data) {
                             <Col xs='12' sm='6' md='4' xl='6' className='pt-2'>
                               <div className='text-label'>Clase evento - Basilea - ASFI: </div>
                               <div className='text-data'>
-                                {(dataApi.claseEventoId !== null && dataApi.claseEventoId.nombre !== 'Otros')?
-                                    dataApi.claseEventoId.nombre : (dataApi.claseEventoId !== null && dataApi.claseEventoId.nombre === 'Otros')?
-                                        <span className='text-label'>{dataApi.claseEventoId.nombre}</span> :  null}
+                                {(dataApi.claseEventoId !== null && dataApi.claseEventoId.nombre !== 'Otros') ?
+                                  dataApi.claseEventoId.nombre : (dataApi.claseEventoId !== null && dataApi.claseEventoId.nombre === 'Otros') ?
+                                    <span className='text-label'>{dataApi.claseEventoId.nombre}</span> : null}
                               </div>
                             </Col>
 

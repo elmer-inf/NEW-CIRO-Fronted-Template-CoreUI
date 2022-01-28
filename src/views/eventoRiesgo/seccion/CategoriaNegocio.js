@@ -15,8 +15,8 @@ var _ = require('lodash');
 const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, isEdit, tipoEvento, fechaDesc, optionsCritico, optionsAsfi }) => {
 
   // Obtiene Trimestre a partir de la fechaDesc
-  const generaTrimestre = ()=>{
-    if(fechaDesc !== undefined){
+  const generaTrimestre = () => {
+    if (fechaDesc !== undefined) {
       var mes = parseInt(fechaDesc.substring(5, 7));
       var anio = parseInt(fechaDesc.substring(0, 4));
       var trimestre = '';
@@ -41,9 +41,9 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         trimestre: Yup.string().nullable(),
         tipoEventoPerdidaId: Yup.mixed().required('Campo obligatorio'),
         subEventoId: Yup.mixed().nullable(),
-        claseEventoId:  Yup.mixed().nullable(),
-        otros : Yup.string().nullable().when('claseEventoId',{
-          is:(val) =>  (val !== null && val.label === 'Otros'),
+        claseEventoId: Yup.mixed().nullable(),
+        otros: Yup.string().nullable().when('claseEventoId', {
+          is: (val) => (val !== null && val.label === 'Otros'),
           then: Yup.string().max(300, 'El campo no debe exceder los 300 caracteres').nullable().required("Campo obligatorio"),
         }),
         detalleEventoCritico: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').required('Campo obligatorio').nullable(),
@@ -61,7 +61,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         descServicioId: Yup.mixed().nullable(),
         detalleEstado: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').nullable(),
 
-        listMatrizRiesgo:Yup.mixed().nullable(),
+        listMatrizRiesgo: Yup.mixed().nullable(),
 
         /* codigoInicial: Yup.string().nullable(),
         subcategorizacionId: Yup.mixed().nullable(),
@@ -123,7 +123,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
 
         listMatrizRiesgo: arrayIdMatrizRiesgo
       }
-      console.log('datos que se enviaran SECCION 3:', data)
+      //console.log('datos que se enviaran SECCION 3:', data)
       setObject(data);
 
       if (tipoEvento === 'A')
@@ -545,7 +545,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
             />
           </FormGroup>
 
-          { formik.values.claseEventoId !== null && formik.values.claseEventoId.label === "Otros"?
+          {formik.values.claseEventoId !== null && formik.values.claseEventoId.label === "Otros" ?
             <FormGroup tag={Col} md='6' lg='6' className='mb-0'>
               <Label className='form-label'>
                 Otros (Clase evento - Basilea - ASFI)
@@ -562,7 +562,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
                 rows={1}
               />
             </FormGroup>
-          : null}
+            : null}
 
           <FormGroup tag={Col} md='6' lg='6' className='mb-0'>
             <Label className='form-label'>

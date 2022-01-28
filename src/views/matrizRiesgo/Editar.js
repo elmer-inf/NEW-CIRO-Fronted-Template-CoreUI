@@ -110,7 +110,7 @@ const MatrizRiesgoEditar = ({ match }) => {
       estadoRegistro: args.estadoRegistro,
       areaId: buildOptionSelect(args.areaId, 'id', 'nombre', true, 'areaId'),
       unidadId: buildOptionSelect(args.unidadId, 'id', 'nombre', true, 'unidadId'),
-      procesoId:  buildOptionSelect(args.procesoId, 'id', 'nombre', true, 'procesoId'),
+      procesoId: buildOptionSelect(args.procesoId, 'id', 'nombre', true, 'procesoId'),
       procedimientoId: buildOptionSelect(args.procedimientoId, 'id', 'campoA', true, 'procedimientoId'),
       duenoCargoId: buildOptionSelect(args.duenoCargoId, 'id', 'nombre', true, 'duenoCargoId'),
       responsableCargoId: buildOptionSelect(args.responsableCargoId, 'id', 'nombre', true, 'responsableCargoId'),
@@ -128,7 +128,7 @@ const MatrizRiesgoEditar = ({ match }) => {
       efectoPerdidaOtro: args.efectoPerdidaOtro,
       efectoPerdidaId: buildOptionSelect(args.efectoPerdidaId, 'id', 'nombre', true, 'efectoPerdidaId'),
       perdidaAsfiId: buildOptionSelect(args.perdidaAsfiId, 'id', 'nombre', true, 'perdidaAsfiId'),
-      monetario:  args.monetario,
+      monetario: args.monetario,
       factorRiesgoId: buildOptionSelect(args.factorRiesgoId, 'id', 'nombre', true, 'factorRiesgoId'),
 
       probabilidadId: buildOptionSelect(args.probabilidadId, 'id', 'campoD', true, 'probabilidadId'),
@@ -137,7 +137,7 @@ const MatrizRiesgoEditar = ({ match }) => {
 
     const controles = {
       controlId: buildOptionSelect(args.controlId, 'id', 'campoA', false, 'controlId'),
-      controlObjetivo: {value:args.controlObjetivo, label: args.controlObjetivo},
+      controlObjetivo: { value: args.controlObjetivo, label: args.controlObjetivo },
       controlComentario: args.controlComentario,
 
       controlesTiene: (args.controlesTiene === true) ? 'true' : (args.controlesTiene === false) ? 'false' : '',
@@ -224,7 +224,7 @@ const MatrizRiesgoEditar = ({ match }) => {
   const [dataAuxSeccion4, setDataAuxSeccion4] = useState([])
 
   const setObject = (result, realValues) => {
-    console.log("result: ", result)
+    //console.log("result: ", result)
     const values = {
       ...requestData,
       ...result
@@ -255,8 +255,8 @@ const MatrizRiesgoEditar = ({ match }) => {
     // Obtiene valores auxiliares de "Controles" para "Riesgo residual"
     if (activeTab === '3' && realValues !== undefined) {
       const dataAuxSeccion3 = {
-        controlIdAux: (typeof realValues.controlId === 'object')? realValues.controlId.value: realValues.controlId,
-        controlObjetivoAux: (typeof realValues.controlObjetivo === 'object')? realValues.controlObjetivo.value : realValues.controlObjetivo,
+        controlIdAux: (typeof realValues.controlId === 'object') ? realValues.controlId.value : realValues.controlId,
+        controlObjetivoAux: (typeof realValues.controlObjetivo === 'object') ? realValues.controlObjetivo.value : realValues.controlObjetivo,
       }
       setDataAuxSeccion3(dataAuxSeccion3)
     }
@@ -328,7 +328,7 @@ const MatrizRiesgoEditar = ({ match }) => {
       planesAccion: JSON.stringify(dataRequest.planesAccion)
     }
 
-    console.log('Lo que se enviara en el request: ', dataValues);
+    //console.log('Lo que se enviara en el request: ', dataValues);
 
     const idRiesgo = match.params.id;
     putRiesgoId(idRiesgo, dataValues)
@@ -364,7 +364,7 @@ const MatrizRiesgoEditar = ({ match }) => {
     getTablaDescripcionRiesgoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'campoA', true);
-        setDataApiControl(_.orderBy(options, ['value' ], ['desc']));
+        setDataApiControl(_.orderBy(options, ['value'], ['desc']));
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -390,157 +390,157 @@ const MatrizRiesgoEditar = ({ match }) => {
       {
         (spin === false)
           ?
-        <Card>
-          <CardHeader>
-            <CardTitle className='float-left h4 pt-2'>
-              <span className='pr-3'>Editar Matriz de Riesgo</span>
+          <Card>
+            <CardHeader>
+              <CardTitle className='float-left h4 pt-2'>
+                <span className='pr-3'>Editar Matriz de Riesgo</span>
 
-              {(formValueInitialDatosToEdit.estadoRegistro === 'Autorizado') ?
-                <span className='pr-3 text-primary font-weight-bold'>{formValueInitialDatosToEdit.codigo}</span>
-                : null}
+                {(formValueInitialDatosToEdit.estadoRegistro === 'Autorizado') ?
+                  <span className='pr-3 text-primary font-weight-bold'>{formValueInitialDatosToEdit.codigo}</span>
+                  : null}
 
-              {(formValueInitialDatosToEdit.estadoRegistro === 'Autorizado') ?
-                <Badge className="px-4 badge-success-light">{formValueInitialDatosToEdit.estadoRegistro}</Badge>
-                : null}
-              {(formValueInitialDatosToEdit.estadoRegistro === 'Descartado') ?
-                <Badge className="px-4 badge-danger">{formValueInitialDatosToEdit.estadoRegistro}</Badge>
-                : null}
-              {(formValueInitialDatosToEdit.estadoRegistro === 'Pendiente') ?
-                <Badge className="px-4 badge-warning-light">{formValueInitialDatosToEdit.estadoRegistro}</Badge>
-                : null}
-              {(formValueInitialDatosToEdit.estadoRegistro === 'Observado') ?
-                <Badge className="px-4 badge-danger-light">{formValueInitialDatosToEdit.estadoRegistro}</Badge>
-                : null}
-            </CardTitle>
-          </CardHeader>
-          <CardBody>
-            <Row>
-              <Col xs="12" md="12" className="mb-4">
-                <Nav tabs className='justify-content-center'>
+                {(formValueInitialDatosToEdit.estadoRegistro === 'Autorizado') ?
+                  <Badge className="px-4 badge-success-light">{formValueInitialDatosToEdit.estadoRegistro}</Badge>
+                  : null}
+                {(formValueInitialDatosToEdit.estadoRegistro === 'Descartado') ?
+                  <Badge className="px-4 badge-danger">{formValueInitialDatosToEdit.estadoRegistro}</Badge>
+                  : null}
+                {(formValueInitialDatosToEdit.estadoRegistro === 'Pendiente') ?
+                  <Badge className="px-4 badge-warning-light">{formValueInitialDatosToEdit.estadoRegistro}</Badge>
+                  : null}
+                {(formValueInitialDatosToEdit.estadoRegistro === 'Observado') ?
+                  <Badge className="px-4 badge-danger-light">{formValueInitialDatosToEdit.estadoRegistro}</Badge>
+                  : null}
+              </CardTitle>
+            </CardHeader>
+            <CardBody>
+              <Row>
+                <Col xs="12" md="12" className="mb-4">
+                  <Nav tabs className='justify-content-center'>
 
-                  <NavItem>
-                    <NavLink className={classnames({ active: activeTab === '1' })}>
-                      <span className={activeTab === '1' ? '' : 'd-none'}></span>
-                      <FileText size={20} /><span className='pl-2 h6 font-weight-bold'>Datos</span>
-                      <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
-                    </NavLink>
-                  </NavItem>
+                    <NavItem>
+                      <NavLink className={classnames({ active: activeTab === '1' })}>
+                        <span className={activeTab === '1' ? '' : 'd-none'}></span>
+                        <FileText size={20} /><span className='pl-2 h6 font-weight-bold'>Datos</span>
+                        <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
+                      </NavLink>
+                    </NavItem>
 
-                  <NavItem>
-                    <NavLink className={classnames({ active: activeTab === '2' })}>
-                      <span className={activeTab === '2' ? '' : 'd-none'}></span>
-                      <BarChart2 size={20} /><span className='pl-2 h6 font-weight-bold'>Definición y Riesgo inherente</span>
-                      <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
-                    </NavLink>
-                  </NavItem>
+                    <NavItem>
+                      <NavLink className={classnames({ active: activeTab === '2' })}>
+                        <span className={activeTab === '2' ? '' : 'd-none'}></span>
+                        <BarChart2 size={20} /><span className='pl-2 h6 font-weight-bold'>Definición y Riesgo inherente</span>
+                        <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
+                      </NavLink>
+                    </NavItem>
 
-                  <NavItem>
-                    <NavLink className={classnames({ active: activeTab === '3' })}>
-                      <span className={activeTab === '3' ? '' : 'd-none'}></span>
-                      <Trello size={20} /><span className='pl-2 h6 font-weight-bold'>Controles</span>
-                      <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
-                    </NavLink>
-                  </NavItem>
+                    <NavItem>
+                      <NavLink className={classnames({ active: activeTab === '3' })}>
+                        <span className={activeTab === '3' ? '' : 'd-none'}></span>
+                        <Trello size={20} /><span className='pl-2 h6 font-weight-bold'>Controles</span>
+                        <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
+                      </NavLink>
+                    </NavItem>
 
-                  <NavItem>
-                    <NavLink className={classnames({ active: activeTab === '4' })}>
-                      <span className={activeTab === '4' ? '' : 'd-none'}></span>
-                      <TrendingUp size={20} /><span className='pl-2 h6 font-weight-bold'>Riesgo residual</span>
-                      <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
-                    </NavLink>
-                  </NavItem>
+                    <NavItem>
+                      <NavLink className={classnames({ active: activeTab === '4' })}>
+                        <span className={activeTab === '4' ? '' : 'd-none'}></span>
+                        <TrendingUp size={20} /><span className='pl-2 h6 font-weight-bold'>Riesgo residual</span>
+                        <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
+                      </NavLink>
+                    </NavItem>
 
-                  <NavItem>
-                    <NavLink className={classnames({ active: activeTab === '5' })}>
-                      <span className={activeTab === '5' ? '' : 'd-none'}></span>
-                      <CheckSquare size={20} /><span className='pl-2 h6 font-weight-bold'>Planes de Acción y Seguimiento</span>
-                      <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
-                    </NavLink>
-                  </NavItem>
+                    <NavItem>
+                      <NavLink className={classnames({ active: activeTab === '5' })}>
+                        <span className={activeTab === '5' ? '' : 'd-none'}></span>
+                        <CheckSquare size={20} /><span className='pl-2 h6 font-weight-bold'>Planes de Acción y Seguimiento</span>
+                        <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
+                      </NavLink>
+                    </NavItem>
 
-                  <NavItem>
-                    <NavLink className={classnames({ active: activeTab === '6' })}>
-                      <span className={activeTab === '6' ? '' : 'd-none'}></span>
-                      <PieChart size={20} /><span className='pl-2 h6 font-weight-bold'>Valoración cuantitativa</span>
-                    </NavLink>
-                  </NavItem>
-                </Nav>
+                    <NavItem>
+                      <NavLink className={classnames({ active: activeTab === '6' })}>
+                        <span className={activeTab === '6' ? '' : 'd-none'}></span>
+                        <PieChart size={20} /><span className='pl-2 h6 font-weight-bold'>Valoración cuantitativa</span>
+                      </NavLink>
+                    </NavItem>
+                  </Nav>
 
-                <TabContent activeTab={activeTab}>
-                  <TabPane tabId="1">
-                    <DatosIniciales
-                      nextSection={nextSection}
-                      setObject={setObject}
-                      initValues={formValueInitialDatosToEdit}
-                      isEdit={true}
-                    />
-                  </TabPane>
+                  <TabContent activeTab={activeTab}>
+                    <TabPane tabId="1">
+                      <DatosIniciales
+                        nextSection={nextSection}
+                        setObject={setObject}
+                        initValues={formValueInitialDatosToEdit}
+                        isEdit={true}
+                      />
+                    </TabPane>
 
-                  <TabPane tabId="2">
-                    <DefinicionRiesgos
-                      nextSection={nextSection}
-                      beforeSection={beforeSection}
-                      setObject={setObject}
-                      initValues={formValueInitialDefinicionToEdit}
-                      optionsMonetario={optionsMonetario}
-                      dataApiRiesgoI={dataApiRiesgoI}
-                      isEdit={true}
-                    />
-                  </TabPane>
+                    <TabPane tabId="2">
+                      <DefinicionRiesgos
+                        nextSection={nextSection}
+                        beforeSection={beforeSection}
+                        setObject={setObject}
+                        initValues={formValueInitialDefinicionToEdit}
+                        optionsMonetario={optionsMonetario}
+                        dataApiRiesgoI={dataApiRiesgoI}
+                        isEdit={true}
+                      />
+                    </TabPane>
 
-                  <TabPane tabId="3">
-                    <Controles
-                      nextSection={nextSection}
-                      beforeSection={beforeSection}
-                      setObject={setObject}
-                      initValues={formValueInitialControlesToEdit}
-                      dataAux={dataAuxSeccion1}
-                      dataApiControl={dataApiControl}
-                      optionsObjetivo={optionsObjetivo}
-                      isEdit={true}
-                    />
-                  </TabPane>
+                    <TabPane tabId="3">
+                      <Controles
+                        nextSection={nextSection}
+                        beforeSection={beforeSection}
+                        setObject={setObject}
+                        initValues={formValueInitialControlesToEdit}
+                        dataAux={dataAuxSeccion1}
+                        dataApiControl={dataApiControl}
+                        optionsObjetivo={optionsObjetivo}
+                        isEdit={true}
+                      />
+                    </TabPane>
 
-                  <TabPane tabId="4">
-                    <RiesgoResidual
-                      nextSection={nextSection}
-                      beforeSection={beforeSection}
-                      setObject={setObject}
-                      initValues={formValueInitialRiesgoResidual}
-                      dataAux={dataAuxSeccion3}
-                      dataAux2={dataAuxSeccion2}
-                      dataApiControl={dataApiControl}
-                      isEdit={true}
-                    />
-                  </TabPane>
+                    <TabPane tabId="4">
+                      <RiesgoResidual
+                        nextSection={nextSection}
+                        beforeSection={beforeSection}
+                        setObject={setObject}
+                        initValues={formValueInitialRiesgoResidual}
+                        dataAux={dataAuxSeccion3}
+                        dataAux2={dataAuxSeccion2}
+                        dataApiControl={dataApiControl}
+                        isEdit={true}
+                      />
+                    </TabPane>
 
-                  <TabPane tabId="5">
-                    <PlanesSeguimiento
-                      nextSection={nextSection}
-                      beforeSection={beforeSection}
-                      setObject={setObject}
-                      initValues={formValueInitialPlanesToEdit}
-                      isEdit={true}
-                    />
-                  </TabPane>
+                    <TabPane tabId="5">
+                      <PlanesSeguimiento
+                        nextSection={nextSection}
+                        beforeSection={beforeSection}
+                        setObject={setObject}
+                        initValues={formValueInitialPlanesToEdit}
+                        isEdit={true}
+                      />
+                    </TabPane>
 
-                  <TabPane tabId="6">
-                    <Valoracion
-                      beforeSection={beforeSection}
-                      initValues={formValueInitialValorToEdit}
-                      dataAux={dataAuxSeccion2}
-                      dataAux2={dataAuxSeccion4}
-                      dataApiProbabilidad={dataApiProbabilidad}
-                      handleOnSubmmit={handleOnSubmmit}
-                      isEdit={true}
-                    />
-                  </TabPane>
-                </TabContent>
-              </Col>
-            </Row>
-          </CardBody>
-        </Card>
-        : null
+                    <TabPane tabId="6">
+                      <Valoracion
+                        beforeSection={beforeSection}
+                        initValues={formValueInitialValorToEdit}
+                        dataAux={dataAuxSeccion2}
+                        dataAux2={dataAuxSeccion4}
+                        dataApiProbabilidad={dataApiProbabilidad}
+                        handleOnSubmmit={handleOnSubmmit}
+                        isEdit={true}
+                      />
+                    </TabPane>
+                  </TabContent>
+                </Col>
+              </Row>
+            </CardBody>
+          </Card>
+          : null
       }
 
       <ToastContainer

@@ -24,27 +24,15 @@ export default TheLayout
 
 
 import React, { useState, useEffect } from 'react'
-
 import { faBox } from '@fortawesome/free-solid-svg-icons';
-
-import {
-  TheContent,
-  TheSidebar,
-  TheFooter,
-  TheHeader
-} from './index'
-
+import { TheContent, TheSidebar, TheFooter, TheHeader} from './index'
 import AuthService from 'src/views/authentication/AuthService';
 import CCSpinner from 'src/reusable/spinner/CCSpinner';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useHistory } from 'react-router-dom'
-
-import {
-  Redirect,
-} from 'react-router-dom'
+import { Redirect} from 'react-router-dom'
 import { getMenuPath, getMenuToNavigate } from 'src/functions/FunctionApi';
 import { iconList } from 'src/reusable/variables/Variables';
-
 export const PathContext = React.createContext([]);
 
 var _ = require('lodash');
@@ -100,24 +88,19 @@ const TheLayout = () => {
           _.forEach(children, function (c) {
             toRoute.push(c.to);
           });
-
         });
       }
 
     } catch (error) {
       console.log('Error route: ', error)
-
     }
-
     return toRoute;
-
   }
 
   const formatChildrenMenu = (menuChildren) => {
     var childrenNavigation = [];
 
     try {
-
       if (Array.isArray(menuChildren) && !_.isEmpty(menuChildren)) {
         _.forEach(menuChildren, function (value) {
           var omited = _.omit(value, ['idHijo'])
@@ -131,23 +114,18 @@ const TheLayout = () => {
               : omited.icon
           }
           childrenNavigation.push(data);
-
         });
       }
     } catch (error) {
       console.log('Error en match menuHijo: ', error)
-
     }
-
     return childrenNavigation;
-
   }
 
   const ommitPermissionItemOnMenu = (menuApiList) => {
     var newNavigation = [];
     try {
       _.forEach(menuApiList, function (item) {
-
         var ommit = _.omit(item, ['idHijo', 'id'])
         const newChildren = _.filter(item._children, function (o) {
           return o.tipo === 'lectura';
@@ -167,13 +145,10 @@ const TheLayout = () => {
         newNavigation.push(menuData)
       });
 
-
     } catch (error) {
       console.log('Error en match menu: ', error)
     }
-
     return newNavigation;
-
   }
 
   /* Calling Web Services */
@@ -190,15 +165,11 @@ const TheLayout = () => {
           Auth.logout();
           history.push('/500')
         }
-
-
         setSpin(false);
-
       }).catch((error) => {
         console.log("Error al recibir el menu ", error);
         Auth.logout();
         history.push('/500')
-
         setSpin(false);
       });
   }
@@ -216,8 +187,6 @@ const TheLayout = () => {
   }
 
   return (
-
-
     (!Auth.loggedIn())
       ? <Redirect from="/" to="/login" />
       : <div className="c-app c-default-layout">
@@ -234,7 +203,6 @@ const TheLayout = () => {
           </div>
         </PathContext.Provider>
       </div>
-
   )
 }
 

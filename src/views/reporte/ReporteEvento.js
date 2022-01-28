@@ -45,7 +45,6 @@ const ReporteEventos = () => {
     { value: '10-01|12-31', label: 'Octubre - Diciembre' }
   ];
 
-
   // nombre de archivos
   const nameFiles = {
     fileA: 'RO<%= periodoEnvio %>A.ATATC',
@@ -70,7 +69,6 @@ const ReporteEventos = () => {
           then: Yup.mixed().nullable().required(Messages.required)
         }
         )
-
       }
     ),
 
@@ -79,7 +77,6 @@ const ReporteEventos = () => {
         ...values
       }
       console.log('datos que se enviaran:', data)
-
       if (values.tipo.value === 'ciro') {
         generateReportCiro(data)
       }
@@ -87,7 +84,7 @@ const ReporteEventos = () => {
   });
 
   const generateReportCiro = (dataToRequest) => {
-    console.log('llego: ', dataToRequest);
+    //console.log('llego: ', dataToRequest);
     //console.log('fecha INICIO reporte:', fechaReporte(0)); // anio-mes-dia
     //console.log('fecha FINAL reporte:', fechaReporte(1));
     setshowCiroReport(true)
@@ -164,7 +161,6 @@ const ReporteEventos = () => {
     return fechaReporte;
   }
 
-
   useEffect(() => { //componentWillMount
     if (formik.values.tipo === null || formik.values.tipo.value !== 'ciro') {
       setshowCiroReport(false)
@@ -183,7 +179,7 @@ const ReporteEventos = () => {
           <CardHeader>
             <CardTitle className='float-left h4 pt-2'>Reporte de Eventos de Riesgo</CardTitle>
             {
-              ((formik.values.tipo !== null && formik.values.tipo.value === 'ciro' ) && (formik.values.trimestre !== null))
+              ((formik.values.tipo !== null && formik.values.tipo.value === 'ciro') && (formik.values.trimestre !== null))
                 ? <Button
                   color='primary'
                   className='float-right mt-1 text-white'
@@ -192,7 +188,6 @@ const ReporteEventos = () => {
                   <Printer size={15} className='mr-2' /><span>Generar 9 reportes</span>
                 </Button>
                 : null
-
             }
 
           </CardHeader>
@@ -296,11 +291,6 @@ const ReporteEventos = () => {
         </Card>
 
       </Fragment>
-
-
-
-
-
 
     </div>
   )

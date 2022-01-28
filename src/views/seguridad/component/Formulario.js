@@ -46,7 +46,7 @@ const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
         areaId: (values.areaId !== null) ? values.areaId.value : 0,
         red: (values.red !== null) ? values.red.value : null
       }
-      console.log('datos que se enviaran:', data)
+      //console.log('datos que se enviaran:', data)
       handleOnSubmit(data)
     }
   })
@@ -116,7 +116,7 @@ const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
 
   const history = useHistory();
   const redirect = (e) => {
-      history.push('/seguridad/Listar');
+    history.push('/seguridad/Listar');
   }
 
   return (
@@ -394,7 +394,7 @@ const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
             style={{ width: '130px' }}
             color="primary"
             outline
-            onClick={(e) => {redirect(e)}}
+            onClick={(e) => { redirect(e) }}
           >
             Cancelar
           </Button>
@@ -413,9 +413,9 @@ const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
             className='text-white'
             color="primary"
             type="submit"
-            //disabled={formik.isSubmitting}
+          //disabled={formik.isSubmitting}
           >
-            <Save size={17} className='mr-2'/>
+            <Save size={17} className='mr-2' />
             GUARDAR
           </Button>
         </div>

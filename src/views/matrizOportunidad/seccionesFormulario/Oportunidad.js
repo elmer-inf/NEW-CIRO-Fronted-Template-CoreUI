@@ -39,7 +39,7 @@ const Oportunidad = ({ nextSection, beforeSection, setObject, initValues, dataAp
         impactoOporId: (values.impactoOporId !== null) ? values.impactoOporId.value : 0,
       }
       const dataSelect = _.omit(data, ['probNivel', 'probOcurrencia', 'probDescriptivo', 'impactoNivel', 'impactoOportunidad', 'impactoDescriptivo', 'nivelOportunidad', 'valorOportunidad']);
-      console.log('datos que se enviaran SECCION 3:', dataSelect)
+      //console.log('datos que se enviaran SECCION 3:', dataSelect)
       setObject(dataSelect);
       nextSection(3);
     }
@@ -87,7 +87,7 @@ const Oportunidad = ({ nextSection, beforeSection, setObject, initValues, dataAp
     if (isEdit) {
       calculoRiesgoInerente();
     }
-    // eslint-disableext-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /*   P  A  R  A  M  E  T  R  O  S   */

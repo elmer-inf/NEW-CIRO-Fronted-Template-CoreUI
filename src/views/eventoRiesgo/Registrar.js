@@ -57,7 +57,7 @@ const EventoRiesgoRegistrar = () => {
   })
 
   // Estado de evento - SECCION 1
-   const optionsEstado = [
+  const optionsEstado = [
     { value: 'Reportado', label: 'Reportado' },
     { value: 'No reportado', label: 'No reportado' }
   ]
@@ -216,7 +216,7 @@ const EventoRiesgoRegistrar = () => {
   }
 
   const setObject = (result) => {
-    console.log("result: ", result)
+    //console.log("result: ", result)
     const values = {
       ...requestData,
       ...result
@@ -259,7 +259,7 @@ const EventoRiesgoRegistrar = () => {
         });
     }
     setTimeout(() => {
-     history.push('/eventoRiesgo/Listar');
+      history.push('/eventoRiesgo/Listar');
       setSpin(false);
     }, 5000);
   }
@@ -290,17 +290,15 @@ const EventoRiesgoRegistrar = () => {
       for (let i = 0; i < getFiles.length; i++) {
         formData.append("file", getFiles[i]);
       }
-    }else{
+    } else {
       formData.append("file", new Blob([]));
     }
-
 
     /*for (var value of formData.values()) {
        console.log('===========================================')
        console.log('--> ', value);
        console.log('===========================================')
      }*/
-
 
     postEventoRiesgoFormData(formData)
       .then(res => {

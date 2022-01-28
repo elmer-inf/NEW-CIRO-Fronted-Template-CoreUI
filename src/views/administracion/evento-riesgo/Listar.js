@@ -31,7 +31,6 @@ const AdministracionEventoListar = () => {
 
   const redirect = (e) => {
     e.preventDefault();
-
     const path = '/administracion/evento-riesgo/Registrar';
     if (hasPermission(path, valuePathFromContext)) {
       history.push(path);
@@ -237,7 +236,7 @@ const AdministracionEventoListar = () => {
   const deleteRow = (row) => {
     swalWithBootstrapButtons.fire({
       title: '',
-      text:'¿Está seguro de eliminar el Parámetro de Evento de Riesgo?',
+      text: '¿Está seguro de eliminar el Parámetro de Evento de Riesgo?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Si',
@@ -278,13 +277,13 @@ const AdministracionEventoListar = () => {
 
   // Editar Parametro
   const editRow = (row) => {
-   // history.push('/administracion/evento-riesgo/Editar/' + row.id);
-     const path = '/administracion/evento-riesgo/Editar/:id';
+    // history.push('/administracion/evento-riesgo/Editar/' + row.id);
+    const path = '/administracion/evento-riesgo/Editar/:id';
     if (hasPermission(path, valuePathFromContext)) {
       history.push('/administracion/evento-riesgo/Editar/' + row.id);
     } else {
       notificationToast();
-    } 
+    }
   }
 
   const [tablaListaOptions, setTablaListaOptions] = useState([])
@@ -360,7 +359,7 @@ const AdministracionEventoListar = () => {
         <Card>
           <CardHeader>
             <CardTitle className='float-left h4 pt-2'>Listado de Parámetros de Eventos de Riesgo</CardTitle>
-            <Button color='primary' onClick={(e) => {redirect(e)}} className='float-right mt-1 text-white' style={{ width: '130px' }}>
+            <Button color='primary' onClick={(e) => { redirect(e) }} className='float-right mt-1 text-white' style={{ width: '130px' }}>
               <Plus size={15} className='mr-2' /><span>Registrar</span>
             </Button>
           </CardHeader>
@@ -404,7 +403,7 @@ const AdministracionEventoListar = () => {
               hover={false}
               condensed={false}
               wrapperClasses="table-responsive"
-              pagination={ pagination }
+              pagination={pagination}
               filter={filterFactory()}
             />
           </CardBody>

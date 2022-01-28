@@ -40,15 +40,15 @@ const MatrizRiesgoListar = () => {
   const [spin, setSpin] = useState(false);
 
   const redirect = (e) => {
-    history.push('/matrizRiesgo/Registrar');
-    /* e.preventDefault();
+    //history.push('/matrizRiesgo/Registrar');
+    e.preventDefault();
     const path = '/matrizRiesgo/Registrar';
     if (hasPermission(path, valuePathFromContext)) {
       history.push(path);
 
     } else {
       notificationToast();
-    } */
+    }
   }
 
   const notificationToast = () => {
@@ -178,8 +178,13 @@ const MatrizRiesgoListar = () => {
   }
 
   const editRow = (row) => {
-    console.log(row)
-    history.push('/matrizRiesgo/Editar/' + row.id);
+    //history.push('/matrizRiesgo/Editar/' + row.id);
+    const path = '/matrizRiesgo/Editar/:id';
+    if (hasPermission(path, valuePathFromContext)) {
+      history.push('/matrizRiesgo/Editar/' + row.id);
+    } else {
+      notificationToast();
+    }
   }
 
   const actionFormatterEvaluar = (cell, row) => {
@@ -193,8 +198,8 @@ const MatrizRiesgoListar = () => {
     // Genera posible codigo al Autorizar Evento
     await getGeneraCodigo(row.id)
       .then((response) => {
-        if(row.estadoRegistro !== 'Descartado' && row.estadoRegistro !== 'Autorizado'){
-           swalWithBootstrapButtons.fire({
+        if (row.estadoRegistro !== 'Descartado' && row.estadoRegistro !== 'Autorizado') {
+          swalWithBootstrapButtons.fire({
             title: '',
             text: 'Al autorizar el registro se asignará el siguiente código: ' + response.data + ' ¿Está seguro de generarlo?',
             icon: 'warning',
@@ -205,7 +210,7 @@ const MatrizRiesgoListar = () => {
             position: 'top',
           }).then((result) => {
             if (result.isConfirmed) {
-                putEvaluaRiesgo(row.id, data)
+              putEvaluaRiesgo(row.id, data)
                 .then(res => {
                   swalWithBootstrapButtons.fire({
                     title: '',
@@ -233,8 +238,8 @@ const MatrizRiesgoListar = () => {
               })
             }
           })
-        }else{
-          if(row.estadoRegistro === 'Descartado'){
+        } else {
+          if (row.estadoRegistro === 'Descartado') {
             swalWithBootstrapButtons.fire({
               title: '',
               text: 'Un registro Descartado no se puede Autorizar',
@@ -243,7 +248,7 @@ const MatrizRiesgoListar = () => {
               position: 'top'
             })
           }
-          if(row.estadoRegistro === 'Autorizado'){
+          if (row.estadoRegistro === 'Autorizado') {
             swalWithBootstrapButtons.fire({
               title: '',
               text: 'El registro ya está Autorizado',
@@ -262,10 +267,10 @@ const MatrizRiesgoListar = () => {
     const data = {
       estadoRegistro: 'Descartado'
     }
-    if(row.estadoRegistro !== 'Autorizado' && row.estadoRegistro !== 'Descartado'){
+    if (row.estadoRegistro !== 'Autorizado' && row.estadoRegistro !== 'Descartado') {
       swalWithBootstrapButtons.fire({
         title: '',
-        text:'¿Está seguro de modificar el estado de registro a Descartado?',
+        text: '¿Está seguro de modificar el estado de registro a Descartado?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Si',
@@ -302,8 +307,8 @@ const MatrizRiesgoListar = () => {
           })
         }
       })
-    } else{
-      if(row.estadoRegistro === 'Autorizado'){
+    } else {
+      if (row.estadoRegistro === 'Autorizado') {
         swalWithBootstrapButtons.fire({
           title: '',
           text: 'Un registro Autorizado no se puede Descartar',
@@ -312,7 +317,7 @@ const MatrizRiesgoListar = () => {
           position: 'top'
         })
       }
-      if(row.estadoRegistro === 'Descartado'){
+      if (row.estadoRegistro === 'Descartado') {
         swalWithBootstrapButtons.fire({
           title: '',
           text: 'El registro ya está Descartado',
@@ -431,7 +436,7 @@ const MatrizRiesgoListar = () => {
             <Card>
               <CardHeader>
                 <CardTitle className='float-left h4 pt-2'>Matriz de Riesgos</CardTitle>
-                <Button color='primary' onClick={(e) => {redirect(e)}} className='float-right mt-1' style={{ width: '130px' }}>
+                <Button color='primary' onClick={(e) => { redirect(e) }} className='float-right mt-1' style={{ width: '130px' }}>
                   <span className='text-white'>Registrar</span>
                 </Button>
               </CardHeader>

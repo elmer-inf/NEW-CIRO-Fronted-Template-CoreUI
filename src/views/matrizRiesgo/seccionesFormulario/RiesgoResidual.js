@@ -1,4 +1,4 @@
-import { React, Fragment, useState, useEffect} from 'react'
+import { React, Fragment, useState, useEffect } from 'react'
 import { ChevronLeft, ChevronRight, Delete } from 'react-feather'
 import { Label, FormGroup, Row, Col, Form, Button } from 'reactstrap'
 import { useFormik } from "formik"
@@ -10,17 +10,17 @@ import { buscaValorLiteral, buscaValorLiteralRiesgoI, calculaRiesgo, reduceProba
 
 var _ = require('lodash');
 
-const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, dataAux2, dataApiControl, isEdit}) => {
+const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, dataAux2, dataApiControl, isEdit }) => {
 
   const formik = useFormik({
     initialValues: initValues,
     validationSchema: Yup.object().shape(
       {
-        probabilidad : Yup.number().nullable(),
-        probabilidadVal : Yup.string().nullable(),
-        impacto : Yup.number().nullable(),
-        impactoVal : Yup.string().nullable(),
-        riesgo : Yup.number().nullable(),
+        probabilidad: Yup.number().nullable(),
+        probabilidadVal: Yup.string().nullable(),
+        impacto: Yup.number().nullable(),
+        impactoVal: Yup.string().nullable(),
+        riesgo: Yup.number().nullable(),
         riesgoVal: Yup.string().nullable(),
       }
     ),
@@ -28,11 +28,11 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, d
     onSubmit: values => {
       const data = {
         ...values
-     }
-      console.log('datos que se enviaran SECCION 4:', data)
+      }
+      //console.log('datos que se enviaran SECCION 4:', data)
       setObject(data, values);
       nextSection(4);
-   }
+    }
   })
 
   /*   P  A  R  A  M  E  T  R  O  S   */
@@ -85,18 +85,18 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, d
   //console.log('disminucionAux: ', disminucionAux);
   const impactoInherenteAux = parseInt(dataAux2.impactoNivelAux);
   useEffect(() => {
-    if(dataAux.controlObjetivoAux === 'Ambos'){
-      formik.setFieldValue('probabilidad', reduceProbabilidadImpacto(probInherenteAux, parseInt(disminucionAux)) , false);
-      formik.setFieldValue('impacto', reduceProbabilidadImpacto(impactoInherenteAux, parseInt(disminucionAux)) , false);
-    } else if(dataAux.controlObjetivoAux === 'Probabilidad'){
-      formik.setFieldValue('probabilidad', reduceProbabilidadImpacto(probInherenteAux, parseInt(disminucionAux)) , false);
-      formik.setFieldValue('impacto', impactoInherenteAux , false);
-    } else if(dataAux.controlObjetivoAux === 'Impacto'){
-      formik.setFieldValue('impacto', reduceProbabilidadImpacto(impactoInherenteAux, parseInt(disminucionAux)) , false);
-      formik.setFieldValue('probabilidad', probInherenteAux , false);
+    if (dataAux.controlObjetivoAux === 'Ambos') {
+      formik.setFieldValue('probabilidad', reduceProbabilidadImpacto(probInherenteAux, parseInt(disminucionAux)), false);
+      formik.setFieldValue('impacto', reduceProbabilidadImpacto(impactoInherenteAux, parseInt(disminucionAux)), false);
+    } else if (dataAux.controlObjetivoAux === 'Probabilidad') {
+      formik.setFieldValue('probabilidad', reduceProbabilidadImpacto(probInherenteAux, parseInt(disminucionAux)), false);
+      formik.setFieldValue('impacto', impactoInherenteAux, false);
+    } else if (dataAux.controlObjetivoAux === 'Impacto') {
+      formik.setFieldValue('impacto', reduceProbabilidadImpacto(impactoInherenteAux, parseInt(disminucionAux)), false);
+      formik.setFieldValue('probabilidad', probInherenteAux, false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataAux,dataAux2]);
+  }, [dataAux, dataAux2]);
 
   // Campo "probabilidadVal" Toma el valor literal de "Probabilidad residual" y Campo "impactoVal" Toma el valor literal de "Impacto residual"
   useEffect(() => {
@@ -110,8 +110,8 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, d
 
 
   // Obtiene el Riesgo inherente y su valoracion (Formula entre Probabilidad e impacto)
-  const calculoRiesgoResidual = () =>{
-    if(formik.values.probabilidad !== null && formik.values.impacto !== null){
+  const calculoRiesgoResidual = () => {
+    if (formik.values.probabilidad !== null && formik.values.impacto !== null) {
       const prob = parseInt(formik.values.probabilidad);
       const imp = parseInt(formik.values.impacto);
       const riesgoCalculado = calculaRiesgo(prob, imp);
@@ -238,33 +238,33 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, d
 
         <div className='d-flex justify-content-between pt-4'>
           <Button
-            style={{width: '130px'}}
+            style={{ width: '130px' }}
             className='text-white'
             color="primary"
             onClick={() => beforeSection(4)}
           >
-            <ChevronLeft size={17} className='mr-1'/>
+            <ChevronLeft size={17} className='mr-1' />
             Atrás
           </Button>
           <Button
-            style={{width: '130px'}}
+            style={{ width: '130px' }}
             color="dark"
             outline
-            onClick={() => { formik.handleReset()}}
+            onClick={() => { formik.handleReset() }}
             disabled={true}
           >
-            <Delete size={17} className='mr-2'/>
+            <Delete size={17} className='mr-2' />
             Limpiar
           </Button>
           <Button
-            style={{width: '130px'}}
+            style={{ width: '130px' }}
             className='text-white'
             color="primary"
             type="submit"
-            //disabled={formik.isSubmitting}
+          //disabled={formik.isSubmitting}
           >
             Siguiente
-            <ChevronRight size={17} className='ml-1'/>
+            <ChevronRight size={17} className='ml-1' />
           </Button>
         </div>
       </Form>

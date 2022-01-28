@@ -76,7 +76,7 @@ const SeguridadEditar = ({ match }) => {
   // functions
   const handleOnSubmit = (dataToRequest) => {
     setSpin(true);
-    //console.log('data que se edita: ', dataToRequest)
+    console.log('Datos que se editan: ', dataToRequest)
     const idSeguridad = match.params.id;
     putSeguridadId(idSeguridad, dataToRequest)
       .then(res => {
@@ -91,12 +91,12 @@ const SeguridadEditar = ({ match }) => {
       });
   }
 
-  const matched = (dataResponse) =>{
-    var tipoActivoIdAux = {value: dataResponse.tipoActivoId.id, label: dataResponse.tipoActivoId.nombre };
-    var estadoIdAux = {value: dataResponse.estadoId.id, label: dataResponse.estadoId.nombre };
-    var nivelRiesgoIdAux = {value: dataResponse.nivelRiesgoId.id, label: dataResponse.nivelRiesgoId.campoA + ' - ' + dataResponse.nivelRiesgoId.campoB };
-    var areaIdAux = {value: dataResponse.areaId.id, label: dataResponse.areaId.clave + ' - ' + dataResponse.areaId.nombre };
-    var redAux = {value: dataResponse.red, label: dataResponse.red };
+  const matched = (dataResponse) => {
+    var tipoActivoIdAux = { value: dataResponse.tipoActivoId.id, label: dataResponse.tipoActivoId.nombre };
+    var estadoIdAux = { value: dataResponse.estadoId.id, label: dataResponse.estadoId.nombre };
+    var nivelRiesgoIdAux = { value: dataResponse.nivelRiesgoId.id, label: dataResponse.nivelRiesgoId.campoA + ' - ' + dataResponse.nivelRiesgoId.campoB };
+    var areaIdAux = { value: dataResponse.areaId.id, label: dataResponse.areaId.clave + ' - ' + dataResponse.areaId.nombre };
+    var redAux = { value: dataResponse.red, label: dataResponse.red };
 
     const valores = {
       fechaRegistro: dataResponse.fechaRegistro,

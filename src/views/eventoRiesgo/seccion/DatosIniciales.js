@@ -90,7 +90,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
 
         estadoReportado: (values.estadoReportado !== null) ? values.estadoReportado.value : null,
       }
-      console.log('datos que se enviaran SECCION 1:', data)
+      //console.log('datos que se enviaran SECCION 1:', data)
       setObject(data);
       obtainFiles(values.files)
       nextSection(1);

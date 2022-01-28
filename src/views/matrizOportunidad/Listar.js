@@ -41,15 +41,15 @@ const MatrizOportunidadListar = () => {
 
 
   const redirect = (e) => {
-    history.push('/matrizOportunidad/Registrar');
-    /* e.preventDefault();
+    //history.push('/matrizOportunidad/Registrar');
+    e.preventDefault();
     const path = '/matrizOportunidad/Registrar';
     if (hasPermission(path, valuePathFromContext)) {
       history.push(path);
 
     } else {
       notificationToast();
-    } */
+    }
   }
 
   const notificationToast = () => {
@@ -178,7 +178,13 @@ const MatrizOportunidadListar = () => {
   }
 
   const editRow = (row) => {
-    history.push('/matrizOportunidad/Editar/' + row.id);
+    //history.push('/matrizOportunidad/Editar/' + row.id);
+    const path = '/matrizOportunidad/Editar/:id';
+    if (hasPermission(path, valuePathFromContext)) {
+      history.push('/matrizOportunidad/Editar/' + row.id);
+    } else {
+      notificationToast();
+    }
   }
 
   const actionFormatterEvaluar = (cell, row) => {
@@ -191,10 +197,10 @@ const MatrizOportunidadListar = () => {
       estadoRegistro: 'Autorizado'
     }
     // Genera posible codigo al Autorizar Evento
-   await getGeneraCodigo(row.id)
+    await getGeneraCodigo(row.id)
       .then((response) => {
-        if(row.estadoRegistro !== 'Descartado' && row.estadoRegistro !== 'Autorizado'){
-           swalWithBootstrapButtons.fire({
+        if (row.estadoRegistro !== 'Descartado' && row.estadoRegistro !== 'Autorizado') {
+          swalWithBootstrapButtons.fire({
             title: '',
             text: 'Al autorizar el registro se asignará el siguiente código: ' + response.data + ' ¿Está seguro de generarlo?',
             icon: 'warning',
@@ -205,7 +211,7 @@ const MatrizOportunidadListar = () => {
             position: 'top',
           }).then((result) => {
             if (result.isConfirmed) {
-                putEvaluaOportunidad(row.id, data)
+              putEvaluaOportunidad(row.id, data)
                 .then(res => {
                   swalWithBootstrapButtons.fire({
                     title: '',
@@ -233,8 +239,8 @@ const MatrizOportunidadListar = () => {
               })
             }
           })
-        }else{
-          if(row.estadoRegistro === 'Descartado'){
+        } else {
+          if (row.estadoRegistro === 'Descartado') {
             swalWithBootstrapButtons.fire({
               title: '',
               text: 'Un registro Descartado no se puede Autorizar',
@@ -243,7 +249,7 @@ const MatrizOportunidadListar = () => {
               position: 'top'
             })
           }
-          if(row.estadoRegistro === 'Autorizado'){
+          if (row.estadoRegistro === 'Autorizado') {
             swalWithBootstrapButtons.fire({
               title: '',
               text: 'El registro ya está Autorizado',
@@ -262,10 +268,10 @@ const MatrizOportunidadListar = () => {
     const data = {
       estadoRegistro: 'Descartado'
     }
-    if(row.estadoRegistro !== 'Autorizado' && row.estadoRegistro !== 'Descartado'){
+    if (row.estadoRegistro !== 'Autorizado' && row.estadoRegistro !== 'Descartado') {
       swalWithBootstrapButtons.fire({
         title: '',
-        text:'¿Está seguro de modificar el estado de registro a Descartado?',
+        text: '¿Está seguro de modificar el estado de registro a Descartado?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Si',
@@ -302,8 +308,8 @@ const MatrizOportunidadListar = () => {
           })
         }
       })
-    } else{
-      if(row.estadoRegistro === 'Autorizado'){
+    } else {
+      if (row.estadoRegistro === 'Autorizado') {
         swalWithBootstrapButtons.fire({
           title: '',
           text: 'Un registro Autorizado no se puede Descartar',
@@ -312,7 +318,7 @@ const MatrizOportunidadListar = () => {
           position: 'top'
         })
       }
-      if(row.estadoRegistro === 'Descartado'){
+      if (row.estadoRegistro === 'Descartado') {
         swalWithBootstrapButtons.fire({
           title: '',
           text: 'El registro ya está Descartado',
@@ -431,7 +437,7 @@ const MatrizOportunidadListar = () => {
             <Card>
               <CardHeader>
                 <CardTitle className='float-left h4 pt-2'>Matriz de Oportunidades</CardTitle>
-                <Button color='primary' onClick={(e) => {redirect(e)}} className='float-right mt-1' style={{ width: '130px' }}>
+                <Button color='primary' onClick={(e) => { redirect(e) }} className='float-right mt-1' style={{ width: '130px' }}>
                   <span className='text-white'>Registrar</span>
                 </Button>
               </CardHeader>

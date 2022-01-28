@@ -101,7 +101,7 @@ const MatrizRiesgoRegistrar = () => {
   }
 
   const setObject = (result) => {
-    console.log("result: ", result)
+    //console.log("result: ", result)
     const values = {
       ...requestData,
       ...result
@@ -152,14 +152,14 @@ const MatrizRiesgoRegistrar = () => {
   const handleOnSubmmit = (values) => {
     setSpin(true);
     const dataRequest = setObject(values);
-    console.log('dataRequest: ', dataRequest)
+    //console.log('dataRequest: ', dataRequest)
     const dataValues = {
       ...dataRequest,
       controles: JSON.stringify(dataRequest.controles),
       planesAccion: JSON.stringify(dataRequest.planesAccion)
     }
 
-    console.log('Lo que se enviara en el request: ', dataValues)
+    //console.log('Lo que se enviara en el request: ', dataValues)
 
     postOportunidad(dataValues)
       .then(res => {

@@ -5,7 +5,7 @@ import Formulario from './component/Formulario'
 import { putTablaDescripcionSeguridad, getTablaDescripcionSeguridadId } from './controller/AdminSeguridadController'
 import { ToastContainer, toast } from 'react-toastify'
 
-const AdministracionSeguridadEditar = ( { match } ) => {
+const AdministracionSeguridadEditar = ({ match }) => {
 
   const history = useHistory();
   const [spin, setSpin] = useState(false);
@@ -19,40 +19,40 @@ const AdministracionSeguridadEditar = ( { match } ) => {
 
   const notificationToast = (type, mensaje) => {
     switch (type) {
-        case 'error':
-            toast.error(mensaje, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-            });
-            break;
-        case 'success':
-            toast.success(mensaje, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-            });
-            break;
+      case 'error':
+        toast.error(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        break;
+      case 'success':
+        toast.success(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        break;
 
-        default:
-            toast(mensaje, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-            });
+      default:
+        toast(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
     }
     setTimeout(() => {
-        history.push('/administracion/seguridad/Listar');
-        setSpin(false);
+      history.push('/administracion/seguridad/Listar');
+      setSpin(false);
     }, 5000);
   }
 
@@ -60,28 +60,28 @@ const AdministracionSeguridadEditar = ( { match } ) => {
     setSpin(true);
     const idTabDesc = match.params.id;
     putTablaDescripcionSeguridad(idTabDesc, dataToRequest)
-    .then(res => {
-      if (res.status >= 200 && res.status < 300) {
-        console.log('Envio el request: ', res);
-        notificationToast('success', 'Párametro de Seguridad modificado exitósamente');
-      } else {
-        console.log('Hubo un  error ', res);
+      .then(res => {
+        if (res.status >= 200 && res.status < 300) {
+          console.log('Envio el request: ', res);
+          notificationToast('success', 'Párametro de Seguridad modificado exitósamente');
+        } else {
+          console.log('Hubo un  error ', res);
+          notificationToast('error', 'Algo salió mal, intente nuevamente');
+        }
+      }).catch((error) => {
+        console.log('Error al modificar Párametro de Seguridad: ', error);
         notificationToast('error', 'Algo salió mal, intente nuevamente');
-      }
-    }).catch((error) => {
-      console.log('Error al modificar Párametro de Seguridad: ', error);
-      notificationToast('error', 'Algo salió mal, intente nuevamente');
-    });
+      });
   }
 
-  const matched = (dataResponse) =>{
-      var nivel1 = {value: dataResponse.tablaId.id, label: dataResponse.tablaId.nombreTabla }
+  const matched = (dataResponse) => {
+    var nivel1 = { value: dataResponse.tablaId.id, label: dataResponse.tablaId.nombreTabla }
     const valores = {
       nombre: dataResponse.nombre,
       tablaId: nivel1,
     }
     console.log('MATCHED: ', valores)
-      setformValueToEdit(valores)
+    setformValueToEdit(valores)
   }
 
   const getById = async () => {
@@ -89,13 +89,13 @@ const AdministracionSeguridadEditar = ( { match } ) => {
     const idParametro = match.params.id;
     await getTablaDescripcionSeguridadId(idParametro)
       .then((response) => {
-          const res = response.data;
-          matched(res)
+        const res = response.data;
+        matched(res)
         setSpin(false)
       }).catch((error) => {
         console.log("Error: ", error);
         setSpin(false);
-    });
+      });
   }
 
   useEffect(() => {
@@ -114,8 +114,8 @@ const AdministracionSeguridadEditar = ( { match } ) => {
           <CardBody className='mt-4'>
             {
               spin === true
-              ? <div></div>
-              : <Formulario
+                ? <div></div>
+                : <Formulario
                   initialValuess={formValueToEdit}
                   handleOnSubmit={handleOnSubmit}
                 />

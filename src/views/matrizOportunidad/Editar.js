@@ -174,7 +174,7 @@ const MatrizOportunidadEditar = ({ match }) => {
   }
 
   const setObject = (result) => {
-    console.log("result: ", result)
+    //console.log("result: ", result)
     const values = {
       ...requestData,
       ...result
@@ -230,9 +230,7 @@ const MatrizOportunidadEditar = ({ match }) => {
       controles: JSON.stringify(dataRequest.controles),
       planesAccion: JSON.stringify(dataRequest.planesAccion)
     }
-
-    console.log('Lo que se enviara en el request: ', dataValues);
-
+    //console.log('Lo que se enviara en el request: ', dataValues);
     const idOportunidad = match.params.id;
     putOportunidadId(idOportunidad, dataValues)
       .then(res => {

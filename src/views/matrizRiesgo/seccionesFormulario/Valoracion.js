@@ -1,4 +1,4 @@
-import { React, Fragment, useEffect, useState} from 'react'
+import { React, Fragment, useEffect, useState } from 'react'
 import { ChevronLeft, Save, Delete } from 'react-feather'
 import { Label, FormGroup, Row, Col, Form, Button } from 'reactstrap'
 import { useFormik } from "formik"
@@ -10,10 +10,10 @@ import { obtieneRiesgoIntervalo, obtieneValorRiesgoIntervalo } from 'src/functio
 
 var _ = require('lodash');
 
-const Valoracion = ({ beforeSection, initValues, dataAux , dataAux2, dataApiProbabilidad, handleOnSubmmit, isEdit }) => {
+const Valoracion = ({ beforeSection, initValues, dataAux, dataAux2, dataApiProbabilidad, handleOnSubmmit, isEdit }) => {
 
   const formik = useFormik({
-    initialValues: {...initValues, montoRiesgo: 0},
+    initialValues: { ...initValues, montoRiesgo: 0 },
     validationSchema: Yup.object().shape(
       {
         criterioImpacto: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').nullable(),
@@ -31,11 +31,11 @@ const Valoracion = ({ beforeSection, initValues, dataAux , dataAux2, dataApiProb
 
     onSubmit: values => {
       const data = {
-       ...values,
-     }
-     console.log('datos que se enviaran SECCION 6:', data)
-     handleOnSubmmit(data)
-   }
+        ...values,
+      }
+      //console.log('datos que se enviaran SECCION 6:', data)
+      handleOnSubmmit(data)
+    }
   })
 
   // Rellena Datos para Editar
@@ -47,17 +47,17 @@ const Valoracion = ({ beforeSection, initValues, dataAux , dataAux2, dataApiProb
   }, [initValues])
 
   /*  P  A  R  A  M  E  T  R  O  S  (Aux) */
-   // Impacto de riesgo
-   const [dataApiImpacto, setDataApiImpacto] = useState([])
-   const callApiImpacto = (idTablaDes) => {
-     getTablaDescripcionRiesgoN1(idTablaDes)
-       .then(res => {
-         const options = buildSelectTwo(res.data, 'id', 'campoD', true)
-         setDataApiImpacto(_.orderBy(options, ['value' ], ['desc']))
-       }).catch((error) => {
-         console.log('Error: ', error)
-       })
-   }
+  // Impacto de riesgo
+  const [dataApiImpacto, setDataApiImpacto] = useState([])
+  const callApiImpacto = (idTablaDes) => {
+    getTablaDescripcionRiesgoN1(idTablaDes)
+      .then(res => {
+        const options = buildSelectTwo(res.data, 'id', 'campoD', true)
+        setDataApiImpacto(_.orderBy(options, ['value'], ['desc']))
+      }).catch((error) => {
+        console.log('Error: ', error)
+      })
+  }
 
   useEffect(() => {
     callApiImpacto(3);
@@ -65,44 +65,44 @@ const Valoracion = ({ beforeSection, initValues, dataAux , dataAux2, dataApiProb
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  (Aux) */
 
   // Obtiene valor "Veces al anio" de la probabilidad
-  const findProbabilidadAnio = (array)=>{
+  const findProbabilidadAnio = (array) => {
     var result = null;
-    if(_.find(array, ['campoA', dataAux2.probabilidadAux+ '']) !== undefined){
-      result =  _.find(array, ['campoA', dataAux2.probabilidadAux+ '']).campoE;
+    if (_.find(array, ['campoA', dataAux2.probabilidadAux + '']) !== undefined) {
+      result = _.find(array, ['campoA', dataAux2.probabilidadAux + '']).campoE;
     }
     return result;
   }
 
   // Obtiene valor "Probabilidad temporalidad" de la probabilidad
-  const findProbabilidadTiempo = (array)=>{
+  const findProbabilidadTiempo = (array) => {
     var result = null;
-    if(_.find(array, ['campoA', dataAux2.probabilidadAux+ '']) !== undefined){
-      result =  _.find(array, ['campoA', dataAux2.probabilidadAux+ '']).campoD;
+    if (_.find(array, ['campoA', dataAux2.probabilidadAux + '']) !== undefined) {
+      result = _.find(array, ['campoA', dataAux2.probabilidadAux + '']).campoD;
     }
     return result;
   }
 
   useEffect(() => {
-    formik.setFieldValue('probTiempo', findProbabilidadTiempo(dataApiProbabilidad) , false)
-    formik.setFieldValue('probVecesAnio', findProbabilidadAnio(dataApiProbabilidad) , false)
+    formik.setFieldValue('probTiempo', findProbabilidadTiempo(dataApiProbabilidad), false)
+    formik.setFieldValue('probVecesAnio', findProbabilidadAnio(dataApiProbabilidad), false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataAux2]);
 
   // Calculo de Monto Riesgo de Pérdida (formula entre "veces al año" e "impactoUSD")
   useEffect(() => {
-    if(formik.values.impactoUSD === 0)
-      formik.setFieldValue('montoRiesgo', 0 , false);
+    if (formik.values.impactoUSD === 0)
+      formik.setFieldValue('montoRiesgo', 0, false);
     else
-      formik.setFieldValue('montoRiesgo', formik.values.probVecesAnio * formik.values.impactoUSD , false);
+      formik.setFieldValue('montoRiesgo', formik.values.probVecesAnio * formik.values.impactoUSD, false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.impactoUSD]);
 
   useEffect(() => {
     if (isEdit) {
-      if(initValues.impactoUSD  === 0)
-        formik.setFieldValue('montoRiesgo', 0 , false);
+      if (initValues.impactoUSD === 0)
+        formik.setFieldValue('montoRiesgo', 0, false);
       else
-        formik.setFieldValue('montoRiesgo', findProbabilidadAnio(dataApiProbabilidad)  * initValues.impactoUSD  , false);
+        formik.setFieldValue('montoRiesgo', findProbabilidadAnio(dataApiProbabilidad) * initValues.impactoUSD, false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataAux2]);
@@ -327,33 +327,33 @@ const Valoracion = ({ beforeSection, initValues, dataAux , dataAux2, dataApiProb
 
         <div className='d-flex justify-content-between pt-4'>
           <Button
-            style={{width: '130px'}}
+            style={{ width: '130px' }}
             className='text-white'
             color="primary"
-            onClick={ () => beforeSection(6) }
+            onClick={() => beforeSection(6)}
           >
-            <ChevronLeft size={17} className='mr-1'/>
+            <ChevronLeft size={17} className='mr-1' />
             Atrás
           </Button>
           <Button
-            style={{width: '130px'}}
+            style={{ width: '130px' }}
             color="dark"
             outline
             onClick={() => { formik.handleReset() }}
             disabled={(!formik.dirty || formik.isSubmitting)}
           >
-            <Delete size={17} className='mr-2'/>
+            <Delete size={17} className='mr-2' />
             Limpiar
           </Button>
           <Button
-            style={{width: '130px'}}
+            style={{ width: '130px' }}
             className='text-white'
             color="primary"
             type="submit"
-            /* disabled={formik.isSubmitting} */
-            //onClick={() => onSubmmit()}
+          /* disabled={formik.isSubmitting} */
+          //onClick={() => onSubmmit()}
           >
-            <Save size={17} className='mr-2'/>
+            <Save size={17} className='mr-2' />
             GUARDAR
           </Button>
         </div>

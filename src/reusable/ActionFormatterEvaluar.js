@@ -9,19 +9,19 @@ const ActionFormatterEvaluar = ({ cell, row, autorizarFunction, descartarFunctio
       <CDropdown className="pb-2">
         <CTooltip content="Más opciones" placement="left" >
           <CDropdownToggle className='icon-btn hide-arrow' color='transparent' size="sm">
-            <MoreVertical size={15} className='text-dark'/>
+            <MoreVertical size={15} className='text-dark' />
           </CDropdownToggle>
         </CTooltip>
         <CDropdownMenu placement="left">
           <CDropdownItem href="#" onClick={() => {
             autorizarFunction(row)
           }} >
-            <CheckCircle size={15} className='mr-2 text-success'/>Autorizar
+            <CheckCircle size={15} className='mr-2 text-success' />Autorizar
           </CDropdownItem>
           <CDropdownItem href="#" onClick={() => {
             descartarFunction(row)
           }} >
-            <XCircle size={15} className='mr-2 text-danger'/>Descartar
+            <XCircle size={15} className='mr-2 text-danger' />Descartar
           </CDropdownItem>
         </CDropdownMenu>
       </CDropdown>

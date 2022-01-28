@@ -20,7 +20,6 @@ export const getSeguridadId = async (id) => {
     return response;
 }
 
-
 export const putSeguridadId = (id, data) => {
     const uri = HOST + 'v1/seguridad/editar/' + id;
     return axios.put(uri, data);
