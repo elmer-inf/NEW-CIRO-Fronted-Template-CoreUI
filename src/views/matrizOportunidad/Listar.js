@@ -179,7 +179,7 @@ const MatrizOportunidadListar = () => {
 
   const editRow = (row) => {
     //history.push('/matrizOportunidad/Editar/' + row.id);
-    const path = '/matrizOportunidad/Editar/:id';
+    const path = '/matrizOportunidad/editar/:id';
     if (hasPermission(path, valuePathFromContext)) {
       history.push('/matrizOportunidad/Editar/' + row.id);
     } else {

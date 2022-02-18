@@ -26,7 +26,7 @@ const AdministracionSeguridadEditar = React.lazy(() => import('./views/administr
 const EventoRiesgoListar = React.lazy(() => import('./views/eventoRiesgo/Listar'));
 const EventoRiesgoRegistrar = React.lazy(() => import('./views/eventoRiesgo/Registrar'));
 const EventoRiesgo = React.lazy(() => import('./views/eventoRiesgo/Mostrar'));
-const UpdateEventoRiesgo = React.lazy(() => import('./views/eventoRiesgo/UpdateEventoRiesgo'));
+const UpdateEventoRiesgo = React.lazy(() => import('./views/eventoRiesgo/Editar'));
 
 // 2do Modulo: Matriz de riesgos
 const MatrizRiesgoListar = React.lazy(() => import('./views/matrizRiesgo/Listar'));
@@ -86,13 +86,13 @@ const routes = [
   { path: '/matrizRiesgo', name: 'Matriz de Riesgo', component: MatrizRiesgoListar, exact: true },
   { path: '/matrizRiesgo/Listar', name: 'Lista de Matriz de riesgos', component: MatrizRiesgoListar },
   { path: '/matrizRiesgo/Registrar', name: 'Registrar Matriz de Riesgo', component: MatrizRiesgoRegistrar },
-  { path: '/matrizRiesgo/Editar/:id', name: 'Editar Matriz de Riesgo', component: MatrizRiesgoEditar },
+  { path: '/matrizRiesgo/editar/:id', name: 'Editar Matriz de Riesgo', component: MatrizRiesgoEditar },
 
   // 3er Modulo: Matriz de oportunidad
   { path: '/matrizOportunidad', name: 'Matriz de oportunidad', component: MatrizOportunidadListar, exact: true },
   { path: '/matrizOportunidad/Listar', name: 'Lista de Matriz de oportunidades', component: MatrizOportunidadListar },
   { path: '/matrizOportunidad/Registrar', name: 'Registrar Matriz de oportunidad', component: MatrizOportunidadRegistrar },
-  { path: '/matrizOportunidad/Editar/:id', name: 'Editar Matriz de oportunidad', component: MatrizOportunidadEditar },
+  { path: '/matrizOportunidad/editar/:id', name: 'Editar Matriz de oportunidad', component: MatrizOportunidadEditar },
 
   // Modulo de Seguridad
   { path: '/seguridad', name: 'Riesgo en Seguridad', component: SeguridadListar, exact: true },

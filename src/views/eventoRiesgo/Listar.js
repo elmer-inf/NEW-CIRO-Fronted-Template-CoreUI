@@ -216,9 +216,10 @@ const EventoRiesgoListar = () => {
 
   const editRow = (row) => {
     //history.push('/eventoRiesgo/Editar/' + row.id);
-    const path = '/eventoRiesgo/UpdateEventoRiesgo/:id';
+    //console.log("valuePathFromContext", valuePathFromContext);
+    const path = '/eventoRiesgo/Editar/:id';
     if (hasPermission(path, valuePathFromContext)) {
-      history.push('/eventoRiesgo/UpdateEventoRiesgo/' + row.id);
+      history.push('/eventoRiesgo/Editar/' + row.id);
     } else {
       notificationToast();
     }

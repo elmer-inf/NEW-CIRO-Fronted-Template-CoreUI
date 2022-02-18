@@ -26,9 +26,9 @@ const UpdateEventoRiesgo = ({ match }) => {
   //const [getFiles, setGetFiles] = useState(null)
   const [dataApiTipoEvento, setDataApiTipoEvento] = useState([])
 
-  /* const obtainFiles = (f) => {
-    setGetFiles(f)
-  } */
+  const obtainFiles = (f) => {
+    //setGetFiles(f)
+  }
 
   const formValueInitialTipoEvento = {
     tipoEvento: null,
@@ -589,7 +589,7 @@ const UpdateEventoRiesgo = ({ match }) => {
                           nextSection={nextSection}
                           setObject={setObject}
                           initValues={formValueInitialDatosSec}
-                          //obtainFiles={obtainFiles}
+                          obtainFiles={obtainFiles}
                           optionsEstado={optionsEstado}
                           isEdit={true}
                         />

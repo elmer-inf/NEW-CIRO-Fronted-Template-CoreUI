@@ -179,7 +179,7 @@ const MatrizRiesgoListar = () => {
 
   const editRow = (row) => {
     //history.push('/matrizRiesgo/Editar/' + row.id);
-    const path = '/matrizRiesgo/Editar/:id';
+    const path = '/matrizRiesgo/editar/:id';
     if (hasPermission(path, valuePathFromContext)) {
       history.push('/matrizRiesgo/Editar/' + row.id);
     } else {

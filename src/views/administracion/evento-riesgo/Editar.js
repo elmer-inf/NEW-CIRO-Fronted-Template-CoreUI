@@ -174,7 +174,7 @@ const AdministracionEventoEditar = ({ match }) => {
 
   /* LISTA TABLA DESCRIPCION NIVEL 2 */
   const callApi2 = (idn2) => {
-    console.log('llego callapi2:: ', ' idn2: ', idn2);
+    //console.log('llego callapi2:: ', ' idn2: ', idn2);
     getTablaDescripcionEventoN1(idn2)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
