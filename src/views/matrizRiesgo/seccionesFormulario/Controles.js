@@ -30,7 +30,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
     controles: Yup.array().of(
       Yup.object().shape({
         nroControl: Yup.number().nullable(),
-        descripcion: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').nullable(),
+        descripcion: Yup.string().nullable(),
         formalizado: Yup.string().nullable(),
         norma: Yup.mixed().nullable(),
         tipo: Yup.mixed().nullable(),

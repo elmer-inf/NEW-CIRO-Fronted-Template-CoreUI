@@ -409,7 +409,7 @@ const MatrizOportunidadListar = () => {
       search = getParams(toSearch);
     }
 
-    console.log('TO SEARCH:: ', search);
+    //console.log('TO SEARCH:: ', search);
 
     const endpoint = 'v1/matrizOportunidad/';
 

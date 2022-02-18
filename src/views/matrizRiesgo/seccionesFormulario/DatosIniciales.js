@@ -65,7 +65,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
       eventoDescAux: Yup.string().nullable(),
       // FIN Campos solo para mostrar:
 
-      procedimientoId: Yup.mixed().required("Campo obligatorio"),
+      procedimientoId: Yup.mixed().nullable(),
       duenoCargoId: Yup.mixed().nullable(),
       responsableCargoId: Yup.mixed().nullable(),
       fechaEvaluacion: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),

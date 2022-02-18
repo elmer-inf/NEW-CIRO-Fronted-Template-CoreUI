@@ -39,8 +39,8 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
         // Campos solo para mostrar
         defConcatenado: Yup.string().nullable(),
         otrosAux2: Yup.boolean(),
-        riesgoInherente: Yup.number().required('Campo obligatorio'),
-        valorRiesgoInherente: Yup.string().required('Campo obligatorio'),
+        riesgoInherente: Yup.number().nullable(),
+        valorRiesgoInherente: Yup.string().nullable(), // REVISAR AUTOCOMPLETADO DE ESTE CAMPO
         probInherente: Yup.string().nullable(),
         probPorcentaje: Yup.string().nullable(),
         probValoracion: Yup.string().nullable(),

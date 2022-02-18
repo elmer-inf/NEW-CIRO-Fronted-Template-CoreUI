@@ -21,7 +21,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
       Yup.object().shape({
         nroPlan: Yup.number().nullable(),
         estrategia: Yup.string().nullable(),
-        descripcion: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').nullable(),
+        descripcion: Yup.string().nullable(),
         cargo: Yup.mixed().nullable(),
         fechaAccion: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
         fechaImpl: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
