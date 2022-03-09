@@ -178,6 +178,7 @@ const TheLayout = () => {
     setSpin(true)
     await getMenuPath()
       .then((response) => {
+        console.log('getPathListByToken: ', response.data )
         setPathList(response.data);
         setSpin(false)
       }).catch((error) => {
