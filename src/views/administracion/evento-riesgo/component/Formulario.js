@@ -28,18 +28,18 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
     validationSchema: Yup.object().shape(
       {
         tablaLista: Yup.mixed().required('Campo obligatorio'),
-        clave: Yup.string().min(1).max(40).nullable(),
-        nombre: Yup.string().min(1).max(1000).required('Campo obligatorio'),
+        clave: Yup.string().min(1).nullable(),
+        nombre: Yup.string().min(1).required('Campo obligatorio'),
 
         descripcion: Yup.mixed().nullable(),
 
-        campoA: Yup.string().min(1).max(1000).nullable(),
-        campoB: Yup.string().min(1).max(1000).nullable(),
+        campoA: Yup.string().min(1).nullable(),
+        campoB: Yup.string().min(1).nullable(),
 
         campoC: Yup.mixed().nullable(),
 
-        campoD: Yup.string().min(1).max(1000).nullable(),
-        codigoAsfi: Yup.string().min(1).max(40).nullable(),
+        campoD: Yup.string().min(1).nullable(),
+        codigoAsfi: Yup.string().min(1).nullable(),
         nivel2_id: Yup.mixed(),
         nivel3_id: Yup.mixed(),
       }

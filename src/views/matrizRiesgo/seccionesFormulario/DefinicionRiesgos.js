@@ -20,9 +20,9 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
     initialValues: { ...initValues, otrosAux2: false },
     validationSchema: Yup.object().shape(
       {
-        definicion: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').required('Campo obligatorio'),
-        causa: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').required('Campo obligatorio'),
-        consecuencia: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').required('Campo obligatorio'),
+        definicion: Yup.string().required('Campo obligatorio'),
+        causa: Yup.string().required('Campo obligatorio'),
+        consecuencia: Yup.string().required('Campo obligatorio'),
         efectoPerdidaOtro: Yup.string().nullable().when('otrosAux2', {
           is: (val) => (val === true),
           then: Yup.string().nullable().required("Campo obligatorio"),

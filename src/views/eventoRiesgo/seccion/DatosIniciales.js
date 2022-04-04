@@ -40,8 +40,8 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
       estadoReportado: Yup.mixed().nullable(),
       fuenteInfId: Yup.mixed().nullable(),
       canalAsfiId: Yup.mixed().required('Campo obligatorio'),
-      descripcion: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').required('Campo obligatorio'),
-      descripcionCompleta: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').nullable(),
+      descripcion: Yup.string().required('Campo obligatorio'),
+      descripcionCompleta: Yup.string().nullable(),
       files: Yup.mixed().nullable(),
 
       /* fechaIni: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),

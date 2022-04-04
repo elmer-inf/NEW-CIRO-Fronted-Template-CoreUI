@@ -36,7 +36,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
     initialValues: initValues,
     validationSchema: Yup.object().shape(
       {
-        codigoInicial: Yup.string().max(500, 'El campo no debe exceder los 500 caracteres').nullable(),
+        codigoInicial: Yup.string().nullable(),
         subcategorizacionId: Yup.mixed().nullable(),
         trimestre: Yup.string().nullable(),
         tipoEventoPerdidaId: Yup.mixed().required('Campo obligatorio'),
@@ -44,9 +44,9 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         claseEventoId: Yup.mixed().nullable(),
         otros: Yup.string().nullable().when('claseEventoId', {
           is: (val) => (val !== null && val.label === 'Otros'),
-          then: Yup.string().max(300, 'El campo no debe exceder los 300 caracteres').nullable().required("Campo obligatorio"),
+          then: Yup.string().nullable().required("Campo obligatorio"),
         }),
-        detalleEventoCritico: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').required('Campo obligatorio').nullable(),
+        detalleEventoCritico: Yup.string().required('Campo obligatorio').nullable(),
         factorRiesgoId: Yup.mixed().required('Campo obligatorio'),
         procesoId: Yup.mixed().required('Campo obligatorio'),
         procedimientoId: Yup.mixed().nullable(),
@@ -59,7 +59,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         opeProSerId: Yup.mixed().nullable(),
         tipoServicioId: Yup.mixed().nullable(),
         descServicioId: Yup.mixed().nullable(),
-        detalleEstado: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').nullable(),
+        detalleEstado: Yup.string().nullable(),
 
         listMatrizRiesgo: Yup.mixed().nullable(),
 

@@ -28,8 +28,8 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
         estado: Yup.mixed().nullable(),
 
         fechaSeg: Yup.date().nullable(),
-        comenPropuesta: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').nullable(),
-        comenEnProceso: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').nullable(),
+        comenPropuesta: Yup.string().nullable(),
+        comenEnProceso: Yup.string().nullable(),
       })
     )
   });

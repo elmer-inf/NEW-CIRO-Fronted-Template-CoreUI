@@ -13,7 +13,7 @@ const AdminFormSeguridad = ({ initialValuess, handleOnSubmit }) => {
     initialValues: initialValuess,
     validationSchema: Yup.object().shape(
       {
-        nombre: Yup.string().max(1000).required('Campo obligatorio'),
+        nombre: Yup.string().required('Campo obligatorio'),
         tablaId: Yup.mixed().required('Campo obligatorio')
       }
     ),

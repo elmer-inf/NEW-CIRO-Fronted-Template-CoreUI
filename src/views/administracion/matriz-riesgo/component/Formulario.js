@@ -13,14 +13,14 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
     initialValues: initialValuess,
     validationSchema: Yup.object().shape(
       {
-        campoA: Yup.string().max(1000).nullable(),
-        nombre: Yup.string().max(1000).required('Campo obligatorio'),
-        campoB: Yup.string().max(1000).nullable(),
-        campoC: Yup.string().max(1000).nullable(),
-        campoD: Yup.string().max(1000).nullable(),
-        campoE: Yup.string().max(1000).nullable(),
-        campoF: Yup.string().max(1000).nullable(),
-        campoG: Yup.string().max(1000).nullable(),
+        campoA: Yup.string().nullable(),
+        nombre: Yup.string().required('Campo obligatorio'),
+        campoB: Yup.string().nullable(),
+        campoC: Yup.string().nullable(),
+        campoD: Yup.string().nullable(),
+        campoE: Yup.string().nullable(),
+        campoF: Yup.string().nullable(),
+        campoG: Yup.string().nullable(),
 
         tablaId: Yup.mixed().required('Campo obligatorio')
       }

@@ -16,9 +16,9 @@ const Descripcion = ({ nextSection, beforeSection, setObject, initValues, isEdit
     initialValues: initValues,
     validationSchema: Yup.object().shape(
       {
-        definicion: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').required("Campo obligatorio"),
-        causa: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').required("Campo obligatorio"),
-        consecuencia: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').required("Campo obligatorio"),
+        definicion: Yup.string().required("Campo obligatorio"),
+        causa: Yup.string().required("Campo obligatorio"),
+        consecuencia: Yup.string().required("Campo obligatorio"),
         factor: Yup.mixed().required("Campo obligatorio"),
         grupoInteresId: Yup.mixed().required("Campo obligatorio"),
         // Solo para mostrar

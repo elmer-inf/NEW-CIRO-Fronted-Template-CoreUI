@@ -1,5 +1,5 @@
 window.globalConfig = {
-    endpoint_riesgos: 'https://10.17.21.238:8081/', //10.17.21.238
+    endpoint_riesgos: 'http://10.17.21.247:8081/', //10.17.21.238
     sis: 'sistema_de_riesgos',
     sessionTimer: 15 // Tiempo en minutos
 };

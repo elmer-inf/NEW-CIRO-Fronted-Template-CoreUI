@@ -15,7 +15,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataApiF
     // campos solo para mostrar
     fortalezaValoracion: Yup.string().nullable(),
 
-    controlComentario: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').nullable(),
+    controlComentario: Yup.string().nullable(),
     controlesTiene: Yup.string().required('Campo obligatorio'),
     nroControles: Yup.string().nullable().when('controlesTiene', {
       is: (val) => (val === 'true'),
@@ -24,7 +24,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataApiF
     controles: Yup.array().of(
       Yup.object().shape({
         nroControl: Yup.number().nullable(),
-        descripcion: Yup.string().max(1000, 'El campo no debe exceder los 1000 caracteres').nullable(),
+        descripcion: Yup.string().nullable(),
       })
     )
   });
