@@ -95,7 +95,7 @@ const sendRequest ={
         setSpin(true)
         await reportCuentasContables(data)
             .then((response) => {
-                console.log('ressssponseee: ', response);
+                //console.log('ressssponseee: ', response);
                 setdataApi(response.data);
                 setSpin(false)
             }).catch((error) => {

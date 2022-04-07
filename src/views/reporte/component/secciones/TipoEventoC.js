@@ -95,7 +95,7 @@ const paging = paginationFactory({
         setSpin(true)
         await reporteTipoEvento(data)
             .then((response) => {
-                console.log('ressssponseee: ', response);
+                //console.log('ressssponseee: ', response);
                 setdataApi(response.data);
                 setSpin(false)
             }).catch((error) => {
