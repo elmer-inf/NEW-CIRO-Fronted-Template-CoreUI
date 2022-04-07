@@ -2,6 +2,7 @@ import jwt_decode from 'jwt-decode';
 //var CryptoJS = require("crypto-js");
 import { HOSTURI } from 'src/config';
 
+const https = require('https');
 const sistema = HOSTURI.sis;
 
 export default class AuthService {
@@ -68,7 +69,10 @@ export default class AuthService {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token,
         'sistema': sistema
-      }
+      },
+      httpsAgent: new https.Agent({
+        rejectUnauthorized: false
+      })
     }
 
     return header;
@@ -79,8 +83,12 @@ export default class AuthService {
       headers: {
         'Content-Type': 'application/json',
         'sistema': sistema
-      }
+      },
+      httpsAgent: new https.Agent({
+        rejectUnauthorized: false
+      })
     }
+
     return header;
   }
 
