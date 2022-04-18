@@ -616,6 +616,11 @@ const EventoRiesgo = ({ match }) => {
                               <div className='text-data'>{dataApi.descServicioId !== null ? dataApi.descServicioId.nombre : <i>Sin registro</i>}</div>
                             </Col>
 
+                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                              <div className='text-label'>Proceso crítico ASFI: </div>
+                              <div className='text-data'>{dataApi.procesoCriticoAsfi !== null ? dataApi.procesoCriticoAsfi : <i>Sin registro</i>}</div>
+                            </Col>
+
 
                             <Col xs='12' md='6' className='pt-2'>
                               <div className='text-label'>Operaciones ASFI: </div>

@@ -81,6 +81,12 @@ const EventoRiesgoRegistrar = () => {
     { value: '2. Línea de Negocio Adquirente', label: '2. Línea de Negocio Adquirente' }
   ]
 
+  // Proceso critico ASFI - SECCION 3
+  const optionProcesoAsfi = [
+    { value: 1, label: 1 },
+    { value: 2, label: 2 }
+  ]
+
   // Cobertura seguro - SECCION 4
   const optionsCobertura = [
     { value: true, label: 'Si' },
@@ -145,6 +151,8 @@ const EventoRiesgoRegistrar = () => {
     descServicioId: null,
     riesgoRelacionado: '',
     detalleEstado: '',
+
+    procesoCriticoAsfi: 2,
 
     listMatrizRiesgo: null
   }
@@ -441,6 +449,7 @@ const EventoRiesgoRegistrar = () => {
                       fechaDesc={requestData.fechaDesc}
                       optionsCritico={optionsEventoCritico}
                       optionsAsfi={optionsLineaAsfi}
+                      optionProcesoAsfi={optionProcesoAsfi}
                       isEdit={false}
                     />
                   </TabPane>

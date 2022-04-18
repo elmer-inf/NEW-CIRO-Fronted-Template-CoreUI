@@ -5,6 +5,7 @@ import { useFormik } from "formik"
 import * as Yup from "yup"
 import { CInputReact } from 'src/reusable/CInputReact'
 import { CSelectReact } from 'src/reusable/CSelectReact'
+import CInputRadio from 'src/reusable/CInputRadio'
 import { getTablaDescripcionEventoN1, getTablaDescripcionEventoN2, getTablaDescripcionEventoN3 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
 import { buildSelectThree, buildSelectTwo } from 'src/functions/Function'
 import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
@@ -12,7 +13,7 @@ import { getRiesgos } from 'src/views/matrizRiesgo/controller/RiesgoController'
 
 var _ = require('lodash');
 
-const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, isEdit, tipoEvento, fechaDesc, optionsCritico, optionsAsfi }) => {
+const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, isEdit, tipoEvento, fechaDesc, optionsCritico, optionsAsfi, optionProcesoAsfi }) => {
 
   // Obtiene Trimestre a partir de la fechaDesc
   const generaTrimestre = () => {
@@ -61,6 +62,9 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         descServicioId: Yup.mixed().nullable(),
         detalleEstado: Yup.string().nullable(),
 
+        procesoCriticoAsfi: Yup.mixed().required('Campo obligatorio'),
+        procesoCriticoAsfiAux: Yup.string().nullable(),
+
         listMatrizRiesgo: Yup.mixed().nullable(),
 
         /* codigoInicial: Yup.string().nullable(),
@@ -87,6 +91,9 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         tipoServicioId: Yup.mixed().nullable(),
         descServicioId: Yup.mixed().nullable(),
         detalleEstado: Yup.string().nullable(),
+
+        procesoCriticoAsfi: Yup.mixed().nullable(),
+        procesoCriticoAsfiAux: Yup.string().nullable(),
 
         listMatrizRiesgo: Yup.mixed().nullable(), */
       }
@@ -787,6 +794,44 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
               options={dataApiServicioDesc}
             />
           </FormGroup>
+
+          {/* Campo NUEVO */}
+          <FormGroup tag={Col} md='6' lg='3' className='mb-0'> 
+            <Label className='form-label'>
+              Proceso crítico ASFI <span className='text-primary h5'><b>*</b></span>
+            </Label>
+            <CInputRadio
+              data={optionProcesoAsfi}
+              id={'procesoCriticoAsfi'}
+              value={formik.values.procesoCriticoAsfi}
+              onChange={formik.setFieldValue}
+              onBlur={formik.setFieldTouched}
+              touched={formik.touched.procesoCriticoAsfi}
+              errors={formik.errors.procesoCriticoAsfi}
+              sendValue={true}
+            />
+          </FormGroup>
+
+          {
+            (formik.values.procesoCriticoAsfi !== null && formik.values.procesoCriticoAsfi === 1) ?
+            <FormGroup tag={Col} sm='12' className='mb-0'>
+              <Label className='form-label'>
+                Detalle proceso crítico ASFI 
+              </Label>
+              <CInputReact
+                type={"textarea"}
+                id={'procesoCriticoAsfiAux'}
+                value={'Se encuentra definido dentro del Mapa de Procesos, priorizando los Procesos Operativos de acuerdo a la cadena de valor que impacta directamente a los objetivos estratégico de la empresa establecidos en el Plan-GTIC-002-SIST.'}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                touched={formik.touched.procesoCriticoAsfiAux}
+                errors={formik.errors.procesoCriticoAsfiAux}
+                disabled={true}
+                rows={2}
+              />
+            </FormGroup>
+            : null
+          }
 
           <FormGroup tag={Col} sm='12' className='mb-0'>
             <Label className='form-label'>

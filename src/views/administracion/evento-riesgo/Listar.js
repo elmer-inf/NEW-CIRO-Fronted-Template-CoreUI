@@ -198,12 +198,13 @@ const AdministracionEventoListar = () => {
         labelTabla === 'Operaciones ASFI' ||
         labelTabla === 'Moneda' ||
         labelTabla === 'Recuperación activo' ||
-        labelTabla === 'Cuenta contable') ? "COD ASFI" : '',
+        labelTabla === 'Cuenta contable' || 
+        labelTabla === 'Macroproceso') ? "COD ASFI" : '',
       sort: true,
       hidden: (labelTabla === 'Ciudad' || labelTabla === 'Tipo de evento' || labelTabla === 'Canal ASFI' ||
         labelTabla === 'Clase Evento - Basilea' || labelTabla === 'Factor de riesgo' || labelTabla === 'Proceso' ||
         labelTabla === 'Línea de negocio ASFI' || labelTabla === 'Operaciones ASFI' || labelTabla === 'Moneda' ||
-        labelTabla === 'Recuperación activo' || labelTabla === 'Cuenta contable') ? false : true,
+        labelTabla === 'Recuperación activo' || labelTabla === 'Cuenta contable' || labelTabla === 'Macroproceso') ? false : true,
       filter: textFilter({
         placeholder: 'Buscar'
       }),

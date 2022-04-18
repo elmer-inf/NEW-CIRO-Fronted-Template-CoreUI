@@ -488,10 +488,11 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
           formik.values.tablaLista.label === 'Operaciones ASFI' ||
           formik.values.tablaLista.label === 'Moneda' ||
           formik.values.tablaLista.label === 'Recuperación activo' ||
-          formik.values.tablaLista.label === 'Cuenta contable')) ?
+          formik.values.tablaLista.label === 'Cuenta contable' ||
+          formik.values.tablaLista.label === 'Macroproceso')) ?
         <FormGroup row className='justify-content-center'>
           <Label sm='3' lg='3' for='clave'>
-            Código ASFI
+            { formik.values.tablaLista.label === 'Macroproceso' ? 'Código ASFI (proceso)' : 'Código ASFI' }
           </Label>
           <Col sm='9' lg='5'>
             <CInputReact

@@ -73,7 +73,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
         estadoRegistro: 'Pendiente',
         fechaDescAux: values.fechaDesc.substring(0, 4),
         responsableElaborador: user.nombre + ' ' + user.primerApellido,
-        estadoEvento: (values.horaFin !== null && values.fechaFin !== null) ? 'Solución' : 'Seguimiento',
+        estadoEvento: ((values.horaFin === null || values.horaFin === '') || (values.fechaFin === null || values.fechaFin === '')) ? 'Seguimiento' : 'Solución',
 
         horaIni: (values.horaIni !== null) ? formatTime(values.horaIni) : null,
         horaDesc: (values.horaDesc !== null) ? formatTime(values.horaDesc) : null,

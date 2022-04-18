@@ -66,6 +66,12 @@ const UpdateEventoRiesgo = ({ match }) => {
     { value: '2. Línea de Negocio Adquirente', label: '2. Línea de Negocio Adquirente' }
   ]
 
+  // Proceso critico ASFI - SECCION 3
+  const optionProcesoAsfi = [
+    { value: 1, label: 1 },
+    { value: 2, label: 2 }
+  ]
+
   // Cobertura seguro - SECCION 4
   const optionsCobertura = [
     { value: true, label: 'Si' },
@@ -131,6 +137,8 @@ const UpdateEventoRiesgo = ({ match }) => {
     descServicioId: null,
     riesgoRelacionado: '',
     detalleEstado: '',
+
+    procesoCriticoAsfi: '',
 
     listMatrizRiesgo: null
   }
@@ -251,6 +259,8 @@ const UpdateEventoRiesgo = ({ match }) => {
       descServicioId: buildOptionSelect(args.descServicioId, 'id', 'nombre', true, 'descServicioId'),
       riesgoRelacionado: args.riesgoRelacionado,
       detalleEstado: args.detalleEstado,
+
+      procesoCriticoAsfi: args.procesoCriticoAsfi,
 
       listMatrizRiesgo: buildSelectThree(args.riesgoRelacionado, 'id', 'codigo', 'definicion', true)
     };
@@ -616,6 +626,7 @@ const UpdateEventoRiesgo = ({ match }) => {
                           fechaDesc={requestData.fechaDesc}
                           optionsCritico={optionsEventoCritico}
                           optionsAsfi={optionsLineaAsfi}
+                          optionProcesoAsfi={optionProcesoAsfi}
                           isEdit={true}
                         />
                       </TabPane>
