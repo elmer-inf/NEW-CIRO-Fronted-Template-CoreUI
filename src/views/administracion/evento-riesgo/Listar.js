@@ -63,7 +63,7 @@ const AdministracionEventoListar = () => {
       dataField: 'id',
       text: 'ID',
       sort: false,
-      hidden: true
+      hidden: false
     }, {
       dataField: 'clave',
       text: (labelTabla === 'Área' || labelTabla === 'Unidad' || labelTabla === 'Macroproceso') ?

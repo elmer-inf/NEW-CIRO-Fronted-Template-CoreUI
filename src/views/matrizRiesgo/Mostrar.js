@@ -151,7 +151,7 @@ const MatrizRiesgo = ({ match }) => {
     await getRiesgoId(idRiesgo)
       .then((response) => {
         const res = response.data;
-        console.log('Res : ', res);
+        //console.log('Res : ', res);
         setDataApi(res)
       }).catch((error) => {
         console.log("Error: ", error);

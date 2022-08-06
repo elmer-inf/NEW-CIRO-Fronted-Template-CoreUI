@@ -95,7 +95,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         duenoCargoId: (values.duenoCargoId !== null) ? values.duenoCargoId.value : 0,
         responsableCargoId: (values.responsableCargoId !== null) ? values.responsableCargoId.value : 0,
         identificadoId: (values.identificadoId !== null) ? values.identificadoId.value : 0,
-        eventoRiesgoId: (values.eventoRiesgoId !== null) ? values.eventoRiesgoId.value : 0,
+        eventoRiesgoId: values.eventoRiesgoId.value // Modificado 02-08-2022
         //eventoMaterializado: values.eventoMaterializado
       }
       //console.log('datos que se enviaran SECCION 1:', data)
