@@ -20,7 +20,7 @@ import Swal from 'sweetalert2'
 
 var _ = require('lodash');
 
-const EventoRiesgoListar = () => {
+const EventoRiesgoListar = () => { 
 
   // Configuracion sweetalert2
   const swalWithBootstrapButtons = Swal.mixin({
