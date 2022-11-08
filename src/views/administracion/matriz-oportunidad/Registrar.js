@@ -31,40 +31,40 @@ const AdministracionMatrizOportunidadRegistrar = () => {
 
   const notificationToast = (type, mensaje) => {
     switch (type) {
-        case 'error':
-            toast.error(mensaje, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-            });
-            break;
-        case 'success':
-            toast.success(mensaje, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-            });
-            break;
+      case 'error':
+        toast.error(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        break;
+      case 'success':
+        toast.success(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        break;
 
-        default:
-            toast(mensaje, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-            });
+      default:
+        toast(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
     }
     setTimeout(() => {
-        history.push('/administracion/matriz-oportunidad/Listar');
-        setSpin(false);
+      history.push('/administracion/matriz-oportunidad/Listar');
+      setSpin(false);
     }, 5000);
   }
 

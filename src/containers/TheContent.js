@@ -64,7 +64,7 @@ const loading = (
 )
 
 const TheContent = ({ routesProp }) => {
-  console.log('routesProp: ', routesProp);
+  //console.log('routesProp: ', routesProp);
   const [listRoute, setListRoute] = useState([])
   const [spin, setSpin] = useState(false);
 
@@ -94,7 +94,7 @@ const TheContent = ({ routesProp }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [routesProp]);
 
-  console.log('listRoute: ', listRoute);
+  //console.log('listRoute: ', listRoute);
   return (
     <main className="c-main">
       <CCSpinner show={spin} />

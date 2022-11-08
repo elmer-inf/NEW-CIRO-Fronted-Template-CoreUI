@@ -37,51 +37,49 @@ const AdministracionEventoRegistrar = () => {
     await getTablaListaEvento()
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre_tabla', true)
-        console.log('El response de tablaaaaa: ', res.data)
         //console.log('options : ', options)
         setTablaListaOptions(options)
       }).catch((error) => {
-        //console.log('Error: ', error)
-        //notificationToast('error', Messages.notification.notOk)
+        console.log('Error: ', error)
       })
   }
 
   const notificationToast = (type, mensaje) => {
     switch (type) {
-        case 'error':
-            toast.error(mensaje, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-            });
-            break;
-        case 'success':
-            toast.success(mensaje, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-            });
-            break;
+      case 'error':
+        toast.error(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        break;
+      case 'success':
+        toast.success(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        break;
 
-        default:
-            toast(mensaje, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-            });
+      default:
+        toast(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
     }
     setTimeout(() => {
-        history.push('/administracion/evento-riesgo/Listar');
-        setSpin(false);
+      history.push('/administracion/evento-riesgo/Listar');
+      setSpin(false);
     }, 5000);
   }
 

@@ -1,5 +1,5 @@
 import { Fragment, useState } from 'react'
-import { Card, CardHeader, CardTitle, CardBody} from 'reactstrap'
+import { Card, CardHeader, CardTitle, CardBody } from 'reactstrap'
 import { useHistory } from 'react-router-dom'
 import Formulario from './component/Formulario'
 import { postTablaDescripcionSeguridad } from './controller/AdminSeguridadController'
@@ -18,58 +18,58 @@ const AdministracionSeguridadRegistrar = () => {
 
   const notificationToast = (type, mensaje) => {
     switch (type) {
-        case 'error':
-            toast.error(mensaje, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-            });
-            break;
-        case 'success':
-            toast.success(mensaje, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-            });
-            break;
+      case 'error':
+        toast.error(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        break;
+      case 'success':
+        toast.success(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        break;
 
-        default:
-            toast(mensaje, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-            });
+      default:
+        toast(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
     }
     setTimeout(() => {
-        history.push('/administracion/seguridad/Listar');
-        setSpin(false);
+      history.push('/administracion/seguridad/Listar');
+      setSpin(false);
     }, 5000);
   }
 
-  const handleOnSubmit = (dataToRequest) =>{
+  const handleOnSubmit = (dataToRequest) => {
     setSpin(true);
     postTablaDescripcionSeguridad(dataToRequest)
-    .then(res => {
-      if (res.status >= 200 && res.status < 300) {
-        console.log('Envio el request: ', res);
-        notificationToast('success', 'Párametro de Seguridad registrado exitósamente');
-      } else {
-        console.log('Hubo un  error ', res);
+      .then(res => {
+        if (res.status >= 200 && res.status < 300) {
+          console.log('Envio el request: ', res);
+          notificationToast('success', 'Párametro de Seguridad registrado exitósamente');
+        } else {
+          console.log('Hubo un  error ', res);
+          notificationToast('error', 'Algo salió mal, intente nuevamente');
+        }
+      }).catch((error) => {
+        console.log('Error al registrar Párametro de Seguridad: ', error);
         notificationToast('error', 'Algo salió mal, intente nuevamente');
-      }
-    }).catch((error) => {
-      console.log('Error al registrar Párametro de Seguridad: ', error);
-      notificationToast('error', 'Algo salió mal, intente nuevamente');
-    })
+      })
   }
 
   return (

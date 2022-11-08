@@ -12,21 +12,46 @@ import { getListPagingWithSearch } from 'src/functions/FunctionApi';
 import { getParams } from 'src/functions/Function';
 import { CFilterDate, CFilterText, handleChildClick, typeFormatter } from 'src/reusable/Component';
 import filterFactory, { customFilter } from 'react-bootstrap-table2-filter';
+import { PathContext } from 'src/containers/TheLayout';
+import { ToastContainer, toast } from 'react-toastify';
+import { Messages } from 'src/reusable/variables/Messages';
+import { hasPermission } from 'src/functions/Function'
 /* import { getTablaDescripcionRiesgoN1 } from 'src/views/administracion/matriz-riesgo/controller/AdminRiesgoController'
 import { getTablaDescripcionSeguridadN1 } from 'src/views/administracion/seguridad/controller/AdminSeguridadController'
-import { buildSelectTwo } from 'src/functions/Function' */
+' */
 
 var _ = require('lodash');
 
 const SeguridadListar = () => {
+
+  //useContext
+  const valuePathFromContext = React.useContext(PathContext);
 
   const history = useHistory()
   const [pagination, setpagination] = useState(pagingInit);
   const [params, setParams] = useState({});
   const [spin, setSpin] = useState(false);
 
-  const redirect = () => {
-    history.push('/seguridad/Registrar')
+  const redirect = (e) => {
+    //history.push('/seguridad/Registrar');
+    e.preventDefault();
+    const path = '/seguridad/Registrar';
+    if (hasPermission(path, valuePathFromContext)) {
+      history.push(path);
+    } else {
+      notificationToast();
+    }
+  }
+
+  const notificationToast = () => {
+    toast.error(Messages.dontHavePermission, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+    });
   }
 
   //  P  A  R  A  M  E  T  R  O  S
@@ -183,8 +208,13 @@ const SeguridadListar = () => {
   }
 
   const editRow = (row) => {
-    console.log(row)
-    history.push('/seguridad/Editar/' + row.id);
+    //history.push('/seguridad/Editar/' + row.id);
+    const path = '/seguridad/Editar/:id';
+    if (hasPermission(path, valuePathFromContext)) {
+      history.push('/seguridad/Editar/' + row.id);
+    } else {
+      notificationToast();
+    }
   }
 
   /* Lista de Seguridad */
@@ -246,7 +276,7 @@ const SeguridadListar = () => {
       search = getParams(toSearch);
     }
 
-    console.log('TO SEARCH:: ', search);
+    //console.log('TO SEARCH:: ', search);
 
     const endpoint = 'v1/seguridad/';
 
@@ -273,7 +303,7 @@ const SeguridadListar = () => {
             <Card>
               <CardHeader>
                 <CardTitle className='float-left h4 pt-2'>Riesgo en Seguridad</CardTitle>
-                <Button color='primary' onClick={redirect} className='float-right mt-1' style={{ width: '130px' }}>
+                <Button color='primary' onClick={(e) => { redirect(e) }} className='float-right mt-1' style={{ width: '130px' }}>
                   <span className='text-white'>Registrar</span>
                 </Button>
               </CardHeader>
@@ -306,6 +336,18 @@ const SeguridadListar = () => {
           </Col>
         </Row>
       </Fragment>
+
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   )
 }

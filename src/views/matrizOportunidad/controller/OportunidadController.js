@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { HOSTURI } from 'src/config'
 
-const HOST = HOSTURI.endpoint_ciro
+const HOST = HOSTURI.endpoint_riesgos
 
 export const getOportunidades = async () => {
     const uri = HOST.concat('v1/matrizOportunidad/listar')
@@ -12,6 +12,11 @@ export const getOportunidades = async () => {
 export const postOportunidad = (data) => {
     const uri = HOST.concat('v1/matrizOportunidad/registrar')
     return axios.post(uri, data);
+}
+
+export const putOportunidadId = (id, data) => {
+    const uri = HOST + 'v1/matrizOportunidad/editar/' + id;
+    return axios.put(uri, data);
 }
 
 export const getOportunidadId = async (id) => {

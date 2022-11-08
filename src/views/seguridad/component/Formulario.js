@@ -4,11 +4,12 @@ import * as Yup from "yup"
 import { CInputReact } from 'src/reusable/CInputReact'
 import { FormGroup, Row, Col, Form, Button, Label } from 'reactstrap'
 import { CSelectReact } from 'src/reusable/CSelectReact'
-import { buildSelectTwo } from 'src/functions/Function'
+import { buildSelectTwo, buildSelectThree } from 'src/functions/Function'
 import { getTablaDescripcionSeguridadN1 } from 'src/views/administracion/seguridad/controller/AdminSeguridadController'
 import { getTablaDescripcionRiesgoN1 } from 'src/views/administracion/matriz-riesgo/controller/AdminRiesgoController'
 import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController'
 import { Delete, Save } from 'react-feather'
+import { useHistory } from 'react-router-dom'
 
 const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
 
@@ -45,7 +46,7 @@ const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
         areaId: (values.areaId !== null) ? values.areaId.value : 0,
         red: (values.red !== null) ? values.red.value : null
       }
-      console.log('datos que se enviaran:', data)
+      //console.log('datos que se enviaran:', data)
       handleOnSubmit(data)
     }
   })
@@ -80,7 +81,7 @@ const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
   const callApiNivelRiesgo = (idTablaDes) => {
     getTablaDescripcionRiesgoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'campoB', false)
+        const options = buildSelectThree(res.data, 'id', 'campoA', 'campoB', false)
         setDataApiNivelRiesgo(options)
       }).catch((error) => {
         console.log('Error: ', error)
@@ -92,7 +93,7 @@ const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
   const callApiArea = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'clave', false)
+        const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
         setDataApiArea(options)
       }).catch((error) => {
         console.log('Error: ', error)
@@ -112,6 +113,11 @@ const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
     callApiArea(3);
   }, [])
   // F  I  N     P  A  R  A  M  E  T  R  O  S
+
+  const history = useHistory();
+  const redirect = (e) => {
+    history.push('/seguridad/Listar');
+  }
 
   return (
     <Fragment>
@@ -222,13 +228,13 @@ const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
             <CInputReact
               type={"textarea"}
               id={'descripcionRiesgo'}
-              placeholder={'Nombre activo de información'}
+              placeholder={'Descripción del riesgo (Vulnerabilidad + amenaza + impacto)'}
               value={formik.values.descripcionRiesgo}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               touched={formik.touched.descripcionRiesgo}
               errors={formik.errors.descripcionRiesgo}
-              rows={1}
+              rows={2}
             />
           </FormGroup>
 
@@ -245,7 +251,7 @@ const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
               onBlur={formik.handleBlur}
               touched={formik.touched.recomendacion}
               errors={formik.errors.recomendacion}
-              rows={1}
+              rows={2}
             />
           </FormGroup>
 
@@ -280,7 +286,7 @@ const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
             />
           </FormGroup>
 
-          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+          <FormGroup tag={Col} md='6' lg='6' className='mb-0'>
             <Label className='form-label'>
               Área
             </Label>
@@ -297,7 +303,7 @@ const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
             />
           </FormGroup>
 
-          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+          <FormGroup tag={Col} md='6' lg='6' className='mb-0'>
             <Label className='form-label'>
               Tratamiento o estado
             </Label>
@@ -327,7 +333,7 @@ const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
               onBlur={formik.handleBlur}
               touched={formik.touched.planTrabajo}
               errors={formik.errors.planTrabajo}
-              rows={1}
+              rows={2}
             />
           </FormGroup>
 
@@ -344,7 +350,7 @@ const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
               onBlur={formik.handleBlur}
               touched={formik.touched.informeEmitido}
               errors={formik.errors.informeEmitido}
-              rows={1}
+              rows={2}
             />
           </FormGroup>
 
@@ -353,7 +359,7 @@ const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
               CI. de seguimiento
             </Label>
             <CInputReact
-              type={"text"}
+              type={"textarea"}
               id={'ciSeguimiento'}
               placeholder={'CI. de seguimiento'}
               value={formik.values.ciSeguimiento}
@@ -361,6 +367,7 @@ const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
               onBlur={formik.handleBlur}
               touched={formik.touched.ciSeguimiento}
               errors={formik.errors.ciSeguimiento}
+              rows={2}
             />
           </FormGroup>
 
@@ -377,34 +384,41 @@ const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
               onBlur={formik.handleBlur}
               touched={formik.touched.comentario}
               errors={formik.errors.comentario}
-              rows={1}
+              rows={2}
             />
           </FormGroup>
         </Row>
 
-        <Row className='pt-4'>
-          <Col className='d-flex justify-content-center'>
-            <Button
-              className='mr-4 text-white'
-              color="primary"
-              type="submit"
-              disabled={formik.isSubmitting}
-            >
-              <Save size={17} className='mr-2'/>
-              Guardar
-            </Button>
-
-            <Button
-              outline color='dark'
-              onClick={() => { formik.handleReset() }}
-              disabled={!formik.dirty || formik.isSubmitting}
-            >
-              <Delete size={17} className='mr-2'/>
-              Limpiar
-            </Button>
-          </Col>
-        </Row>
-
+        <div className='d-flex justify-content-between pt-4'>
+          <Button
+            style={{ width: '130px' }}
+            color="primary"
+            outline
+            onClick={(e) => { redirect(e) }}
+          >
+            Cancelar
+          </Button>
+          <Button
+            style={{ width: '130px' }}
+            color="dark"
+            outline
+            onClick={() => { formik.handleReset() }}
+            disabled={!formik.dirty || formik.isSubmitting}
+          >
+            <Delete size={17} className='mr-2' />
+            Limpiar
+          </Button>
+          <Button
+            style={{ width: '130px' }}
+            className='text-white'
+            color="primary"
+            type="submit"
+          //disabled={formik.isSubmitting}
+          >
+            <Save size={17} className='mr-2' />
+            GUARDAR
+          </Button>
+        </div>
       </Form>
     </Fragment>
   )

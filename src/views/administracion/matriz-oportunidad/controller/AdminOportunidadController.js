@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { HOSTURI } from 'src/config'
 
-const HOST = HOSTURI.endpoint_ciro
+const HOST = HOSTURI.endpoint_riesgos
 
 export const getTablaListaOportunidad = async () => {
     const uri = HOST.concat('v1/tablaListaMatrizOportunidad/listar')
@@ -10,14 +10,13 @@ export const getTablaListaOportunidad = async () => {
 }
 
 export const getTablaDescripcionOportunidadN1 = async (idTabla) => {
-    const uri = HOST.concat('v1/tablaDescripcionMatrizOportunidad/listarNivel1/',idTabla)
+    const uri = HOST.concat('v1/tablaDescripcionMatrizOportunidad/listarNivel1/', idTabla)
     const response = await axios.get(uri)
     return response
 }
 
 export const getTablaDescripcionOportunidadN2 = async (idTabla, idNivel2) => {
-    const uri = HOST.concat('v1/tablaDescripcionMatrizOportunidad/listarNivel2/',idTabla,'/', idNivel2);
-    console.log('URIII  : ', uri)
+    const uri = HOST.concat('v1/tablaDescripcionMatrizOportunidad/listarNivel2/', idTabla, '/', idNivel2);
     const response = await axios.get(uri)
     return response
 }
@@ -32,9 +31,14 @@ export const putTablaDescripcionOportunidadId = (id, data) => {
     return axios.put(uri, data);
 }
 
- export const getTablaDescripcionOportunidadId = async (id) => {
+export const getTablaDescripcionOportunidadId = async (id) => {
     const uri = HOST + 'v1/tablaDescripcionMatrizOportunidad/mostrar2/' + id;
     const response = await axios.get(uri);
     return response;
 };
+
+export const deleteTablaDescripcionOportunidadId = (id) => {
+    const uri = HOST + 'v1/tablaDescripcionMatrizOportunidad/eliminar/' + id;
+    return axios.delete(uri);
+}
 

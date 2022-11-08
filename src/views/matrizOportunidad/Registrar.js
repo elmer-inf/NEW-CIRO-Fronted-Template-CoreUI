@@ -1,49 +1,58 @@
-import { React, useState } from 'react'
+import { React, useEffect, useState } from 'react'
 import DatosIniciales from './seccionesFormulario/DatosIniciales'
 import Descripcion from './seccionesFormulario/Descripcion'
 import Oportunidad from './seccionesFormulario/Oportunidad'
 import Controles from './seccionesFormulario/Controles'
 import PlanesSeguimiento from './seccionesFormulario/PlanesSeguimiento'
 import { FileText, BarChart2, ChevronRight, CheckSquare, Trello, Columns } from 'react-feather'
-import { Row, Col, Card, CardBody, CardHeader, CardTitle, TabContent, TabPane, NavLink, NavItem, Nav} from 'reactstrap';
+import { Row, Col, Card, CardBody, CardHeader, CardTitle, TabContent, TabPane, NavLink, NavItem, Nav } from 'reactstrap';
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames';
 import { postOportunidad } from './controller/OportunidadController';
 import { ToastContainer, toast } from 'react-toastify'
 import CCSpinner from 'src/reusable/spinner/CCSpinner'
+import { getTablaDescripcionOportunidadN1 } from 'src/views/administracion/matriz-oportunidad/controller/AdminOportunidadController';
+import { buildSelectTwo } from 'src/functions/Function'
+var _ = require('lodash');
 
 const MatrizRiesgoRegistrar = () => {
 
   const history = useHistory();
   const [spin, setSpin] = useState(false);
 
+  // Clasificacion de factores
+  const optionsFactores = [
+    { value: '1. Interno', label: '1. Interno' },
+    { value: '2. Externo', label: '2. Externo' }
+  ]
+
   const formValueInitialDatosIniciales = {
-    areaId : null,
-    unidadId : null,
-    procesoId : null,
-    procedimientoId : null,
-    duenoCargoId : null,
-    responsableCargoId : null,
-    fechaEvaluacion : '',
-    fodaId : null,
-    fodaDescripcionId : null,
+    areaId: null,
+    unidadId: null,
+    procesoId: null,
+    procedimientoId: null,
+    duenoCargoId: null,
+    responsableCargoId: null,
+    fechaEvaluacion: '',
+    fodaId: null,
+    fodaDescripcionId: null,
   }
 
   const formValueInitialDescripcion = {
-    definicion : '',
-    causa : '',
-    consecuencia : '',
-    factor : '',
-    grupoInteresId : null,
+    definicion: '',
+    causa: '',
+    consecuencia: '',
+    factor: '',
+    grupoInteresId: null,
   }
 
   const formValueInitialOportunidad = {
-    probabilidadId : null,
-    impactoOporId : null
+    probabilidadId: null,
+    impactoOporId: null
   }
 
   const formValueInitialControles = {
-    controlesTiene : false,
+    controlesTiene: 'false',
     controlComentario: '',
     fortalezaId: '',
     nroControles: '',
@@ -91,8 +100,8 @@ const MatrizRiesgoRegistrar = () => {
     }
   }
 
-  const setObject = (result, realValues) => {
-    console.log("result: ", result)
+  const setObject = (result) => {
+    //console.log("result: ", result)
     const values = {
       ...requestData,
       ...result
@@ -103,70 +112,104 @@ const MatrizRiesgoRegistrar = () => {
 
   const notificationToast = (type, mensaje) => {
     switch (type) {
-        case 'error':
-            toast.error(mensaje, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-            });
-            break;
-        case 'success':
-            toast.success(mensaje, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-            });
-            break;
+      case 'error':
+        toast.error(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        break;
+      case 'success':
+        toast.success(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        break;
 
-        default:
-            toast(mensaje, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-            });
+      default:
+        toast(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
     }
     setTimeout(() => {
-        history.push('/matrizOportunidad/Listar');
-        setSpin(false);
+      history.push('/matrizOportunidad/Listar');
+      setSpin(false);
     }, 5000);
   }
 
   const handleOnSubmmit = (values) => {
     setSpin(true);
     const dataRequest = setObject(values);
-    console.log('dataRequest: ', dataRequest)
+    //console.log('dataRequest: ', dataRequest)
     const dataValues = {
       ...dataRequest,
       controles: JSON.stringify(dataRequest.controles),
       planesAccion: JSON.stringify(dataRequest.planesAccion)
     }
 
-    console.log('Lo que se enviara en el request: ', dataValues)
+    //console.log('Lo que se enviara en el request: ', dataValues)
 
     postOportunidad(dataValues)
-    .then(res => {
-      if (res.status >= 200 && res.status < 300) {
-        console.log('Envio el request: ', res)
-        notificationToast('success', 'Matriz de Oportunidad registrada exitósamente');
-        // history.push("/matrizOportunidad/listar")
-      } else {
-        console.log('Hubo un  error ', res);
+      .then(res => {
+        if (res.status >= 200 && res.status < 300) {
+          console.log('Envio el request: ', res)
+          notificationToast('success', 'Matriz de Oportunidad registrada exitósamente');
+          // history.push("/matrizOportunidad/listar")
+        } else {
+          console.log('Hubo un  error ', res);
+          notificationToast('error', 'Algo salió mal, intente nuevamente');
+        }
+      }).catch((error) => {
+        console.log('Error al obtener datos: ', error);
         notificationToast('error', 'Algo salió mal, intente nuevamente');
-      }
-    }).catch((error) => {
-      console.log('Error al obtener datos: ', error);
-      notificationToast('error', 'Algo salió mal, intente nuevamente');
-    });
+      });
   }
+
+  // Tratamiento
+  const [dataApiTratamiento, setDataApiTratamiento] = useState([])
+  const callApiTratamiento = (idTablaDes, idNivel2) => {
+    getTablaDescripcionOportunidadN1(idTablaDes, idNivel2)
+      .then(res => {
+        const options = buildSelectTwo(res.data, 'id', 'campoB', true)
+        setDataApiTratamiento(options)
+
+      }).catch((error) => {
+        console.log('Error: ', error)
+      })
+  }
+
+  // Tipo Control
+  const [dataApiFortaleza, setDataApiFortaleza] = useState([])
+  const callApiFortaleza = (idTablaDes) => {
+    getTablaDescripcionOportunidadN1(idTablaDes)
+      .then(res => {
+
+        const options = buildSelectTwo(res.data, 'id', 'campoA', true)
+        setDataApiFortaleza(_.orderBy(options, ['value'], ['desc']))
+        setSpin(false)
+      }).catch((error) => {
+        console.log('Error: ', error)
+      })
+  }
+
+  useEffect(() => {
+    callApiTratamiento(5);
+    callApiFortaleza(6);
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
 
   return (
     <div>
@@ -184,7 +227,7 @@ const MatrizRiesgoRegistrar = () => {
                   <NavLink className={classnames({ active: activeTab === '1' })}>
                     <span className={activeTab === '1' ? '' : 'd-none'}></span>
                     <FileText size={20} /><span className='pl-2 h6 font-weight-bold'>Datos iniciales</span>
-                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary'/>
+                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
                   </NavLink>
                 </NavItem>
 
@@ -192,7 +235,7 @@ const MatrizRiesgoRegistrar = () => {
                   <NavLink className={classnames({ active: activeTab === '2' })}>
                     <span className={activeTab === '2' ? '' : 'd-none'}></span>
                     <Columns size={20} /><span className='pl-2 h6 font-weight-bold'>Descripcion</span>
-                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary'/>
+                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
                   </NavLink>
                 </NavItem>
 
@@ -200,7 +243,7 @@ const MatrizRiesgoRegistrar = () => {
                   <NavLink className={classnames({ active: activeTab === '3' })}>
                     <span className={activeTab === '3' ? '' : 'd-none'}></span>
                     <BarChart2 size={20} /><span className='pl-2 h6 font-weight-bold'>Oportunidad</span>
-                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary'/>
+                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
                   </NavLink>
                 </NavItem>
 
@@ -208,7 +251,7 @@ const MatrizRiesgoRegistrar = () => {
                   <NavLink className={classnames({ active: activeTab === '4' })}>
                     <span className={activeTab === '4' ? '' : 'd-none'}></span>
                     <Trello size={20} /><span className='pl-2 h6 font-weight-bold'>Controles</span>
-                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary'/>
+                    <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
                   </NavLink>
                 </NavItem>
 
@@ -226,7 +269,7 @@ const MatrizRiesgoRegistrar = () => {
                     nextSection={nextSection}
                     setObject={setObject}
                     initValues={formValueInitialDatosIniciales}
-                    //isEdit={false}
+                    isEdit={false}
                   />
                 </TabPane>
 
@@ -236,7 +279,8 @@ const MatrizRiesgoRegistrar = () => {
                     beforeSection={beforeSection}
                     setObject={setObject}
                     initValues={formValueInitialDescripcion}
-                    //isEdit={false}
+                    optionsFactores={optionsFactores}
+                    isEdit={false}
                   />
                 </TabPane>
 
@@ -246,7 +290,8 @@ const MatrizRiesgoRegistrar = () => {
                     beforeSection={beforeSection}
                     setObject={setObject}
                     initValues={formValueInitialOportunidad}
-                    //isEdit={true}
+                    dataApiTratamiento={dataApiTratamiento}
+                    isEdit={false}
                   />
                 </TabPane>
 
@@ -256,7 +301,8 @@ const MatrizRiesgoRegistrar = () => {
                     beforeSection={beforeSection}
                     setObject={setObject}
                     initValues={formValueInitialControles}
-                    //isEdit={true}
+                    dataApiFortaleza={dataApiFortaleza}
+                    isEdit={false}
                   />
                 </TabPane>
 
@@ -265,7 +311,7 @@ const MatrizRiesgoRegistrar = () => {
                     beforeSection={beforeSection}
                     initValues={formValueInitialPlanesSeguimiento}
                     handleOnSubmmit={handleOnSubmmit}
-                    //isEdit={true}
+                  //isEdit={true}
                   />
                 </TabPane>
 

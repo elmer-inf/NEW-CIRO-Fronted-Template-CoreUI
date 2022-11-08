@@ -12,6 +12,7 @@ import { buildSelectTwo, buildSelectThree } from 'src/functions/Function'
 import { getEventos } from 'src/views/eventoRiesgo/controller/EventoController'
 import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
 import CInputRadio from 'src/reusable/CInputRadio'
+import { useHistory } from 'react-router-dom'
 
 var _ = require('lodash');
 
@@ -20,31 +21,31 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   const [relEventoRiesgo, setRelEventoRiesgo] = useState([]);
 
   const formik = useFormik({
-    initialValues: {...initValues, otrosAux: false},
+    initialValues: { ...initValues, otrosAux: false },
     validationSchema: Yup.object().shape({
-      areaId : Yup.mixed().required('Campo obligatorio'),
-      unidadId : Yup.mixed().required('Campo obligatorio'),
-      procesoId : Yup.mixed().required('Campo obligatorio'),
+      areaId: Yup.mixed().required('Campo obligatorio'),
+      unidadId: Yup.mixed().required('Campo obligatorio'),
+      procesoId: Yup.mixed().required('Campo obligatorio'),
 
       // Campos solo para mostrar:
-      macroNombre : Yup.string().nullable(),
-      macroCriticidad : Yup.string().nullable(),
-      macroValoracion : Yup.string().nullable(),
+      macroNombre: Yup.string().nullable(),
+      macroCriticidad: Yup.string().nullable(),
+      macroValoracion: Yup.string().nullable(),
       otrosAux: Yup.boolean(),
       eventoFechaAux: Yup.date().nullable(),
       eventoDescAux: Yup.string().nullable(),
       // FIN Campos solo para mostrar:
 
-      procedimientoId : Yup.mixed().required('Campo obligatorio'),
-      duenoCargoId : Yup.mixed().required('Campo obligatorio'),
-      responsableCargoId : Yup.mixed().required('Campo obligatorio'),
-      fechaEvaluacion : Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").required('Campo obligatorio'),
-      identificadoId : Yup.mixed().nullable().when('otrosAux',{
-        is:(val) =>  (val === false),
+      procedimientoId: Yup.mixed().required('Campo obligatorio'),
+      duenoCargoId: Yup.mixed().required('Campo obligatorio'),
+      responsableCargoId: Yup.mixed().required('Campo obligatorio'),
+      fechaEvaluacion: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").required('Campo obligatorio'),
+      identificadoId: Yup.mixed().nullable().when('otrosAux', {
+        is: (val) => (val === false),
         then: Yup.mixed().nullable().required("Campo obligatorio"),
       }),
-      identificadoOtro: Yup.string().nullable().when('otrosAux',{
-        is:(val) => (val === true),
+      identificadoOtro: Yup.string().nullable().when('otrosAux', {
+        is: (val) => (val === true),
         then: Yup.string().nullable().required("Campo obligatorio"),
       }),
       eventoRiesgoId: Yup.mixed().nullable(),
@@ -64,7 +65,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
       eventoDescAux: Yup.string().nullable(),
       // FIN Campos solo para mostrar:
 
-      procedimientoId: Yup.mixed().required("Campo obligatorio"),
+      procedimientoId: Yup.mixed().nullable(),
       duenoCargoId: Yup.mixed().nullable(),
       responsableCargoId: Yup.mixed().nullable(),
       fechaEvaluacion: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
@@ -94,17 +95,36 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         duenoCargoId: (values.duenoCargoId !== null) ? values.duenoCargoId.value : 0,
         responsableCargoId: (values.responsableCargoId !== null) ? values.responsableCargoId.value : 0,
         identificadoId: (values.identificadoId !== null) ? values.identificadoId.value : 0,
-        eventoRiesgoId: (values.eventoRiesgoId !== null) ? values.eventoRiesgoId.value : 0,
+        eventoRiesgoId: values.eventoRiesgoId.value // Modificado 02-08-2022
         //eventoMaterializado: values.eventoMaterializado
       }
-      console.log('datos que se enviaran SECCION 1:', data)
+      //console.log('datos que se enviaran SECCION 1:', data)
       setObject(data, values);
       nextSection(1);
     }
   })
 
-  /*   P  A  R  A  M  E  T  R  O  S   */
+  // Rellena Datos para Editar
+  useEffect(() => {
+    if (isEdit) {
+      formik.setValues({ ...initValues })
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initValues])
 
+
+  // Para el despliegue del select llenado al EDITAR
+  useEffect(() => {
+    if (isEdit && initValues.areaId !== null) {
+      callApiUnidad(4, initValues.areaId.id);
+    }
+    if (isEdit && initValues.procesoId !== null) {
+      callApiProcedimiento(16, initValues.procesoId.id);
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  /*   P  A  R  A  M  E  T  R  O  S   */
   // Area
   const [dataApiArea, setDataApiArea] = useState([])
   const callApiArea = (idTablaDes) => {
@@ -185,34 +205,53 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
 
   useEffect(() => {
     callApiArea(3);
-    callApiMacro(15); 
+    callApiMacro(15);
     callApiCargo(7);
     callApiIdentificado(8);
     getListEventosRiesgo();
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Reset Unidad (nivel 2)
-  const resetUnidadId = () => { formik.setFieldValue('unidadId', null, false); }
-  useEffect(() => {
-    if (formik.values.areaId !== null) {
-      callApiUnidad(4, formik.values.areaId.id);
-      resetUnidadId();
-    }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.areaId])
+  /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
-  // Reset Procedimiento (nivel 2)
-  const resetProcedimiento = () => { formik.setFieldValue('procedimientoId', null, true); }
-  useEffect(() => {
-    if (formik.values.procesoId !== null) {
-      callApiProcedimiento(16, formik.values.procesoId.id);
-      resetProcedimiento();
-    }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.procesoId])
 
-  // Autocompleta nombre, criticidad y valoracion de Macroproceso
+  // FORMIK RESET VALUE REUTILIZABLE
+  const resetFormikValue = (field, valueToReset) => {
+    formik.setFieldValue(field, valueToReset, false);
+  }
+
+  /*  Values of AREA */
+  const clearDependenceOfArea = () => {
+    resetFormikValue('unidadId', null);
+    setDataApiUnidad([]);
+  }
+  const getValueArea = (value) => {
+    if (value !== null) {
+      callApiUnidad(4, value.id);
+    }
+  }
+  const clearInputArea = (id) => {
+    formik.setFieldValue(id, null, false);
+  }
+  /* FIN  Values of AREA */
+
+  /*  Values of MACROPROCESO */
+  const clearDependenceOfMacroproceso = () => {
+    resetFormikValue('procedimientoId', null);
+    setDataApiProcedimiento([]);
+  }
+  const getValueMacroproceso = (value) => {
+    if (value !== null) {
+      callApiProcedimiento(16, value.id);
+    }
+  }
+  const clearInputMacroproceso = (id) => {
+    formik.setFieldValue(id, null, false);
+  }
+  /* FIN  Values of MACROPROCESO */
+
+
+  // Autocompleta codigo, criticidad y valoracion de Macroproceso
   useEffect(() => {
     if (formik.values.procesoId !== null) {
       formik.setFieldValue('macroNombre', formik.values.procesoId.clave, false)
@@ -232,10 +271,10 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   }, [formik.values.otrosAux])
 
 
-   // Autocompleta "Fecha y Descripcion" de Eventos
-   useEffect(() => {
+  // Autocompleta "Fecha y Descripcion" de Eventos
+  useEffect(() => {
     if (formik.values.eventoRiesgoId !== null) {
-      formik.setFieldValue('eventoFechaAux', formik.values.eventoRiesgoId.fechaDesc !== null? formik.values.eventoRiesgoId.fechaDesc : '', false);
+      formik.setFieldValue('eventoFechaAux', formik.values.eventoRiesgoId.fechaDesc !== null ? formik.values.eventoRiesgoId.fechaDesc : '', false);
       formik.setFieldValue('eventoDescAux', formik.values.eventoRiesgoId.descripcion, false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -248,14 +287,24 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
     formik.setFieldValue('eventoDescAux', '', false);
 
   }
+
+  // Reset codigo, criticidad y valoracion de Macroproceso
+  useEffect(() => {
+    if (formik.values.procesoId === null) {
+      formik.setFieldValue('macroNombre', '', false)
+      formik.setFieldValue('macroCriticidad', '', false)
+      formik.setFieldValue('macroValoracion', '', false)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.procesoId]);
+
+
   useEffect(() => {
     if (formik.values.eventoMaterializado === false) {
       resetDatosEvento();
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.eventoMaterializado])
-
-  /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
 
   /**
@@ -271,26 +320,25 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         console.log('Error: ', error)
       })
   }
-  const resetAllValues = () => {
-    formik.setFieldValue('macroNombre', '', false);
-    formik.setFieldValue('macroCriticidad', '', false);
-    formik.setFieldValue('macroValoracion', '', false);
 
-  }
-  const clearAllDependences = () => {
-    resetAllValues();
-    //setVarListN2([]);
+
+  /*  // Limita El año de la fecha a 3000
+   useEffect(() => {
+     var arrayFecha = formik.values.fechaEvaluacion.split('-')
+     if (arrayFecha[0] > 3000){
+       formik.setFieldValue('fechaEvaluacion', '3000-' + arrayFecha[1] + '-' + arrayFecha[2] , false);
+       //console.log('fecha fff: ', '3000-' + arrayFecha[1] + '-' + arrayFecha[2]);
+     }
+     //eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [formik.values.fechaEvaluacion]) */
+
+
+  // Redirecciona a Listar
+  const history = useHistory();
+  const redirect = (e) => {
+    history.push('/matrizRiesgo/Listar');
   }
 
- /*  // Limita El año de la fecha a 3000
-  useEffect(() => {
-    var arrayFecha = formik.values.fechaEvaluacion.split('-')
-    if (arrayFecha[0] > 3000){
-      formik.setFieldValue('fechaEvaluacion', '3000-' + arrayFecha[1] + '-' + arrayFecha[2] , false);
-      //console.log('fecha fff: ', '3000-' + arrayFecha[1] + '-' + arrayFecha[2]);
-    }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.fechaEvaluacion]) */
 
   return (
     <Fragment>
@@ -301,16 +349,24 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
             <Label className='form-label'>
               Área <span className='text-primary h5'><b>*</b></span>
             </Label>
-            <CSelectReact
-              type={"select"}
+            <CSelectReactTwo
               id={'areaId'}
               placeholder={'Seleccionar'}
               value={formik.values.areaId}
               onChange={formik.setFieldValue}
               onBlur={formik.setFieldTouched}
-              error={formik.errors.areaId}
+              errors={formik.errors.areaId}
               touched={formik.touched.areaId}
               options={dataApiArea}
+              obligatorio={false}
+              isClearable={true}
+              isSearchable={true}
+              isDisabled={false}
+              dependence={true}
+              cleareableDependences={clearDependenceOfArea}
+              getAddValue={true}
+              getSelectValue={getValueArea}
+              inputIsClearable={clearInputArea}
             />
           </FormGroup>
 
@@ -335,38 +391,24 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
             <Label className='form-label'>
               Macroproceso <span className='text-primary h5'><b>*</b></span>
             </Label>
-            {/*  <CSelectReact
-              type={"select"}
+            <CSelectReactTwo
               id={'procesoId'}
               placeholder={'Seleccionar'}
               value={formik.values.procesoId}
               onChange={formik.setFieldValue}
               onBlur={formik.setFieldTouched}
-              error={formik.errors.procesoId}
-              touched={formik.touched.procesoId}
-              options={dataApiMacroproceso}
-            /> */}
-
-            <CSelectReactTwo
-              label={""}
-              id={'procesoId'}
-              placeholder={'Seleccione'}
-              value={formik.values.procesoId}
-              onChange={formik.setFieldValue}
-              onBlur={formik.setFieldTouched}
               errors={formik.errors.procesoId}
               touched={formik.touched.procesoId}
-              //options={tablaListaOptions}optionToSelect.tablaOp
               options={dataApiMacroproceso}
-              obligatorio={true}
+              obligatorio={false}
               isClearable={true}
               isSearchable={true}
               isDisabled={false}
               dependence={true}
-              cleareableDependences={clearAllDependences}  //FUNCION PARA LIMPIA LOS VALORES FORMIK...
-              getAddValue={false}
-            //  getSelectValue={getSelectValueLevel2} // AGGARA EL EL VALOR DEL SELECT VALUE
-            // inputIsClearable={inputIsClearableLevel2} // AGGARA EL EL VALOR DEL SELECT VALUE
+              cleareableDependences={clearDependenceOfMacroproceso}
+              getAddValue={true}
+              getSelectValue={getValueMacroproceso}
+              inputIsClearable={clearInputMacroproceso}
             />
 
           </FormGroup>
@@ -488,7 +530,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
-              Identificado por {formik.values.otrosAux === false? <span className='text-primary h5'><b>*</b></span>: null}
+              Identificado por {formik.values.otrosAux === false ? <span className='text-primary h5'><b>*</b></span> : null}
             </Label>
             <CSelectReact
               type={"select"}
@@ -500,12 +542,12 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
               error={formik.errors.identificadoId}
               touched={formik.touched.identificadoId}
               options={dataApiIdentificado}
-              isDisabled={formik.values.otrosAux === true? true: false}
+              isDisabled={formik.values.otrosAux === true ? true : false}
             />
           </FormGroup>
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
-            <br/>
+            <br />
             <CInputCheckbox
               id={'otrosAux'}
               type={"checkbox"}
@@ -513,14 +555,14 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               label='Otros (Identificado por)'
-              disabled={formik.values.identificadoId !== null? true: false}
+              disabled={formik.values.identificadoId !== null ? true : false}
             />
           </FormGroup>
 
-          {formik.values.otrosAux === true && formik.values.identificadoId === null?
+          {formik.values.otrosAux === true && formik.values.identificadoId === null ?
             <FormGroup tag={Col} md='6' lg='6' className='mb-0'>
               <Label className='form-label'>
-                Otros (Identificado por) {formik.values.otrosAux === true? <span className='text-primary h5'><b>*</b></span>: null}
+                Otros (Identificado por) {formik.values.otrosAux === true ? <span className='text-primary h5'><b>*</b></span> : null}
               </Label>
               <CInputReact
                 type={"textarea"}
@@ -534,10 +576,10 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
                 rows={1}
               />
             </FormGroup>
-          : null}
+            : null}
         </Row>
 
-        <hr/>
+        <hr />
         <Row>
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
@@ -569,7 +611,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
               error={formik.errors.eventoRiesgoId}
               touched={formik.touched.eventoRiesgoId}
               options={relEventoRiesgo}
-              isDisabled={formik.values.eventoMaterializado === true? false : true}
+              isDisabled={formik.values.eventoMaterializado === true ? false : true}
             />
           </FormGroup>
 
@@ -614,8 +656,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
             style={{ width: '130px' }}
             color="primary"
             outline
-          // onClick={(e) => { redirect(e) }}
-          //href="#/administracion/formularios"
+            onClick={(e) => { redirect(e) }}
           >
             Cancelar
           </Button>

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { HOSTURI } from 'src/config'
 
-const HOST = HOSTURI.endpoint_ciro
+const HOST = HOSTURI.endpoint_riesgos
 
 export const getTablaListaSeguridad = async () => {
     const uri = HOST.concat('v1/tablaListaSeguridad/listar')
@@ -10,7 +10,7 @@ export const getTablaListaSeguridad = async () => {
 }
 
 export const getTablaDescripcionSeguridadN1 = async (idTabla) => {
-    const uri = HOST.concat('v1/tablaDescripcionSeguridad/listarNivel1/',idTabla)
+    const uri = HOST.concat('v1/tablaDescripcionSeguridad/listarNivel1/', idTabla)
     const response = await axios.get(uri)
     return response
 }
@@ -29,4 +29,9 @@ export const getTablaDescripcionSeguridadId = async (id) => {
     const uri = HOST + 'v1/tablaDescripcionSeguridad/mostrar/' + id;
     const response = await axios.get(uri);
     return response;
-};
+}
+
+export const deleteTablaDescripcionSeguridadId = (id) => {
+    const uri = HOST + 'v1/tablaDescripcionSeguridad/eliminar/' + id;
+    return axios.delete(uri);
+}

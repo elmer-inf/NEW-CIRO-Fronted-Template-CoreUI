@@ -43,7 +43,6 @@ const MatrizOportunidadListar = () => {
   const redirect = (e) => {
     //history.push('/matrizOportunidad/Registrar');
     e.preventDefault();
-
     const path = '/matrizOportunidad/Registrar';
     if (hasPermission(path, valuePathFromContext)) {
       history.push(path);
@@ -69,7 +68,11 @@ const MatrizOportunidadListar = () => {
       dataField: 'id',
       text: 'ID',
       sort: true,
-      hidden: false
+      hidden: false,
+      filter: customFilter(),
+      filterRenderer: (onFilter, column) =>
+        <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
+      headerFormatter: typeFormatter,
     }, {
       dataField: 'codigo',
       text: 'CODIGO',
@@ -87,7 +90,6 @@ const MatrizOportunidadListar = () => {
       filterRenderer: (onFilter, column) =>
         <CFilterDate placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
       headerFormatter: typeFormatter,
-      align: 'right',
     }, {
       dataField: 'procesoId.clave',
       text: 'COD MACRO',
@@ -172,12 +174,17 @@ const MatrizOportunidadListar = () => {
   }
 
   const detailsRow = (row) => {
-    history.push('/matrizOportunidad/mostrar/' + row.id);
+    history.push('/matrizOportunidad/Mostrar/' + row.id);
   }
 
   const editRow = (row) => {
-    //console.log(row)
-    //history.push('./editar/' + row.id);
+    //history.push('/matrizOportunidad/Editar/' + row.id);
+    const path = '/matrizOportunidad/editar/:id';
+    if (hasPermission(path, valuePathFromContext)) {
+      history.push('/matrizOportunidad/Editar/' + row.id);
+    } else {
+      notificationToast();
+    }
   }
 
   const actionFormatterEvaluar = (cell, row) => {
@@ -190,10 +197,10 @@ const MatrizOportunidadListar = () => {
       estadoRegistro: 'Autorizado'
     }
     // Genera posible codigo al Autorizar Evento
-   await getGeneraCodigo(row.id)
+    await getGeneraCodigo(row.id)
       .then((response) => {
-        if(row.estadoRegistro !== 'Descartado' && row.estadoRegistro !== 'Autorizado'){
-           swalWithBootstrapButtons.fire({
+        if (row.estadoRegistro !== 'Descartado' && row.estadoRegistro !== 'Autorizado') {
+          swalWithBootstrapButtons.fire({
             title: '',
             text: 'Al autorizar el registro se asignará el siguiente código: ' + response.data + ' ¿Está seguro de generarlo?',
             icon: 'warning',
@@ -204,12 +211,13 @@ const MatrizOportunidadListar = () => {
             position: 'top',
           }).then((result) => {
             if (result.isConfirmed) {
-                putEvaluaOportunidad(row.id, data)
+              putEvaluaOportunidad(row.id, data)
                 .then(res => {
                   swalWithBootstrapButtons.fire({
                     title: '',
                     text: 'Operación realizada exitósamente',
                     icon: 'success',
+                    confirmButtonText: 'Aceptar',
                     position: 'top',
                   }).then(okay => {
                     if (okay) {
@@ -226,24 +234,27 @@ const MatrizOportunidadListar = () => {
                 title: '',
                 text: 'Operación cancelada',
                 icon: 'error',
+                confirmButtonText: 'Aceptar',
                 position: 'top'
               })
             }
           })
-        }else{
-          if(row.estadoRegistro === 'Descartado'){
+        } else {
+          if (row.estadoRegistro === 'Descartado') {
             swalWithBootstrapButtons.fire({
               title: '',
               text: 'Un registro Descartado no se puede Autorizar',
               icon: 'error',
+              confirmButtonText: 'Aceptar',
               position: 'top'
             })
           }
-          if(row.estadoRegistro === 'Autorizado'){
+          if (row.estadoRegistro === 'Autorizado') {
             swalWithBootstrapButtons.fire({
               title: '',
               text: 'El registro ya está Autorizado',
               icon: 'error',
+              confirmButtonText: 'Aceptar',
               position: 'top'
             })
           }
@@ -257,10 +268,10 @@ const MatrizOportunidadListar = () => {
     const data = {
       estadoRegistro: 'Descartado'
     }
-    if(row.estadoRegistro !== 'Autorizado' && row.estadoRegistro !== 'Descartado'){
+    if (row.estadoRegistro !== 'Autorizado' && row.estadoRegistro !== 'Descartado') {
       swalWithBootstrapButtons.fire({
         title: '',
-        text:'¿Está seguro de modificar el estado de registro a Descartado?',
+        text: '¿Está seguro de modificar el estado de registro a Descartado?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Si',
@@ -275,6 +286,7 @@ const MatrizOportunidadListar = () => {
                 title: '',
                 text: 'Operación realizada exitósamente',
                 icon: 'success',
+                confirmButtonText: 'Aceptar',
                 position: 'top',
               }).then(okay => {
                 if (okay) {
@@ -291,29 +303,31 @@ const MatrizOportunidadListar = () => {
             title: '',
             text: 'Operación cancelada',
             icon: 'error',
+            confirmButtonText: 'Aceptar',
             position: 'top'
           })
         }
       })
-    } else{
-      if(row.estadoRegistro === 'Autorizado'){
+    } else {
+      if (row.estadoRegistro === 'Autorizado') {
         swalWithBootstrapButtons.fire({
           title: '',
           text: 'Un registro Autorizado no se puede Descartar',
           icon: 'error',
+          confirmButtonText: 'Aceptar',
           position: 'top'
         })
       }
-      if(row.estadoRegistro === 'Descartado'){
+      if (row.estadoRegistro === 'Descartado') {
         swalWithBootstrapButtons.fire({
           title: '',
           text: 'El registro ya está Descartado',
           icon: 'error',
+          confirmButtonText: 'Aceptar',
           position: 'top'
         })
       }
     }
-    
   }
 
   /* LISTA TABLA LISTA */
@@ -377,6 +391,9 @@ const MatrizOportunidadListar = () => {
     if (param['duenoCargoId.nombre'] === '' || _.isEmpty(param['duenoCargoId.nombre'])) {
       delete param['duenoCargoId.nombre'];
     }
+    if (param['id'] === '' || _.isEmpty(param['id'])) {
+      delete param['id'];
+    }
 
     setParams(param)
     validatePagination(pagination.page, pagination.size, param);
@@ -392,7 +409,7 @@ const MatrizOportunidadListar = () => {
       search = getParams(toSearch);
     }
 
-    console.log('TO SEARCH:: ', search);
+    //console.log('TO SEARCH:: ', search);
 
     const endpoint = 'v1/matrizOportunidad/';
 
@@ -420,7 +437,7 @@ const MatrizOportunidadListar = () => {
             <Card>
               <CardHeader>
                 <CardTitle className='float-left h4 pt-2'>Matriz de Oportunidades</CardTitle>
-                <Button color='primary' onClick={(e) => {redirect(e)}} className='float-right mt-1' style={{ width: '130px' }}>
+                <Button color='primary' onClick={(e) => { redirect(e) }} className='float-right mt-1' style={{ width: '130px' }}>
                   <span className='text-white'>Registrar</span>
                 </Button>
               </CardHeader>

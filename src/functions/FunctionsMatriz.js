@@ -1,7 +1,6 @@
 var _ = require('lodash');
 
 // Calcula Riesgo Inherente mediante Probabilidad e Impacto
-
 export const calculaRiesgo = (prob, imp) => {
   var riesgo = 0;
   if (prob === 1 && (imp === 1 || imp === 2))
@@ -85,10 +84,10 @@ export const buscaValorLiteral = (arrayData, prob_Imp) => {
 
 // Encuentra valor literal de Riesgo
 export const buscaValorLiteralRiesgoI = (arrayData, riesgo) => {
-  var riesgoVal = null;
+  var riesgoVal = 'Sin registro';
   try {
-    if (Array.isArray(arrayData) && riesgo !== null && riesgo !== undefined) {
-      riesgoVal = (_.find(arrayData, ['campoA', riesgo + '']) !== undefined) ? _.find(arrayData, ['campoA', riesgo + '']).campoB : null
+    if (Array.isArray(arrayData) && riesgo !== null && riesgo !== undefined && riesgo !== 0) {
+      riesgoVal = (_.find(arrayData, ['campoA', riesgo + '']) !== undefined) ? _.find(arrayData, ['campoA', riesgo + '']).campoB : null;
     }
   } catch (error) {
     console.log('Error al obtener valor literal del Riesgo: ', error);
@@ -102,11 +101,11 @@ export const intervaloImpacto = (arrayData, perdida) => {
   try {
     if (Array.isArray(arrayData) && perdida !== null && perdida !== undefined) {
       for (let value in arrayData) {
-        if (perdida >= arrayData[value].campoE && perdida <= arrayData[value].campoF){
+        if (perdida >= arrayData[value].campoE && perdida <= arrayData[value].campoF) {
           montoPerdida = arrayData[value].id;
         }
-        if(perdida > _.maxBy(arrayData, 'campoF').campoF){
-            montoPerdida = null;
+        if (perdida > _.maxBy(arrayData, 'campoF').campoF) {
+          montoPerdida = _.maxBy(arrayData, 'campoF').id;
         }
       }
     }
@@ -117,19 +116,19 @@ export const intervaloImpacto = (arrayData, perdida) => {
 }
 
 // Obtiene la Valoracion del Riesgo en el intervalo de IMPACTO
-export const obtieneValorRiesgoIntervalo = (arrayData, perdida)=>{
+export const obtieneValorRiesgoIntervalo = (arrayData, perdida) => {
   var valorRiesgo = null;
   var idIntervalo = intervaloImpacto(arrayData, perdida);
   valorRiesgo = (_.find(arrayData, ['id', idIntervalo]) !== undefined) ? _.find(arrayData, ['id', idIntervalo]).campoA : null;
-  return valorRiesgo !== null? valorRiesgo : 0;
+  return valorRiesgo !== null ? valorRiesgo : 0;
 }
 
 // Obtiene el Riesgo en el intervalo de IMPACTO
-export const obtieneRiesgoIntervalo = (arrayData, perdida)=>{
+export const obtieneRiesgoIntervalo = (arrayData, perdida) => {
   var riesgo = null;
   var idIntervalo = intervaloImpacto(arrayData, perdida);
   riesgo = (_.find(arrayData, ['id', idIntervalo]) !== undefined) ? _.find(arrayData, ['id', idIntervalo]).nombre : null;
-  return riesgo !== null? riesgo : 'No definido';
+  return riesgo !== null ? riesgo : 'No definido';
 }
 
 

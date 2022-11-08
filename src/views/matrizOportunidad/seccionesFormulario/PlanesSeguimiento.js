@@ -16,22 +16,22 @@ var _ = require('lodash');
 const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) => {
 
   const formik = Yup.object().shape({
-      nroPlanes: Yup.string().nullable(),
-      planesAccion: Yup.array().of(
-        Yup.object().shape({
-          nroPlan: Yup.number().nullable(),
-          estrategia: Yup.string().nullable(),
-          descripcion: Yup.string().nullable(),
-          cargo: Yup.mixed().nullable(),
-          fechaAccion: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
-          fechaImpl: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
-          estado: Yup.mixed().nullable(),
+    nroPlanes: Yup.string().nullable(),
+    planesAccion: Yup.array().of(
+      Yup.object().shape({
+        nroPlan: Yup.number().nullable(),
+        estrategia: Yup.string().nullable(),
+        descripcion: Yup.string().nullable(),
+        cargo: Yup.mixed().nullable(),
+        fechaAccion: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
+        fechaImpl: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
+        estado: Yup.mixed().nullable(),
 
-          fechaSeg: Yup.date().nullable(),
-          comenConcluido: Yup.string().nullable(),
-          comenEnProceso: Yup.string().nullable(),
-        })
-      )
+        fechaSeg: Yup.date().nullable(),
+        comenConcluido: Yup.string().nullable(),
+        comenEnProceso: Yup.string().nullable(),
+      })
+    )
   });
 
   function onChangePlanes(e, field, values, setValues) {
@@ -41,7 +41,7 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
     const previousNumber = parseInt(field.value || '0');
     if (previousNumber < nroPlanes) {
       for (let i = previousNumber; i < nroPlanes; i++) {
-        planesAccion.push({ nroPlan: i+1, estrategia: '', descripcion: '', cargo: '', fechaAccion: '', fechaImpl: '', estado: '', fechaSeg: '', comenConcluido: '',comenEnProceso: '' });
+        planesAccion.push({ nroPlan: i + 1, estrategia: '', descripcion: '', cargo: '', fechaAccion: '', fechaImpl: '', estado: '', fechaSeg: '', comenConcluido: '', comenEnProceso: '' });
       }
     } else {
       for (let i = previousNumber; i >= nroPlanes; i--) {
@@ -58,7 +58,7 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
     const data = {
       ...values,
     }
-    console.log('datos que se enviaran SECCION 5:', _.omit(data, ['nroPlanes']))
+    //console.log('datos que se enviaran SECCION 5:', _.omit(data, ['nroPlanes']))
     handleOnSubmmit(_.omit(data, ['nroPlanes']))
   }
 
@@ -75,17 +75,17 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
       })
   }
 
-   // Cargo
-   const [dataApiCargo, setDataApiCargo] = useState([])
-   const callApiCargo = (idTablaDes) => {
-     getTablaDescripcionEventoN1(idTablaDes)
-       .then(res => {
-         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
-         setDataApiCargo(options)
-       }).catch((error) => {
-         console.log('Error: ', error)
-       })
-   }
+  // Cargo
+  const [dataApiCargo, setDataApiCargo] = useState([])
+  const callApiCargo = (idTablaDes) => {
+    getTablaDescripcionEventoN1(idTablaDes)
+      .then(res => {
+        const options = buildSelectTwo(res.data, 'id', 'nombre', false)
+        setDataApiCargo(options)
+      }).catch((error) => {
+        console.log('Error: ', error)
+      })
+  }
 
   useEffect(() => {
     callApiTratamiento(5);
@@ -99,26 +99,26 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
       dataField: 'nroPlan',
       text: 'Plan',
     }, {
-        dataField: 'estrategia',
-        text: 'Estrategia',
+      dataField: 'estrategia',
+      text: 'Estrategia',
     }, {
-        dataField: 'descripcion',
-        text: 'Descripción',
+      dataField: 'descripcion',
+      text: 'Descripción',
     }, {
-        dataField: 'cargo',
-        text: 'Cargo',
+      dataField: 'cargo',
+      text: 'Cargo',
     }, {
-        dataField: 'fechaAccion',
-        text: 'Fecha acción',
-        style: { whiteSpace: 'nowrap' },
+      dataField: 'fechaAccion',
+      text: 'Fecha acción',
+      style: { whiteSpace: 'nowrap' },
     }, {
-         dataField: 'fechaImpl',
-         text: 'Fecha implementación',
-        style: { whiteSpace: 'nowrap' },
-     }, {
-        dataField: 'estado',
-        text: 'Estado',
-        formatter: colorEstado,
+      dataField: 'fechaImpl',
+      text: 'Fecha implementación',
+      style: { whiteSpace: 'nowrap' },
+    }, {
+      dataField: 'estado',
+      text: 'Estado',
+      formatter: colorEstado,
     }
   ]
 
@@ -223,7 +223,7 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
                       <Field
                         name={`planesAccion.${i}.descripcion`}
                         as="textarea"
-                        rows="1"
+                        rows="2"
                         className={'form-control' + (planErrors.descripcion && planTouched.descripcion ? ' is-invalid' : '')}
                       />
                       <ErrorMessage name={`planesAccion.${i}.descripcion`} component="div" className="invalid-feedback" />
@@ -234,7 +234,7 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
                       <Select
                         placeholder="Seleccionar"
                         onChange={selectedOption => {
-                          setFieldValue(`planesAccion.${i}.cargo`, selectedOption.label , false)
+                          setFieldValue(`planesAccion.${i}.cargo`, selectedOption.label, false)
                         }}
                         options={dataApiCargo}
                         name={`planesAccion.${i}.cargo`}
@@ -288,7 +288,7 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
           <Row className='pt-4 table-hover-animation'>
             <Col xs='12'>
               <BootstrapTable
-                classes= {'table-hover-animation mt-2'}
+                classes={'table-hover-animation mt-2'}
                 bootstrap4={true}
                 sort={{ dataField: 'nroPlan', order: 'asc' }}
                 noDataIndication={'No hay registros de Planes de acción'}
@@ -338,16 +338,16 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
             <Col xs='12' md='6' xl='6' className='pt-3'>
               <div className="progress-group mb-4">
                 <div className="progress-group-header">
-                  <Percent size={15} className='mb-1'/>
+                  <Percent size={15} className='mb-1' />
                   <span className="pl-3 text-label">Avance</span>
                   <span className="ml-auto font-weight-bold">
-                    {resultAvance(values.planesAccion)} <Percent size={15} className='mb-1'/>
+                    {resultAvance(values.planesAccion)} <Percent size={15} className='mb-1' />
                   </span>
                 </div>
                 <div className="progress-group-bars">
                   <CProgress
                     className="progress-sm"
-                    color={resultAvance(values.planesAccion) <= 32? 'danger' : resultAvance(values.planesAccion) <= 66? 'warning' : 'success'}
+                    color={resultAvance(values.planesAccion) <= 32 ? 'danger' : resultAvance(values.planesAccion) <= 66 ? 'warning' : 'success'}
                     value={resultAvance(values.planesAccion)}
                   />
                 </div>
@@ -357,28 +357,28 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
             <Col xs='12' md='6' xl='6' className='pt-3'>
               {countEstadoPlanes(values.planesAccion, 'Concluido') === 0 ?
                 <div>
-                  <CBadge className='badge-danger-light'><X size={30} className='text-danger'/></CBadge>
+                  <CBadge className='badge-danger-light'><X size={30} className='text-danger' /></CBadge>
                   <span className='text-label pl-4'>Estado</span>
                   <span className='text-danger text-label pl-5'>Sin progreso</span>
                 </div>
-              : null}
+                : null}
 
               {(countEstadoPlanes(values.planesAccion, 'Concluido') < values.planesAccion.length &&
                 countEstadoPlanes(values.planesAccion, 'Concluido') !== 0) ?
                 <div>
-                <CBadge className='badge-warning-light'><AlertCircle size={30} className='text-warning'/></CBadge>
-                <span className='text-label pl-4'>Estado</span>
-                <span className='text-warning text-label pl-5'>En Proceso</span>
+                  <CBadge className='badge-warning-light'><AlertCircle size={30} className='text-warning' /></CBadge>
+                  <span className='text-label pl-4'>Estado</span>
+                  <span className='text-warning text-label pl-5'>En Proceso</span>
                 </div>
-              : null}
+                : null}
 
-              {countEstadoPlanes(values.planesAccion, 'Concluido') === values.planesAccion.length && values.planesAccion.length !==0 ?
+              {countEstadoPlanes(values.planesAccion, 'Concluido') === values.planesAccion.length && values.planesAccion.length !== 0 ?
                 <div>
-                  <CBadge className='badge-success-light'><Check size={30} className='text-success'/></CBadge>
+                  <CBadge className='badge-success-light'><Check size={30} className='text-success' /></CBadge>
                   <span className='text-label pl-4'>Estado</span>
                   <span className='text-success text-label pl-5'>Concluido</span>
                 </div>
-              : null}
+                : null}
             </Col>
           </Row>
 
@@ -407,7 +407,7 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
                       <Field
                         name={`planesAccion.${i}.comenConcluido`}
                         as="textarea"
-                        rows="1"
+                        rows="3"
                         className={'form-control' + (planErrors.comenConcluido && planTouched.comenConcluido ? ' is-invalid' : '')}
                       />
                       <ErrorMessage name={`planesAccion.${i}.comenConcluido`} component="div" className="invalid-feedback" />
@@ -418,7 +418,7 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
                       <Field
                         name={`planesAccion.${i}.comenEnProceso`}
                         as="textarea"
-                        rows="1"
+                        rows="3"
                         className={'form-control' + (planErrors.comenEnProceso && planTouched.comenEnProceso ? ' is-invalid' : '')}
                       />
                       <ErrorMessage name={`planesAccion.${i}.comenEnProceso`} component="div" className="invalid-feedback" />
@@ -437,7 +437,7 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
               color="primary"
               onClick={() => beforeSection(5)}
             >
-              <ChevronLeft size={17} className='mr-1'/>
+              <ChevronLeft size={17} className='mr-1' />
               Atrás
             </Button>
             <Button
@@ -448,7 +448,7 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
             /* onClick={() => { formik.handleReset() }}
             disabled={(!formik.dirty || formik.isSubmitting)} */
             >
-              <Delete size={17} className='mr-2'/>
+              <Delete size={17} className='mr-2' />
               Limpiar
             </Button>
             <Button
@@ -456,9 +456,9 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
               className='text-white'
               color="primary"
               type="submit"
-              //disabled={formik.isSubmitting}
+            //disabled={formik.isSubmitting}
             >
-              <Save size={17} className='mr-2'/>
+              <Save size={17} className='mr-2' />
               GUARDAR
             </Button>
           </div>

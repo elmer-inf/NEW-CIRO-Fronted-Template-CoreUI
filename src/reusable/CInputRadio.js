@@ -32,13 +32,13 @@ function CInputRadioCustom(props) {
   }
   return (
     <FormGroup>
-     {/*  {props.obligatorio && <b>*{' '}</b>}<Label>{props.label}{':'}</Label>
+      {/*  {props.obligatorio && <b>*{' '}</b>}<Label>{props.label}{':'}</Label>
       <Card style={props.showScroll ? { minHeight: '200px', maxHeight: '200px', overflowY: 'scroll', marginBottom: '0rem' } : { marginBottom: '0rem' }}>
         <CardBody> */}
-          <Row className=''>
-            {checkboxList()}
-          </Row>
-        {/* </CardBody>
+      <Row className=''>
+        {checkboxList()}
+      </Row>
+      {/* </CardBody>
       </Card>
       {(!!props.errors && props.touched)
         && (

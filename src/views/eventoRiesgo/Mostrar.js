@@ -1,14 +1,18 @@
 import { React, useState, useEffect } from 'react'
 import { FileText, Activity, DollarSign, BarChart2, CheckSquare } from 'react-feather'
-import { Row, Col, Card, CardBody, CardHeader, CardTitle, Badge, Button, ListGroup, ListGroupItem } from 'reactstrap';
+import { Row, Col, Card, CardBody, CardHeader, CardTitle, Badge, Button, ListGroup, ListGroupItem, Table } from 'reactstrap';
 import { CNav, CNavItem, CNavLink, CTabContent, CTabPane, CTabs, CButton, CCollapse, CCard, CModal, CModalBody, CModalHeader, CModalTitle } from '@coreui/react'
-import { getEventoRiesgoId, getUltimaObservacion, putEvaluaEvento, getGeneraCodigo } from './controller/EventoController';
+import { getEventoRiesgoId, getUltimaObservacion, putEvaluaEvento, getGeneraCodigo, getArchivosByEvento } from './controller/EventoController';
 import FormularioEvaluar from './component/FormularioEvaluar'
+import { formatSizeUnits, formatDate } from 'src/functions/FunctionEvento'
 import Swal from 'sweetalert2'
+import CIcon from '@coreui/icons-react';
 
 var _ = require('lodash');
 
 const EventoRiesgo = ({ match }) => {
+
+  const [dataArchivos, setDataArchivo] = useState([])
 
   //const forceUpdate = useReducer(bool => !bool)[1];
 
@@ -20,6 +24,16 @@ const EventoRiesgo = ({ match }) => {
     },
     buttonsStyling: false
   })
+
+  const getArchivos = (idEvento) => {
+    getArchivosByEvento(idEvento)
+      .then(res => {
+        //console.log('archivo: ', res.data);
+        setDataArchivo(res.data)
+      }).catch((error) => {
+        console.log('Error: ', error)
+      })
+  }
 
   // Genera posible codigo al Autorizar Evento
   const [codigo, setGeneraCodigo] = useState({})
@@ -38,9 +52,11 @@ const EventoRiesgo = ({ match }) => {
     getById();
     getByIdObservacion();
     getCodigo();
+    getArchivos(match.params.id);
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  console.log('Archivos id: ', dataArchivos);
   // Obtiene Evento de riesgo por el ID
   const [dataApi, setDataApi] = useState({})
 
@@ -97,8 +113,8 @@ const EventoRiesgo = ({ match }) => {
     swalWithBootstrapButtons.fire({
       title: '',
       text: dataToRequest.estadoRegistro === 'Autorizado' ? 'Al autorizar el registro se asignará el siguiente código para ASFI: ' + codigo + ' ¿Está seguro de generarlo?' :
-            dataToRequest.estadoRegistro === 'Observado' ? '¿Está seguro de modificar el estado de registro a Observado?' :
-            dataToRequest.estadoRegistro === 'Pendiente' ? '¿Está seguro de modificar el estado de registro a Pendiente?' :
+        dataToRequest.estadoRegistro === 'Observado' ? '¿Está seguro de modificar el estado de registro a Observado?' :
+          dataToRequest.estadoRegistro === 'Pendiente' ? '¿Está seguro de modificar el estado de registro a Pendiente?' :
             dataToRequest.estadoRegistro === 'Descartado' ? '¿Está seguro de modificar el estado de registro a Descartado?' : '',
       icon: 'warning',
       showCancelButton: true,
@@ -166,9 +182,8 @@ const EventoRiesgo = ({ match }) => {
     return dataApi.montoRecuperado + dataApi.gastoAsociado + dataApi.montoRecuperadoSeguro;
   }
 
-
+  // Lista Matriz de riesgos relacionados
   const renderRiesgoRelacionado = (list) => {
-
     var build = list.map((item) => {
       return (
         <li>{item.codigo}</li>
@@ -176,6 +191,35 @@ const EventoRiesgo = ({ match }) => {
     })
     return build
   }
+
+  function base64toPDF(data) {
+    var bufferArray = base64ToArrayBuffer(data);
+    var blobStore = new Blob([bufferArray], { type: "application/pdf" });
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(blobStore);
+      return;
+    }
+    var data2 = window.URL.createObjectURL(blobStore);
+    var pdfWindow = window.open();
+    var link = document.createElement('a');
+    document.body.appendChild(link);
+    pdfWindow.location.href = data2;
+    //link.download = "file.pdf";
+    link.click();
+    window.URL.revokeObjectURL(data2);
+    link.remove();
+  }
+
+  function base64ToArrayBuffer(data) {
+    var bString = window.atob(data);
+    var bLength = bString.length;
+    var bytes = new Uint8Array(bLength);
+    for (var i = 0; i < bLength; i++) {
+      var ascii = bString.charCodeAt(i);
+      bytes[i] = ascii;
+    }
+    return bytes;
+  };
 
   return (
     <div>
@@ -374,7 +418,7 @@ const EventoRiesgo = ({ match }) => {
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Estado: </div>
-                              <div className='text-data'>{dataApi.estadoReportado !== null ? dataApi.estadoReportado.nombre : <i>Sin registro</i>}</div>
+                              <div className='text-data'>{dataApi.estadoReportado !== null ? dataApi.estadoReportado : <i>Sin registro</i>}</div>
                             </Col>
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
@@ -387,14 +431,53 @@ const EventoRiesgo = ({ match }) => {
                               <div className='text-data'>{dataApi.canalAsfiId !== null ? dataApi.canalAsfiId.nombre : <i>Sin registro</i>}</div>
                             </Col>
 
-                            <Col xs='12' md='6' className='pt-2'>
+                            <Col xs='12' className='pt-2'>
                               <div className='text-label'>Descripción: </div>
                               <div className='text-data'>{dataApi.descripcion !== '' ? dataApi.descripcion : <i>Sin registro</i>}</div>
                             </Col>
 
-                            <Col xs='12' md='6' className='pt-2'>
+                            <Col xs='12' className='pt-2'>
                               <div className='text-label'>Descripción completa: </div>
                               <div className='text-data'>{dataApi.descripcionCompleta !== '' ? dataApi.descripcionCompleta : <i>Sin registro</i>}</div>
+                            </Col>
+                          </Row>
+
+                          <Row>
+                            <Col xs='12' md='6' className='pt-2'>
+                              <div className='text-label'>Archivo(s) adjunto(s): </div>
+                              {(dataArchivos !== null && !_.isEmpty(dataArchivos)) ?
+                                <Table responsive size="sm" borderless="false" className='mt-2'>
+                                  <thead>
+                                    <tr>
+                                      <th className='pl-3'>Nombre</th>
+                                      <th>Tamaño</th>
+                                      <th>Fecha registro</th>
+                                      <th>Archivo</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {dataArchivos.map((archivo) => {
+                                      return (
+                                        <tr key={archivo.id}>
+                                          <td className='pl-3'>{archivo.nombreArchivo}</td>
+                                          <td>{formatSizeUnits(archivo.size)}</td>
+                                          <td>{formatDate(archivo.updated)}</td>
+                                          {/* <td><embed type="application/pdf" src={'data:application/pdf;base64,'+archivo.archivoBase64} /></td> */}
+                                          <td>
+                                            <CButton onClick={() => base64toPDF(archivo.archivoBase64)}>
+                                              <CIcon
+                                                className="mb-2"
+                                                src="/icon/pdf.png"
+                                                height={30}
+                                              />
+                                            </CButton>
+                                          </td>
+                                        </tr>
+                                      )
+                                    })}
+                                  </tbody>
+                                </Table>
+                                : <i>Sin Archivos</i>}
                             </Col>
                           </Row>
                         </CTabPane>
@@ -435,9 +518,9 @@ const EventoRiesgo = ({ match }) => {
 
                         <CTabPane>
                           <Row className='pt-3'>
-                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                            <Col xs='12' sm='6' md='4' xl='6' className='pt-2'>
                               <div className='text-label'>Código inicial: </div>
-                              <div className='text-data'>{dataApi.codigoInicial !== '' ? dataApi.codigoInicial : <i>Sin registro</i>}</div>
+                              <div className='text-data'>{dataApi.codigoInicial !== '' || dataApi.codigoInicial !== null ? dataApi.codigoInicial : <i>Sin registro</i>}</div>
                             </Col>
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Sub categorización: </div>
@@ -459,18 +542,16 @@ const EventoRiesgo = ({ match }) => {
                               <div className='text-data'>{dataApi.subEventoId !== null ? dataApi.subEventoId.nombre : <i>Sin registro</i>}</div>
                             </Col>
 
-                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                            <Col xs='12' sm='6' md='4' xl='6' className='pt-2'>
                               <div className='text-label'>Clase evento - Basilea - ASFI: </div>
-                              <div className='text-data'>{dataApi.claseEventoId !== null ? dataApi.claseEventoId.nombre : <i>Sin registro</i>}</div>
+                              <div className='text-data'>
+                                {(dataApi.claseEventoId !== null && dataApi.claseEventoId.nombre !== 'Otros') ?
+                                  dataApi.claseEventoId.nombre : (dataApi.claseEventoId !== null && dataApi.claseEventoId.nombre === 'Otros') ?
+                                    <span className='text-label'>{dataApi.claseEventoId.nombre}</span> : null}
+                              </div>
                             </Col>
-                            {dataApi.otros !== null ?
-                              <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
-                                <div className='text-label'>Otros (Clase evento - Basilea - ASFI): </div>
-                                <div className='text-data'>{dataApi.otros}</div>
-                              </Col>
-                              : null}
 
-                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                            <Col xs='12' sm='6' md='4' xl='6' className='pt-2'>
                               <div className='text-label'>Detalle evento crítico: </div>
                               <div className='text-data'>{dataApi.detalleEventoCritico !== '' ? dataApi.detalleEventoCritico : <i>Sin registro</i>}</div>
                             </Col>
@@ -487,7 +568,7 @@ const EventoRiesgo = ({ match }) => {
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Procedimiento: </div>
-                              <div className='text-data'>{dataApi.procedimientoId !== null ? dataApi.procedimientoId.nombre : <i>Sin registro</i>}</div>
+                              <div className='text-data'>{dataApi.procedimientoId !== null ? dataApi.procedimientoId.descripcion : <i>Sin registro</i>}</div>
                             </Col>
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
@@ -535,6 +616,11 @@ const EventoRiesgo = ({ match }) => {
                               <div className='text-data'>{dataApi.descServicioId !== null ? dataApi.descServicioId.nombre : <i>Sin registro</i>}</div>
                             </Col>
 
+                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                              <div className='text-label'>Proceso crítico ASFI: </div>
+                              <div className='text-data'>{dataApi.procesoCriticoAsfi !== null ? dataApi.procesoCriticoAsfi : <i>Sin registro</i>}</div>
+                            </Col>
+
 
                             <Col xs='12' md='6' className='pt-2'>
                               <div className='text-label'>Operaciones ASFI: </div>
@@ -562,24 +648,24 @@ const EventoRiesgo = ({ match }) => {
 
                               <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                                 <div className='text-label'>Monto de pérdida: </div>
-                                <div className='text-data'>{dataApi.montoPerdida !== null ? dataApi.montoPerdida : <i>Sin registro</i>}</div>
+                                <div className='text-data'>{dataApi.montoPerdida !== null ? _.round(dataApi.montoPerdida, 2) : <i>Sin registro</i>}</div>
                               </Col>
 
                               <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                                 <div className='text-label'>Valor contable - Monto de pérdida (BOB){/* Monto de pérdida por riesgo operativo (USD) */}: </div>
                                 <div className='text-data'>
-                                  {calculaCambio()}
+                                  {_.round(calculaCambio(), 2)}
                                 </div>
                               </Col>
 
                               <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                                 <div className='text-label'>Gastos asociados: </div>
-                                <div className='text-data'>{dataApi.gastoAsociado !== null ? dataApi.gastoAsociado : <i>Sin registro</i>}</div>
+                                <div className='text-data'>{dataApi.gastoAsociado !== null ? _.round(dataApi.gastoAsociado, 2) : <i>Sin registro</i>}</div>
                               </Col>
 
                               <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                                 <div className='text-label'>Monto recuperado: </div>
-                                <div className='text-data'>{dataApi.montoRecuperado !== null ? dataApi.montoRecuperado : <i>Sin registro</i>}</div>
+                                <div className='text-data'>{dataApi.montoRecuperado !== null ? _.round(dataApi.montoRecuperado, 2) : <i>Sin registro</i>}</div>
                               </Col>
 
                               <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
@@ -603,7 +689,7 @@ const EventoRiesgo = ({ match }) => {
 
                               <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                                 <div className='text-label'>Monto recuperado del seguro: </div>
-                                <div className='text-data'>{dataApi.montoRecuperadoSeguro !== null ? dataApi.montoRecuperadoSeguro : <i>Sin registro</i>}</div>
+                                <div className='text-data'>{dataApi.montoRecuperadoSeguro !== null ? _.round(dataApi.montoRecuperadoSeguro, 2) : <i>Sin registro</i>}</div>
                               </Col>
 
                               <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
@@ -613,21 +699,31 @@ const EventoRiesgo = ({ match }) => {
 
                               <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                                 <div className='text-label'>Pérdida de valor de mercado: </div>
-                                <div className='text-data'>{dataApi.perdidaMercado !== null ? dataApi.perdidaMercado : <i>Sin registro</i>}</div>
+                                <div className='text-data'>{dataApi.perdidaMercado !== null ? _.round(dataApi.perdidaMercado, 2) : <i>Sin registro</i>}</div>
                               </Col>
 
                               <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                                 <div className='text-label'>Monto total recuperado: </div>
                                 <div className='text-data'>
-                                  {totalRecuperado()}
+                                  {_.round(totalRecuperado(), 2)}
                                 </div>
                               </Col>
 
                               <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                                 <div className='text-label'>Monto total de pérdida: </div>
                                 <div className='text-data'>
-                                  {calculaCambio() - (totalRecuperado())}
+                                  {_.round(calculaCambio() - totalRecuperado(), 2)}
                                 </div>
+                              </Col>
+
+                              <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                                <div className='text-label'>Cuenta contable: </div>
+                                <div className='text-data'>{dataApi.cuentaContableId !== null ? dataApi.cuentaContableId.nombre : <i>Sin registro</i>}</div>
+                              </Col>
+
+                              <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                                <div className='text-label'>Fecha de registro de la cuenta contable: </div>
+                                <div className='text-data'>{dataApi.fechaContable !== null ? dataApi.fechaContable : <i>Sin registro</i>}</div>
                               </Col>
                             </Row>
                           </CTabPane>
@@ -637,51 +733,65 @@ const EventoRiesgo = ({ match }) => {
                           <Row className='pt-3'>
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Operativo: </div>
-                              <div className='text-data'>{dataApi.operativoId !== null ? dataApi.operativoId.nombre : <i>Sin registro</i>}</div>
+                              <div className='text-data'>
+                                {dataApi.operativoId !== null ? dataApi.operativoId.clave + ' - ' + dataApi.operativoId.nombre : <i>Sin registro</i>}
+                              </div>
                             </Col>
-                            {/* <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
-                            <div className='text-label'>Seguridad de la información: </div>
-                            <div className='text-data'>{dataApi.seguridadId !== null ? dataApi.seguridadId.nombre : <i>Sin registro</i>}</div>
-                          </Col> */}
+
+                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                              <div className='text-label'>Seguridad de la información: </div>
+                              <div className='text-data'>
+                                {dataApi.seguridadId !== null ? dataApi.seguridadId.clave + ' - ' + dataApi.seguridadId.nombre : <i>Sin registro</i>}
+                              </div>
+                            </Col>
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Liquidez y mercado: </div>
-                              <div className='text-data'>{dataApi.liquidezId !== null ? dataApi.liquidezId.nombre : <i>Sin registro</i>}</div>
+                              <div className='text-data'>
+                                {dataApi.liquidezId !== null ? dataApi.liquidezId.clave + ' - ' + dataApi.liquidezId.nombre : <i>Sin registro</i>}
+                              </div>
                             </Col>
-
-                            {/* <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
-                            <div className='text-label'>LGI FT y/o DP: </div>
-                            <div className='text-data'>{dataApi.lgiId !== null ? dataApi.lgiId.nombre : <i>Sin registro</i>}</div>
-                          </Col> */}
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Fraude con medios de pago electrónico: </div>
-                              <div className='text-data'>{dataApi.fraudeId !== null ? dataApi.fraudeId.nombre : <i>Sin registro</i>}</div>
+                              <div className='text-data'>
+                                {dataApi.fraudeId !== null ? dataApi.fraudeId.clave + ' - ' + dataApi.fraudeId.nombre : <i>Sin registro</i>}
+                              </div>
                             </Col>
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Legal y regulatorio: </div>
-                              <div className='text-data'>{dataApi.legalId !== null ? dataApi.legalId.nombre : <i>Sin registro</i>}</div>
+                              <div className='text-data'>
+                                {dataApi.legalId !== null ? dataApi.legalId.clave + ' - ' + dataApi.legalId.nombre : <i>Sin registro</i>}
+                              </div>
                             </Col>
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Reputacional: </div>
-                              <div className='text-data'>{dataApi.reputacionalId !== null ? dataApi.reputacionalId.nombre : <i>Sin registro</i>}</div>
+                              <div className='text-data'>
+                                {dataApi.reputacionalId !== null ? dataApi.reputacionalId.clave + ' - ' + dataApi.reputacionalId.nombre : <i>Sin registro</i>}
+                              </div>
                             </Col>
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Cumplimiento: </div>
-                              <div className='text-data'>{dataApi.cumplimientoId !== null ? dataApi.cumplimientoId.nombre : <i>Sin registro</i>}</div>
+                              <div className='text-data'>
+                                {dataApi.cumplimientoId !== null ? dataApi.cumplimientoId.clave + ' - ' + dataApi.cumplimientoId.nombre : <i>Sin registro</i>}
+                              </div>
                             </Col>
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Estratégico: </div>
-                              <div className='text-data'>{dataApi.estrategicoId !== null ? dataApi.estrategicoId.nombre : <i>Sin registro</i>}</div>
+                              <div className='text-data'>
+                                {dataApi.estrategicoId !== null ? dataApi.estrategicoId.clave + ' - ' + dataApi.estrategicoId.nombre : <i>Sin registro</i>}
+                              </div>
                             </Col>
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Gobierno corporativo: </div>
-                              <div className='text-data'>{dataApi.gobiernoId !== null ? dataApi.gobiernoId.nombre : <i>Sin registro</i>}</div>
+                              <div className='text-data'>
+                                {dataApi.gobiernoId !== null ? dataApi.gobiernoId.clave + ' - ' + dataApi.gobiernoId.nombre : <i>Sin registro</i>}
+                              </div>
                             </Col>
                           </Row>
                         </CTabPane>

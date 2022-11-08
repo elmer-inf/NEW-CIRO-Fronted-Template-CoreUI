@@ -1,24 +1,26 @@
-import { React, useState, useEffect } from 'react'
+import { React } from 'react'
 import { ChevronLeft, ChevronRight, Delete } from 'react-feather'
 import { Row, Col, FormGroup, Label, Button, } from 'reactstrap'
-import { getTablaDescripcionOportunidadN1 } from 'src/views/administracion/matriz-oportunidad/controller/AdminOportunidadController';
 import * as Yup from "yup"
-import { buildSelectTwo } from 'src/functions/Function'
 import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik';
 import { CInputReact } from 'src/reusable/CInputReact'
+import Select from "react-select";
 
 var _ = require('lodash');
 
-const Controles = ({ nextSection, beforeSection, setObject, initValues, isEdit }) => {
+const Controles = ({ nextSection, beforeSection, setObject, initValues, dataApiFortaleza, isEdit }) => {
 
   const formik = Yup.object().shape({
     fortalezaId: Yup.mixed().nullable(),
     // campos solo para mostrar
     fortalezaValoracion: Yup.string().nullable(),
 
-    controlComentario:  Yup.string().nullable(),
+    controlComentario: Yup.string().nullable(),
     controlesTiene: Yup.string().required('Campo obligatorio'),
-    nroControles: Yup.string().nullable(),
+    nroControles: Yup.string().nullable().when('controlesTiene', {
+      is: (val) => (val === 'true'),
+      then: Yup.string().nullable().required("Campo obligatorio"),
+    }),
     controles: Yup.array().of(
       Yup.object().shape({
         nroControl: Yup.number().nullable(),
@@ -34,7 +36,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, isEdit }
     const previousNumber = parseInt(field.value || '0');
     if (previousNumber < nroControles) {
       for (let i = previousNumber; i < nroControles; i++) {
-        controles.push({ nroControl: i+1, descripcion: ''});
+        controles.push({ nroControl: i + 1, descripcion: '' });
       }
     } else {
       for (let i = previousNumber; i >= nroControles; i--) {
@@ -42,7 +44,6 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, isEdit }
       }
     }
     setValues({ ...values, controles });
-
     // call formik onChange method
     field.onChange(e);
   }
@@ -50,59 +51,75 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, isEdit }
   function onSubmit(values) {
     const data = {
       ...values,
+      fortalezaId: (values.fortalezaId !== null)
+        ? (Number.isInteger(values.fortalezaId))
+          ? values.fortalezaId
+          : values.fortalezaId.value
+        : 0,
     }
-    // display form field values on success
-    //alert(JSON.stringify(_.omit(data, ['nroControles']), null, 10));
-    console.log('datos que se enviaran SECCION 4:', _.omit(data, ['nroControles']))
+    //console.log('datos que se enviaran SECCION 4:', _.omit(data, ['nroControles']))
     setObject(_.omit(data, ['nroControles']), values);
     nextSection(4);
   }
 
-  /*   P  A  R  A  M  E  T  R  O  S   */
-
-  // Tipo Control
-  const [dataApiFortaleza, setDataApiFortaleza] = useState([])
-  const callApiFortaleza = (idTablaDes) => {
-    getTablaDescripcionOportunidadN1(idTablaDes)
-      .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'campoA', true)
-        setDataApiFortaleza(_.orderBy(options, ['value' ], ['desc']))
-      }).catch((error) => {
-        console.log('Error: ', error)
-      })
+  // Style Select
+  const customStyles = {
+    menu: provided => ({ ...provided, zIndex: "9999 !important" }),
+    control: (styles,) => ({
+      ...styles,
+      boxShadow: 'none'
+    }),
+    option: (styles, { isDisabled, isSelected }) => {
+      return {
+        ...styles,
+        backgroundColor: isSelected ? '#e79140' : 'white',
+        cursor: isDisabled ? 'not-allowed' : 'default',
+        ':active': {
+          backgroundColor: '#e79140',
+          color: 'white'
+        },
+        ':hover': {
+          backgroundColor: isSelected ? '#e79140' : '#fbf3eb',
+          color: isSelected ? 'white' : '#e79140'
+        }
+      }
+    }
   }
 
-  useEffect(() => {
-    callApiFortaleza(6);
-  }, [])
-
-  // Despliegue de dataApi Parametros en options (Select)
-  const optionsFortaleza = () => {
-    const deployOption = dataApiFortaleza.map((item, i) => {
-      return (
-        <option key={i} value={item.value}>{item.label}</option>
-      )
-    });
-    return deployOption;
+  // Busca valor literal de Fortaleza
+  const findValueFortaleza = (args) => {
+    var result = '';
+    if (Number.isInteger(args)) {
+      if (args !== '' && _.find(dataApiFortaleza, ['id', _.toInteger(args)]) !== undefined) {
+        result = _.find(dataApiFortaleza, ['id', _.toInteger(args)]).campoA + '. ' + _.find(dataApiFortaleza, ['id', _.toInteger(args)]).nombre
+      }
+    } else {
+      if (args !== null && _.find(dataApiFortaleza, ['id', _.toInteger(args.value)]) !== undefined) {
+        result = _.find(dataApiFortaleza, ['id', _.toInteger(args.value)]).campoA + '. ' + _.find(dataApiFortaleza, ['id', _.toInteger(args.value)]).nombre
+      }
+    }
+    return result;
   }
 
-  /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
   return (
     <Formik initialValues={initValues} validationSchema={formik} onSubmit={onSubmit}>
-      {({ errors, values, touched, setValues }) => (
+      {({ errors, values, touched, setValues, setFieldValue }) => (
         <Form>
           <Row className='pt-4'>
             <Col sm='12' md='12' xl='3'>
               <Label>Ponderación Control/Fortaleza</Label>
-              <Field
-                name='fortalezaId'
-                className={'form-control' + (errors.fortalezaId && touched.fortalezaId ? ' is-invalid' : '')}
-                as={"select"}
-              >
-                <option value="" disabled>Seleccionar</option>
-                {optionsFortaleza()}
-              </Field>
+              <Select
+                placeholder="Seleccionar"
+                onChange={selectedOption => {
+                  setFieldValue('fortalezaId', selectedOption.value, false)
+                }}
+                options={dataApiFortaleza}
+                name={'fortalezaId'}
+                styles={customStyles}
+                defaultValue={initValues.fortalezaId}
+                className={(errors.fortalezaId && touched.fortalezaId ? ' is-invalid' : '')}
+              />
               <ErrorMessage name="fortalezaId" component="div" className="invalid-feedback" />
             </Col>
 
@@ -113,7 +130,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, isEdit }
               <CInputReact
                 type={"textarea"}
                 id={'fortalezaValoracion'}
-                value={(values.fortalezaId !== '' && _.find(dataApiFortaleza, ['id', _.toInteger(values.fortalezaId)]) !== undefined) ? (_.find(dataApiFortaleza, ['id', _.toInteger(values.fortalezaId)]).campoA + '. ' + _.find(dataApiFortaleza, ['id', _.toInteger(values.fortalezaId)]).nombre) : ""}
+                value={findValueFortaleza(values.fortalezaId)}
                 disabled={true}
                 rows={2}
               />
@@ -123,9 +140,9 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, isEdit }
               <Row>
                 <Label xs='6' md='6' xl='6' className='text-label'>¿Tiene Controles?</Label>
                 <Col xs='6' md='6' xl='6'>
-                  <Field type="radio" name="controlesTiene" value="true" className={(errors.controlesTiene && touched.controlesTiene ? ' is-invalid' : '')}/>
+                  <Field type="radio" name="controlesTiene" value="true" className={(errors.controlesTiene && touched.controlesTiene ? ' is-invalid' : '')} />
                   <Label className='px-3'>Si</Label>
-                  <Field type="radio" name="controlesTiene" value="false" className={(errors.controlesTiene && touched.controlesTiene ? ' is-invalid' : '')}/>
+                  <Field type="radio" name="controlesTiene" value="false" className={(errors.controlesTiene && touched.controlesTiene ? ' is-invalid' : '')} />
                   <Label className='pl-3'>No</Label>
                   <ErrorMessage name="controlesTiene" component="div" className="invalid-feedback" />
                 </Col>
@@ -142,7 +159,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, isEdit }
                 />
                 <ErrorMessage name="controlComentario" component="div" className="invalid-feedback" />
               </Col>
-            : null}
+              : null}
 
             {values.controlesTiene === 'true' ?
               <Col sm='12' md='6'>
@@ -152,7 +169,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, isEdit }
                     <Field name="nroControles">
                       {({ field }) => (
                         <select {...field} className={'form-control' + (errors.nroControles && touched.nroControles ? ' is-invalid' : '')} onChange={e => onChangeControles(e, field, values, setValues)}>
-                          <option value="" disabled>Seleccionar</option>
+                          <option value="">Seleccionar</option>
                           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i =>
                             <option key={i} value={i}>{i}</option>
                           )}
@@ -163,7 +180,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, isEdit }
                   </Col>
                 </Row>
               </Col>
-            : null}
+              : null}
           </Row>
 
           {values.controlesTiene === 'true' ?
@@ -192,7 +209,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, isEdit }
                 );
               }))}
             </FieldArray>
-          : null}
+            : null}
 
           <div className='d-flex justify-content-between pt-4'>
             <Button
@@ -201,7 +218,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, isEdit }
               color="primary"
               onClick={() => beforeSection(4)}
             >
-              <ChevronLeft size={17} className='mr-1'/>
+              <ChevronLeft size={17} className='mr-1' />
               Atrás
             </Button>
             <Button
@@ -212,7 +229,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, isEdit }
             /* onClick={() => { formik.handleReset() }}
             disabled={(!formik.dirty || formik.isSubmitting)} */
             >
-              <Delete size={17} className='mr-2'/>
+              <Delete size={17} className='mr-2' />
               Limpiar
             </Button>
             <Button
@@ -220,10 +237,10 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, isEdit }
               className='text-white'
               color="primary"
               type="submit"
-              //disabled={formik.isSubmitting}
+            //disabled={formik.isSubmitting}
             >
               Siguiente
-              <ChevronRight size={17} className='ml-1'/>
+              <ChevronRight size={17} className='ml-1' />
             </Button>
           </div>
 

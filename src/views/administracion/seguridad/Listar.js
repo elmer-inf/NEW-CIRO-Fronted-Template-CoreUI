@@ -6,12 +6,52 @@ import { typeFormatter } from 'src/reusable/Component';
 import ActionFormatter from 'src/reusable/ActionFormatter';
 import Select from 'react-select'
 import { useHistory } from 'react-router-dom'
-import { getTablaListaSeguridad, getTablaDescripcionSeguridadN1 } from './controller/AdminSeguridadController'
-import { buildSelectTwo } from 'src/functions/Function'
+import { getTablaListaSeguridad, getTablaDescripcionSeguridadN1, deleteTablaDescripcionSeguridadId } from './controller/AdminSeguridadController'
+import { buildSelectTwo, hasPermission } from 'src/functions/Function'
+import { PathContext } from 'src/containers/TheLayout';
+import { ToastContainer, toast } from 'react-toastify';
+import { Messages } from 'src/reusable/variables/Messages';
+import Swal from 'sweetalert2'
 
 const AdministracionSeguridadListar = () => {
 
-  const [labelTabla, setLabelTabla] = useState([])
+  // Configuracion sweetalert2
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: 'btn btn-primary px-4',
+      cancelButton: 'btn btn-outline-primary px-4 mr-4',
+    },
+    buttonsStyling: false
+  })
+
+  //useContext
+  const valuePathFromContext = React.useContext(PathContext);
+
+  const redirect = (e) => {
+    //history.push('/administracion/seguridad/Registrar');
+    e.preventDefault();
+    const path = '/administracion/seguridad/Registrar';
+    if (hasPermission(path, valuePathFromContext)) {
+      history.push(path);
+
+    } else {
+      notificationToast();
+    }
+  }
+
+  const notificationToast = () => {
+    toast.error(Messages.dontHavePermission, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+    });
+  }
+
+  const [labelTabla, setLabelTabla] = useState([]);
+  const [valueTabla, setValueTabla] = useState([]);
 
   const columns = [
     {
@@ -39,21 +79,67 @@ const AdministracionSeguridadListar = () => {
   ]
 
   const actionFormatter = (cell, row) => {
-    return <ActionFormatter cell={cell} row={row} editFunction={editRow} />
+    return <ActionFormatter cell={cell} row={row} deleteFunction={deleteRow} editFunction={editRow} />
   }
 
+  // Eliminar Parametro
+  const deleteRow = (row) => {
+    swalWithBootstrapButtons.fire({
+      title: '',
+      text: '¿Está seguro de eliminar el Parámetro de Seguridad?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si',
+      cancelButtonText: 'No',
+      reverseButtons: true,
+      position: 'top'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteTablaDescripcionSeguridadId(row.id)
+          .then(res => {
+            swalWithBootstrapButtons.fire({
+              title: '',
+              text: 'Operación realizada exitósamente',
+              icon: 'success',
+              confirmButtonText: 'Aceptar',
+              position: 'top',
+            }).then(okay => {
+              if (okay) {
+                getTablaDescripcion(valueTabla);
+              }
+            })
+          }).catch((error) => {
+            console.log('Error al eliminar Parámetro de Seguridad: ', error);
+          });
+      } else if (
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        swalWithBootstrapButtons.fire({
+          title: '',
+          text: 'Operación cancelada',
+          icon: 'error',
+          confirmButtonText: 'Aceptar',
+          position: 'top'
+        })
+      }
+    })
+  }
+
+  // Editar Parametro
   const editRow = (row) => {
-    console.log(row)
-    history.push('/administracion/seguridad/Editar/' + row.id);
+    //history.push('/administracion/seguridad/Editar/' + row.id);
+    const path = '/administracion/seguridad/Editar/:id';
+    if (hasPermission(path, valuePathFromContext)) {
+      history.push('/administracion/seguridad/Editar/' + row.id);
+    } else {
+      notificationToast();
+    }
   }
 
   const [tablaListaOptions, setTablaListaOptions] = useState([])
   const [dataApi, setDAtaApi] = useState([])
   const history = useHistory()
 
-  const redirect = () => {
-    history.push('/administracion/seguridad/Registrar')
-  }
 
   /* LISTA TABLA LISTA */
   const callApi = () => {
@@ -68,7 +154,8 @@ const AdministracionSeguridadListar = () => {
   }
 
   useEffect(() => {
-    callApi()
+    callApi();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   /* LISTA TABLA DESCRIPCION despendiento de seleccion tabla lista*/
@@ -76,6 +163,8 @@ const AdministracionSeguridadListar = () => {
     //console.log('select:  ', result)
     const labelTable = result.label
     setLabelTabla(labelTable)
+    const valueTable = result.value;
+    setValueTabla(valueTable);
     getTablaDescripcion(result.value);
   }
 
@@ -85,7 +174,6 @@ const AdministracionSeguridadListar = () => {
         setDAtaApi(res.data)
       }).catch((error) => {
         console.log('Error: ', error)
-        //notificationToast('error', Messages.notification.notOk)
       })
   }
 
@@ -119,7 +207,7 @@ const AdministracionSeguridadListar = () => {
         <Card>
           <CardHeader>
             <CardTitle className='float-left h4 pt-2'>Listado de Parámetros de Seguridad</CardTitle>
-            <Button color='primary' onClick={redirect} className='float-right mt-1' style={{ width: '130px' }}>
+            <Button color='primary' onClick={(e) => { redirect(e) }} className='float-right mt-1' style={{ width: '130px' }}>
               <span className='text-white'>Registrar</span>
             </Button>
           </CardHeader>
@@ -167,6 +255,18 @@ const AdministracionSeguridadListar = () => {
           </CardBody>
         </Card>
       </Fragment>
+
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   )
 }

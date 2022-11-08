@@ -111,32 +111,32 @@ const Seguridad = ({ match }) => {
                     </div>
                   </Col>
 
-                  <Col xs='12' sm='6' md='6' xl='6' className='pt-2'>
+                  <Col xs='12' sm='6' xl='6' className='pt-2'>
                     <div className='text-label'>Descripción del riesgo (Vulnerabilidad + amenaza + impacto): </div>
                     <div className='text-data'>{dataApi.descripcionRiesgo !== '' ? dataApi.descripcionRiesgo : <i>Sin registro</i>}</div>
                   </Col>
 
-                  <Col xs='12' sm='6' md='4' xl='6' className='pt-2'>
+                  <Col xs='12' sm='6' xl='6' className='pt-2'>
                     <div className='text-label'>Recomendación: </div>
                     <div className='text-data'>{dataApi.recomendacion !== '' ? dataApi.recomendacion : <i>Sin registro</i>}</div>
                   </Col>
 
-                  <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                  <Col xs='12' sm='6' xl='3' className='pt-2'>
                     <div className='text-label'>Fecha de solución: </div>
                     <div className='text-data'>{dataApi.fechaSolucion !== null ? dataApi.fechaSolucion : <i>Sin registro</i>}</div>
                   </Col>
 
-                  <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                  <Col xs='12' sm='6' xl='3' className='pt-2'>
                     <div className='text-label'>Fecha límite de atención: </div>
                     <div className='text-data'>{dataApi.fechaLimite !== null ? dataApi.fechaLimite : <i>Sin registro</i>}</div>
                   </Col>
 
-                  <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                  <Col xs='12' sm='6' xl='6' className='pt-2'>
                     <div className='text-label'>Área: </div>
-                    <div className='text-data'>{dataApi.areaId !== null ? dataApi.areaId.nombre : <i>Sin registro</i>}</div>
+                    <div className='text-data'>{dataApi.areaId !== null ? dataApi.areaId.clave + ' - ' + dataApi.areaId.nombre : <i>Sin registro</i>}</div>
                   </Col>
 
-                  <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                  <Col xs='12' sm='6' xl='6' className='pt-2'>
                     <div className='text-label'>Tratamiento o estado: </div>
                     {/* <div className='text-data'>{dataApi.estadoId !== null ? dataApi.estadoId.nombre : <i>Sin registro</i>}</div> */}
                     <div>
@@ -152,22 +152,22 @@ const Seguridad = ({ match }) => {
                     </div>
                   </Col>
 
-                  <Col xs='12' sm='6' md='4' xl='6' className='pt-2'>
+                  <Col xs='12' sm='6' xl='6' className='pt-2'>
                     <div className='text-label'>Plan de trabajo: </div>
                     <div className='text-data'>{dataApi.planTrabajo !== '' ? dataApi.planTrabajo : <i>Sin registro</i>}</div>
                   </Col>
 
-                  <Col xs='12' sm='6' md='4' xl='6' className='pt-2'>
+                  <Col xs='12' sm='6' xl='6' className='pt-2'>
                     <div className='text-label'>Informe emitido: </div>
                     <div className='text-data'>{dataApi.informeEmitido !== '' ? dataApi.informeEmitido : <i>Sin registro</i>}</div>
                   </Col>
 
-                  <Col xs='12' sm='6' md='4' xl='6' className='pt-2'>
+                  <Col xs='12' sm='6' xl='6' className='pt-2'>
                     <div className='text-label'>CI. de seguimiento: </div>
                     <div className='text-data'>{dataApi.ciSeguimiento !== '' ? dataApi.ciSeguimiento : <i>Sin registro</i>}</div>
                   </Col>
 
-                  <Col xs='12' sm='6' md='4' xl='6' className='pt-2'>
+                  <Col xs='12' sm='6' xl='6' className='pt-2'>
                     <div className='text-label'>Comentarios SGSI & TIC: </div>
                     <div className='text-data'>{dataApi.comentario !== '' ? dataApi.comentario : <i>Sin registro</i>}</div>
                   </Col>

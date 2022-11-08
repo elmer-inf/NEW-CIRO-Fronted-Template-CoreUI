@@ -207,8 +207,8 @@ const MatrizOportunidad = ({ match }) => {
     swalWithBootstrapButtons.fire({
       title: '',
       text: dataToRequest.estadoRegistro === 'Autorizado' ? 'Al autorizar el registro se asignará el siguiente código: ' + codigo + ' ¿Está seguro de generarlo?' :
-            dataToRequest.estadoRegistro === 'Observado' ? '¿Está seguro de modificar el estado de registro a Observado?' :
-            dataToRequest.estadoRegistro === 'Pendiente' ? '¿Está seguro de modificar el estado de registro a Pendiente?' :
+        dataToRequest.estadoRegistro === 'Observado' ? '¿Está seguro de modificar el estado de registro a Observado?' :
+          dataToRequest.estadoRegistro === 'Pendiente' ? '¿Está seguro de modificar el estado de registro a Pendiente?' :
             dataToRequest.estadoRegistro === 'Descartado' ? '¿Está seguro de modificar el estado de registro a Descartado?' : '',
       icon: 'warning',
       showCancelButton: true,
@@ -441,7 +441,7 @@ const MatrizOportunidad = ({ match }) => {
 
                             <Col xs='12' sm='6' className='pt-3'>
                               <div className='text-label'>Grupo de Interés Relacionado: </div>
-                              <div className='text-data'>{dataApi.grupoInteresId !== null ? dataApi.grupoInteresId.nombre : <i>Sin registro</i>}</div>
+                              <div className='text-data'>{dataApi.grupoInteresId !== null ? dataApi.grupoInteresId.campoA + ' - ' + dataApi.grupoInteresId.nombre : <i>Sin registro</i>}</div>
                             </Col>
 
                           </Row>

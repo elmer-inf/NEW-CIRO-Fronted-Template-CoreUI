@@ -46,6 +46,7 @@
     "core-js": "^3.9.1",
     "enzyme": "^3.11.0",
     "formik": "^2.2.9",
+    "file-saver": "^2.0.2",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
     "prop-types": "^15.7.2",

@@ -6,6 +6,9 @@ import { FormGroup, Col, Form, Button, Label, Row } from 'reactstrap'
 import { getTablaDescripcionEventoN1 } from '../controller/AdminEventoController';
 import { buildSelectTwo } from 'src/functions/Function'
 import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
+import { CSelectReact } from 'src/reusable/CSelectReact'
+
+/* var _ = require('lodash'); */
 
 /**
  * @param handleOnSubmit : function
@@ -14,7 +17,9 @@ import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
  */
 
 const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelect }) => {
-  console.log('opt:: ', optionToSelect);
+
+  //console.log('opt:: ', optionToSelect);
+
   const [varListN2, setVarListN2] = useState(optionToSelect.tabla_n2);
   const [varListN3, setVarListN3] = useState(optionToSelect.tabla_n3);
 
@@ -23,14 +28,18 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
     validationSchema: Yup.object().shape(
       {
         tablaLista: Yup.mixed().required('Campo obligatorio'),
-        clave: Yup.string().min(1).max(20).nullable(),
-        nombre: Yup.string().min(1).max(1000).required('Campo obligatorio'),
-        descripcion: Yup.string().min(1).max(1000).nullable(),
-        campoA: Yup.string().min(1).max(1000).nullable(),
-        campoB: Yup.string().min(1).max(1000).nullable(),
-        campoC: Yup.string().min(1).max(1000).nullable(),
-        campoD: Yup.string().min(1).max(1000).nullable(),
-        codigoAsfi: Yup.string().min(1).max(100).nullable(),
+        clave: Yup.string().min(1).nullable(),
+        nombre: Yup.string().min(1).required('Campo obligatorio'),
+
+        descripcion: Yup.mixed().nullable(),
+
+        campoA: Yup.string().min(1).nullable(),
+        campoB: Yup.string().min(1).nullable(),
+
+        campoC: Yup.mixed().nullable(),
+
+        campoD: Yup.string().min(1).nullable(),
+        codigoAsfi: Yup.string().min(1).nullable(),
         nivel2_id: Yup.mixed(),
         nivel3_id: Yup.mixed(),
       }
@@ -40,7 +49,10 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
         ...values,
         tablaLista: values.tablaLista.value,
         nivel2_id: (values.nivel2_id !== null) ? values.nivel2_id.value : 0,
-        nivel3_id: (values.nivel3_id !== null) ? values.nivel3_id.value : 0
+        nivel3_id: (values.nivel3_id !== null) ? values.nivel3_id.value : 0,
+
+        descripcion: (values.tablaLista.label === 'Responsable') ? values.descripcion.value : values.descripcion,
+        campoC: (values.tablaLista.label === 'Responsable') ? values.campoC.value : values.campoC,
       }
       console.log('datos que se enviaran:', values)
       console.log('datos que se data:', data)
@@ -51,7 +63,7 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
   /* LISTA TABLA DESCRIPCION NIVEL 2 */
   //const [dataApi2, setDataApi] = useState([])
   const callApi2 = (idn2) => {
-    console.log('llego callapi2:: ', ' idn2: ', idn2);
+    //console.log('llego callapi2:: ', ' idn2: ', idn2);
     getTablaDescripcionEventoN1(idn2)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
@@ -59,7 +71,6 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
         setVarListN2(options)
       }).catch((error) => {
         console.log('Error: ', error)
-        //notificationToast('error', Messages.notification.notOk)
       })
   }
 
@@ -72,7 +83,6 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
         setVarListN3(options)
       }).catch((error) => {
         console.log('Error: ', error)
-        //notificationToast('error', Messages.notification.notOk)
       })
   }
 
@@ -87,11 +97,9 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
     formik.setFieldValue('cadigoAsfi', '', false);
     formik.setFieldValue('nivel2_id', null, false);
     formik.setFieldValue('nivel3_id', null, false);
-
   }
 
   /* Get List Level 2v*/
-
   const clearAllDependences = () => {
     resetAllValues();
     setVarListN2([]);
@@ -114,17 +122,51 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
     //formik.setFieldValue(id, null, false);
     //clearAllDependences();
   }
-  console.log('varListN2: ', varListN2);
-  console.log('varListN3: ', varListN3);
+  //console.log('varListN2: ', varListN2);
+  //console.log('varListN3: ', varListN3);
+
   //Life Cycle
   useEffect(() => {
-    console.log('optxxxx:: ', optionToSelect);
+    //console.log('optxxxx:: ', optionToSelect);
     if (isEdit) {
       setVarListN2(optionToSelect.tabla_n2)
       setVarListN3(optionToSelect.tabla_n3)
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [optionToSelect]);
+
+  // P A R A M E T R O S
+  // Cargos
+  const dataApiCargo = [
+    { value: 'Gerente de Riesgos Integrales', label: 'Gerente de Riesgos Integrales' },
+    { value: 'Subgerente de Riesgos', label: 'Subgerente de Riesgos' },
+    { value: 'Analista de Riesgos', label: 'Analista de Riesgos' },
+    { value: 'Asistente de Riesgos', label: 'Asistente de Riesgos' },
+  ]
+  /* const [dataApiCargo, setDataApiCargo] = useState([])
+  const callApiCargo = (idTablaDes) => {
+    getTablaDescripcionEventoN1(idTablaDes)
+      .then(res => {
+        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
+        setDataApiCargo(options)
+        //setDataApiCargo(_.filter(options, ['nombre', 'Riesgos']));
+      }).catch((error) => {
+        console.log('Error: ', error)
+      })
+  } */
+
+  // Opciones Select Tipo de Responsable
+  const optionsTipoRes = [
+    { value: 'Elaborador', label: 'Elaborador' },
+    { value: 'Revisor', label: 'Revisor' },
+    { value: 'Aprobador', label: 'Aprobador' }
+  ]
+
+  /* useEffect(() => {
+    callApiCargo(7);
+  }, []) */
+  // F I N   P A R A M E T R O S
+
 
   return (
     <Form onSubmit={formik.handleSubmit} autoComplete="off">
@@ -144,10 +186,8 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
             touched={formik.touched.tablaLista}
             options={tablaListaOptions}
           /> */}
-
-
           <CSelectReactTwo
-            label={""}
+            //label={""}
             id={'tablaLista'}
             placeholder={'Seleccione'}
             value={formik.values.tablaLista}
@@ -188,7 +228,7 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
           formik.values.tablaLista.label === 'Liquidez' ||
           formik.values.tablaLista.label === 'Operativo' ||
           formik.values.tablaLista.label === 'Seguridad de la información'
-          ))
+        ))
         ? <FormGroup row className='justify-content-center'>
           <Label sm='3' lg='3' for='clave'>
             {(formik.values.tablaLista.label === 'Área' ||
@@ -236,7 +276,8 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
                 formik.values.tablaLista.label === 'Fraude' ||
                 formik.values.tablaLista.label === 'Liquidez' ||
                 formik.values.tablaLista.label === 'Operativo' ||
-                formik.values.tablaLista.label === 'Seguridad de la información') ? 'Descriptivo' : formik.values.tablaLista.label === 'Recuperación activo' ? 'Descripción' : 'Nombre'}
+                formik.values.tablaLista.label === 'Seguridad de la información') ?
+                'Descriptivo' : (formik.values.tablaLista.label === 'Recuperación activo' || formik.values.tablaLista.label === 'Cuenta contable') ? 'Descripción' : 'Nombre'}
           </Label>
           <Col sm='9' lg='5'>
             <CInputReact
@@ -267,7 +308,8 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
           formik.values.tablaLista.label === 'Liquidez' ||
           formik.values.tablaLista.label === 'Macroproceso' ||
           formik.values.tablaLista.label === 'Proceso' ||
-          formik.values.tablaLista.label === 'Seguridad de la información'))
+          formik.values.tablaLista.label === 'Seguridad de la información' ||
+          formik.values.tablaLista.label === 'Responsable'))
         ? <FormGroup row className='justify-content-center'>
           <Label sm='3' lg='3' for='descripcion'>
             {(formik.values.tablaLista.label === 'Categoria de tipo de Evento' ||
@@ -283,18 +325,32 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
             {formik.values.tablaLista.label === 'Fraude' ? 'Importe reportado fraude (USD)' : null}
             {formik.values.tablaLista.label === 'Macroproceso' ? 'Nivel' : null}
             {formik.values.tablaLista.label === 'Proceso' ? 'Nombre documento' : null}
+            {formik.values.tablaLista.label === 'Responsable' ? 'Cargo' : null}
           </Label>
           <Col sm='9' lg='5'>
-            <CInputReact
-              type={"textarea"}
-              id={'descripcion'}
-              value={formik.values.descripcion}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              touched={formik.touched.descripcion}
-              errors={formik.errors.descripcion}
-              rows={3}
-            />
+            {formik.values.tablaLista.label === 'Responsable'
+              ? <CSelectReact
+                type={"select"}
+                id={'descripcion'}
+                placeholder={'Seleccionar'}
+                value={formik.values.descripcion}
+                onChange={formik.setFieldValue}
+                onBlur={formik.setFieldTouched}
+                error={formik.errors.descripcion}
+                touched={formik.touched.descripcion}
+                options={dataApiCargo}
+              />
+              : <CInputReact
+                type={"textarea"}
+                id={'descripcion'}
+                value={formik.values.descripcion}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                touched={formik.touched.descripcion}
+                errors={formik.errors.descripcion}
+                rows={(formik.values.tablaLista !== null && formik.values.tablaLista.label === 'Responsable') ? 1 : 3}
+              />
+            }
           </Col>
         </FormGroup>
         : null
@@ -306,7 +362,8 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
           formik.values.tablaLista.label === 'Gobierno' ||
           formik.values.tablaLista.label === 'Fraude' ||
           formik.values.tablaLista.label === 'Liquidez' ||
-          formik.values.tablaLista.label === 'Seguridad de la información'))
+          formik.values.tablaLista.label === 'Seguridad de la información' ||
+          formik.values.tablaLista.label === 'Responsable'))
         ? <FormGroup row className='justify-content-center'>
           <Label sm='3' lg='3' for='clave'>
             {formik.values.tablaLista.label === 'Macroproceso' ? 'Valoración' : null}
@@ -315,16 +372,18 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
             {formik.values.tablaLista.label === 'Liquidez' ? 'Liquidez' : null}
             {formik.values.tablaLista.label === 'Proceso' ? 'Proceso' : null}
             {formik.values.tablaLista.label === 'Seguridad de la información' ? 'Plazo de atención hasta' : null}
+            {formik.values.tablaLista.label === 'Responsable' ? 'Descripción' : null}
           </Label>
           <Col sm='9' lg='5'>
             <CInputReact
-              type={"text"}
+              type={"textarea"}
               id={'campoA'}
               value={formik.values.campoA}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               touched={formik.touched.campoA}
               errors={formik.errors.campoA}
+              rows={(formik.values.tablaLista !== null && formik.values.tablaLista.label === 'Responsable') ? 3 : 1}
             />
           </Col>
         </FormGroup>
@@ -335,13 +394,15 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
         (formik.values.tablaLista.label === 'Proceso' ||
           formik.values.tablaLista.label === 'Gobierno' ||
           formik.values.tablaLista.label === 'Fraude' ||
-          formik.values.tablaLista.label === 'Liquidez'))
+          formik.values.tablaLista.label === 'Liquidez' ||
+          formik.values.tablaLista.label === 'Responsable'))
         ? <FormGroup row className='justify-content-center'>
           <Label sm='3' lg='3' for='clave'>
             {formik.values.tablaLista.label === 'Proceso' ? 'Gerencia' : null}
             {formik.values.tablaLista.label === 'Gobierno' ? 'Puntuación Autoevaluación' : null}
             {formik.values.tablaLista.label === 'Fraude' ? 'Importe reportado fraude 2 (USD)' : null}
             {formik.values.tablaLista.label === 'Liquidez' ? 'Capital de trabajo' : null}
+            {formik.values.tablaLista.label === 'Responsable' ? 'Usuario' : null}
           </Label>
           <Col sm='9' lg='5'>
             <CInputReact
@@ -358,22 +419,38 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
         : null
       }
 
-      {(formik.values.tablaLista !== null && formik.values.tablaLista.label === 'Fraude')
+      {(formik.values.tablaLista !== null &&
+        (formik.values.tablaLista.label === 'Fraude' ||
+          formik.values.tablaLista.label === 'Responsable'))
         ? <FormGroup row className='justify-content-center'>
-          <Label sm='3' lg='8' for='clave'>
+          <Label sm='3' lg={(formik.values.tablaLista !== null && formik.values.tablaLista.label === 'Responsable') ? '3' : '8'} for='clave'>
             {formik.values.tablaLista.label === 'Fraude' ? 'Impacto - severidad' : null}
+            {formik.values.tablaLista.label === 'Responsable' ? 'Tipo' : null}
           </Label>
-          <Col sm='9' lg='8'>
-            <CInputReact
-              type={"textarea"}
-              id={'campoC'}
-              value={formik.values.campoC}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              touched={formik.touched.campoC}
-              errors={formik.errors.campoC}
-              rows={3}
-            />
+          <Col sm='9' lg={(formik.values.tablaLista !== null && formik.values.tablaLista.label === 'Responsable') ? '5' : '8'}>
+            {formik.values.tablaLista.label === 'Responsable'
+              ? <CSelectReact
+                type={"select"}
+                id={'campoC'}
+                placeholder={'Seleccionar'}
+                value={formik.values.campoC}
+                onChange={formik.setFieldValue}
+                onBlur={formik.setFieldTouched}
+                error={formik.errors.campoC}
+                touched={formik.touched.campoC}
+                options={optionsTipoRes}
+              />
+              : <CInputReact
+                type={"textarea"}
+                id={'campoC'}
+                value={formik.values.campoC}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                touched={formik.touched.campoC}
+                errors={formik.errors.campoC}
+                rows={(formik.values.tablaLista !== null && formik.values.tablaLista.label === 'Responsable') ? 1 : 3}
+              />
+            }
           </Col>
         </FormGroup>
         : null
@@ -410,10 +487,12 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
           formik.values.tablaLista.label === 'Línea de negocio ASFI' ||
           formik.values.tablaLista.label === 'Operaciones ASFI' ||
           formik.values.tablaLista.label === 'Moneda' ||
-          formik.values.tablaLista.label === 'Recuperación activo')) ?
+          formik.values.tablaLista.label === 'Recuperación activo' ||
+          formik.values.tablaLista.label === 'Cuenta contable' ||
+          formik.values.tablaLista.label === 'Macroproceso')) ?
         <FormGroup row className='justify-content-center'>
           <Label sm='3' lg='3' for='clave'>
-            Código ASFI
+            { formik.values.tablaLista.label === 'Macroproceso' ? 'Código ASFI (proceso)' : 'Código ASFI' }
           </Label>
           <Col sm='9' lg='5'>
             <CInputReact
@@ -481,8 +560,6 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
               //getSelectValue={getSelectValueLevel3} // AGGARA EL EL VALOR DEL SELECT VALUE
               //inputIsClearable={inputIsClearableLevel3} // AGGARA EL EL VALOR DEL SELECT VALUE
               />
-
-
             </Col>
           </FormGroup>
           : null
@@ -570,9 +647,6 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
               // getSelectValue={getSelectValue} // AGGARA EL EL VALOR DEL SELECT VALUE
               // inputIsClearable={inputIsClearable} // AGGARA EL EL VALOR DEL SELECT VALUE
               />
-
-
-
             </Col>
           </Row>
 

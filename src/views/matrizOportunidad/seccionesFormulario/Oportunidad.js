@@ -1,4 +1,4 @@
-import { React, Fragment, useState, useEffect} from 'react'
+import { React, Fragment, useState, useEffect } from 'react'
 import { ChevronLeft, ChevronRight, Delete } from 'react-feather'
 import { Label, FormGroup, Row, Col, Form, Button } from 'reactstrap'
 import { useFormik } from "formik"
@@ -12,48 +12,92 @@ import { calculaRiesgo, buscaValorLiteralRiesgoI } from 'src/functions/Functions
 
 var _ = require('lodash');
 
-const Oportunidad = ({ nextSection, beforeSection, setObject, initValues, isEdit}) => {
+const Oportunidad = ({ nextSection, beforeSection, setObject, initValues, dataApiTratamiento, isEdit }) => {
 
   const formik = useFormik({
     initialValues: initValues,
     validationSchema: Yup.object().shape(
       {
-        probabilidadId : Yup.mixed().required("Campo obligatorio"),
-        impactoOporId : Yup.mixed().required("Campo obligatorio"),
+        probabilidadId: Yup.mixed().required("Campo obligatorio"),
+        impactoOporId: Yup.mixed().required("Campo obligatorio"),
         // Campos solo para mostrar
-        probNivel : Yup.string().nullable(),
-        probOcurrencia : Yup.string().nullable(),
-        probDescriptivo : Yup.string().nullable(),
-        impactoNivel : Yup.string().nullable(),
-        impactoOportunidad : Yup.string().nullable(),
-        impactoDescriptivo : Yup.string().nullable(),
-        nivelOportunidad : Yup.number().nullable(),
-        valorOportunidad : Yup.string().nullable(),
+        probNivel: Yup.string().nullable(),
+        probOcurrencia: Yup.string().nullable(),
+        probDescriptivo: Yup.string().nullable(),
+        impactoNivel: Yup.string().nullable(),
+        impactoOportunidad: Yup.string().nullable(),
+        impactoDescriptivo: Yup.string().nullable(),
+        nivelOportunidad: Yup.number().nullable(),
+        valorOportunidad: Yup.string().nullable(),
       }
     ),
 
     onSubmit: values => {
       const data = {
         ...values,
-        probabilidadId:(values.probabilidadId !== null) ? values.probabilidadId.value : 0,
-        impactoOporId:(values.impactoOporId !== null) ? values.impactoOporId.value : 0,
-     }
-      const dataSelect =  _.omit(data, ['probNivel', 'probOcurrencia', 'probDescriptivo', 'impactoNivel', 'impactoOportunidad', 'impactoDescriptivo', 'nivelOportunidad', 'valorOportunidad']);
-      console.log('datos que se enviaran SECCION 3:', dataSelect)
+        probabilidadId: (values.probabilidadId !== null) ? values.probabilidadId.value : 0,
+        impactoOporId: (values.impactoOporId !== null) ? values.impactoOporId.value : 0,
+      }
+      const dataSelect = _.omit(data, ['probNivel', 'probOcurrencia', 'probDescriptivo', 'impactoNivel', 'impactoOportunidad', 'impactoDescriptivo', 'nivelOportunidad', 'valorOportunidad']);
+      //console.log('datos que se enviaran SECCION 3:', dataSelect)
       setObject(dataSelect);
       nextSection(3);
-   }
-  })
+    }
+  });
+
+  useEffect(() => {
+    callApiProbabilidad(2);
+    callApiImpactoOpor(4);
+  }, [])
+
+  // Rellena Datos para Editar
+  useEffect(() => {
+    if (isEdit) {
+      formik.setValues({ ...initValues })
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initValues])
+
+  // Autocompleta Probabilidad, porcentaje y valoracion
+  useEffect(() => {
+    if (formik.values.probabilidadId !== null) {
+      formik.setFieldValue('probNivel', formik.values.probabilidadId.campoA, false)
+      formik.setFieldValue('probOcurrencia', formik.values.probabilidadId.campoG, false)
+      formik.setFieldValue('probDescriptivo', formik.values.probabilidadId.nombre, false)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.probabilidadId]);
+
+  // Autocompleta Impacto, porcentaje y valoracion
+  useEffect(() => {
+    if (formik.values.impactoOporId !== null) {
+      formik.setFieldValue('impactoNivel', formik.values.impactoOporId.campoA, false)
+      formik.setFieldValue('impactoOportunidad', formik.values.impactoOporId.campoD, false)
+      formik.setFieldValue('impactoDescriptivo', formik.values.impactoOporId.nombre, false)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.impactoOporId]);
+
+  useEffect(() => {
+    calculoRiesgoInerente();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.probabilidadId, formik.values.impactoOporId]);
+
+  useEffect(() => {
+    if (isEdit) {
+      calculoRiesgoInerente();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   /*   P  A  R  A  M  E  T  R  O  S   */
-
   // Probabilidad
   const [dataApiProbabilidad, setDataApiProbabilidad] = useState([])
   const callApiProbabilidad = (idTablaDes) => {
     getTablaDescripcionRiesgoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'campoD', true)
-        setDataApiProbabilidad(_.orderBy(options, ['value' ], ['desc']))
+        setDataApiProbabilidad(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -65,68 +109,24 @@ const Oportunidad = ({ nextSection, beforeSection, setObject, initValues, isEdit
     getTablaDescripcionOportunidadN1(idTablaDes, idNivel2)
       .then(res => {
         const options = buildSelectThree(res.data, 'id', 'campoA', 'campoC', true)
-        setDataApiImpactoOpor(_.orderBy(options, ['value' ], ['desc']))
+        setDataApiImpactoOpor(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
   }
 
-  // Tratamiento
-  const [dataApiTratamiento, setDataApiTratamiento] = useState([])
-  const callApiTratamiento = (idTablaDes, idNivel2) => {
-    getTablaDescripcionOportunidadN1(idTablaDes, idNivel2)
-      .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'campoB', true)
-        setDataApiTratamiento(options)
-      }).catch((error) => {
-        console.log('Error: ', error)
-      })
-  }
-
-  useEffect(() => {
-    callApiProbabilidad(2);
-    callApiImpactoOpor(4)
-    callApiTratamiento(5)
-  }, [])
-
-  // Autocompleta Probabilidad, porcentaje y valoracion
-  useEffect(() => {
-    if(formik.values.probabilidadId !== null){
-      formik.setFieldValue('probNivel', formik.values.probabilidadId.campoA, false)
-      formik.setFieldValue('probOcurrencia', formik.values.probabilidadId.campoG, false)
-      formik.setFieldValue('probDescriptivo', formik.values.probabilidadId.nombre, false)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.probabilidadId]);
-
-  // Autocompleta Impacto, porcentaje y valoracion
-  useEffect(() => {
-    if(formik.values.impactoOporId !== null){
-      formik.setFieldValue('impactoNivel', formik.values.impactoOporId.campoA, false)
-      formik.setFieldValue('impactoOportunidad', formik.values.impactoOporId.campoD, false)
-      formik.setFieldValue('impactoDescriptivo', formik.values.impactoOporId.nombre, false)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.impactoOporId]);
-
-  // Obtiene el Riesgo y si valoracion (Formula entre Probabilidad e impacto)
-  const calculoRiesgoInerente = () =>{
-    if(formik.values.probabilidadId !== null && formik.values.impactoOporId !== null){
+  // Obtiene el Riesgo y su valoracion (Formula entre Probabilidad e impacto)
+  const calculoRiesgoInerente = () => {
+    if (formik.values.probabilidadId !== null && formik.values.impactoOporId !== null) {
       const prob = parseInt(formik.values.probabilidadId.campoA);
       const imp = parseInt(formik.values.impactoOporId.campoA);
       const riesgo = calculaRiesgo(prob, imp);
       formik.setFieldValue('nivelOportunidad', riesgo, false)
-
-      var riesgoValAux = buscaValorLiteralRiesgoI(dataApiTratamiento, riesgo)
-      formik.setFieldValue('valorOportunidad', riesgoValAux, false)
+      var riesgoValAux = buscaValorLiteralRiesgoI(dataApiTratamiento, riesgo);
+      //console.log('dataApiTratamiento: ', dataApiTratamiento);
+      formik.setFieldValue('valorOportunidad', riesgoValAux, false);
     }
   }
-
-  useEffect(() => {
-    calculoRiesgoInerente();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.probabilidadId,formik.values.impactoOporId]);
-
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
   return (
@@ -150,7 +150,7 @@ const Oportunidad = ({ nextSection, beforeSection, setObject, initValues, isEdit
             />
           </FormGroup>
 
-          <FormGroup tag={Col} md='6' xl='4'  className='mb-0'>
+          <FormGroup tag={Col} md='6' xl='4' className='mb-0'>
             <Label className='form-label'>
               Probabilidad
             </Label>
@@ -297,33 +297,33 @@ const Oportunidad = ({ nextSection, beforeSection, setObject, initValues, isEdit
         </Row>
         <div className='d-flex justify-content-between pt-4'>
           <Button
-            style={{width: '130px'}}
+            style={{ width: '130px' }}
             className='text-white'
             color="primary"
             onClick={() => beforeSection(3)}
           >
-            <ChevronLeft size={17} className='mr-1'/>
+            <ChevronLeft size={17} className='mr-1' />
             Atrás
           </Button>
           <Button
-            style={{width: '130px'}}
+            style={{ width: '130px' }}
             color="dark"
             outline
-            onClick={() => { formik.handleReset()}}
+            onClick={() => { formik.handleReset() }}
             disabled={(!formik.dirty || formik.isSubmitting)}
           >
-            <Delete size={17} className='mr-2'/>
+            <Delete size={17} className='mr-2' />
             Limpiar
           </Button>
           <Button
-            style={{width: '130px'}}
+            style={{ width: '130px' }}
             className='text-white'
             color="primary"
             type="submit"
-            //disabled={formik.isSubmitting}
+          //disabled={formik.isSubmitting}
           >
             Siguiente
-            <ChevronRight size={17} className='ml-1'/>
+            <ChevronRight size={17} className='ml-1' />
           </Button>
         </div>
       </Form>

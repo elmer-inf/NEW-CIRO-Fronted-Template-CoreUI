@@ -1,23 +1,23 @@
 import { React, Fragment, useState, useEffect } from 'react'
 import { ChevronLeft, ChevronRight, Delete } from 'react-feather'
 import { Label, FormGroup, Row, Col, Form, Button } from 'reactstrap'
-
 import { useFormik } from "formik"
 import * as Yup from "yup"
 import { CInputReact } from 'src/reusable/CInputReact'
 import { CSelectReact } from 'src/reusable/CSelectReact'
-import CInputCheckbox from 'src/reusable/CInputCheckbox'
+import CInputRadio from 'src/reusable/CInputRadio'
 import { getTablaDescripcionEventoN1, getTablaDescripcionEventoN2, getTablaDescripcionEventoN3 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
 import { buildSelectThree, buildSelectTwo } from 'src/functions/Function'
+import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
 import { getRiesgos } from 'src/views/matrizRiesgo/controller/RiesgoController'
 
 var _ = require('lodash');
 
-const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, isEdit, tipoEvento, fechaDesc }) => {
+const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, isEdit, tipoEvento, fechaDesc, optionsCritico, optionsAsfi, optionProcesoAsfi }) => {
 
   // Obtiene Trimestre a partir de la fechaDesc
-  const generaTrimestre = ()=>{
-    if(fechaDesc !== undefined){
+  const generaTrimestre = () => {
+    if (fechaDesc !== undefined) {
       var mes = parseInt(fechaDesc.substring(5, 7));
       var anio = parseInt(fechaDesc.substring(0, 4));
       var trimestre = '';
@@ -42,9 +42,11 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         trimestre: Yup.string().nullable(),
         tipoEventoPerdidaId: Yup.mixed().required('Campo obligatorio'),
         subEventoId: Yup.mixed().nullable(),
-        claseEventoId:  Yup.mixed().nullable(),
-        otrosAux: Yup.string().nullable(),
-        otros: Yup.string().nullable(),
+        claseEventoId: Yup.mixed().nullable(),
+        otros: Yup.string().nullable().when('claseEventoId', {
+          is: (val) => (val !== null && val.label === 'Otros'),
+          then: Yup.string().nullable().required("Campo obligatorio"),
+        }),
         detalleEventoCritico: Yup.string().required('Campo obligatorio').nullable(),
         factorRiesgoId: Yup.mixed().required('Campo obligatorio'),
         procesoId: Yup.mixed().required('Campo obligatorio'),
@@ -60,8 +62,10 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         descServicioId: Yup.mixed().nullable(),
         detalleEstado: Yup.string().nullable(),
 
-        listMatrizRiesgo:Yup.mixed().nullable()
-       
+        procesoCriticoAsfi: Yup.mixed().required('Campo obligatorio'),
+        procesoCriticoAsfiAux: Yup.string().nullable(),
+
+        listMatrizRiesgo: Yup.mixed().nullable(),
 
         /* codigoInicial: Yup.string().nullable(),
         subcategorizacionId: Yup.mixed().nullable(),
@@ -69,8 +73,10 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         tipoEventoPerdidaId: Yup.mixed().nullable(),
         subEventoId: Yup.mixed().nullable(),
         claseEventoId: Yup.mixed().nullable(),
-        otrosAux: Yup.string().nullable(),
-        otros: Yup.string().nullable(),
+        otros : Yup.string().nullable().when('claseEventoId',{
+          is:(val) =>  (val !== null && val.label === 'Otros'),
+          then: Yup.string().max(300, 'El campo no debe exceder los 300 caracteres').nullable().required("Campo obligatorio"),
+        }),
         detalleEventoCritico: Yup.string().nullable(),
         factorRiesgoId: Yup.mixed().nullable(),
         procesoId: Yup.mixed().nullable(),
@@ -85,6 +91,9 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         tipoServicioId: Yup.mixed().nullable(),
         descServicioId: Yup.mixed().nullable(),
         detalleEstado: Yup.string().nullable(),
+
+        procesoCriticoAsfi: Yup.mixed().nullable(),
+        procesoCriticoAsfiAux: Yup.string().nullable(),
 
         listMatrizRiesgo: Yup.mixed().nullable(), */
       }
@@ -121,7 +130,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
 
         listMatrizRiesgo: arrayIdMatrizRiesgo
       }
-      console.log('datos que se enviaran SECCION 3:', data)
+      //console.log('datos que se enviaran SECCION 3:', data)
       setObject(data);
 
       if (tipoEvento === 'A')
@@ -217,18 +226,6 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
       })
   }
 
-  // Evento critico
-  const optionsEventoCritico = [
-    { value: 'Crítico', label: 'Crítico' },
-    { value: 'No crítico', label: 'No crítico' }
-  ]
-
-  // Línea de negocio
-  const optionsLineaAsfi = [
-    { value: '1. Línea de Negocio Emisor', label: '1. Línea de Negocio Emisor' },
-    { value: '2. Línea de Negocio Adquirente', label: '2. Línea de Negocio Adquirente' }
-  ]
-
   // Linea de negocio ASFI
   const [dataApiLineaAsfi, setDataApiLineaAsfi] = useState([])
   const callApiLineaAsfi = (idTablaDes) => {
@@ -314,59 +311,108 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
     callLListMatrizRiesgos();
   }, [])
 
-  // Sub evento (nivel 2)
-  const resetSubeventoYclase = () => { formik.setFieldValue('subEventoId', null, false); formik.setFieldValue('claseEventoId', null, false); }
+  // Para el despliegue del select llenado al EDITAR
   useEffect(() => {
-    if (formik.values.tipoEventoPerdidaId !== null) {
-      callApiSubevento(12, formik.values.tipoEventoPerdidaId.id);
-      resetSubeventoYclase();
+    if (isEdit && initValues.tipoEventoPerdidaId !== null) {
+      callApiSubevento(12, initValues.tipoEventoPerdidaId.id);
+    }
+    if (isEdit && initValues.subEventoId !== null && initValues.tipoEventoPerdidaId !== null) {
+      callApiClaseEvento(13, initValues.subEventoId.id, initValues.tipoEventoPerdidaId.id);
+    }
+    if (isEdit && initValues.procesoId !== null) {
+      callApiProcedimiento(16, initValues.procesoId.id);
+    }
+    if (isEdit && initValues.tipoServicioId !== null) {
+      callApiServicioDesc(22, initValues.tipoServicioId.id);
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.tipoEventoPerdidaId])
+  }, [])
 
-  // Clase evento (nivel 3)
-  const resetClaseEvento = () => { formik.setFieldValue('claseEventoId', null, false); }
-  useEffect(() => {
-    if (formik.values.subEventoId !== null) {
-      callApiClaseEvento(13, formik.values.subEventoId.id, formik.values.tipoEventoPerdidaId.id);
-      console.log('13, ', formik.values.subEventoId.id, ', ', formik.values.tipoEventoPerdidaId.id);
-      resetClaseEvento();
-    }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.subEventoId])
 
-  // Procedimiento (nivel 2)
-  const resetProcedimiento = () => { formik.setFieldValue('procedimientoId', null, false); }
-  useEffect(() => {
-    if (formik.values.procesoId !== null) {
-      callApiProcedimiento(16, formik.values.procesoId.id);
-      resetProcedimiento();
-    }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.procesoId])
+  // FORMIK RESET VALUE REUTILIZABLE
+  const resetFormikValue = (field, valueToReset) => {
+    formik.setFieldValue(field, valueToReset, false);
+  }
 
-  // Descripción de servicio (nivel 2)
-  const resetServicioDesc = () => { formik.setFieldValue('descServicioId', null, false); }
-  useEffect(() => {
-    if (formik.values.tipoServicioId !== null) {
-      callApiServicioDesc(22, formik.values.tipoServicioId.id);
-      resetServicioDesc();
+  /*  Values of TIPO DE EVENTO DE PERDIDA N1*/
+  const clearDependenceOfTipoEventoP = () => {
+    resetFormikValue('subEventoId', null);
+    resetFormikValue('claseEventoId', null);
+    setDataApiSubevento([]);
+    setDataApiClaseEvento([]);
+  }
+  const getValueTipoEventoP = (value) => {
+    if (value !== null) {
+      callApiSubevento(12, value.id);
     }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.tipoServicioId])
+  }
+  const clearInputTipoEventoP = (id) => {
+    formik.setFieldValue(id, null, false); // limpia el select N1
+    resetFormikValue('subEventoId', null); // limpiar el valor del select N2
+    resetFormikValue('claseEventoId', null); // limpiar el valor del select N3
+  }
+  /* FIN  Values of TIPO DE EVENTO DE PERDIDA N1*/
+
+  /*  Values of SUB EVENTO N2 */
+  const clearDependenceOfSubEvento = () => {
+    resetFormikValue('claseEventoId', null);
+    setDataApiClaseEvento([]);
+  }
+  const getValueSubEvento = (value) => {
+    if (value !== null && formik.values.tipoEventoPerdidaId !== null) {
+      callApiClaseEvento(13, value.id, formik.values.tipoEventoPerdidaId.id);
+    }
+  }
+  const clearInputSubEvento = (id) => {
+    formik.setFieldValue(id, null, false); // limpia el select N1
+    resetFormikValue('claseEventoId', null) // limpiar el valor del select N2
+  }
+  /* FIN  Values of SUB EVENTO N2 */
+
+  /*  Values of PROCESO N1 */
+  const clearDependenceOfProceso = () => {
+    resetFormikValue('procedimientoId', null);
+    setDataApiProcedimiento([]);
+  }
+  const getValueProceso = (value) => {
+    if (value !== null) {
+      callApiProcedimiento(16, value.id);
+    }
+  }
+  const clearInputProceso = (id) => {
+    formik.setFieldValue(id, null, false);
+    resetFormikValue('procedimientoId', null);
+  }
+  /* FIN  Values of PROCESO N1 */
+
+  /*  Values of TIPO DE SERVICIO N1 */
+  const clearDependenceOfTipoServicio = () => {
+    resetFormikValue('descServicioId', null);
+    setDataApiServicioDesc([]);
+  }
+  const getValueTipoServicio = (value) => {
+    if (value !== null) {
+      callApiServicioDesc(22, value.id);
+    }
+  }
+  const clearInputTipoServicio = (id) => {
+    formik.setFieldValue(id, null, false);
+    resetFormikValue('descServicioId', null);
+  }
+  /* FIN  Values of TIPO DE SERVICIO N1 */
 
   // Resetea "otros" dependiendo del check
-  const resetOtros = () => { formik.setFieldValue('otros', null, false); }
+  const resetOtros = () => { formik.setFieldValue('otros', '', false); }
   useEffect(() => {
-    if (formik.values.otrosAux !== true) {
+    if (formik.values.claseEventoId !== null) {
       resetOtros();
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.otrosAux])
+  }, [formik.values.claseEventoId])
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
-  // Riesgos realcionados:
 
+  // Riesgos realcionados:
   const [listRiesgoRel, setListRiesgoRel] = useState([]);
 
   const callLListMatrizRiesgos = () => {
@@ -388,12 +434,12 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
           <div className='divider-text'><span className='text-label'>Categoria</span></div>
         </div>
         <Row>
-          <FormGroup tag={Col} md='6' lg='3'>
+          <FormGroup tag={Col} md='6' lg='6'>
             <Label className='form-label'>
               Código inicial
             </Label>
             <CInputReact
-              type={"text"}
+              type={"textarea"}
               id={'codigoInicial'}
               placeholder={'Código inicial'}
               value={formik.values.codigoInicial}
@@ -401,6 +447,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
               onBlur={formik.handleBlur}
               touched={formik.touched.codigoInicial}
               errors={formik.errors.codigoInicial}
+              rows={1}
             />
           </FormGroup>
 
@@ -440,18 +487,26 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
-              Tipo de evento de pérdida - Basilea<span className='text-primary h5'><b>*</b></span>
+              Tipo de evento de pérdida - Basilea <span className='text-primary h5'><b>*</b></span>
             </Label>
-            <CSelectReact
-              type={"select"}
+            <CSelectReactTwo
               id={'tipoEventoPerdidaId'}
               placeholder={'Seleccionar'}
               value={formik.values.tipoEventoPerdidaId}
               onChange={formik.setFieldValue}
               onBlur={formik.setFieldTouched}
-              error={formik.errors.tipoEventoPerdidaId}
+              errors={formik.errors.tipoEventoPerdidaId}
               touched={formik.touched.tipoEventoPerdidaId}
               options={dataApiTipoEvento}
+              obligatorio={false}
+              isClearable={true}
+              isSearchable={true}
+              isDisabled={false}
+              dependence={true}
+              cleareableDependences={clearDependenceOfTipoEventoP}
+              getAddValue={true}
+              getSelectValue={getValueTipoEventoP}
+              inputIsClearable={clearInputTipoEventoP}
             />
           </FormGroup>
 
@@ -459,16 +514,24 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
             <Label className='form-label'>
               Sub evento - Basilea
             </Label>
-            <CSelectReact
-              type={"select"}
+            <CSelectReactTwo
               id={'subEventoId'}
               placeholder={'Seleccionar'}
               value={formik.values.subEventoId}
               onChange={formik.setFieldValue}
               onBlur={formik.setFieldTouched}
-              error={formik.errors.subEventoId}
+              errors={formik.errors.subEventoId}
               touched={formik.touched.subEventoId}
               options={dataApiSubevento}
+              obligatorio={false}
+              isClearable={true}
+              isSearchable={true}
+              isDisabled={false}
+              dependence={true}
+              cleareableDependences={clearDependenceOfSubEvento}
+              getAddValue={true}
+              getSelectValue={getValueSubEvento}
+              inputIsClearable={clearInputSubEvento}
             />
           </FormGroup>
 
@@ -489,24 +552,13 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
             />
           </FormGroup>
 
-          <FormGroup tag={Col} md='6' lg='3' className='mb-0' style={{ position: 'sticky' }}>
-            <CInputCheckbox
-              id={'otrosAux'}
-              type={"checkbox"}
-              value={formik.values.otrosAux}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              label='Otros (Clase evento - Basilea - ASFI)'
-            />
-          </FormGroup>
-
-          {formik.values.otrosAux === true ?
-            <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+          {formik.values.claseEventoId !== null && formik.values.claseEventoId.label === "Otros" ?
+            <FormGroup tag={Col} md='6' lg='6' className='mb-0'>
               <Label className='form-label'>
                 Otros (Clase evento - Basilea - ASFI)
               </Label>
               <CInputReact
-                type={"text"}
+                type={"textarea"}
                 id={'otros'}
                 placeholder={'Otros'}
                 value={formik.values.otros}
@@ -514,16 +566,17 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
                 onBlur={formik.handleBlur}
                 touched={formik.touched.otros}
                 errors={formik.errors.otros}
+                rows={1}
               />
             </FormGroup>
             : null}
 
-          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+          <FormGroup tag={Col} md='6' lg='6' className='mb-0'>
             <Label className='form-label'>
               Detalle evento crítico <span className='text-primary h5'><b>*</b></span>
             </Label>
             <CInputReact
-              type={"text"}
+              type={"textarea"}
               id={'detalleEventoCritico'}
               placeholder={'Detalle evento crítico'}
               value={formik.values.detalleEventoCritico}
@@ -531,6 +584,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
               onBlur={formik.handleBlur}
               touched={formik.touched.detalleEventoCritico}
               errors={formik.errors.detalleEventoCritico}
+              rows={1}
             />
           </FormGroup>
 
@@ -555,16 +609,24 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
             <Label className='form-label'>
               Macroproceso <span className='text-primary h5'><b>*</b></span>
             </Label>
-            <CSelectReact
-              type={"select"}
+            <CSelectReactTwo
               id={'procesoId'}
               placeholder={'Seleccionar'}
               value={formik.values.procesoId}
               onChange={formik.setFieldValue}
               onBlur={formik.setFieldTouched}
-              error={formik.errors.procesoId}
+              errors={formik.errors.procesoId}
               touched={formik.touched.procesoId}
               options={dataApiProceso}
+              obligatorio={false}
+              isClearable={true}
+              isSearchable={true}
+              isDisabled={false}
+              dependence={true}
+              cleareableDependences={clearDependenceOfProceso}
+              getAddValue={true}
+              getSelectValue={getValueProceso}
+              inputIsClearable={clearInputProceso}
             />
           </FormGroup>
 
@@ -598,7 +660,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
               onBlur={formik.setFieldTouched}
               error={formik.errors.eventoCritico}
               touched={formik.touched.eventoCritico}
-              options={optionsEventoCritico}
+              options={optionsCritico}
             />
           </FormGroup>
           <FormGroup tag={Col} md='12' className='mb-0'>
@@ -636,7 +698,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
               onBlur={formik.setFieldTouched}
               error={formik.errors.lineaNegocio}
               touched={formik.touched.lineaNegocio}
-              options={optionsLineaAsfi}
+              options={optionsAsfi}
             />
           </FormGroup>
 
@@ -695,16 +757,24 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
             <Label className='form-label'>
               Tipo de servicio
             </Label>
-            <CSelectReact
-              type={"select"}
+            <CSelectReactTwo
               id={'tipoServicioId'}
               placeholder={'Seleccionar'}
               value={formik.values.tipoServicioId}
               onChange={formik.setFieldValue}
               onBlur={formik.setFieldTouched}
-              error={formik.errors.tipoServicioId}
+              errors={formik.errors.tipoServicioId}
               touched={formik.touched.tipoServicioId}
               options={dataApiTipoServicio}
+              obligatorio={false}
+              isClearable={true}
+              isSearchable={true}
+              isDisabled={false}
+              dependence={true}
+              cleareableDependences={clearDependenceOfTipoServicio}
+              getAddValue={true}
+              getSelectValue={getValueTipoServicio}
+              inputIsClearable={clearInputTipoServicio}
             />
           </FormGroup>
 
@@ -724,6 +794,44 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
               options={dataApiServicioDesc}
             />
           </FormGroup>
+
+          {/* Campo NUEVO */}
+          <FormGroup tag={Col} md='6' lg='3' className='mb-0'> 
+            <Label className='form-label'>
+              Proceso crítico ASFI <span className='text-primary h5'><b>*</b></span>
+            </Label>
+            <CInputRadio
+              data={optionProcesoAsfi}
+              id={'procesoCriticoAsfi'}
+              value={formik.values.procesoCriticoAsfi}
+              onChange={formik.setFieldValue}
+              onBlur={formik.setFieldTouched}
+              touched={formik.touched.procesoCriticoAsfi}
+              errors={formik.errors.procesoCriticoAsfi}
+              sendValue={true}
+            />
+          </FormGroup>
+
+          {
+            (formik.values.procesoCriticoAsfi !== null && formik.values.procesoCriticoAsfi === 1) ?
+            <FormGroup tag={Col} sm='12' className='mb-0'>
+              <Label className='form-label'>
+                Detalle proceso crítico ASFI 
+              </Label>
+              <CInputReact
+                type={"textarea"}
+                id={'procesoCriticoAsfiAux'}
+                value={'Se encuentra definido dentro del Mapa de Procesos, priorizando los Procesos Operativos de acuerdo a la cadena de valor que impacta directamente a los objetivos estratégico de la empresa establecidos en el Plan-GTIC-002-SIST.'}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                touched={formik.touched.procesoCriticoAsfiAux}
+                errors={formik.errors.procesoCriticoAsfiAux}
+                disabled={true}
+                rows={2}
+              />
+            </FormGroup>
+            : null
+          }
 
           <FormGroup tag={Col} sm='12' className='mb-0'>
             <Label className='form-label'>
@@ -755,7 +863,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
               onBlur={formik.handleBlur}
               touched={formik.touched.detalleEstado}
               errors={formik.errors.detalleEstado}
-              rows={1}
+              rows={3}
             />
           </FormGroup>
         </Row>

@@ -1,11 +1,11 @@
-import { React, Fragment, useState, useEffect} from 'react'
+import { React, Fragment, useState, useEffect } from 'react'
 import { ChevronLeft, ChevronRight, Delete } from 'react-feather'
 import { Label, FormGroup, Row, Col, Form, Button } from 'reactstrap'
 import { useFormik } from "formik"
 import * as Yup from "yup"
 import { CInputReact } from 'src/reusable/CInputReact'
 import { CSelectReact } from 'src/reusable/CSelectReact'
-import  CInputCheckbox  from 'src/reusable/CInputCheckbox'
+import CInputCheckbox from 'src/reusable/CInputCheckbox'
 import CInputRadio from 'src/reusable/CInputRadio'
 import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController'
 import { getTablaDescripcionRiesgoN1 } from 'src/views/administracion/matriz-riesgo/controller/AdminRiesgoController';
@@ -14,39 +14,39 @@ import { calculaRiesgo, buscaValorLiteralRiesgoI } from 'src/functions/Functions
 
 var _ = require('lodash');
 
-const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) => {
+const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMonetario, dataApiRiesgoI, isEdit }) => {
 
   const formik = useFormik({
-    initialValues: {...initValues, otrosAux2: false},
+    initialValues: { ...initValues, otrosAux2: false },
     validationSchema: Yup.object().shape(
       {
-        definicion : Yup.string().required('Campo obligatorio'),
-        causa : Yup.string().required('Campo obligatorio'),
-        consecuencia : Yup.string().required('Campo obligatorio'),
-        defConcatenado : Yup.string().required('Campo obligatorio'),
-        efectoPerdidaOtro: Yup.string().nullable().when('otrosAux2',{
-          is:(val) => (val === true),
+        definicion: Yup.string().required('Campo obligatorio'),
+        causa: Yup.string().required('Campo obligatorio'),
+        consecuencia: Yup.string().required('Campo obligatorio'),
+        efectoPerdidaOtro: Yup.string().nullable().when('otrosAux2', {
+          is: (val) => (val === true),
           then: Yup.string().nullable().required("Campo obligatorio"),
         }),
-        efectoPerdidaId : Yup.mixed().nullable().when('otrosAux2',{
-          is:(val) =>  (val === false),
+        efectoPerdidaId: Yup.mixed().nullable().when('otrosAux2', {
+          is: (val) => (val === false),
           then: Yup.mixed().nullable().required("Campo obligatorio"),
         }),
-        perdidaAsfiId : Yup.mixed().required("Campo obligatorio"),
-        monetario : Yup.boolean().required('Campo obligatorio'),
-        factorRiesgoId : Yup.mixed().required('Campo obligatorio'),
-        probabilidadId : Yup.mixed().required("Campo obligatorio"),
-        impactoId : Yup.mixed().required("Campo obligatorio"),
+        perdidaAsfiId: Yup.mixed().required("Campo obligatorio"),
+        monetario: Yup.boolean().required('Campo obligatorio'),
+        factorRiesgoId: Yup.mixed().required('Campo obligatorio'),
+        probabilidadId: Yup.mixed().required("Campo obligatorio"),
+        impactoId: Yup.mixed().required("Campo obligatorio"),
         // Campos solo para mostrar
+        defConcatenado: Yup.string().nullable(),
         otrosAux2: Yup.boolean(),
-        riesgoInherente : Yup.number().required('Campo obligatorio'),
-        valorRiesgoInherente : Yup.string().required('Campo obligatorio'),
-        probInherente : Yup.string().nullable(),
-        probPorcentaje : Yup.string().nullable(),
-        probValoracion : Yup.string().nullable(),
-        impactoInherente : Yup.string().nullable(),
-        impactoPorcentaje : Yup.string().nullable(),
-        impactoValoracion : Yup.string().nullable(),
+        riesgoInherente: Yup.number().nullable(),
+        valorRiesgoInherente: Yup.string().nullable(), // REVISAR AUTOCOMPLETADO DE ESTE CAMPO
+        probInherente: Yup.string().nullable(),
+        probPorcentaje: Yup.string().nullable(),
+        probValoracion: Yup.string().nullable(),
+        impactoInherente: Yup.string().nullable(),
+        impactoPorcentaje: Yup.string().nullable(),
+        impactoValoracion: Yup.string().nullable(),
 
         /* definicion : Yup.string().nullable(),
         causa : Yup.string().nullable(),
@@ -66,6 +66,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
         probabilidadId : Yup.mixed().required("Campo obligatorio"),
         impactoId : Yup.mixed().required("Campo obligatorio"),
         // Campos solo para mostrar
+        defConcatenado : Yup.string().nullable(),
         otrosAux2: Yup.boolean(),
         riesgoInherente : Yup.number().nullable(),
         valorRiesgoInherente : Yup.string().nullable(),
@@ -81,19 +82,39 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
     onSubmit: values => {
       const data = {
         ...values,
-        efectoPerdidaId : (values.efectoPerdidaId !== null) ?   values.efectoPerdidaId.value : 0,
-        perdidaAsfiId : (values.perdidaAsfiId !== null) ?   values.perdidaAsfiId.value : 0,
-        factorRiesgoId : (values.factorRiesgoId !== null) ?   values.factorRiesgoId.value : 0,
+        efectoPerdidaId: (values.efectoPerdidaId !== null) ? values.efectoPerdidaId.value : 0,
+        perdidaAsfiId: (values.perdidaAsfiId !== null) ? values.perdidaAsfiId.value : 0,
+        factorRiesgoId: (values.factorRiesgoId !== null) ? values.factorRiesgoId.value : 0,
 
-        probabilidadId:(values.probabilidadId !== null) ? values.probabilidadId.value : 0,
-        impactoId:(values.impactoId !== null) ? values.impactoId.value : 0,
-     }
-      const dataSelect =  _.omit(data, ['probInherente', 'probPorcentaje', 'probValoracion', 'impactoInherente', 'impactoPorcentaje', 'impactoValoracion', 'riesgoInherente', 'valorRiesgoInherente']);
-      console.log('datos que se enviaran SECCION 2:', dataSelect)
+        probabilidadId: (values.probabilidadId !== null) ? values.probabilidadId.value : 0,
+        impactoId: (values.impactoId !== null) ? values.impactoId.value : 0,
+      }
+      const dataSelect = _.omit(data, ['defConcatenado', 'probInherente', 'probPorcentaje', 'probValoracion', 'impactoInherente', 'impactoPorcentaje', 'impactoValoracion', 'riesgoInherente', 'valorRiesgoInherente']);
+      //console.log('datos que se enviaran SECCION 2:', dataSelect)
       setObject(dataSelect, values);
       nextSection(2);
-   }
+    }
   })
+
+  // Rellena Datos para Editar
+  useEffect(() => {
+    if (isEdit) {
+      formik.setValues({ ...initValues })
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initValues])
+
+  useEffect(() => {
+    calculoRiesgoInerente();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.probabilidadId, formik.values.impactoId]);
+
+  useEffect(() => {
+    if (isEdit) {
+      calculoRiesgoInerente();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   /*   P  A  R  A  M  E  T  R  O  S   */
   // Efecto de perdida
@@ -120,12 +141,6 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
       })
   }
 
-  // Monetario
-  const optionsMonetario = [
-    { value: true, label: 'Si' },
-    { value: false, label: 'No' }
-  ]
-
   // Factor de riesgo operativo
   const [dataApiFactorRiesgo, setDataApiFactorRiesgo] = useState([])
   const callApiFactorRiesgo = (idTablaDes) => {
@@ -144,7 +159,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
     getTablaDescripcionRiesgoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'campoD', true)
-        setDataApiProbabilidad(_.orderBy(options, ['value' ], ['desc']))
+        setDataApiProbabilidad(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -156,19 +171,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
     getTablaDescripcionRiesgoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'campoD', true)
-        setDataApiImpacto(_.orderBy(options, ['value' ], ['desc']))
-      }).catch((error) => {
-        console.log('Error: ', error)
-      })
-  }
-
-  // Nivel de riesgo inherente
-  const [dataApiRiesgoI, setDataApiRiesgoI] = useState([])
-  const callApiRiesgoI = (idTablaDes) => {
-    getTablaDescripcionRiesgoN1(idTablaDes)
-      .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'campoD', true)
-        setDataApiRiesgoI(options)
+        setDataApiImpacto(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -177,15 +180,15 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
   useEffect(() => {
     callApiProbabilidad(2);
     callApiImpacto(3);
-    callApiRiesgoI(9);
     callApiEfectoPerdida(19)
     callApiPerdidaAsfi(1)
     callApiFactorRiesgo(26);
   }, [])
+  /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
   // Concatena definicion, causa y consecuencia
   useEffect(() => {
-    if(formik.values.definicion !== '' && formik.values.causa !== '' && formik.values.consecuencia !== ''){
+    if (formik.values.definicion !== '' && formik.values.causa !== '' && formik.values.consecuencia !== '') {
       formik.setFieldValue('defConcatenado', 'RIESGO POR ' + formik.values.definicion + ' DEBIDO A ' + formik.values.causa + ' PUEDE OCASIONAR ' + formik.values.consecuencia, false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -193,7 +196,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
 
   // Autocompleta Probabilidad inherente, porcentaje y valoracion
   useEffect(() => {
-    if(formik.values.probabilidadId !== null){
+    if (formik.values.probabilidadId !== null) {
       formik.setFieldValue('probInherente', formik.values.probabilidadId.campoA, false)
       formik.setFieldValue('probPorcentaje', formik.values.probabilidadId.campoG, false)
       formik.setFieldValue('probValoracion', formik.values.probabilidadId.nombre, false)
@@ -203,7 +206,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
 
   // Autocompleta Impacto inherente, porcentaje y valoracion
   useEffect(() => {
-    if(formik.values.impactoId !== null){
+    if (formik.values.impactoId !== null) {
       formik.setFieldValue('impactoInherente', formik.values.impactoId.campoA, false)
       formik.setFieldValue('impactoPorcentaje', formik.values.impactoId.campoG, false)
       formik.setFieldValue('impactoValoracion', formik.values.impactoId.nombre, false)
@@ -212,8 +215,8 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
   }, [formik.values.impactoId]);
 
   // Obtiene el Riesgo inherente y si valoracion (Formula entre Probabilidad e impacto)
-  const calculoRiesgoInerente = () =>{
-    if(formik.values.probabilidadId !== null && formik.values.impactoId !== null){
+  const calculoRiesgoInerente = () => {
+    if (formik.values.probabilidadId !== null && formik.values.impactoId !== null) {
       const prob = parseInt(formik.values.probabilidadId.campoA);
       const imp = parseInt(formik.values.impactoId.campoA);
       const riesgo = calculaRiesgo(prob, imp);
@@ -224,11 +227,6 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
     }
   }
 
-  useEffect(() => {
-    calculoRiesgoInerente();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.probabilidadId,formik.values.impactoId]);
-
   // Resetea "otros" dependiendo del check
   const resetOtros = () => { formik.setFieldValue('efectoPerdidaOtro', null, false); }
   useEffect(() => {
@@ -238,7 +236,6 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.otrosAux2])
 
-  /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
   return (
     <Fragment>
@@ -260,7 +257,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
               onBlur={formik.handleBlur}
               touched={formik.touched.definicion}
               errors={formik.errors.definicion}
-              rows={1}
+              rows={2}
             />
           </FormGroup>
 
@@ -277,7 +274,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
               onBlur={formik.handleBlur}
               touched={formik.touched.causa}
               errors={formik.errors.causa}
-              rows={1}
+              rows={2}
             />
           </FormGroup>
 
@@ -294,7 +291,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
               onBlur={formik.handleBlur}
               touched={formik.touched.consecuencia}
               errors={formik.errors.consecuencia}
-              rows={1}
+              rows={2}
             />
           </FormGroup>
 
@@ -312,13 +309,14 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
               onBlur={formik.handleBlur}
               touched={formik.touched.defConcatenado}
               errors={formik.errors.defConcatenado}
-              rows={2}
+              disabled={true}
+              rows={4}
             />
           </FormGroup>
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
-              Tipo de Pérdida {formik.values.otrosAux2 === false? <span className='text-primary h5'><b>*</b></span>: null}
+              Tipo de Pérdida {formik.values.otrosAux2 === false ? <span className='text-primary h5'><b>*</b></span> : null}
             </Label>
             <CSelectReact
               type={"select"}
@@ -330,12 +328,12 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
               error={formik.errors.efectoPerdidaId}
               touched={formik.touched.efectoPerdidaId}
               options={dataApiEfectoPerdida}
-              isDisabled={formik.values.otrosAux2 === true? true: false}
+              isDisabled={formik.values.otrosAux2 === true ? true : false}
             />
           </FormGroup>
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
-            <br/>
+            <br />
             <CInputCheckbox
               id={'otrosAux2'}
               type={"checkbox"}
@@ -343,14 +341,14 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               label='Otros (Tipo de Pérdida)'
-              disabled={formik.values.efectoPerdidaId !== null? true: false}
+              disabled={formik.values.efectoPerdidaId !== null ? true : false}
             />
           </FormGroup>
 
-          {formik.values.otrosAux2 === true && formik.values.efectoPerdidaId === null?
+          {formik.values.otrosAux2 === true && formik.values.efectoPerdidaId === null ?
             <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
               <Label className='form-label'>
-                Otros (Tipo de Pérdida) {formik.values.otrosAux2 === true? <span className='text-primary h5'><b>*</b></span>: null}
+                Otros (Tipo de Pérdida) {formik.values.otrosAux2 === true ? <span className='text-primary h5'><b>*</b></span> : null}
               </Label>
               <CInputReact
                 type={"text"}
@@ -363,7 +361,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
                 errors={formik.errors.efectoPerdidaOtro}
               />
             </FormGroup>
-          : null}
+            : null}
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
@@ -585,33 +583,33 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, isEdit}) =
         </Row>
         <div className='d-flex justify-content-between pt-4'>
           <Button
-            style={{width: '130px'}}
+            style={{ width: '130px' }}
             className='text-white'
             color="primary"
             onClick={() => beforeSection(2)}
           >
-            <ChevronLeft size={17} className='mr-1'/>
+            <ChevronLeft size={17} className='mr-1' />
             Atrás
           </Button>
           <Button
-            style={{width: '130px'}}
+            style={{ width: '130px' }}
             color="dark"
             outline
-            onClick={() => { formik.handleReset()}}
+            onClick={() => { formik.handleReset() }}
             disabled={(!formik.dirty || formik.isSubmitting)}
           >
-            <Delete size={17} className='mr-2'/>
+            <Delete size={17} className='mr-2' />
             Limpiar
           </Button>
           <Button
-            style={{width: '130px'}}
+            style={{ width: '130px' }}
             className='text-white'
             color="primary"
             type="submit"
-            //disabled={formik.isSubmitting}
+          //disabled={formik.isSubmitting}
           >
             Siguiente
-            <ChevronRight size={17} className='ml-1'/>
+            <ChevronRight size={17} className='ml-1' />
           </Button>
         </div>
       </Form>

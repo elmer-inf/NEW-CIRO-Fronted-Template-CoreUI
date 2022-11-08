@@ -42,40 +42,40 @@ const AdministracionEventoEditar = ({ match }) => {
 
   const notificationToast = (type, mensaje) => {
     switch (type) {
-        case 'error':
-            toast.error(mensaje, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-            });
-            break;
-        case 'success':
-            toast.success(mensaje, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-            });
-            break;
+      case 'error':
+        toast.error(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        break;
+      case 'success':
+        toast.success(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        break;
 
-        default:
-            toast(mensaje, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-            });
+      default:
+        toast(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
     }
     setTimeout(() => {
-        history.push('/administracion/evento-riesgo/Listar');
-        setSpin(false);
+      history.push('/administracion/evento-riesgo/Listar');
+      setSpin(false);
     }, 5000);
   }
 
@@ -100,11 +100,14 @@ const AdministracionEventoEditar = ({ match }) => {
   }
 
   const macthed = (dataResponse) => {
+    console.log('dataresponse: ', dataResponse);
     const r = dataResponse.tablaLista;
 
     var nivel1 = { value: dataResponse.tablaLista.id, label: dataResponse.tablaLista.nombre_tabla, nivel2: dataResponse.tablaLista.nivel2, nivel3: dataResponse.tablaLista.nivel3 }
     var nivel2 = {}
     var nivel3 = {}
+    var descripcionAux = (nivel1.label === 'Responsable') ? { value: dataResponse.descripcion, label: dataResponse.descripcion } : dataResponse.descripcion;
+    var campoCAux = (nivel1.label === 'Responsable') ? { value: dataResponse.campoC, label: dataResponse.campoC } : dataResponse.campoC;
 
     if (dataResponse.nivel2_id !== null) {
       nivel2 = { value: dataResponse.nivel2_id.id, label: dataResponse.nivel2_id.nombre }
@@ -116,15 +119,18 @@ const AdministracionEventoEditar = ({ match }) => {
     const valores = {
       nombre: dataResponse.nombre,
       clave: dataResponse.clave,
-      descripcion: dataResponse.descripcion,
+      //descripcion: dataResponse.descripcion,
       campoA: dataResponse.campoA,
       campoB: dataResponse.campoB,
-      campoC: dataResponse.campoC,
+      //campoC: dataResponse.campoC,
       campoD: dataResponse.campoD,
       codigoAsfi: dataResponse.codigoAsfi,
       tablaLista: nivel1,
       nivel2_id: (dataResponse.nivel2_id !== null) ? nivel2 : null,
-      nivel3_id: (dataResponse.nivel3_id !== null) ? nivel3 : null
+      nivel3_id: (dataResponse.nivel3_id !== null) ? nivel3 : null,
+
+      descripcion: descripcionAux,
+      campoC: campoCAux
     }
     //console.log('MATCHEDEDED: ', valores)
     setformValueToEdit(valores);
@@ -168,7 +174,7 @@ const AdministracionEventoEditar = ({ match }) => {
 
   /* LISTA TABLA DESCRIPCION NIVEL 2 */
   const callApi2 = (idn2) => {
-    console.log('llego callapi2:: ', ' idn2: ', idn2);
+    //console.log('llego callapi2:: ', ' idn2: ', idn2);
     getTablaDescripcionEventoN1(idn2)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)

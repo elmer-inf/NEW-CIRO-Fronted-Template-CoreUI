@@ -16,22 +16,22 @@ var _ = require('lodash');
 const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdit }) => {
 
   const formik = Yup.object().shape({
-      nroPlanes: Yup.string().nullable(),
-      planesAccion: Yup.array().of(
-        Yup.object().shape({
-          nroPlan: Yup.number().nullable(),
-          estrategia: Yup.string().nullable(),
-          descripcion: Yup.string().nullable(),
-          cargo: Yup.mixed().nullable(),
-          fechaAccion: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
-          fechaImpl: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
-          estado: Yup.mixed().nullable(),
+    nroPlanes: Yup.string().nullable(),
+    planesAccion: Yup.array().of(
+      Yup.object().shape({
+        nroPlan: Yup.number().nullable(),
+        estrategia: Yup.string().nullable(),
+        descripcion: Yup.string().nullable(),
+        cargo: Yup.mixed().nullable(),
+        fechaAccion: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
+        fechaImpl: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
+        estado: Yup.mixed().nullable(),
 
-          fechaSeg: Yup.date().nullable(),
-          comenPropuesta: Yup.string().nullable(),
-          comenEnProceso: Yup.string().nullable(),
-        })
-      )
+        fechaSeg: Yup.date().nullable(),
+        comenPropuesta: Yup.string().nullable(),
+        comenEnProceso: Yup.string().nullable(),
+      })
+    )
   });
 
   function onChangePlanes(e, field, values, setValues) {
@@ -41,7 +41,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
     const previousNumber = parseInt(field.value || '0');
     if (previousNumber < nroPlanes) {
       for (let i = previousNumber; i < nroPlanes; i++) {
-        planesAccion.push({ nroPlan: i+1, estrategia: '', descripcion: '', cargo: '', fechaAccion: '', fechaImpl: '', estado: '', fechaSeg: '', comenPropuesta: '',comenEnProceso: '' });
+        planesAccion.push({ nroPlan: i + 1, estrategia: '', descripcion: '', cargo: '', fechaAccion: '', fechaImpl: '', estado: '', fechaSeg: '', comenPropuesta: '', comenEnProceso: '' });
       }
     } else {
       for (let i = previousNumber; i >= nroPlanes; i--) {
@@ -58,9 +58,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
     const data = {
       ...values,
     }
-    // display form field values on success
-    //alert(JSON.stringify(_.omit(data, ['nroPlanes']), null, 10));
-    console.log('datos que se enviaran SECCION 5:', _.omit(data, ['nroPlanes']))
+    //console.log('datos que se enviaran SECCION 5:', _.omit(data, ['nroPlanes']))
     setObject(_.omit(data, ['nroPlanes']));
     nextSection(5);
   }
@@ -78,17 +76,17 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
       })
   }
 
-   // Cargo
-   const [dataApiCargo, setDataApiCargo] = useState([])
-   const callApiCargo = (idTablaDes) => {
-     getTablaDescripcionEventoN1(idTablaDes)
-       .then(res => {
-         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
-         setDataApiCargo(options)
-       }).catch((error) => {
-         console.log('Error: ', error)
-       })
-   }
+  // Cargo
+  const [dataApiCargo, setDataApiCargo] = useState([])
+  const callApiCargo = (idTablaDes) => {
+    getTablaDescripcionEventoN1(idTablaDes)
+      .then(res => {
+        const options = buildSelectTwo(res.data, 'id', 'nombre', false)
+        setDataApiCargo(options)
+      }).catch((error) => {
+        console.log('Error: ', error)
+      })
+  }
 
   useEffect(() => {
     callApiCargo(7);
@@ -106,7 +104,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
     return deployOption;
   }
 
-   // Options Num de Planes
+  // Options Num de Planes
   /*  const optionsPlanes = [
     { value: 1, label: 1 },
     { value: 2, label: 2 },
@@ -124,29 +122,29 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
 
   const columns = [
     {
-        dataField: 'nroPlan',
-        text: 'Plan',
+      dataField: 'nroPlan',
+      text: 'Plan',
     }, {
-        dataField: 'estrategia',
-        text: 'Estrategia',
+      dataField: 'estrategia',
+      text: 'Estrategia',
     }, {
-        dataField: 'descripcion',
-        text: 'Descripción',
+      dataField: 'descripcion',
+      text: 'Descripción',
     }, {
-        dataField: 'cargo',
-        text: 'Cargo',
+      dataField: 'cargo',
+      text: 'Cargo',
     }, {
-        dataField: 'fechaAccion',
-        text: 'Fecha acción',
-        style: { whiteSpace: 'nowrap' },
+      dataField: 'fechaAccion',
+      text: 'Fecha acción',
+      style: { whiteSpace: 'nowrap' },
     }, {
-        dataField: 'fechaImpl',
-        text: 'Fecha implementación',
-        style: { whiteSpace: 'nowrap' },
-     }, {
-        dataField: 'estado',
-        text: 'Estado',
-        formatter: colorEstado,
+      dataField: 'fechaImpl',
+      text: 'Fecha implementación',
+      style: { whiteSpace: 'nowrap' },
+    }, {
+      dataField: 'estado',
+      text: 'Estado',
+      formatter: colorEstado,
     }
   ]
 
@@ -192,10 +190,24 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
     } */
   }
 
+  // Construye objeto para Select CARGO
+  const buildSelectCargo = (i) => {
+    var result = null;
+    try {
+      if (initValues.planesAccion[i] !== null && initValues.planesAccion[i] !== undefined) {
+        result = { value: initValues.planesAccion[i]['cargo'], label: initValues.planesAccion[i]['cargo'] };
+      }
+    } catch (error) {
+      console.error('Error en Funcion buildSelectCargo: ', error);
+      result = null;
+    }
+    return result;
+  }
+
 
   return (
     <Formik initialValues={initValues} validationSchema={formik} onSubmit={onSubmit}>
-      {({ errors, values, touched, setValues, setFieldValue}) => (
+      {({ errors, values, touched, setValues, setFieldValue }) => (
         <Form className='pt-2'>
           <div className='divider divider-left divider-primary'>
             <div className='divider-text'><span className='text-label text-primary'>Planes de Acción</span></div>
@@ -220,7 +232,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
               </Row>
             </Col>
           </Row>
-          {/* {console.log('Valuesdss:', values.planesAccion) */}
+
           <FieldArray name="planesAccion">
             {() => (values.planesAccion.map((plan, i) => {
               const planErrors = (errors.planesAccion?.length && errors.planesAccion[i]) || {};
@@ -249,7 +261,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
                       <Field
                         name={`planesAccion.${i}.descripcion`}
                         as="textarea"
-                        rows="1"
+                        rows="2"
                         className={'form-control' + (planErrors.descripcion && planTouched.descripcion ? ' is-invalid' : '')}
                       />
                       <ErrorMessage name={`planesAccion.${i}.descripcion`} component="div" className="invalid-feedback" />
@@ -262,11 +274,12 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
                       <Select
                         placeholder="Seleccionar"
                         onChange={selectedOption => {
-                          setFieldValue(`planesAccion.${i}.cargo`, selectedOption.label , false)
+                          setFieldValue(`planesAccion.${i}.cargo`, selectedOption.label, false)
                         }}
                         options={dataApiCargo}
                         name={`planesAccion.${i}.cargo`}
                         styles={customStyles}
+                        defaultValue={buildSelectCargo(i)}
                         className={(planErrors.cargo && planTouched.cargo ? ' is-invalid' : '')}
                       />
                       <ErrorMessage name={`planesAccion.${i}.cargo`} component="div" className="invalid-feedback" />
@@ -316,7 +329,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
           <Row className='table-hover-animation mt-2'>
             <Col xs='12'>
               <BootstrapTable
-                classes= {'table-hover-animation mt-2'}
+                classes={'table-hover-animation mt-2'}
                 bootstrap4={true}
                 sort={{ dataField: 'nroPlan', order: 'asc' }}
                 noDataIndication={'No hay registros de Planes de acción'}
@@ -366,16 +379,16 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
             <Col xs='12' md='6' xl='6' className='pt-3'>
               <div className="progress-group mb-4">
                 <div className="progress-group-header">
-                  <Percent size={15} className='mb-1'/>
+                  <Percent size={15} className='mb-1' />
                   <span className="pl-3 text-label">Avance</span>
                   <span className="ml-auto font-weight-bold">
-                    {resultAvance(values.planesAccion)} <Percent size={15} className='mb-1'/>
+                    {resultAvance(values.planesAccion)} <Percent size={15} className='mb-1' />
                   </span>
                 </div>
                 <div className="progress-group-bars">
                   <CProgress
                     className="progress-sm"
-                    color={resultAvance(values.planesAccion) <= 32? 'danger' : resultAvance(values.planesAccion) <= 66? 'warning' : 'success'}
+                    color={resultAvance(values.planesAccion) <= 32 ? 'danger' : resultAvance(values.planesAccion) <= 66 ? 'warning' : 'success'}
                     value={resultAvance(values.planesAccion)}
                   />
                 </div>
@@ -385,28 +398,28 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
             <Col xs='12' md='6' xl='6' className='pt-3'>
               {countEstadoPlanes(values.planesAccion, 'Concluido') === 0 ?
                 <div>
-                  <CBadge className='badge-danger-light'><X size={30} className='text-danger'/></CBadge>
+                  <CBadge className='badge-danger-light'><X size={30} className='text-danger' /></CBadge>
                   <span className='text-label pl-4'>Estado</span>
                   <span className='text-danger text-label pl-5'>Sin progreso</span>
                 </div>
-              : null}
+                : null}
 
               {(countEstadoPlanes(values.planesAccion, 'Concluido') < values.planesAccion.length &&
                 countEstadoPlanes(values.planesAccion, 'Concluido') !== 0) ?
                 <div>
-                <CBadge className='badge-warning-light'><AlertCircle size={30} className='text-warning'/></CBadge>
-                <span className='text-label pl-4'>Estado</span>
-                <span className='text-warning text-label pl-5'>En Proceso</span>
+                  <CBadge className='badge-warning-light'><AlertCircle size={30} className='text-warning' /></CBadge>
+                  <span className='text-label pl-4'>Estado</span>
+                  <span className='text-warning text-label pl-5'>En Proceso</span>
                 </div>
-              : null}
+                : null}
 
-              {countEstadoPlanes(values.planesAccion, 'Concluido') === values.planesAccion.length && values.planesAccion.length !==0 ?
+              {countEstadoPlanes(values.planesAccion, 'Concluido') === values.planesAccion.length && values.planesAccion.length !== 0 ?
                 <div>
-                  <CBadge className='badge-success-light'><Check size={30} className='text-success'/></CBadge>
+                  <CBadge className='badge-success-light'><Check size={30} className='text-success' /></CBadge>
                   <span className='text-label pl-4'>Estado</span>
                   <span className='text-success text-label pl-5'>Concluido</span>
                 </div>
-              : null}
+                : null}
             </Col>
           </Row>
 
@@ -435,7 +448,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
                       <Field
                         name={`planesAccion.${i}.comenPropuesta`}
                         as="textarea"
-                        rows="1"
+                        rows="3"
                         className={'form-control' + (planErrors.comenPropuesta && planTouched.comenPropuesta ? ' is-invalid' : '')}
                       />
                       <ErrorMessage name={`planesAccion.${i}.comenPropuesta`} component="div" className="invalid-feedback" />
@@ -446,7 +459,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
                       <Field
                         name={`planesAccion.${i}.comenEnProceso`}
                         as="textarea"
-                        rows="1"
+                        rows="3"
                         className={'form-control' + (planErrors.comenEnProceso && planTouched.comenEnProceso ? ' is-invalid' : '')}
                       />
                       <ErrorMessage name={`planesAccion.${i}.comenEnProceso`} component="div" className="invalid-feedback" />
@@ -465,7 +478,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
               color="primary"
               onClick={() => beforeSection(5)}
             >
-              <ChevronLeft size={17} className='mr-1'/>
+              <ChevronLeft size={17} className='mr-1' />
               Atrás
             </Button>
             <Button
@@ -476,7 +489,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
             /* onClick={() => { formik.handleReset() }}
             disabled={(!formik.dirty || formik.isSubmitting)} */
             >
-              <Delete size={17} className='mr-2'/>
+              <Delete size={17} className='mr-2' />
               Limpiar
             </Button>
             <Button
@@ -484,10 +497,10 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
               className='text-white'
               color="primary"
               type="submit"
-              //disabled={formik.isSubmitting}
+            //disabled={formik.isSubmitting}
             >
               Siguiente
-              <ChevronRight size={17} className='ml-1'/>
+              <ChevronRight size={17} className='ml-1' />
             </Button>
           </div>
 

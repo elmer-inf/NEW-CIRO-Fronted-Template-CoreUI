@@ -5,12 +5,12 @@ import CategoriaNegocio from './seccion/CategoriaNegocio'
 import DatosIniciales from './seccion/DatosIniciales'
 import Planes from './seccion/Planes'
 import { FileText, Activity, DollarSign, BarChart2, ChevronRight, AlertTriangle, CheckSquare } from 'react-feather'
-import { Row, Col, Card, CardBody, CardHeader, CardTitle, TabContent, TabPane, NavLink, NavItem, Nav, FormGroup, Label, } from 'reactstrap';
+import { Row, Col, Card, CardBody, CardHeader, CardTitle, TabContent, TabPane, NavLink, NavItem, Nav, FormGroup, Label } from 'reactstrap';
 import CInputRadio from 'src/reusable/CInputRadio'
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames';
 import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
-import { postEventoRiesgo } from './controller/EventoController';
+import { postEventoRiesgoFormData } from './controller/EventoController';
 import { buildSelectTwo } from 'src/functions/Function'
 import { useFormik } from "formik"
 import * as Yup from "yup"
@@ -23,7 +23,7 @@ const EventoRiesgoRegistrar = () => {
 
   const history = useHistory();
   const [spin, setSpin] = useState(false);
-
+  const [getFiles, setGetFiles] = useState(null)
   // Tipo de evento
   const [dataApiTipoEvento, setDataApiTipoEvento] = useState([])
   const callApiTipoEvento = (idTablaDes) => {
@@ -34,6 +34,10 @@ const EventoRiesgoRegistrar = () => {
       }).catch((error) => {
         console.log('Error: ', error)
       })
+  }
+
+  const obtainFiles = (f) => {
+    setGetFiles(f)
   }
 
   useEffect(() => {
@@ -51,6 +55,43 @@ const EventoRiesgoRegistrar = () => {
       //tipoEvento: Yup.mixed().required('Tipo de Evento de riesgo obligatorio'),
     })
   })
+
+  // Estado de evento - SECCION 1
+  const optionsEstado = [
+    { value: 'Reportado', label: 'Reportado' },
+    { value: 'No reportado', label: 'No reportado' }
+  ]
+
+  // Estado de Planes de accion - SECCION 2
+  const optionEstadoPlanes = [
+    { value: 'No iniciado', label: 'No iniciado' },
+    { value: 'En proceso', label: 'En proceso' },
+    { value: 'Concluido', label: 'Concluido' }
+  ]
+
+  // Evento critico - SECCION 3
+  const optionsEventoCritico = [
+    { value: 'Crítico', label: 'Crítico' },
+    { value: 'No crítico', label: 'No crítico' }
+  ]
+
+  // Línea de negocio - SECCION 3
+  const optionsLineaAsfi = [
+    { value: '1. Línea de Negocio Emisor', label: '1. Línea de Negocio Emisor' },
+    { value: '2. Línea de Negocio Adquirente', label: '2. Línea de Negocio Adquirente' }
+  ]
+
+  // Proceso critico ASFI - SECCION 3
+  const optionProcesoAsfi = [
+    { value: 1, label: 1 },
+    { value: 2, label: 2 }
+  ]
+
+  // Cobertura seguro - SECCION 4
+  const optionsCobertura = [
+    { value: true, label: 'Si' },
+    { value: false, label: 'No' }
+  ]
 
   const formValueInitialDatos = {
     estadoRegistro: '',
@@ -73,7 +114,9 @@ const EventoRiesgoRegistrar = () => {
     fuenteInfId: null,
     canalAsfiId: null,
     descripcion: '',
-    descripcionCompleta: ''
+    descripcionCompleta: '',
+    files: null,
+    responsableElaborador: ''
   }
 
   const formValueInitialPlanes = {
@@ -109,6 +152,8 @@ const EventoRiesgoRegistrar = () => {
     riesgoRelacionado: '',
     detalleEstado: '',
 
+    procesoCriticoAsfi: 2,
+
     listMatrizRiesgo: null
   }
 
@@ -119,11 +164,13 @@ const EventoRiesgoRegistrar = () => {
     gastoAsociado: '',
     montoRecuperado: '',
     impactoId: null,
-    coberturaSeguro: '',
+    coberturaSeguro: false,
     polizaSeguroId: null,
     montoRecuperadoSeguro: '',
     recuperacionActivoId: null,
     perdidaMercado: '',
+    cuentaContableId: null,
+    fechaContable: ''
   }
 
   const formValueInitialRiesgos = {
@@ -149,7 +196,6 @@ const EventoRiesgoRegistrar = () => {
 
   const [requestData, setRequestData] = useState(dataResult);
   const [activeTab, setActiveTap] = useState('1');
-  //const [spin, setSpin] = useState(false);
 
   /* manejo de botones siguiente */
   const nextSection = (tab) => {
@@ -178,7 +224,7 @@ const EventoRiesgoRegistrar = () => {
   }
 
   const setObject = (result) => {
-    console.log("result: ", result)
+    //console.log("result: ", result)
     const values = {
       ...requestData,
       ...result
@@ -242,10 +288,27 @@ const EventoRiesgoRegistrar = () => {
         tipoEvento: formik.values.tipoEvento
       }
     }
+    //console.log('Lo que se enviara en el request: ', request)
+    // console.log('JSON.stringify(request) ', JSON.stringify(request))
+    var formData = new FormData();
 
-    console.log('Lo que se enviara en el request: ', request)
+    formData.append('eventoRiesgoPostDTO', JSON.stringify(_.omit(request, ['files'])));
+    //formData.append('file', getFiles);
+    if (getFiles !== null) {
+      for (let i = 0; i < getFiles.length; i++) {
+        formData.append("file", getFiles[i]);
+      }
+    } else {
+      formData.append("file", new Blob([]));
+    }
 
-    postEventoRiesgo(request)
+    /*for (var value of formData.values()) {
+       console.log('===========================================')
+       console.log('--> ', value);
+       console.log('===========================================')
+     }*/
+
+    postEventoRiesgoFormData(formData)
       .then(res => {
         if (res.status >= 200 && res.status < 300) {
           console.log('Envio el request: ', res);
@@ -259,6 +322,22 @@ const EventoRiesgoRegistrar = () => {
         console.log('Error al registrar Evento de Riesgo: ', error);
         notificationToast('error', 'Algo salió mal, intente nuevamente');
       });
+
+
+    /*  postEventoRiesgo(request)
+        .then(res => {
+          if (res.status >= 200 && res.status < 300) {
+            console.log('Envio el request: ', res);
+            notificationToast('success', 'Evento de Riesgo registrado exitósamente');
+            //history.push("/eventoRiesgo/listar")
+          } else {
+            console.log('Hubo un  error ', res);
+            notificationToast('error', 'Algo salió mal, intente nuevamente');
+          }
+        }).catch((error) => {
+          console.log('Error al registrar Evento de Riesgo: ', error);
+          notificationToast('error', 'Algo salió mal, intente nuevamente');
+        });*/
   }
 
   return (
@@ -343,6 +422,9 @@ const EventoRiesgoRegistrar = () => {
                       nextSection={nextSection}
                       setObject={setObject}
                       initValues={formValueInitialDatos}
+                      obtainFiles={obtainFiles}
+                      optionsEstado={optionsEstado}
+                      isEdit={false}
                     />
                   </TabPane>
 
@@ -352,6 +434,8 @@ const EventoRiesgoRegistrar = () => {
                       beforeSection={beforeSection}
                       setObject={setObject}
                       initValues={formValueInitialPlanes}
+                      optionsPlanes={optionEstadoPlanes}
+                      isEdit={false}
                     />
                   </TabPane>
 
@@ -363,6 +447,10 @@ const EventoRiesgoRegistrar = () => {
                       initValues={formValueInitialCategoria}
                       tipoEvento={formik.values.tipoEvento}
                       fechaDesc={requestData.fechaDesc}
+                      optionsCritico={optionsEventoCritico}
+                      optionsAsfi={optionsLineaAsfi}
+                      optionProcesoAsfi={optionProcesoAsfi}
+                      isEdit={false}
                     />
                   </TabPane>
 
@@ -372,6 +460,8 @@ const EventoRiesgoRegistrar = () => {
                       beforeSection={beforeSection}
                       setObject={setObject}
                       initValues={formValueInitialImportes}
+                      optionsCobertura={optionsCobertura}
+                      isEdit={false}
                     />
                   </TabPane>
 

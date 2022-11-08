@@ -7,21 +7,30 @@ import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import ActionFormatter from 'src/reusable/ActionFormatter';
 import Select from 'react-select'
 import { useHistory } from 'react-router-dom'
-import { getTablaDescripcionEventoN1, getTablaListaEvento } from './controller/AdminEventoController'
+import { getTablaDescripcionEventoN1, getTablaListaEvento, deleteTablaDescripcionEventoId } from './controller/AdminEventoController'
 import { buildSelectTwo, hasPermission } from 'src/functions/Function'
 import { Plus } from 'react-feather';
 import { PathContext } from 'src/containers/TheLayout';
 import { ToastContainer, toast } from 'react-toastify';
 import { Messages } from 'src/reusable/variables/Messages';
+import Swal from 'sweetalert2'
 
 const AdministracionEventoListar = () => {
+
+  // Configuracion sweetalert2
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: 'btn btn-primary px-4',
+      cancelButton: 'btn btn-outline-primary px-4 mr-4',
+    },
+    buttonsStyling: false
+  })
 
   //useContext
   const valuePathFromContext = React.useContext(PathContext);
 
   const redirect = (e) => {
     e.preventDefault();
-
     const path = '/administracion/evento-riesgo/Registrar';
     if (hasPermission(path, valuePathFromContext)) {
       history.push(path);
@@ -42,7 +51,8 @@ const AdministracionEventoListar = () => {
     });
   }
 
-  const [labelTabla, setLabelTabla] = useState([])
+  const [labelTabla, setLabelTabla] = useState([]);
+  const [valueTabla, setValueTabla] = useState([]);
 
   const pagination = paginationFactory({
     page: 2,
@@ -53,7 +63,7 @@ const AdministracionEventoListar = () => {
       dataField: 'id',
       text: 'ID',
       sort: false,
-      hidden: true
+      hidden: false
     }, {
       dataField: 'clave',
       text: (labelTabla === 'Área' || labelTabla === 'Unidad' || labelTabla === 'Macroproceso') ?
@@ -93,7 +103,7 @@ const AdministracionEventoListar = () => {
           labelTabla === 'Liquidez' ||
           labelTabla === 'Operativo' ||
           labelTabla === 'Seguridad de la información') ?
-          'DESCRIPTIVO' : (labelTabla === 'Recuperación activo') ?
+          'DESCRIPTIVO' : (labelTabla === 'Recuperación activo' || labelTabla === 'Cuenta contable') ?
             'DESCRIPCION' : 'NOMBRE',
       sort: true,
       hidden: (labelTabla.length !== 0) ? false : true,
@@ -116,13 +126,13 @@ const AdministracionEventoListar = () => {
               'IMPACTO REGULATORIO' : (labelTabla === 'Cumplimiento') ?
                 "IMPACTO DE CUMPLIMIENTO" : (labelTabla === 'Gobierno') ?
                   'NIVEL DE GOB #' : (labelTabla === 'Fraude') ?
-                    'Imp reportado ($)' : '',
+                    'Imp reportado ($)' : (labelTabla === 'Responsable') ? 'CARGO' : '',
       sort: true,
       hidden: (labelTabla === 'Categoria de tipo de Evento' || labelTabla === 'Efecto de pérdida' || labelTabla === 'Impacto' ||
         labelTabla === 'Reputacional' || labelTabla === 'Estratégico' || labelTabla === 'Operativo' ||
         labelTabla === 'Seguridad de la información' || labelTabla === 'Macroproceso' || labelTabla === 'Proceso' ||
         labelTabla === 'Legal' || labelTabla === 'Liquidez' || labelTabla === 'Cumplimiento' ||
-        labelTabla === 'Gobierno' || labelTabla === 'Fraude') ? false : true,
+        labelTabla === 'Gobierno' || labelTabla === 'Fraude' || labelTabla === 'Responsable') ? false : true,
       filter: textFilter({
         placeholder: 'Buscar'
       }),
@@ -135,10 +145,11 @@ const AdministracionEventoListar = () => {
             'NIVEL DE GOB' : (labelTabla === 'Fraude') ?
               'Fraude a ventas ($)' : (labelTabla === 'Liquidez') ?
                 'LIQUIDEZ' : (labelTabla === 'Seguridad de la información') ?
-                  'PLAZO HASTA' : '',
+                  'PLAZO HASTA' : (labelTabla === 'Responsable') ? 'DESCRIPCION' : '',
       sort: true,
       hidden: (labelTabla === 'Macroproceso' || labelTabla === 'Proceso' || labelTabla === 'Gobierno' ||
-        labelTabla === 'Fraude' || labelTabla === 'Liquidez' || labelTabla === 'Seguridad de la información') ? false : true,
+        labelTabla === 'Fraude' || labelTabla === 'Liquidez' || labelTabla === 'Seguridad de la información' ||
+        labelTabla === 'Responsable') ? false : true,
       filter: textFilter({
         placeholder: 'Buscar'
       }),
@@ -149,19 +160,19 @@ const AdministracionEventoListar = () => {
         'GERENCIA' : (labelTabla === 'Gobierno') ?
           'PUNTUACION AUTOEVAL' : (labelTabla === 'Fraude') ?
             'Imp reportado 2 ($)' : (labelTabla === 'Liquidez') ?
-              "CAPITAL DE TRABAJO" : '',
+              "CAPITAL DE TRABAJO" : (labelTabla === 'Responsable') ? 'USUARIO' : '',
       sort: true,
       hidden: (labelTabla === 'Proceso' || labelTabla === 'Gobierno' ||
-        labelTabla === 'Fraude' || labelTabla === 'Liquidez') ? false : true,
+        labelTabla === 'Fraude' || labelTabla === 'Liquidez' || labelTabla === 'Responsable') ? false : true,
       filter: textFilter({
         placeholder: 'Buscar'
       }),
       headerFormatter: typeFormatter,
     }, {
       dataField: 'campoC',
-      text: (labelTabla === 'Fraude') ? "IMPACTO - SEVERIDAD" : '',
+      text: (labelTabla === 'Fraude') ? "IMPACTO - SEVERIDAD" : (labelTabla === 'Responsable') ? 'TIPO' : '',
       sort: true,
-      hidden: (labelTabla === 'Fraude') ? false : true,
+      hidden: (labelTabla === 'Fraude' || labelTabla === 'Responsable') ? false : true,
       filter: textFilter({
         placeholder: 'Buscar'
       }),
@@ -186,12 +197,14 @@ const AdministracionEventoListar = () => {
         labelTabla === 'Línea de negocio ASFI' ||
         labelTabla === 'Operaciones ASFI' ||
         labelTabla === 'Moneda' ||
-        labelTabla === 'Recuperación activo') ? "COD ASFI" : '',
+        labelTabla === 'Recuperación activo' ||
+        labelTabla === 'Cuenta contable' || 
+        labelTabla === 'Macroproceso') ? "COD ASFI" : '',
       sort: true,
       hidden: (labelTabla === 'Ciudad' || labelTabla === 'Tipo de evento' || labelTabla === 'Canal ASFI' ||
         labelTabla === 'Clase Evento - Basilea' || labelTabla === 'Factor de riesgo' || labelTabla === 'Proceso' ||
         labelTabla === 'Línea de negocio ASFI' || labelTabla === 'Operaciones ASFI' || labelTabla === 'Moneda' ||
-        labelTabla === 'Recuperación activo') ? false : true,
+        labelTabla === 'Recuperación activo' || labelTabla === 'Cuenta contable' || labelTabla === 'Macroproceso') ? false : true,
       filter: textFilter({
         placeholder: 'Buscar'
       }),
@@ -217,19 +230,58 @@ const AdministracionEventoListar = () => {
   ]
 
   const actionFormatter = (cell, row) => {
-    return <ActionFormatter cell={cell} row={row} detailFunction={detailsRow} editFunction={editRow} />
+    return <ActionFormatter cell={cell} row={row} deleteFunction={deleteRow} editFunction={editRow} />
   }
 
-  const detailsRow = (row) => {
-    console.log(row)
-    //loseModal();
-    //return <DetailRestForm row={row} mod={true}/>
+  // Eliminar Parametro
+  const deleteRow = (row) => {
+    swalWithBootstrapButtons.fire({
+      title: '',
+      text: '¿Está seguro de eliminar el Parámetro de Evento de Riesgo?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si',
+      cancelButtonText: 'No',
+      reverseButtons: true,
+      position: 'top'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteTablaDescripcionEventoId(row.id)
+          .then(res => {
+            swalWithBootstrapButtons.fire({
+              title: '',
+              text: 'Operación realizada exitósamente',
+              icon: 'success',
+              confirmButtonText: 'Aceptar',
+              position: 'top',
+            }).then(okay => {
+              if (okay) {
+                getTablaDescripcion(valueTabla);
+              }
+            })
+          }).catch((error) => {
+            console.log('Error al eliminar Parámetro de Evento de Riesgo: ', error);
+          });
+      } else if (
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        swalWithBootstrapButtons.fire({
+          title: '',
+          text: 'Operación cancelada',
+          icon: 'error',
+          confirmButtonText: 'Aceptar',
+          position: 'top'
+        })
+      }
+    })
   }
+
+  // Editar Parametro
   const editRow = (row) => {
-    //history.push('/administracion/evento-riesgo/Editar/' + row.id);
-    const path = '/administracion/evento-riesgo/Editar/:id' + row.id;
+    // history.push('/administracion/evento-riesgo/Editar/' + row.id);
+    const path = '/administracion/evento-riesgo/Editar/:id';
     if (hasPermission(path, valuePathFromContext)) {
-      history.push(path);
+      history.push('/administracion/evento-riesgo/Editar/' + row.id);
     } else {
       notificationToast();
     }
@@ -254,27 +306,26 @@ const AdministracionEventoListar = () => {
   }
 
   useEffect(() => {
-    callApi()
+    callApi();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
 
   /* LISTA TABLA DESCRIPCION despendiento de seleccion tabla lista*/
   const handleSelectOnChange = (result) => {
-    console.log('select:  ', result)
-    const labelTable = result.label
-    setLabelTabla(labelTable)
+    const labelTable = result.label;
+    setLabelTabla(labelTable);
+    const valueTable = result.value;
+    setValueTabla(valueTable);
     getTablaDescripcion(result.value);
   }
 
   const getTablaDescripcion = (idTabla) => {
-
     getTablaDescripcionEventoN1(idTabla)
       .then(res => {
-        console.log('nivel 1: ', res.data)
+        //console.log('nivel 1: ', res.data)
         setDAtaApi(res.data)
       }).catch((error) => {
         console.log('Error: ', error)
-        //notificationToast('error', Messages.notification.notOk)
       })
   }
 
@@ -309,7 +360,7 @@ const AdministracionEventoListar = () => {
         <Card>
           <CardHeader>
             <CardTitle className='float-left h4 pt-2'>Listado de Parámetros de Eventos de Riesgo</CardTitle>
-            <Button color='primary' onClick={(e) => {redirect(e)}} className='float-right mt-1 text-white' style={{ width: '130px' }}>
+            <Button color='primary' onClick={(e) => { redirect(e) }} className='float-right mt-1 text-white' style={{ width: '130px' }}>
               <Plus size={15} className='mr-2' /><span>Registrar</span>
             </Button>
           </CardHeader>
@@ -353,7 +404,7 @@ const AdministracionEventoListar = () => {
               hover={false}
               condensed={false}
               wrapperClasses="table-responsive"
-              pagination={ pagination }
+              pagination={pagination}
               filter={filterFactory()}
             />
           </CardBody>

@@ -1,11 +1,11 @@
-import { React, Fragment, useState, useEffect} from 'react'
+import { React, Fragment, useState, useEffect } from 'react'
 import { ChevronLeft, Save, Delete } from 'react-feather'
 import { Label, FormGroup, Row, Col, Form, Button } from 'reactstrap'
 import { useFormik } from "formik"
 import * as Yup from "yup"
 import { CSelectReact } from 'src/reusable/CSelectReact'
-import { getTablaDescripcionEventoN1} from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
-import { buildSelectTwo } from 'src/functions/Function'
+import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
+import { buildSelectThree } from 'src/functions/Function'
 
 var _ = require('lodash');
 
@@ -28,22 +28,21 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
     ),
 
     onSubmit: values => {
-      console.log('entra');
       const data = {
-       ...values,
-        operativoId:    (values.operativoId !== null) ?     values.operativoId.value : 0,
-        liquidezId:     (values.liquidezId !== null) ?      values.liquidezId.value : 0,
-        fraudeId:       (values.fraudeId !== null) ?        values.fraudeId.value : 0,
-        legalId:        (values.legalId !== null) ?         values.legalId.value : 0,
-        reputacionalId: (values.reputacionalId !== null) ?  values.reputacionalId.value : 0,
-        cumplimientoId: (values.cumplimientoId !== null) ?  values.cumplimientoId.value : 0,
-        estrategicoId:  (values.estrategicoId !== null) ?   values.estrategicoId.value : 0,
-        gobiernoId:     (values.gobiernoId !== null) ?      values.gobiernoId.value : 0,
-        seguridadId:    (values.seguridadId !== null) ?     values.seguridadId.value : 0
-     }
-     console.log('datos que se enviaran SECCION 5:', data)
-     handleOnSubmmit(data)
-   }
+        ...values,
+        operativoId: (values.operativoId !== null) ? values.operativoId.value : 0,
+        liquidezId: (values.liquidezId !== null) ? values.liquidezId.value : 0,
+        fraudeId: (values.fraudeId !== null) ? values.fraudeId.value : 0,
+        legalId: (values.legalId !== null) ? values.legalId.value : 0,
+        reputacionalId: (values.reputacionalId !== null) ? values.reputacionalId.value : 0,
+        cumplimientoId: (values.cumplimientoId !== null) ? values.cumplimientoId.value : 0,
+        estrategicoId: (values.estrategicoId !== null) ? values.estrategicoId.value : 0,
+        gobiernoId: (values.gobiernoId !== null) ? values.gobiernoId.value : 0,
+        seguridadId: (values.seguridadId !== null) ? values.seguridadId.value : 0
+      }
+      //console.log('datos que se enviaran SECCION 5:', data)
+      handleOnSubmmit(data)
+    }
   })
 
   /*   P  A  R  A  M  E  T  R  O  S   */
@@ -53,8 +52,8 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
   const callApiReputacional = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'clave', false)
-        setDataApiReputacional(_.orderBy(options, ['value' ], ['desc']))
+        const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
+        setDataApiReputacional(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -65,8 +64,8 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
   const callApiLegal = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'clave', false)
-        setDataApiLegal(_.orderBy(options, ['value' ], ['desc']))
+        const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
+        setDataApiLegal(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -77,8 +76,8 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
   const callApiCumplimiento = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'clave', false)
-        setDataApiCumplimiento(_.orderBy(options, ['value' ], ['desc']))
+        const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
+        setDataApiCumplimiento(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -89,8 +88,8 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
   const callApiEstrategico = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'clave', false)
-        setDataApiEstrategico(_.orderBy(options, ['value' ], ['desc']))
+        const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
+        setDataApiEstrategico(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -101,8 +100,8 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
   const callApiGobierno = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'clave', false)
-        setDataApiGobierno(_.orderBy(options, ['value' ], ['desc']))
+        const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
+        setDataApiGobierno(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -113,8 +112,8 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
   const callApiFraude = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'clave', false)
-        setDataApiFraude(_.orderBy(options, ['value' ], ['desc']))
+        const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
+        setDataApiFraude(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -125,8 +124,8 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
   const callApiLiquidez = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'clave', false)
-        setDataApiLiquidez(_.orderBy(options, ['value' ], ['desc']))
+        const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
+        setDataApiLiquidez(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -137,8 +136,8 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
   const callApiOperativo = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'clave', false)
-        setDataApiOperativo(_.orderBy(options, ['value' ], ['desc']))
+        const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
+        setDataApiOperativo(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -149,8 +148,8 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
   const callApiSeguridad = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'clave', false)
-        setDataApiSeguridad(_.orderBy(options, ['value' ], ['desc']))
+        const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
+        setDataApiSeguridad(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
         console.log('Error: ', error)
       })
@@ -331,32 +330,32 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
 
         <div className='d-flex justify-content-between pt-4'>
           <Button
-            style={{width: '130px'}}
+            style={{ width: '130px' }}
             className='text-white'
             color="primary"
-            onClick={() => (tipoEvento ==='A')? beforeSection(5) : beforeSection(4) }
+            onClick={() => (tipoEvento === 'A') ? beforeSection(5) : beforeSection(4)}
           >
-            <ChevronLeft size={17} className='mr-1'/>
+            <ChevronLeft size={17} className='mr-1' />
             Atrás
           </Button>
           <Button
-            style={{width: '130px'}}
+            style={{ width: '130px' }}
             color="dark"
             outline
             onClick={() => { formik.handleReset()/* ; this.reset() */ }}
             disabled={(!formik.dirty || formik.isSubmitting)}
           >
-            <Delete size={17} className='mr-2'/>
+            <Delete size={17} className='mr-2' />
             Limpiar
           </Button>
           <Button
-            style={{width: '130px'}}
+            style={{ width: '130px' }}
             className='text-white'
             color="primary"
             type="submit"
-            //disabled={formik.isSubmitting}
+          //disabled={formik.isSubmitting}
           >
-            <Save size={17} className='mr-2'/>
+            <Save size={17} className='mr-2' />
             GUARDAR
           </Button>
         </div>
