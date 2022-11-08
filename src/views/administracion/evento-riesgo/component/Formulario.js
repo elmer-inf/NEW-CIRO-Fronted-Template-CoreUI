@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from 'react'
-import { useFormik } from "formik"
-import * as Yup from "yup"
-import { CInputReact } from 'src/reusable/CInputReact'
-import { FormGroup, Col, Form, Button, Label, Row } from 'reactstrap'
+import React, { useState, useEffect } from 'react';
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { CInputReact } from 'src/reusable/CInputReact';
+import { FormGroup, Col, Form, Button, Label, Row } from 'reactstrap';
 import { getTablaDescripcionEventoN1 } from '../controller/AdminEventoController';
-import { buildSelectTwo } from 'src/functions/Function'
-import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
-import { CSelectReact } from 'src/reusable/CSelectReact'
-
-/* var _ = require('lodash'); */
+import { buildSelectTwo } from 'src/functions/Function';
+import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo';
+import { CSelectReact } from 'src/reusable/CSelectReact';
 
 /**
  * @param handleOnSubmit : function
@@ -17,8 +15,6 @@ import { CSelectReact } from 'src/reusable/CSelectReact'
  */
 
 const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelect }) => {
-
-  //console.log('opt:: ', optionToSelect);
 
   const [varListN2, setVarListN2] = useState(optionToSelect.tabla_n2);
   const [varListN3, setVarListN3] = useState(optionToSelect.tabla_n3);
@@ -30,14 +26,10 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
         tablaLista: Yup.mixed().required('Campo obligatorio'),
         clave: Yup.string().min(1).nullable(),
         nombre: Yup.string().min(1).required('Campo obligatorio'),
-
         descripcion: Yup.mixed().nullable(),
-
         campoA: Yup.string().min(1).nullable(),
         campoB: Yup.string().min(1).nullable(),
-
         campoC: Yup.mixed().nullable(),
-
         campoD: Yup.string().min(1).nullable(),
         codigoAsfi: Yup.string().min(1).nullable(),
         nivel2_id: Yup.mixed(),
@@ -50,39 +42,32 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
         tablaLista: values.tablaLista.value,
         nivel2_id: (values.nivel2_id !== null) ? values.nivel2_id.value : 0,
         nivel3_id: (values.nivel3_id !== null) ? values.nivel3_id.value : 0,
-
         descripcion: (values.tablaLista.label === 'Responsable') ? values.descripcion.value : values.descripcion,
         campoC: (values.tablaLista.label === 'Responsable') ? values.campoC.value : values.campoC,
       }
-      console.log('datos que se enviaran:', values)
-      console.log('datos que se data:', data)
       handleOnSubmit(data)
     }
   })
 
   /* LISTA TABLA DESCRIPCION NIVEL 2 */
-  //const [dataApi2, setDataApi] = useState([])
   const callApi2 = (idn2) => {
-    //console.log('llego callapi2:: ', ' idn2: ', idn2);
     getTablaDescripcionEventoN1(idn2)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
-        //console.log('options : ', options)
         setVarListN2(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
   /* LISTA TABLA DESCRIPCION NIVEL 3 */
-  //const [dataApi3, setDataApi3] = useState([])
   const callApi3 = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setVarListN3(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -106,7 +91,6 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
   }
 
   const getSelectValueLevel2 = (value) => {
-    console.log('getSelectValue : ', value);
     if (value.nivel2 !== null && value.nivel2 !== 0) {
       const idnivel2 = value.nivel2;
       callApi2(idnivel2);
@@ -118,16 +102,13 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
   }
 
   const inputIsClearableLevel2 = (id) => {
-    console.log('inputIsClearable aaa: ', id);
+    //console.log('inputIsClearable aaa: ', id);
     //formik.setFieldValue(id, null, false);
     //clearAllDependences();
   }
-  //console.log('varListN2: ', varListN2);
-  //console.log('varListN3: ', varListN3);
 
   //Life Cycle
   useEffect(() => {
-    //console.log('optxxxx:: ', optionToSelect);
     if (isEdit) {
       setVarListN2(optionToSelect.tabla_n2)
       setVarListN3(optionToSelect.tabla_n3)
@@ -143,17 +124,6 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
     { value: 'Analista de Riesgos', label: 'Analista de Riesgos' },
     { value: 'Asistente de Riesgos', label: 'Asistente de Riesgos' },
   ]
-  /* const [dataApiCargo, setDataApiCargo] = useState([])
-  const callApiCargo = (idTablaDes) => {
-    getTablaDescripcionEventoN1(idTablaDes)
-      .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
-        setDataApiCargo(options)
-        //setDataApiCargo(_.filter(options, ['nombre', 'Riesgos']));
-      }).catch((error) => {
-        console.log('Error: ', error)
-      })
-  } */
 
   // Opciones Select Tipo de Responsable
   const optionsTipoRes = [
@@ -161,12 +131,7 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
     { value: 'Revisor', label: 'Revisor' },
     { value: 'Aprobador', label: 'Aprobador' }
   ]
-
-  /* useEffect(() => {
-    callApiCargo(7);
-  }, []) */
   // F I N   P A R A M E T R O S
-
 
   return (
     <Form onSubmit={formik.handleSubmit} autoComplete="off">
@@ -204,8 +169,8 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
             dependence={true}
             cleareableDependences={clearAllDependences}  //FUNCION PARA LIMPIA LOS VALORES FORMIK...
             getAddValue={true}
-            getSelectValue={getSelectValueLevel2} // AGGARA EL EL VALOR DEL SELECT VALUE
-            inputIsClearable={inputIsClearableLevel2} // AGGARA EL EL VALOR DEL SELECT VALUE
+            getSelectValue={getSelectValueLevel2} // AGGARA EL VALOR DEL SELECT VALUE
+            inputIsClearable={inputIsClearableLevel2} // AGGARA EL VALOR DEL SELECT VALUE
           />
         </Col>
       </FormGroup>

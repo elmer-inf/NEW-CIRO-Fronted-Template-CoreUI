@@ -62,14 +62,13 @@ const AdministracionSeguridadEditar = ({ match }) => {
     putTablaDescripcionSeguridad(idTabDesc, dataToRequest)
       .then(res => {
         if (res.status >= 200 && res.status < 300) {
-          console.log('Envio el request: ', res);
           notificationToast('success', 'Párametro de Seguridad modificado exitósamente');
         } else {
-          console.log('Hubo un  error ', res);
+          console.error('Hubo un  error ', res);
           notificationToast('error', 'Algo salió mal, intente nuevamente');
         }
       }).catch((error) => {
-        console.log('Error al modificar Párametro de Seguridad: ', error);
+        console.error('Error al modificar Párametro de Seguridad: ', error);
         notificationToast('error', 'Algo salió mal, intente nuevamente');
       });
   }
@@ -80,7 +79,6 @@ const AdministracionSeguridadEditar = ({ match }) => {
       nombre: dataResponse.nombre,
       tablaId: nivel1,
     }
-    console.log('MATCHED: ', valores)
     setformValueToEdit(valores)
   }
 
@@ -93,7 +91,7 @@ const AdministracionSeguridadEditar = ({ match }) => {
         matched(res)
         setSpin(false)
       }).catch((error) => {
-        console.log("Error: ", error);
+        console.error("Error: ", error);
         setSpin(false);
       });
   }

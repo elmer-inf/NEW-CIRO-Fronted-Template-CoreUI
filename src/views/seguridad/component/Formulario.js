@@ -46,7 +46,6 @@ const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
         areaId: (values.areaId !== null) ? values.areaId.value : 0,
         red: (values.red !== null) ? values.red.value : null
       }
-      //console.log('datos que se enviaran:', data)
       handleOnSubmit(data)
     }
   })
@@ -60,7 +59,7 @@ const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiTipoActivo(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -72,7 +71,7 @@ const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiEstado(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -84,7 +83,7 @@ const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
         const options = buildSelectThree(res.data, 'id', 'campoA', 'campoB', false)
         setDataApiNivelRiesgo(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -96,7 +95,7 @@ const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
         const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
         setDataApiArea(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 

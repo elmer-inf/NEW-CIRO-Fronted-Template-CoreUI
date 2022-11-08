@@ -164,7 +164,7 @@ const AdministracionMatrizOportunidadListar = () => {
               }
             })
           }).catch((error) => {
-            console.log('Error al eliminar Parámetro de Matriz de Oportunidad: ', error);
+            console.error('Error al eliminar Parámetro de Matriz de Oportunidad: ', error);
           });
       } else if (
         result.dismiss === Swal.DismissReason.cancel
@@ -202,7 +202,7 @@ const AdministracionMatrizOportunidadListar = () => {
         const options = buildSelectTwo(res.data, 'id', 'nombreTabla', false)
         setTablaListaOptions(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
         //notificationToast('error', Messages.notification.notOk)
       })
   }
@@ -214,7 +214,6 @@ const AdministracionMatrizOportunidadListar = () => {
 
   /* LISTA TABLA DESCRIPCION despendiento de seleccion tabla lista*/
   const handleSelectOnChange = (result) => {
-    //console.log('select:  ', result)
     const labelTable = result.label
     setLabelTabla(labelTable)
     const valueTable = result.value;
@@ -225,10 +224,9 @@ const AdministracionMatrizOportunidadListar = () => {
   const getTablaDescripcion = (idTabla) => {
     getTablaDescripcionOportunidadN1(idTabla)
       .then(res => {
-        //console.log('nivel 1: ', res.data)
         setDAtaApi(res.data)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
         //notificationToast('error', Messages.notification.notOk)
       })
   }

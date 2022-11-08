@@ -150,7 +150,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiSubcat(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -162,7 +162,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiTipo(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -174,7 +174,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiSubevento(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -186,7 +186,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiClaseEvento(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -198,7 +198,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiFactorRiesgo(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -210,7 +210,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiProceso(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -222,7 +222,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         const options = buildSelectTwo(res.data, 'id', 'descripcion', true)
         setDataApiProcedimiento(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -234,7 +234,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiLineaAsfi(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -246,7 +246,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiOperacion(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -258,7 +258,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiEfectoPerdida(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -270,7 +270,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiOpeProSer(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -282,7 +282,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiTipoServicio(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -294,7 +294,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiServicioDesc(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -416,14 +416,12 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   const [listRiesgoRel, setListRiesgoRel] = useState([]);
 
   const callLListMatrizRiesgos = () => {
-    //console.log('llegoo: ');
     getRiesgos()
       .then(res => {
         const options = buildSelectThree(res.data, 'id', 'codigo', 'definicion', true)
-        //console.log('resssponseeee riesgo realcionado:: ', options);
         setListRiesgoRel(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 

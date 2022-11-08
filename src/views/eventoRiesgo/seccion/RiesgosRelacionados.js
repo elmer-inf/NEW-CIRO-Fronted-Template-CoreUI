@@ -55,7 +55,7 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
         const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
         setDataApiReputacional(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -67,7 +67,7 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
         const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
         setDataApiLegal(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -79,7 +79,7 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
         const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
         setDataApiCumplimiento(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -91,7 +91,7 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
         const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
         setDataApiEstrategico(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -103,7 +103,7 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
         const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
         setDataApiGobierno(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -115,7 +115,7 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
         const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
         setDataApiFraude(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -127,7 +127,7 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
         const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
         setDataApiLiquidez(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -139,7 +139,7 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
         const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
         setDataApiOperativo(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -151,7 +151,7 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
         const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
         setDataApiSeguridad(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 

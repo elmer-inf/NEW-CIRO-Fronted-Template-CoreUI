@@ -72,7 +72,7 @@ const TheLayout = () => {
         arrayComponent = faBox
       }
     } catch (error) {
-      console.log('Error getComponent: ', error)
+      console.error('Error getComponent: ', error)
     }
     return arrayComponent;
   }
@@ -92,7 +92,7 @@ const TheLayout = () => {
       }
 
     } catch (error) {
-      console.log('Error route: ', error)
+      console.error('Error route: ', error)
     }
     return toRoute;
   }
@@ -117,7 +117,7 @@ const TheLayout = () => {
         });
       }
     } catch (error) {
-      console.log('Error en match menuHijo: ', error)
+      console.error('Error en match menuHijo: ', error)
     }
     return childrenNavigation;
   }
@@ -146,7 +146,7 @@ const TheLayout = () => {
       });
 
     } catch (error) {
-      console.log('Error en match menu: ', error)
+      console.error('Error en match menu: ', error)
     }
     return newNavigation;
   }
@@ -167,7 +167,7 @@ const TheLayout = () => {
         }
         setSpin(false);
       }).catch((error) => {
-        console.log("Error al recibir el menu ", error);
+        console.error("Error al recibir el menu ", error);
         Auth.logout();
         history.push('/500')
         setSpin(false);
@@ -178,11 +178,11 @@ const TheLayout = () => {
     setSpin(true)
     await getMenuPath()
       .then((response) => {
-        console.log('getPathListByToken: ', response.data )
+        //console.log('getPathListByToken: ', response.data )
         setPathList(response.data);
         setSpin(false)
       }).catch((error) => {
-        console.log("Error: ", error);
+        console.error("Error: ", error);
         setSpin(false)
       });
   }

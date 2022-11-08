@@ -28,10 +28,9 @@ const EventoRiesgo = ({ match }) => {
   const getArchivos = (idEvento) => {
     getArchivosByEvento(idEvento)
       .then(res => {
-        //console.log('archivo: ', res.data);
         setDataArchivo(res.data)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -43,7 +42,7 @@ const EventoRiesgo = ({ match }) => {
       .then((response) => {
         setGeneraCodigo(response.data)
       }).catch((error) => {
-        console.log("Error: ", error);
+        console.error("Error: ", error);
       });
   }
 
@@ -56,7 +55,6 @@ const EventoRiesgo = ({ match }) => {
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log('Archivos id: ', dataArchivos);
   // Obtiene Evento de riesgo por el ID
   const [dataApi, setDataApi] = useState({})
 
@@ -65,10 +63,9 @@ const EventoRiesgo = ({ match }) => {
     await getEventoRiesgoId(idEvento)
       .then((response) => {
         const res = response.data;
-        console.log('Res : ', res);
         setDataApi(res)
       }).catch((error) => {
-        console.log("Error: ", error);
+        console.error("Error: ", error);
         //notificationToast('error', Messages.notification.notOk)
       });
   }
@@ -81,10 +78,9 @@ const EventoRiesgo = ({ match }) => {
     await getUltimaObservacion(idEvento)
       .then((response) => {
         const res = response.data;
-        console.log('Datos ultima observacion : ', res);
         setDataUltimaObs(res)
       }).catch((error) => {
-        console.log("Error: ", error);
+        console.error("Error: ", error);
       });
   }
 
@@ -138,7 +134,7 @@ const EventoRiesgo = ({ match }) => {
               }
             })
           }).catch((error) => {
-            console.log('Error al obtener datos: ', error);
+            console.error('Error al obtener datos: ', error);
           });
       } else if (
         result.dismiss === Swal.DismissReason.cancel

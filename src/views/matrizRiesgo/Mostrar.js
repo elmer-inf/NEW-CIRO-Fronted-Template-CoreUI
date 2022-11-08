@@ -31,7 +31,7 @@ const MatrizRiesgo = ({ match }) => {
       .then((response) => {
         setGeneraCodigo(response.data)
       }).catch((error) => {
-        console.log("Error: ", error);
+        console.error("Error: ", error);
       });
   }
 
@@ -151,10 +151,9 @@ const MatrizRiesgo = ({ match }) => {
     await getRiesgoId(idRiesgo)
       .then((response) => {
         const res = response.data;
-        //console.log('Res : ', res);
         setDataApi(res)
       }).catch((error) => {
-        console.log("Error: ", error);
+        console.error("Error: ", error);
       });
   }
 
@@ -167,7 +166,7 @@ const MatrizRiesgo = ({ match }) => {
         const options = buildSelectTwo(res.data, 'id', 'campoD', true)
         setDataApiRiesgoI(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -179,7 +178,7 @@ const MatrizRiesgo = ({ match }) => {
         const options = buildSelectTwo(res.data, 'id', 'campoD', true)
         setDataApiProbabilidad(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -191,7 +190,7 @@ const MatrizRiesgo = ({ match }) => {
         const options = buildSelectTwo(res.data, 'id', 'campoD', true)
         setDataApiImpacto(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -208,7 +207,6 @@ const MatrizRiesgo = ({ match }) => {
       probabilidadR = dataApi.probabilidadId !== null ? reduceProbabilidadImpacto(dataApi.probabilidadId.campoA, disminucion) : 'Sin registro';
     else
       probabilidadR = dataApi.probabilidadId !== null ? dataApi.probabilidadId.campoA : 'Sin registro';
-    //console.log('probabilidadR: ', probabilidadR);
     return probabilidadR;
   }
 
@@ -297,10 +295,9 @@ const MatrizRiesgo = ({ match }) => {
     await getUltimaObservacion(idRiesgo)
       .then((response) => {
         const res = response.data;
-        //console.log('Datos ultima observacion : ', res);
         setDataUltimaObs(res)
       }).catch((error) => {
-        console.log("Error: ", error);
+        console.error("Error: ", error);
         //notificationToast('error', Messages.notification.notOk)
       });
   }
@@ -358,7 +355,7 @@ const MatrizRiesgo = ({ match }) => {
               }
             })
           }).catch((error) => {
-            console.log('Error al obtener datos: ', error);
+            console.error('Error al obtener datos: ', error);
           });
 
       } else if (

@@ -109,7 +109,7 @@ const AdministracionSeguridadListar = () => {
               }
             })
           }).catch((error) => {
-            console.log('Error al eliminar Parámetro de Seguridad: ', error);
+            console.error('Error al eliminar Parámetro de Seguridad: ', error);
           });
       } else if (
         result.dismiss === Swal.DismissReason.cancel
@@ -148,7 +148,7 @@ const AdministracionSeguridadListar = () => {
         const options = buildSelectTwo(res.data, 'id', 'nombreTabla', false)
         setTablaListaOptions(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
         //notificationToast('error', Messages.notification.notOk)
       })
   }
@@ -160,7 +160,6 @@ const AdministracionSeguridadListar = () => {
 
   /* LISTA TABLA DESCRIPCION despendiento de seleccion tabla lista*/
   const handleSelectOnChange = (result) => {
-    //console.log('select:  ', result)
     const labelTable = result.label
     setLabelTabla(labelTable)
     const valueTable = result.value;
@@ -173,7 +172,7 @@ const AdministracionSeguridadListar = () => {
       .then(res => {
         setDAtaApi(res.data)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 

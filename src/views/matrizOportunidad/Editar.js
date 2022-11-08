@@ -130,12 +130,11 @@ const MatrizOportunidadEditar = ({ match }) => {
     await getOportunidadId(idOportunidad)
       .then((response) => {
         const res = response.data;
-        console.log('Datos a editar de Matriz de Oportunidad: ', res);
         macthedValues(res);
         callApiTratamiento(5);
         callApiFortaleza(6);
       }).catch((error) => {
-        console.log("Error: ", error);
+        console.error("Error: ", error);
       });
   }
 
@@ -174,7 +173,6 @@ const MatrizOportunidadEditar = ({ match }) => {
   }
 
   const setObject = (result) => {
-    //console.log("result: ", result)
     const values = {
       ...requestData,
       ...result
@@ -230,19 +228,18 @@ const MatrizOportunidadEditar = ({ match }) => {
       controles: JSON.stringify(dataRequest.controles),
       planesAccion: JSON.stringify(dataRequest.planesAccion)
     }
-    //console.log('Lo que se enviara en el request: ', dataValues);
+
     const idOportunidad = match.params.id;
     putOportunidadId(idOportunidad, dataValues)
       .then(res => {
         if (res.status >= 200 && res.status < 300) {
-          console.log('Envio el request: ', res)
           notificationToast('success', 'Matriz de Oportunidad modificada exitósamente');
         } else {
-          console.log('Hubo un  error ', res);
+          console.error('Hubo un  error ', res);
           notificationToast('error', 'Algo salió mal, intente nuevamente');
         }
       }).catch((error) => {
-        console.log('Error al obtener datos: ', error);
+        console.error('Error al obtener datos: ', error);
         notificationToast('error', 'Algo salió mal, intente nuevamente');
       });
   }
@@ -256,7 +253,7 @@ const MatrizOportunidadEditar = ({ match }) => {
         setDataApiTratamiento(options)
 
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -269,7 +266,7 @@ const MatrizOportunidadEditar = ({ match }) => {
         setDataApiFortaleza(_.orderBy(options, ['value'], ['desc']))
         setSpin(false)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 

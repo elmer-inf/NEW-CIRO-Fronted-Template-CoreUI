@@ -65,7 +65,7 @@ const Descripcion = ({ nextSection, beforeSection, setObject, initValues, isEdit
         const options = buildSelectThree(res.data, 'id', 'campoA', 'nombre', false)
         setDataApiGrupoInteres(_.orderBy(options, ['value'], ['asc']))
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 

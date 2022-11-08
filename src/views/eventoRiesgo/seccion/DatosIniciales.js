@@ -114,7 +114,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiAgencia(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -126,7 +126,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiCiudad(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -138,7 +138,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiArea(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -150,7 +150,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiUnidad(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -162,7 +162,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiEntidad(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -174,7 +174,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiCargo(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -186,7 +186,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiFuente(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -198,7 +198,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiCanal(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -247,39 +247,33 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
 
   /*  Values of AGENCIA */
   const clearDependenceOfAgencia = () => {
-    console.log('leego a clean dependeces');
     resetFormikValue('ciudadId', null)
     setDataApiCiudad([]);
   }
+
   const getValueAgencia = (value) => {
-    console.log('getSelectValue : ', value);
     if (value !== null) {
-      console.log('ingrdssoooo');
       callApiCiudad(2, value.id);
     }
   }
   const clearInputAgencia = (id) => {
-    console.log('inputIsClearable aaa: ', id);
-    formik.setFieldValue(id, null, false); // likmia el select principal
+    formik.setFieldValue(id, null, false); // limpia el select principal
     resetFormikValue('ciudadId', null) // limpiar el valro de mi select hijo
   }
   /* FIN  Values of AGENCIA */
 
   /*  Values of AREA */
   const clearDependenceOfArea = () => {
-    console.log('leego a clean dependeces');
     resetFormikValue('unidadId', null)
     setDataApiUnidad([]);
   }
+
   const getValueArea = (value) => {
-    console.log('getSelectValue : ', value);
     if (value !== null) {
-      console.log('ingrdssoooo');
       callApiUnidad(4, value.id);
     }
   }
   const clearInputArea = (id) => {
-    console.log('inputIsClearable aaa: ', id);
     formik.setFieldValue(id, null, false);
   }
   /* FIN  Values of AREA */

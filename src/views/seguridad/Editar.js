@@ -76,7 +76,6 @@ const SeguridadEditar = ({ match }) => {
   // functions
   const handleOnSubmit = (dataToRequest) => {
     setSpin(true);
-    console.log('Datos que se editan: ', dataToRequest)
     const idSeguridad = match.params.id;
     putSeguridadId(idSeguridad, dataToRequest)
       .then(res => {
@@ -86,7 +85,7 @@ const SeguridadEditar = ({ match }) => {
           notificationToast('error', 'Algo salió mal, intente nuevamente');
         }
       }).catch((error) => {
-        console.log('Error al obtener datos: ', error);
+        console.error('Error al obtener datos: ', error);
         notificationToast('error', 'Algo salió mal, intente nuevamente')
       });
   }
@@ -117,7 +116,6 @@ const SeguridadEditar = ({ match }) => {
       areaId: areaIdAux,
       red: redAux
     }
-    //console.log('MATCHED: ', valores)
     setformValueToEdit(valores)
   }
 
@@ -131,7 +129,7 @@ const SeguridadEditar = ({ match }) => {
         matched(res);
         setSpin(false);
       }).catch((error) => {
-        console.log("Error: ", error);
+        console.error("Error: ", error);
         setSpin(false);
       });
   }

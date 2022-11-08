@@ -31,7 +31,7 @@ const MatrizOportunidad = ({ match }) => {
       .then((response) => {
         setGeneraCodigo(response.data)
       }).catch((error) => {
-        console.log("Error: ", error);
+        console.error("Error: ", error);
       });
   }
 
@@ -123,10 +123,9 @@ const MatrizOportunidad = ({ match }) => {
     await getOportunidadId(idOportunidad)
       .then((response) => {
         const res = response.data;
-        console.log('Res : ', res);
         setDataApi(res)
       }).catch((error) => {
-        console.log("Error: ", error);
+        console.error("Error: ", error);
       });
   }
 
@@ -140,7 +139,7 @@ const MatrizOportunidad = ({ match }) => {
         const options = buildSelectTwo(res.data, 'id', 'campoB', true)
         setDataApiTratamiento(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -170,10 +169,9 @@ const MatrizOportunidad = ({ match }) => {
     await getUltimaObservacion(idRiesgo)
       .then((response) => {
         const res = response.data;
-        //console.log('Datos ultima observacion : ', res);
         setDataUltimaObs(res)
       }).catch((error) => {
-        console.log("Error: ", error);
+        console.error("Error: ", error);
         //notificationToast('error', Messages.notification.notOk)
       });
   }
@@ -202,8 +200,6 @@ const MatrizOportunidad = ({ match }) => {
   // Evalua Oportunidad: Autorizar, Pendiente, Observado y Descartado
   const handleOnSubmit = (dataToRequest) => {
     const idOportunidad = match.params.id;
-    //console.log('ID evento para evaluar: ', idEvento)
-    //console.log('data antes de enviar: ', dataToRequest)
     swalWithBootstrapButtons.fire({
       title: '',
       text: dataToRequest.estadoRegistro === 'Autorizado' ? 'Al autorizar el registro se asignará el siguiente código: ' + codigo + ' ¿Está seguro de generarlo?' :
@@ -232,7 +228,7 @@ const MatrizOportunidad = ({ match }) => {
               }
             })
           }).catch((error) => {
-            console.log('Error al obtener datos: ', error);
+            console.error('Error al obtener datos: ', error);
           });
       } else if (
         result.dismiss === Swal.DismissReason.cancel

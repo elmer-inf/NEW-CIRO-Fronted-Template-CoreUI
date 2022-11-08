@@ -1,6 +1,6 @@
-import React from 'react'
-import { FormGroup, FormFeedback, FormText } from 'reactstrap'
-import Select from 'react-select'
+import React from 'react';
+import { FormGroup, FormFeedback, FormText } from 'reactstrap';
+import Select from 'react-select';
 
 export const CSelectReact = (props) => {
 
@@ -33,7 +33,6 @@ export const CSelectReact = (props) => {
     }
   } */
 
-  //console.log("props select", props)
   return (
     <FormGroup>
       {/*  <Label>{props.label}</Label> */}

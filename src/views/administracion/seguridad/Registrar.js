@@ -60,14 +60,13 @@ const AdministracionSeguridadRegistrar = () => {
     postTablaDescripcionSeguridad(dataToRequest)
       .then(res => {
         if (res.status >= 200 && res.status < 300) {
-          console.log('Envio el request: ', res);
           notificationToast('success', 'Párametro de Seguridad registrado exitósamente');
         } else {
-          console.log('Hubo un  error ', res);
+          console.error('Hubo un  error ', res);
           notificationToast('error', 'Algo salió mal, intente nuevamente');
         }
       }).catch((error) => {
-        console.log('Error al registrar Párametro de Seguridad: ', error);
+        console.error('Error al registrar Párametro de Seguridad: ', error);
         notificationToast('error', 'Algo salió mal, intente nuevamente');
       })
   }

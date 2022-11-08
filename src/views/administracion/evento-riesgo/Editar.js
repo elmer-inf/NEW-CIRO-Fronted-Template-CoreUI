@@ -82,27 +82,23 @@ const AdministracionEventoEditar = ({ match }) => {
   // functions
   const handleOnSubmit = (dataToRequest) => {
     setSpin(true);
-    console.log('data que se edita: ', dataToRequest)
     const idTabDesc = match.params.id;
     putTablaDescripcionEventoId(idTabDesc, dataToRequest)
       .then(res => {
         if (res.status >= 200 && res.status < 300) {
-          console.log('Envio el request: ', res);
           notificationToast('success', 'Parámetro de Evento de Riesgo modificado exitósamente');
         } else {
-          console.log('Hubo un  error ', res);
+          console.error('Hubo un  error ', res);
           notificationToast('error', 'Algo salió mal, intente nuevamente');
         }
       }).catch((error) => {
-        console.log('Error al modificar Parámetro de Evento de Riesgo: ', error);
+        console.error('Error al modificar Parámetro de Evento de Riesgo: ', error);
         notificationToast('error', 'Algo salió mal, intente nuevamente');
       });
   }
 
   const macthed = (dataResponse) => {
-    console.log('dataresponse: ', dataResponse);
     const r = dataResponse.tablaLista;
-
     var nivel1 = { value: dataResponse.tablaLista.id, label: dataResponse.tablaLista.nombre_tabla, nivel2: dataResponse.tablaLista.nivel2, nivel3: dataResponse.tablaLista.nivel3 }
     var nivel2 = {}
     var nivel3 = {}
@@ -132,9 +128,7 @@ const AdministracionEventoEditar = ({ match }) => {
       descripcion: descripcionAux,
       campoC: campoCAux
     }
-    //console.log('MATCHEDEDED: ', valores)
     setformValueToEdit(valores);
-    //console.log('mtachhhher: ', dataResponse.tablaLista);
     if (r.nivel2 !== null && r.nivel2 !== 0) {
       const idnivel2 = r.nivel2;
       callApi2(idnivel2);
@@ -154,7 +148,7 @@ const AdministracionEventoEditar = ({ match }) => {
         macthed(res)
         setSpin(false)
       }).catch((error) => {
-        console.log("Error: ", error);
+        console.error("Error: ", error);
         setSpin(false);
       });
   }
@@ -163,41 +157,33 @@ const AdministracionEventoEditar = ({ match }) => {
     await getTablaListaEvento()
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre_tabla', true)
-        //console.log('El response de tabla: ', res.data)
-        //console.log('options : ', options)
         setTablaListaOptions(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
         //notificationToast('error', Messages.notification.notOk)
       })
   }
 
   /* LISTA TABLA DESCRIPCION NIVEL 2 */
   const callApi2 = (idn2) => {
-    //console.log('llego callapi2:: ', ' idn2: ', idn2);
     getTablaDescripcionEventoN1(idn2)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
-        console.log('El response de tabla call api 2: ', res.data)
-        //console.log('options : ', options)
+        console.error('El response de tabla call api 2: ', res.data)
         setDataApi2(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
         //notificationToast('error', Messages.notification.notOk)
       })
   }
   /* LISTA TABLA DESCRIPCION NIVEL 3 */
   const callApi3 = (idTablaDes) => {
-    console.log('llego callApi3:: ', idTablaDes);
-
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
-        console.log('El response de tabla 3 : ', res.data)
-        //console.log('options : ', options)
         setDataApi3(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
         //notificationToast('error', Messages.notification.notOk)
       })
   }

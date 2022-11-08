@@ -77,7 +77,7 @@ export const buscaValorLiteral = (arrayData, prob_Imp) => {
       valorLiteral = (_.find(arrayData, ['campoA', prob_Imp + '']) !== undefined) ? _.find(arrayData, ['campoA', prob_Imp + '']).nombre : null
     }
   } catch (error) {
-    console.log('Error al obtener valor literal de Probabilidad/Impacto: ', error);
+    console.error('Error al obtener valor literal de Probabilidad/Impacto: ', error);
   }
   return valorLiteral;
 }
@@ -90,7 +90,7 @@ export const buscaValorLiteralRiesgoI = (arrayData, riesgo) => {
       riesgoVal = (_.find(arrayData, ['campoA', riesgo + '']) !== undefined) ? _.find(arrayData, ['campoA', riesgo + '']).campoB : null;
     }
   } catch (error) {
-    console.log('Error al obtener valor literal del Riesgo: ', error);
+    console.error('Error al obtener valor literal del Riesgo: ', error);
   }
   return riesgoVal;
 }
@@ -110,7 +110,7 @@ export const intervaloImpacto = (arrayData, perdida) => {
       }
     }
   } catch (error) {
-    console.log('Error al obtener Valoracion del Riesgo en el Intervalo: ', error);
+    console.error('Error al obtener Valoracion del Riesgo en el Intervalo: ', error);
   }
   return montoPerdida;
 }

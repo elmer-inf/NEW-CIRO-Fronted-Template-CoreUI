@@ -1,10 +1,10 @@
-import React, { Fragment, useState, useEffect } from 'react'
-import { Card, CardHeader, CardBody, CardTitle, Button, Col, Row } from 'reactstrap'
-import { CBadge } from '@coreui/react'
+import React, { Fragment, useState, useEffect } from 'react';
+import { Card, CardHeader, CardBody, CardTitle, Button, Col, Row } from 'reactstrap';
+import { CBadge } from '@coreui/react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import ActionFormatter from 'src/reusable/ActionFormatterEvento';
-import { useHistory } from 'react-router-dom'
-import { getListSeguridadPaging } from './controller/SeguridadController'
+import { useHistory } from 'react-router-dom';
+import { getListSeguridadPaging } from './controller/SeguridadController';
 import { pagingInit } from 'src/reusable/variables/Variables';
 import CCSpinner from 'src/reusable/spinner/CCSpinner';
 import CPagination from 'src/reusable/pagination/CPagination';
@@ -15,11 +15,7 @@ import filterFactory, { customFilter } from 'react-bootstrap-table2-filter';
 import { PathContext } from 'src/containers/TheLayout';
 import { ToastContainer, toast } from 'react-toastify';
 import { Messages } from 'src/reusable/variables/Messages';
-import { hasPermission } from 'src/functions/Function'
-/* import { getTablaDescripcionRiesgoN1 } from 'src/views/administracion/matriz-riesgo/controller/AdminRiesgoController'
-import { getTablaDescripcionSeguridadN1 } from 'src/views/administracion/seguridad/controller/AdminSeguridadController'
-' */
-
+import { hasPermission } from 'src/functions/Function';
 var _ = require('lodash');
 
 const SeguridadListar = () => {
@@ -33,7 +29,6 @@ const SeguridadListar = () => {
   const [spin, setSpin] = useState(false);
 
   const redirect = (e) => {
-    //history.push('/seguridad/Registrar');
     e.preventDefault();
     const path = '/seguridad/Registrar';
     if (hasPermission(path, valuePathFromContext)) {
@@ -53,37 +48,6 @@ const SeguridadListar = () => {
       draggable: true,
     });
   }
-
-  //  P  A  R  A  M  E  T  R  O  S
-  // Estado
-  /* const [dataApiEstado, setDataApiEstado] = useState([])
-  const callApiEstado = (idTablaDes) => {
-    getTablaDescripcionSeguridadN1(idTablaDes)
-      .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', false)
-        setDataApiEstado(options)
-      }).catch((error) => {
-        console.log('Error: ', error)
-      })
-  }
-
-  // Nivel Riesgo
-  const [dataApiNivelRiesgo, setDataApiNivelRiesgo] = useState([])
-  const callApiNivelRiesgo = (idTablaDes) => {
-    getTablaDescripcionRiesgoN1(idTablaDes)
-      .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'campoB', false)
-        setDataApiNivelRiesgo(options)
-      }).catch((error) => {
-        console.log('Error: ', error)
-      })
-  }
-
-  useEffect(() => {
-    callApiEstado(2);
-    callApiNivelRiesgo(9);
-  }, []) */
-  // F  I  N     P  A  R  A  M  E  T  R  O  S
 
   const columns = [
     {
@@ -150,8 +114,6 @@ const SeguridadListar = () => {
   ]
 
   function colorEstado(cell) {
-    /* var b = _.find(dataApiEstado, ['nombre', cell]);
-    console.log('data: ', cell); */
     var cellBuscar = _.lowerCase(cell);
     if (cellBuscar === 'asumido' || cellBuscar === 'en validacion') {
       return (
@@ -208,7 +170,6 @@ const SeguridadListar = () => {
   }
 
   const editRow = (row) => {
-    //history.push('/seguridad/Editar/' + row.id);
     const path = '/seguridad/Editar/:id';
     if (hasPermission(path, valuePathFromContext)) {
       history.push('/seguridad/Editar/' + row.id);
@@ -232,7 +193,7 @@ const SeguridadListar = () => {
 
         setSpin(false)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -276,8 +237,6 @@ const SeguridadListar = () => {
       search = getParams(toSearch);
     }
 
-    //console.log('TO SEARCH:: ', search);
-
     const endpoint = 'v1/seguridad/';
 
     await getListPagingWithSearch(page, size, endpoint, search)
@@ -288,7 +247,7 @@ const SeguridadListar = () => {
         setpagination(toPaging);
         setSpin(false)
       }).catch((error) => {
-        console.log("Error: ", error);
+        console.error("Error: ", error);
         setSpin(false)
       });
   }

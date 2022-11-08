@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { typeFormatter } from 'src/reusable/Component';
 import BootstrapTable from 'react-bootstrap-table-next';
 import { reportProceso } from '../../controller/ReporteCiroController';
 import CCSpinner from 'src/reusable/spinner/CCSpinner';
-import { Card, CardBody, Col, Row } from 'reactstrap'
+import { Card, CardBody, Col, Row } from 'reactstrap';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-
 
 const ProcesoF = ({ fechaIniTrim, fechaFinTrim }) => {
 
@@ -63,11 +62,10 @@ const ProcesoF = ({ fechaIniTrim, fechaFinTrim }) => {
     setSpin(true)
     await reportProceso(data)
       .then((response) => {
-        //console.log('response Reporte F: ', response);
         setdataApi(response.data);
         setSpin(false)
       }).catch((error) => {
-        console.log("Error: ", error);
+        console.error("Error: ", error);
         setSpin(false)
       })
   }

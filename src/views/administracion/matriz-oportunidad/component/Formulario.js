@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react'
-import { useFormik } from "formik"
-import * as Yup from "yup"
-import { CInputReact } from 'src/reusable/CInputReact'
-import { FormGroup, Col, Form, Button, Label } from 'reactstrap'
-import { CSelectReact } from 'src/reusable/CSelectReact'
+import React, { useState, useEffect } from 'react';
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { CInputReact } from 'src/reusable/CInputReact';
+import { FormGroup, Col, Form, Button, Label } from 'reactstrap';
+import { CSelectReact } from 'src/reusable/CSelectReact';
 import { getTablaDescripcionOportunidadN1 } from '../controller/AdminOportunidadController';
-import { buildSelectTwo } from 'src/functions/Function'
-import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
+import { buildSelectTwo } from 'src/functions/Function';
+import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo';
 
 const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit, optionsList, isEdit }) => {
   const formik = useFormik({
@@ -29,7 +29,6 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit, optionsList, is
         tablaId: values.tablaId.value,
         nivel2Id: (values.nivel2Id !== null) ? values.nivel2Id.value : 0,
       }
-      console.log('datos que se enviaran:', data)
       handleOnSubmit(data)
     }
   })
@@ -42,38 +41,11 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit, optionsList, is
         const options = buildSelectTwo(res.data, 'id', 'nombre', true);
         setDataApi(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
-
-  /*
-    useEffect(() => {
-     if( formik.values.tablaId !== null){
-      const idnivel2 = formik.values.tablaId.nivel2;
-      callApi2(idnivel2);
-      resetValues();
-     }
-     //eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [formik.values.tablaId])
-  */
-  /*useEffect(() => {
-     if( formik.values.tablaId !== null){
-      console.log('efect 2: ',formik.values.tablaId.nivel2 )
-      const idnivel2 = formik.values.tablaId.nivel2;
-      callApi2(idnivel2);
-     }
-     //eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])*/
-
-
   const resetValues = () => {
-    /*     formik.setFieldValue('campoA', null, false);
-        formik.setFieldValue('nombre', null, false);
-        formik.setFieldValue('campoB', null, false);
-        formik.setFieldValue('campoC', null, false);
-        formik.setFieldValue('campoD', null, false);
-        formik.setFieldValue('tablaId', null, false); */
     formik.setFieldValue('nivel2Id', null, false);
   }
 
@@ -83,19 +55,14 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit, optionsList, is
   }
 
   const getSelectValueLevel2 = (value) => {
-    console.log('getSelectValue : ', value);
     if (value.nivel2 !== null && value.nivel2 !== 0) {
       const idnivel2 = value.nivel2;
       callApi2(idnivel2);
     }
   }
   const inputIsClearableLevel2 = (id) => {
-    console.log('inputIsClearable aaa: ', id);
-    //formik.setFieldValue(id, null, false);
-    //clearAllDependences();
+    //console.log('inputIsClearable aaa: ', id);
   }
-
-
 
   useEffect(() => {
     if (isEdit) {
@@ -103,7 +70,6 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit, optionsList, is
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [optionsList]);
-
 
 
   return (

@@ -31,7 +31,6 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
         ...values,
         tablaId: values.tablaId.value
       }
-      console.log('datos que se enviaran:', data)
       handleOnSubmit(data)
     }
   })

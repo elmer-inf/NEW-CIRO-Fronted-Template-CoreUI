@@ -76,7 +76,6 @@ const ReporteEventos = () => {
       const data = {
         ...values
       }
-      console.log('datos que se enviaran:', data)
       if (values.tipo.value === 'ciro') {
         generateReportCiro(data)
       }
@@ -91,7 +90,6 @@ const ReporteEventos = () => {
   }
 
   const generateAllReportCiro = async () => {
-    //const dateFormat = fechaReporte(1)
     setSpin(true);
     const sendRequest = {
       fechaIniTrim: fechaReporte(0),
@@ -135,7 +133,7 @@ const ReporteEventos = () => {
 
         setSpin(false)
       }).catch((error) => {
-        console.log("Error: ", error);
+        console.error("Error: ", error);
         setSpin(false)
       })
 
@@ -156,7 +154,7 @@ const ReporteEventos = () => {
       }
     }
     catch (error) {
-      console.log('Error al obtener Fecha reporte Inicio/Fin: ', error);
+      console.error('Error al obtener Fecha reporte Inicio/Fin: ', error);
     }
     return fechaReporte;
   }

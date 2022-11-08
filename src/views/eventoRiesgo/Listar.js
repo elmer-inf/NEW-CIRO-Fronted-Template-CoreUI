@@ -215,8 +215,6 @@ const EventoRiesgoListar = () => {
   }
 
   const editRow = (row) => {
-    //history.push('/eventoRiesgo/Editar/' + row.id);
-    //console.log("valuePathFromContext", valuePathFromContext);
     const path = '/eventoRiesgo/Editar/:id';
     if (hasPermission(path, valuePathFromContext)) {
       history.push('/eventoRiesgo/Editar/' + row.id);
@@ -273,7 +271,7 @@ const EventoRiesgoListar = () => {
                       }
                     })
                   }).catch((error) => {
-                    console.log('Error al obtener datos: ', error);
+                    console.error('Error al obtener datos: ', error);
                   });
               } else if (
                 result.dismiss === Swal.DismissReason.cancel
@@ -309,7 +307,7 @@ const EventoRiesgoListar = () => {
           }
         }
       }).catch((error) => {
-        console.log("Error: ", error);
+        console.error("Error: ", error);
       });
   }
   // Descarta Registro
@@ -343,7 +341,7 @@ const EventoRiesgoListar = () => {
                 }
               })
             }).catch((error) => {
-              console.log('Error al obtener datos: ', error);
+              console.error('Error al obtener datos: ', error);
             });
         } else if (
           result.dismiss === Swal.DismissReason.cancel
@@ -386,23 +384,20 @@ const EventoRiesgoListar = () => {
     setSpin(true)
     await getEventosPaging(page, size)
       .then(res => {
-        //console.log('El response de tabla: ', res.data)
         const paging = res.data.paging;
         const toPaging = { ...paging }
-
         setEventos(res.data.data);
         setpagination(toPaging);
-
         setSpin(false)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
+
   useEffect(() => {
     callApi(pagination.page, pagination.size)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
 
   // search by columns
   const handleOnFilter = (event) => {
@@ -421,11 +416,7 @@ const EventoRiesgoListar = () => {
       param[fieldName] = valueToSearch;
     }
 
-    console.log('params:: ', param)
-    console.log('param[fechaFin]:: ', param['fechaFin'])
-
     //deleteok
-
     if (param['fechaFin'] === '' || _.isEmpty(param['fechaFin'])) {
       delete param['fechaFin'];
     }
@@ -450,8 +441,6 @@ const EventoRiesgoListar = () => {
       search = getParams(toSearch);
     }
 
-    //console.log('TO SEARCH:: ', search);
-
     const endpoint = 'v1/eventoRiesgo/';
 
     await getListPagingWithSearch(page, size, endpoint, search)
@@ -462,7 +451,7 @@ const EventoRiesgoListar = () => {
         setpagination(toPaging);
         setSpin(false)
       }).catch((error) => {
-        console.log("Error: ", error);
+        console.error("Error: ", error);
         setSpin(false)
       });
   }

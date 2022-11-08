@@ -99,7 +99,7 @@ const Oportunidad = ({ nextSection, beforeSection, setObject, initValues, dataAp
         const options = buildSelectTwo(res.data, 'id', 'campoD', true)
         setDataApiProbabilidad(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -111,7 +111,7 @@ const Oportunidad = ({ nextSection, beforeSection, setObject, initValues, dataAp
         const options = buildSelectThree(res.data, 'id', 'campoA', 'campoC', true)
         setDataApiImpactoOpor(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -123,7 +123,6 @@ const Oportunidad = ({ nextSection, beforeSection, setObject, initValues, dataAp
       const riesgo = calculaRiesgo(prob, imp);
       formik.setFieldValue('nivelOportunidad', riesgo, false)
       var riesgoValAux = buscaValorLiteralRiesgoI(dataApiTratamiento, riesgo);
-      //console.log('dataApiTratamiento: ', dataApiTratamiento);
       formik.setFieldValue('valorOportunidad', riesgoValAux, false);
     }
   }

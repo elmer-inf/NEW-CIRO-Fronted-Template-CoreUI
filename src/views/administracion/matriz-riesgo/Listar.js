@@ -208,7 +208,7 @@ const AdministracionMatrizRiesgosListar = () => {
               }
             })
           }).catch((error) => {
-            console.log('Error al eliminar Parámetro de Matriz de Riesgo: ', error);
+            console.error('Error al eliminar Parámetro de Matriz de Riesgo: ', error);
           });
       } else if (
         result.dismiss === Swal.DismissReason.cancel
@@ -244,11 +244,9 @@ const AdministracionMatrizRiesgosListar = () => {
     getTablaListaRiesgo()
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombreTabla', false)
-        //console.log('El response de tabla: ', res.data)
-        //console.log('options : ', options)
         setTablaListaOptions(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
         //notificationToast('error', Messages.notification.notOk)
       })
   }
@@ -259,7 +257,6 @@ const AdministracionMatrizRiesgosListar = () => {
 
   /* LISTA TABLA DESCRIPCION despendiento de seleccion tabla lista*/
   const handleSelectOnChange = (result) => {
-    //console.log('select:  ', result)
     const labelTable = result.label
     setLabelTabla(labelTable)
     const valueTable = result.value;
@@ -270,10 +267,9 @@ const AdministracionMatrizRiesgosListar = () => {
   const getTablaDescripcion = (idTabla) => {
     getTablaDescripcionRiesgoN1(idTabla)
       .then(res => {
-        //console.log('nivel 1: ', res.data)
         setDAtaApi(res.data)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
         //notificationToast('error', Messages.notification.notOk)
       })
   }

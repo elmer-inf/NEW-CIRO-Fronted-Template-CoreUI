@@ -83,11 +83,10 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
-        //console.log('tasa cambio: ', options)
         setLabelTasaCambio(options[0].label)
         setDataApiTasaCambio(options[0].label)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -99,7 +98,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
         const options = buildSelectTwo(res.data, 'id', 'clave', false)
         setDataApiMoneda(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -111,7 +110,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiImpacto(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -123,7 +122,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiPoliza(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -135,7 +134,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiRecuperacionActivo(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -147,7 +146,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiCuentaContable(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 

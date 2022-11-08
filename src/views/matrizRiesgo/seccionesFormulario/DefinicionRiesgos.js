@@ -125,7 +125,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiEfectoPerdida(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -137,7 +137,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiPerdidaAsfi(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -149,7 +149,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiFactorRiesgo(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -161,7 +161,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
         const options = buildSelectTwo(res.data, 'id', 'campoD', true)
         setDataApiProbabilidad(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -173,7 +173,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
         const options = buildSelectTwo(res.data, 'id', 'campoD', true)
         setDataApiImpacto(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 

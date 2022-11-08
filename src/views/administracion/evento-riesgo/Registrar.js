@@ -37,10 +37,9 @@ const AdministracionEventoRegistrar = () => {
     await getTablaListaEvento()
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre_tabla', true)
-        //console.log('options : ', options)
         setTablaListaOptions(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -88,14 +87,13 @@ const AdministracionEventoRegistrar = () => {
     postTablaDescripcionEvento(dataToRequest)
       .then(res => {
         if (res.status >= 200 && res.status < 300) {
-          console.log('Envio el request: ', res);
           notificationToast('success', 'Parámetro de Evento de Riesgo registrado exitósamente');
         } else {
-          console.log('Hubo un  error ', res);
+          console.error('Hubo un  error ', res);
           notificationToast('error', 'Algo salió mal, intente nuevamente');
         }
       }).catch((error) => {
-        console.log('Error al registrar Parámetro de Evento de Riesgo: ', error);
+        console.error('Error al registrar Parámetro de Evento de Riesgo: ', error);
         notificationToast('error', 'Algo salió mal, intente nuevamente');
       })
   }

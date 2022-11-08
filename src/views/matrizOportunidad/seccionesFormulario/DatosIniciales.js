@@ -97,7 +97,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiArea(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -109,7 +109,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiUnidad(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -121,7 +121,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiMacro(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -133,7 +133,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         const options = buildSelectTwo(res.data, 'id', 'campoA', true)
         setDataApiProcedimiento(_.uniqBy(options, 'label'))
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -145,7 +145,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiCargo(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -157,7 +157,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiFoda(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -169,7 +169,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiFodaDesc(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 

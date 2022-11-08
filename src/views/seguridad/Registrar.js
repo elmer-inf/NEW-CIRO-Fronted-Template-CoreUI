@@ -1,10 +1,10 @@
-import { Fragment, useState } from 'react'
-import { Card, CardHeader, CardTitle, CardBody } from 'reactstrap'
-import { useHistory } from 'react-router-dom'
-import Formulario from './component/Formulario'
-import { postSeguridad } from './controller/SeguridadController'
+import { Fragment, useState } from 'react';
+import { Card, CardHeader, CardTitle, CardBody } from 'reactstrap';
+import { useHistory } from 'react-router-dom';
+import Formulario from './component/Formulario';
+import { postSeguridad } from './controller/SeguridadController';
 import { ToastContainer, toast } from 'react-toastify';
-import CCSpinner from 'src/reusable/spinner/CCSpinner'
+import CCSpinner from 'src/reusable/spinner/CCSpinner';
 
 const SeguridadRegistrar = () => {
 
@@ -75,14 +75,13 @@ const SeguridadRegistrar = () => {
     postSeguridad(dataToRequest)
       .then(res => {
         if (res.status >= 200 && res.status < 300) {
-          console.log('Envio el request: ', res);
           notificationToast('success', 'Riesgo en Seguridad registrado exitósamente');
         } else {
-          console.log('Hubo un  error ', res);
+          console.error('Hubo un  error ', res);
           notificationToast('error', 'Algo salió mal, intente nuevamente');
         }
       }).catch((error) => {
-        console.log('Error al obtener datos: ', error);
+        console.error('Error al obtener datos: ', error);
         notificationToast('error', 'Algo salió mal, intente nuevamente');
       })
   }

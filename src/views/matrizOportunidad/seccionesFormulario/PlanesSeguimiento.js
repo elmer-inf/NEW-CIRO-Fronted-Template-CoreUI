@@ -71,7 +71,7 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
         const options = buildSelectTwo(res.data, 'id', 'campoD', true)
         setDataApiTratamiento(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -83,7 +83,7 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiCargo(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 

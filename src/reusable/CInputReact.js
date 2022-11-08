@@ -1,15 +1,7 @@
 import React from 'react'
+import { FormGroup, FormFeedback, Input } from 'reactstrap';
 
-import { FormGroup, FormFeedback, Input } from 'reactstrap'
 export const CInputReact = (props) => {
-  /**
-    <FormGroup>
-              <Label htmlFor="inputIsValid">Input is valid</Label>
-              <Input valid id="inputIsValid" />
-              <ValidFeedback>Cool! Input is valid</ValidFeedback>
-            </FormGroup>
-   */
-  //console.log("props: ",props)
 
   return (
     <FormGroup>

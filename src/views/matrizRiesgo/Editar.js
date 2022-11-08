@@ -169,14 +169,13 @@ const MatrizRiesgoEditar = ({ match }) => {
     await getRiesgoId(idEventoRiesgo)
       .then((response) => {
         const res = response.data;
-        console.log('Datos a editar de  Matriz Riesgo: ', res);
         macthedValues(res);
         callApiRiesgoI(9);
         callApiControl(5);
         callApiProbabilidad(2);
         //setSpin(false)
       }).catch((error) => {
-        console.log("Error: ", error);
+        console.error("Error: ", error);
       });
   }
 
@@ -224,7 +223,6 @@ const MatrizRiesgoEditar = ({ match }) => {
   const [dataAuxSeccion4, setDataAuxSeccion4] = useState([])
 
   const setObject = (result, realValues) => {
-    //console.log("result: ", result)
     const values = {
       ...requestData,
       ...result
@@ -320,28 +318,23 @@ const MatrizRiesgoEditar = ({ match }) => {
   }
 
   const handleOnSubmmit = (values) => {
-    //setSpin(true);
     const dataRequest = setObject(values);
     const dataValues = {
       ...dataRequest,
       controles: JSON.stringify(dataRequest.controles),
       planesAccion: JSON.stringify(dataRequest.planesAccion)
     }
-
-    //console.log('Lo que se enviara en el request: ', dataValues);
-
     const idRiesgo = match.params.id;
     putRiesgoId(idRiesgo, dataValues)
       .then(res => {
         if (res.status >= 200 && res.status < 300) {
-          console.log('Envio el request: ', res)
           notificationToast('success', 'Matriz de Riesgo modificada exitósamente');
         } else {
-          console.log('Hubo un  error ', res);
+          console.error('Hubo un  error ', res);
           notificationToast('error', 'Algo salió mal, intente nuevamente');
         }
       }).catch((error) => {
-        console.log('Error al obtener datos: ', error);
+        console.error('Error al obtener datos: ', error);
         notificationToast('error', 'Algo salió mal, intente nuevamente');
       });
   }
@@ -354,7 +347,7 @@ const MatrizRiesgoEditar = ({ match }) => {
         const options = buildSelectTwo(res.data, 'id', 'campoD', true);
         setDataApiRiesgoI(options);
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -366,7 +359,7 @@ const MatrizRiesgoEditar = ({ match }) => {
         const options = buildSelectTwo(res.data, 'id', 'campoA', true);
         setDataApiControl(_.orderBy(options, ['value'], ['desc']));
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -379,7 +372,7 @@ const MatrizRiesgoEditar = ({ match }) => {
         setDataApiProbabilidad(options);
         setSpin(false);
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 

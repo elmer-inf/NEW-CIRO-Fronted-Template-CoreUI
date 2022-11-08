@@ -44,7 +44,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, d
         const options = buildSelectTwo(res.data, 'id', 'campoD', true)
         setDataApiProbabilidad(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -56,7 +56,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, d
         const options = buildSelectTwo(res.data, 'id', 'campoD', true)
         setDataApiImpacto(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -68,7 +68,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, d
         const options = buildSelectTwo(res.data, 'id', 'campoD', true)
         setDataApiRiesgoI(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -82,7 +82,6 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, d
   // calcula "Probabilidad e impacto residual" del valor "Probabilidad inherente"
   const disminucionAux = (dataAux.controlIdAux !== undefined && _.find(dataApiControl, ['id', _.toInteger(dataAux.controlIdAux)]) !== null) ? _.find(dataApiControl, ['id', _.toInteger(dataAux.controlIdAux)]).campoB : null;
   const probInherenteAux = parseInt(dataAux2.probabilidaNivelAux);
-  //console.log('disminucionAux: ', disminucionAux);
   const impactoInherenteAux = parseInt(dataAux2.impactoNivelAux);
   useEffect(() => {
     if (dataAux.controlObjetivoAux === 'Ambos') {

@@ -186,7 +186,6 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataApiF
           {values.controlesTiene === 'true' ?
             <FieldArray name="controles">
               {() => (values.controles.map((control, i) => {
-                /* console.log('Console log control: ', control); */
                 const controlErrors = (errors.controles?.length && errors.controles[i]) || {};
                 const controlTouched = (touched.controles?.length && touched.controles[i]) || {};
                 return (

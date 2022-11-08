@@ -44,7 +44,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiArea(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -56,7 +56,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiCargo(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 

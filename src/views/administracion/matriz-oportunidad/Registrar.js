@@ -73,14 +73,13 @@ const AdministracionMatrizOportunidadRegistrar = () => {
     postTablaDescripcionOportunidad(dataToRequest)
       .then(res => {
         if (res.status >= 200 && res.status < 300) {
-          console.log('Envio el request: ', res);
           notificationToast('success', 'Parámetro de Matriz de Oportunidad registrado exitósamente');
         } else {
-          console.log('Hubo un  error ', res);
+          console.error('Hubo un  error ', res);
           notificationToast('error', 'Algo salió mal, intente nuevamente');
         }
       }).catch((error) => {
-        console.log('Error al registrar Evento de Riesgo: ', error);
+        console.error('Error al registrar Evento de Riesgo: ', error);
         notificationToast('error', 'Algo salió mal, intente nuevamente');
       })
   }
@@ -93,7 +92,7 @@ const AdministracionMatrizOportunidadRegistrar = () => {
         const options = buildSelectTwo(res.data, 'id', 'nombreTabla', true)
         setTablaListaOptions(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 

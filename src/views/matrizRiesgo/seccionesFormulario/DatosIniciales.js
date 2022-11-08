@@ -83,7 +83,6 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
     ),
 
     onSubmit: values => {
-      //console.log('Values ::: ', values);
       const data = {
         ...values,
         estadoRegistro: 'Pendiente',
@@ -133,7 +132,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiArea(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -145,7 +144,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiUnidad(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -157,7 +156,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiMacro(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -169,7 +168,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         const options = buildSelectTwo(res.data, 'id', 'campoA', true);/* campoA */
         setDataApiProcedimiento(_.uniqBy(options, 'label'))
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -181,7 +180,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiCargo(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -193,7 +192,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiIdentificado(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -317,7 +316,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         const options = buildSelectThree(order, 'id', 'id', 'codigo', true)
         setRelEventoRiesgo(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -327,7 +326,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
      var arrayFecha = formik.values.fechaEvaluacion.split('-')
      if (arrayFecha[0] > 3000){
        formik.setFieldValue('fechaEvaluacion', '3000-' + arrayFecha[1] + '-' + arrayFecha[2] , false);
-       //console.log('fecha fff: ', '3000-' + arrayFecha[1] + '-' + arrayFecha[2]);
+       //console.error('fecha fff: ', '3000-' + arrayFecha[1] + '-' + arrayFecha[2]);
      }
      //eslint-disable-next-line react-hooks/exhaustive-deps
    }, [formik.values.fechaEvaluacion]) */

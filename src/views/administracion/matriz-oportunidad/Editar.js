@@ -71,19 +71,17 @@ const AdministracionMatrizOEditar = ({ match }) => {
 
   const handleOnSubmit = (dataToRequest) => {
     setSpin(true);
-    console.log('data que se edita: ', dataToRequest)
     const idTabDesc = match.params.id;
     putTablaDescripcionOportunidadId(idTabDesc, dataToRequest)
       .then(res => {
         if (res.status >= 200 && res.status < 300) {
-          console.log('Envio el request: ', res);
           notificationToast('success', 'Parámetro de Matriz de Oportunidad modificado exitósamente');
         } else {
-          console.log('Hubo un  error ', res);
+          console.error('Hubo un  error ', res);
           notificationToast('error', 'Algo salió mal, intente nuevamente');
         }
       }).catch((error) => {
-        console.log('Error al modificar Parámetro de Matriz de Oportunidad: ', error);
+        console.error('Error al modificar Parámetro de Matriz de Oportunidad: ', error);
         notificationToast('error', 'Algo salió mal, intente nuevamente');
       });
   }
@@ -105,15 +103,12 @@ const AdministracionMatrizOEditar = ({ match }) => {
       tablaId: nivel1,
       nivel2Id: (dataResponse.nivel2Id !== null) ? nivel2 : null,
     }
-    //console.log('MATCHEDEDED: ', valores)
     setformValueToEdit(valores)
 
     if (dataResponse.tablaId.nivel2 !== null && dataResponse.tablaId.nivel2 !== 0) {
       const idnivel2 = dataResponse.tablaId.nivel2;
       callApi2(idnivel2);
     }
-
-
   }
 
   const getById = async () => {
@@ -121,12 +116,11 @@ const AdministracionMatrizOEditar = ({ match }) => {
     const idParametro = match.params.id;
     await getTablaDescripcionOportunidadId(idParametro)
       .then((response) => {
-        //console.log("API xxxxx: ", response.data);
         const res = response.data;
         macthed(res);
         setSpin(false);
       }).catch((error) => {
-        console.log("Error: ", error);
+        console.error("Error: ", error);
         setSpin(false);
       });
   }
@@ -137,7 +131,7 @@ const AdministracionMatrizOEditar = ({ match }) => {
         const options = buildSelectTwo(res.data, 'id', 'nombreTabla', true);
         setTablaListaOptions(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -148,12 +142,11 @@ const AdministracionMatrizOEditar = ({ match }) => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true);
         setListlevel2(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
   useEffect(() => {
-    //console.log("call")
     getById();
     callApi();
     //eslint-disable-next-line react-hooks/exhaustive-deps

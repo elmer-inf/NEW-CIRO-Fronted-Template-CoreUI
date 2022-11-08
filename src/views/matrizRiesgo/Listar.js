@@ -224,7 +224,7 @@ const MatrizRiesgoListar = () => {
                     }
                   })
                 }).catch((error) => {
-                  console.log('Error al obtener datos: ', error);
+                  console.error('Error al obtener datos: ', error);
                 });
             } else if (
               result.dismiss === Swal.DismissReason.cancel
@@ -259,7 +259,7 @@ const MatrizRiesgoListar = () => {
           }
         }
       }).catch((error) => {
-        console.log("Error: ", error);
+        console.error("Error: ", error);
       });
   }
   // Descarta Registro
@@ -293,7 +293,7 @@ const MatrizRiesgoListar = () => {
                 }
               })
             }).catch((error) => {
-              console.log('Error al obtener datos: ', error);
+              console.error('Error al obtener datos: ', error);
             });
         } else if (
           result.dismiss === Swal.DismissReason.cancel
@@ -337,7 +337,6 @@ const MatrizRiesgoListar = () => {
 
     getMatrizPaging(page, size)
       .then(res => {
-        //console.log('El response de tabla: ', res.data)
         const paging = res.data.paging;
         const toPaging = { ...paging }
 
@@ -345,7 +344,7 @@ const MatrizRiesgoListar = () => {
         setpagination(toPaging);
         setSpin(false)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -369,11 +368,7 @@ const MatrizRiesgoListar = () => {
       param[fieldName] = valueToSearch;
     }
 
-    console.log('params:: ', param)
-    console.log('param[fechaEvaluacion]:: ', param['fechaEvaluacion'])
-
     //deleteok
-
     if (param['procesoId.clave'] === '' || _.isEmpty(param['procesoId.clave'])) {
       delete param['procesoId.clave'];
     }
@@ -392,7 +387,6 @@ const MatrizRiesgoListar = () => {
     if (param['id'] === '' || _.isEmpty(param['id'])) {
       delete param['id'];
     }
-
     setParams(param)
     validatePagination(pagination.page, pagination.size, param);
   }
@@ -407,8 +401,6 @@ const MatrizRiesgoListar = () => {
       search = getParams(toSearch);
     }
 
-    //console.log('TO SEARCH:: ', search);
-
     const endpoint = 'v1/matrizRiesgo/';
 
     await getListPagingWithSearch(page, size, endpoint, search)
@@ -419,7 +411,7 @@ const MatrizRiesgoListar = () => {
         setpagination(toPaging);
         setSpin(false)
       }).catch((error) => {
-        console.log("Error: ", error);
+        console.error("Error: ", error);
         setSpin(false)
       });
   }

@@ -32,7 +32,7 @@ const EventoRiesgoRegistrar = () => {
         const options = buildSelectTwo(res.data, 'id', 'clave', false)
         setDataApiTipoEvento(_.orderBy(options, ['value'], ['asc']))
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -224,7 +224,6 @@ const EventoRiesgoRegistrar = () => {
   }
 
   const setObject = (result) => {
-    //console.log("result: ", result)
     const values = {
       ...requestData,
       ...result
@@ -288,8 +287,7 @@ const EventoRiesgoRegistrar = () => {
         tipoEvento: formik.values.tipoEvento
       }
     }
-    //console.log('Lo que se enviara en el request: ', request)
-    // console.log('JSON.stringify(request) ', JSON.stringify(request))
+
     var formData = new FormData();
 
     formData.append('eventoRiesgoPostDTO', JSON.stringify(_.omit(request, ['files'])));
@@ -302,40 +300,30 @@ const EventoRiesgoRegistrar = () => {
       formData.append("file", new Blob([]));
     }
 
-    /*for (var value of formData.values()) {
-       console.log('===========================================')
-       console.log('--> ', value);
-       console.log('===========================================')
-     }*/
-
     postEventoRiesgoFormData(formData)
       .then(res => {
         if (res.status >= 200 && res.status < 300) {
-          console.log('Envio el request: ', res);
           notificationToast('success', 'Evento de Riesgo registrado exitósamente');
-          //history.push("/eventoRiesgo/listar")
         } else {
-          console.log('Hubo un  error ', res);
+          console.error('Hubo un  error ', res);
           notificationToast('error', 'Algo salió mal, intente nuevamente');
         }
       }).catch((error) => {
-        console.log('Error al registrar Evento de Riesgo: ', error);
+        console.error('Error al registrar Evento de Riesgo: ', error);
         notificationToast('error', 'Algo salió mal, intente nuevamente');
       });
-
 
     /*  postEventoRiesgo(request)
         .then(res => {
           if (res.status >= 200 && res.status < 300) {
-            console.log('Envio el request: ', res);
             notificationToast('success', 'Evento de Riesgo registrado exitósamente');
             //history.push("/eventoRiesgo/listar")
           } else {
-            console.log('Hubo un  error ', res);
+            console.error('Hubo un  error ', res);
             notificationToast('error', 'Algo salió mal, intente nuevamente');
           }
         }).catch((error) => {
-          console.log('Error al registrar Evento de Riesgo: ', error);
+          console.error('Error al registrar Evento de Riesgo: ', error);
           notificationToast('error', 'Algo salió mal, intente nuevamente');
         });*/
   }

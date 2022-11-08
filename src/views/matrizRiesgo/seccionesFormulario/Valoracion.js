@@ -55,7 +55,7 @@ const Valoracion = ({ beforeSection, initValues, dataAux, dataAux2, dataApiProba
         const options = buildSelectTwo(res.data, 'id', 'campoD', true)
         setDataApiImpacto(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 

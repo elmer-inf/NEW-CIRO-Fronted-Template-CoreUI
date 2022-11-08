@@ -1,21 +1,21 @@
-import { React, useState, useEffect } from 'react'
-import ImportesRelacionados from './seccion/ImportesRelacionados'
-import RiesgosRelacionados from './seccion/RiesgosRelacionados'
-import CategoriaNegocio from './seccion/CategoriaNegocio'
-import DatosIniciales from './seccion/DatosIniciales'
-import Planes from './seccion/Planes'
-import { FileText, Activity, DollarSign, BarChart2, ChevronRight, AlertTriangle, CheckSquare } from 'react-feather'
+import { React, useState, useEffect } from 'react';
+import ImportesRelacionados from './seccion/ImportesRelacionados';
+import RiesgosRelacionados from './seccion/RiesgosRelacionados';
+import CategoriaNegocio from './seccion/CategoriaNegocio';
+import DatosIniciales from './seccion/DatosIniciales';
+import Planes from './seccion/Planes';
+import { FileText, Activity, DollarSign, BarChart2, ChevronRight, AlertTriangle, CheckSquare } from 'react-feather';
 import { Row, Col, Card, CardBody, CardHeader, CardTitle, TabContent, TabPane, NavLink, NavItem, Nav, FormGroup, Label, Badge } from 'reactstrap';
-import CInputRadio from 'src/reusable/CInputRadio'
-import { useHistory } from 'react-router-dom'
+import CInputRadio from 'src/reusable/CInputRadio';
+import { useHistory } from 'react-router-dom';
 import classnames from 'classnames';
 import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
 import { getEventoRiesgoId, putEventoRiesgoId } from './controller/EventoController';
-import { buildOptionSelect, buildOptionSelectThree, buildSelectThree, buildSelectTwo } from 'src/functions/Function'
-import { useFormik } from "formik"
-import * as Yup from "yup"
-import { ToastContainer, toast } from 'react-toastify'
-import CCSpinner from 'src/reusable/spinner/CCSpinner'
+import { buildOptionSelect, buildOptionSelectThree, buildSelectThree, buildSelectTwo } from 'src/functions/Function';
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { ToastContainer, toast } from 'react-toastify';
+import CCSpinner from 'src/reusable/spinner/CCSpinner';
 
 var _ = require('lodash');
 
@@ -194,7 +194,7 @@ const UpdateEventoRiesgo = ({ match }) => {
         const options = buildSelectTwo(res.data, 'id', 'clave', false)
         setDataApiTipoEvento(_.orderBy(options, ['value'], ['asc']))
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -304,11 +304,10 @@ const UpdateEventoRiesgo = ({ match }) => {
     await getEventoRiesgoId(idEventoRiesgo)
       .then((response) => {
         const res = response.data;
-        console.log('Datos a editar de Evento Riesgo: ', res);
         macthedValues(res);
         setSpin(false)
       }).catch((error) => {
-        console.log("Error: ", error);
+        console.error("Error: ", error);
       });
   }
 
@@ -349,12 +348,10 @@ const UpdateEventoRiesgo = ({ match }) => {
   }
 
   const setObject = (result) => {
-    //console.log("result: ", result)
     const values = {
       ...requestData,
       ...result
     }
-    //console.log('DATA PARA GUARDAR : ', values);
     setRequestData(values);
     return values;
   }
@@ -451,14 +448,13 @@ const UpdateEventoRiesgo = ({ match }) => {
     putEventoRiesgoId(idEvento, _.omit(request, ['files', 'riesgoRelacionado']))
       .then(res => {
         if (res.status >= 200 && res.status < 300) {
-          console.log('Envio el request: ', res);
           notificationToast('success', 'Evento de Riesgo modificado exitósamente');
         } else {
-          console.log('Hubo un  error ', res);
+          console.error('Hubo un  error ', res);
           notificationToast('error', 'Algo salió mal, intente nuevamente');
         }
       }).catch((error) => {
-        console.log('Error al modificar Evento de Riesgo: ', error);
+        console.error('Error al modificar Evento de Riesgo: ', error);
         notificationToast('error', 'Algo salió mal, intente nuevamente');
       });
 

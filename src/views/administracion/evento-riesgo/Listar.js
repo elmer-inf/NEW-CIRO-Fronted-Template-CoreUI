@@ -260,7 +260,7 @@ const AdministracionEventoListar = () => {
               }
             })
           }).catch((error) => {
-            console.log('Error al eliminar Parámetro de Evento de Riesgo: ', error);
+            console.error('Error al eliminar Parámetro de Evento de Riesgo: ', error);
           });
       } else if (
         result.dismiss === Swal.DismissReason.cancel
@@ -296,11 +296,9 @@ const AdministracionEventoListar = () => {
     getTablaListaEvento()
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre_tabla', false)
-        //console.log('El response de tabla: ', res.data)
-        //console.log('options : ', options)
         setTablaListaOptions(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
         //notificationToast('error', Messages.notification.notOk)
       })
   }
@@ -322,10 +320,9 @@ const AdministracionEventoListar = () => {
   const getTablaDescripcion = (idTabla) => {
     getTablaDescripcionEventoN1(idTabla)
       .then(res => {
-        //console.log('nivel 1: ', res.data)
         setDAtaApi(res.data)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 

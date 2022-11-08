@@ -1,8 +1,8 @@
 import React from 'react'
-
 import { FormGroup, FormFeedback, CustomInput, Label } from 'reactstrap';
+
 const CInputCheckbox = (props) => {
-  //console.log("props: ",props)
+  
   return (
     <FormGroup>
       {/* <Label>{props.label}</Label> */}

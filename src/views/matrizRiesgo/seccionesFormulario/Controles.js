@@ -59,11 +59,6 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
   }
 
   function onSubmit(values) {
-    /* if(typeof values.controlObjetivo === 'object'){
-      console.log('SI es objeto');
-    } else{
-      console.log('NO es objeto');
-    } */
     const data = {
       ...values,
       controlesTiene: Boolean(values.controlesTiene),
@@ -93,9 +88,8 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
       .then(res => {
         const options = buildSelectThree(res.data, 'id', 'nombre', 'descripcion', true);
         setDataApiProcedimiento(_.filter(options, ['campoA', dataAux.procedimientoAux])); /* campoA */
-        /* setDataApiProcedimiento(options); */
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -107,7 +101,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiTipoControl(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -119,7 +113,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiNivelAuto(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 

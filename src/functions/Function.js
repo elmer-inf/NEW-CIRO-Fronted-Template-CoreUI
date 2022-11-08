@@ -17,7 +17,7 @@ export const buildSelect = (result, fieldName) => {
       });
     }
   } catch (error) {
-    console.log('Error: ', error)
+    console.error('Error: ', error)
   }
   return select;
 };
@@ -30,7 +30,7 @@ export const buildSelect = (result, fieldName) => {
  *
  */
 export const buildSelectThree = (data, fieldValue, fieldLabel, fieldLabel2, mantainAllData) => {
-  //console.log('dataselect:: ', data)
+
   const select = [];
   try {
     if (Array.isArray(data)) {
@@ -45,9 +45,8 @@ export const buildSelectThree = (data, fieldValue, fieldLabel, fieldLabel2, mant
       });
     }
   } catch (error) {
-    console.log('Error: ', error)
+    console.error('Error: ', error)
   }
-  //console.log(mantainAllData, ' NEW OBJECT SELECT:: ', select)
   return select;
 }
 
@@ -61,7 +60,7 @@ export const buildOptionSelect = (data, fieldValue, fieldLabel, mantainAllData, 
     }
 
   } catch (error) {
-    console.log('Error in ' + nameData + ' - buildOptionSelect : ', error)
+    console.error('Error in ' + nameData + ' - buildOptionSelect : ', error)
 
   }
   return optionSelect;
@@ -77,14 +76,14 @@ export const buildOptionSelectThree = (data, fieldValue, fieldLabel, fieldLabel2
     }
 
   } catch (error) {
-    console.log('Error in ' + nameData + ' - buildOptionSelect : ', error)
+    console.error('Error in ' + nameData + ' - buildOptionSelect : ', error)
 
   }
   return optionSelect;
 }
 
 export const buildSelectTwo = (data, fieldValue, fieldLabel, mantainAllData) => {
-  //console.log('dataselect:: ', data)
+
   const select = [];
   try {
     if (Array.isArray(data)) {
@@ -99,9 +98,8 @@ export const buildSelectTwo = (data, fieldValue, fieldLabel, mantainAllData) => 
       });
     }
   } catch (error) {
-    console.log('Error: ', error)
+    console.error('Error: ', error)
   }
-  //console.log(mantainAllData, ' NEW OBJECT SELECT:: ', select)
   return select;
 }
 
@@ -141,12 +139,10 @@ export const calculateLayout = (countInput) => {
 }
 
 export const deleteRowOfTable = (rowToDelete, data, field) => {
-  //const data = data;
   var newList = [];
   try {
     if (Array.isArray(data)) {
       console.log('================= ini ================== ')
-
       console.log('data ANTES: ', data)
       //const newList = [];
       newList = _.filter(data, function (o) {
@@ -160,24 +156,21 @@ export const deleteRowOfTable = (rowToDelete, data, field) => {
     console.log('Error eliminano un registro: ', error)
   }
   return newList
-  //console.log("Nuevo:::::: ", newList)
 }
 export const hasPermission = (path, pathRoutes) => {
   const permission = _.find(pathRoutes, function (o) {
     return o.path === path;
   });
   if (!_.isEmpty(permission)) {
-    console.log('Tiene permiso')
-
+    //console.log('Tiene permiso')
     return true;
   }
-  console.log('NO Tiene permiso')
+  //console.log('NO Tiene permiso')
   return false;
 }
 
 export const exportFile = (dataRespose, nameFileWithExtention) => {
   const blob = new Blob([dataRespose], { type: 'text/plain;charset=utf-8' });
   const FileSaver = require('file-saver');
-  //var date = new Date().toLocaleDateString();
   FileSaver.saveAs(blob, nameFileWithExtention);
 }

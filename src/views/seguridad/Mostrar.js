@@ -18,10 +18,9 @@ const Seguridad = ({ match }) => {
     await getSeguridadId(idSeguridad)
       .then((response) => {
         const res = response.data;
-        //console.log('Res : ', res);
         setDataApi(res)
       }).catch((error) => {
-        console.log("Error: ", error);
+        console.error("Error: ", error);
         //notificationToast('error', Messages.notification.notOk)
       });
   }

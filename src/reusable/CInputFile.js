@@ -1,30 +1,18 @@
 import React from 'react'
+import { FormGroup, FormFeedback, Input, Label } from 'reactstrap';
 
-import {
-  FormGroup,
-  FormFeedback,
-  Input,
-  Label
-} from 'reactstrap';
 export const CInputFile = (props) => {
 
-  /**
-    <FormGroup>
-              <Label htmlFor="inputIsValid">Input is valid</Label>
-              <Input valid id="inputIsValid" />
-              <ValidFeedback>Cool! Input is valid</ValidFeedback>
-            </FormGroup>
-   */
   const handleChange = (value) => {
     if (props.multiple) {
-      console.log('value.currentTarget MULTYYY.:: ', value.currentTarget.files);
+      //console.log('value.currentTarget MULTYYY.:: ', value.currentTarget.files);
       props.onChange(props.id, value.currentTarget.files);
     } else {
-      console.log('value.currentTarget.:: ', value.currentTarget.files[0]);
+      //console.log('value.currentTarget.:: ', value.currentTarget.files[0]);
       props.onChange(props.id, value.currentTarget.files[0]);
     }
-
   }
+  
   return (
     <FormGroup>
       <Label>{props.label}</Label>

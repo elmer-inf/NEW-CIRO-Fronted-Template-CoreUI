@@ -225,7 +225,7 @@ const MatrizOportunidadListar = () => {
                     }
                   })
                 }).catch((error) => {
-                  console.log('Error al obtener datos: ', error);
+                  console.error('Error al obtener datos: ', error);
                 });
             } else if (
               result.dismiss === Swal.DismissReason.cancel
@@ -260,7 +260,7 @@ const MatrizOportunidadListar = () => {
           }
         }
       }).catch((error) => {
-        console.log("Error: ", error);
+        console.error("Error: ", error);
       });
   }
   // Descarta Registro
@@ -294,7 +294,7 @@ const MatrizOportunidadListar = () => {
                 }
               })
             }).catch((error) => {
-              console.log('Error al obtener datos: ', error);
+              console.error('Error al obtener datos: ', error);
             });
         } else if (
           result.dismiss === Swal.DismissReason.cancel
@@ -337,16 +337,13 @@ const MatrizOportunidadListar = () => {
     setSpin(true)
     getOportunidadPaging(page, size)
       .then(res => {
-        //console.log('El response de tabla: ', res.data)
         const paging = res.data.paging;
         const toPaging = { ...paging }
-
         setListaOportunidades(res.data.data);
         setpagination(toPaging);
-
         setSpin(false)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -370,15 +367,10 @@ const MatrizOportunidadListar = () => {
       param[fieldName] = valueToSearch;
     }
 
-    console.log('params:: ', param)
-    console.log('param[fechaEvaluacion]:: ', param['fechaEvaluacion'])
-
     //deleteok
-
     if (param['fechaEvaluacion'] === '' || _.isEmpty(param['fechaEvaluacion'])) {
       delete param['fechaEvaluacion'];
     }
-
     if (param['procesoId.clave'] === '' || _.isEmpty(param['procesoId.clave'])) {
       delete param['procesoId.clave'];
     }
@@ -394,25 +386,19 @@ const MatrizOportunidadListar = () => {
     if (param['id'] === '' || _.isEmpty(param['id'])) {
       delete param['id'];
     }
-
     setParams(param)
     validatePagination(pagination.page, pagination.size, param);
   }
 
   const validatePagination = async (page, size, toSearch) => {
     setSpin(true)
-
     var search = getParams(toSearch);
     if (toSearch === 'p') {
       search = getParams(params);
     } else {
       search = getParams(toSearch);
     }
-
-    //console.log('TO SEARCH:: ', search);
-
     const endpoint = 'v1/matrizOportunidad/';
-
     await getListPagingWithSearch(page, size, endpoint, search)
       .then((response) => {
         const paging = response.data.paging;
@@ -421,7 +407,7 @@ const MatrizOportunidadListar = () => {
         setpagination(toPaging);
         setSpin(false)
       }).catch((error) => {
-        console.log("Error: ", error);
+        console.error("Error: ", error);
         setSpin(false)
       });
   }

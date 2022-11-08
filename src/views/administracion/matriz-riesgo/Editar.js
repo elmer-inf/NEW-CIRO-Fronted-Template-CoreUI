@@ -65,19 +65,17 @@ const AdministracionMatrizRiesgoEditar = ({ match }) => {
 
   const handleOnSubmit = (dataToRequest) => {
     setSpin(true);
-    console.log('data que se edita: ', dataToRequest)
     const idTabDesc = match.params.id;
     putTablaDescripcionRiesgo(idTabDesc, dataToRequest)
       .then(res => {
         if (res.status >= 200 && res.status < 300) {
-          console.log('Envio el request: ', res);
           notificationToast('success', 'Párametro de Matriz de Riesgo modificado exitósamente');
         } else {
-          console.log('Hubo un  error ', res);
+          console.error('Hubo un  error ', res);
           notificationToast('error', 'Algo salió mal, intente nuevamente');
         }
       }).catch((error) => {
-        console.log('Error al modificar Párametro de Matriz de Riesgo: ', error);
+        console.error('Error al modificar Párametro de Matriz de Riesgo: ', error);
         notificationToast('error', 'Algo salió mal, intente nuevamente');
       });
   }
@@ -96,7 +94,6 @@ const AdministracionMatrizRiesgoEditar = ({ match }) => {
 
       tablaId: nivel1,
     }
-    console.log('MATCHED: ', valores)
     setformValueToEdit(valores)
   }
 
@@ -109,13 +106,12 @@ const AdministracionMatrizRiesgoEditar = ({ match }) => {
         matched(res);
         setSpin(false);
       }).catch((error) => {
-        console.log("Error: ", error);
+        console.error("Error: ", error);
         setSpin(false);
       });
   }
 
   useEffect(() => {
-    //console.log("call")
     getById();
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

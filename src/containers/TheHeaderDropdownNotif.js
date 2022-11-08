@@ -15,10 +15,9 @@ const TheHeaderDropdownNotif = () => {
     getDiezDiasAntes()
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'codigo', true)
-        //console.log('options : ', options)
         setDiezDiasAntes(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -28,10 +27,9 @@ const TheHeaderDropdownNotif = () => {
     getCincoDiasAntes()
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'codigo', true)
-        //console.log('options : ', options)
         setCincoDiasAntes(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -41,10 +39,9 @@ const TheHeaderDropdownNotif = () => {
     getPlanVencido()
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'codigo', true)
-        // console.log('options : ', options)
         setPlanVencido(options)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 

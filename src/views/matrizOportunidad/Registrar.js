@@ -101,7 +101,6 @@ const MatrizRiesgoRegistrar = () => {
   }
 
   const setObject = (result) => {
-    //console.log("result: ", result)
     const values = {
       ...requestData,
       ...result
@@ -152,27 +151,22 @@ const MatrizRiesgoRegistrar = () => {
   const handleOnSubmmit = (values) => {
     setSpin(true);
     const dataRequest = setObject(values);
-    //console.log('dataRequest: ', dataRequest)
     const dataValues = {
       ...dataRequest,
       controles: JSON.stringify(dataRequest.controles),
       planesAccion: JSON.stringify(dataRequest.planesAccion)
     }
 
-    //console.log('Lo que se enviara en el request: ', dataValues)
-
     postOportunidad(dataValues)
       .then(res => {
         if (res.status >= 200 && res.status < 300) {
-          console.log('Envio el request: ', res)
           notificationToast('success', 'Matriz de Oportunidad registrada exitósamente');
-          // history.push("/matrizOportunidad/listar")
         } else {
-          console.log('Hubo un  error ', res);
+          console.error('Hubo un  error ', res);
           notificationToast('error', 'Algo salió mal, intente nuevamente');
         }
       }).catch((error) => {
-        console.log('Error al obtener datos: ', error);
+        console.error('Error al obtener datos: ', error);
         notificationToast('error', 'Algo salió mal, intente nuevamente');
       });
   }
@@ -186,7 +180,7 @@ const MatrizRiesgoRegistrar = () => {
         setDataApiTratamiento(options)
 
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
@@ -200,7 +194,7 @@ const MatrizRiesgoRegistrar = () => {
         setDataApiFortaleza(_.orderBy(options, ['value'], ['desc']))
         setSpin(false)
       }).catch((error) => {
-        console.log('Error: ', error)
+        console.error('Error: ', error)
       })
   }
 
