@@ -9,12 +9,11 @@ import ViewReportCIRO from './component/ViewReportCIRO';
 import { exportFile } from 'src/functions/Function';
 import CCSpinner from 'src/reusable/spinner/CCSpinner';
 import { generateAllReport } from './controller/ReporteCiroController';
-
 var _ = require('lodash');
 
 const ReporteEventos = () => {
-  const [spin, setSpin] = useState(false);
 
+  const [spin, setSpin] = useState(false);
   const [showCiroReport, setshowCiroReport] = useState(false);
 
   const formValueInitial = {
@@ -71,7 +70,6 @@ const ReporteEventos = () => {
         )
       }
     ),
-
     onSubmit: values => {
       const data = {
         ...values
@@ -159,19 +157,16 @@ const ReporteEventos = () => {
     return fechaReporte;
   }
 
-  useEffect(() => { //componentWillMount
+  useEffect(() => {
     if (formik.values.tipo === null || formik.values.tipo.value !== 'ciro') {
       setshowCiroReport(false)
-
     }
   }, [formik.values.tipo]);
-
 
 
   return (
     <div className='table-hover-animation'>
       <CCSpinner show={spin} />
-
       <Fragment>
         <Card>
           <CardHeader>
@@ -187,7 +182,6 @@ const ReporteEventos = () => {
                 </Button>
                 : null
             }
-
           </CardHeader>
           <CardBody>
             <Form onSubmit={formik.handleSubmit} autoComplete="off">
@@ -245,7 +239,6 @@ const ReporteEventos = () => {
                     </FormGroup>
                     : null
                 }
-
               </Row>
               <Row>
                 <Col xs={12} sm={12} md={{ size: 2, order: 0, offset: 4 }}>
@@ -274,22 +267,17 @@ const ReporteEventos = () => {
                     Generar
                   </Button>
                 </Col>
-
               </Row>
-
             </Form>
             <hr />
             {
-
               (formik.values.tipo !== null && formik.values.tipo.value === 'ciro' && showCiroReport === true)
                 ? <ViewReportCIRO fechaInicio={fechaReporte(0)} fechaFin={fechaReporte(1)} trimestre={formik.values.trimestre} />
                 : <h6><center>{'Seleccione un tipo de reporte'}</center></h6>
             }
           </CardBody>
         </Card>
-
       </Fragment>
-
     </div>
   )
 }

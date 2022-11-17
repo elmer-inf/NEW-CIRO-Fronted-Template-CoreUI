@@ -7,8 +7,6 @@ import { ListGroup, ListGroupItem } from 'reactstrap'
 
 const TheHeaderDropdownNotif = () => {
 
-  //const history = useHistory();
-
   // Eventos 10 dias antes de vencer el plan
   const [listDiezDiasAntes, setDiezDiasAntes] = useState([])
   const callApiDiezDiasAntes = () => {
@@ -88,9 +86,7 @@ const TheHeaderDropdownNotif = () => {
               {listCincoDiasAntes.map((evento) => {
                 return <ListGroupItem className='py-1' key={evento.value}>
                   <Calendar size={15} className='text-primary mr-2' />
-                  {/* <Link to={{ pathname: '/eventoRiesgo/Mostrar/' + evento.id }} className='text-dark'> */}
                   {evento.id} | {evento.codigo !== null ? evento.codigo : <span>Sin código</span>} | {evento.fechaFinPlan}
-                  {/* </Link> */}
                 </ListGroupItem>
               })}
             </ListGroup>
@@ -104,10 +100,8 @@ const TheHeaderDropdownNotif = () => {
             <ListGroup flush className='pt-2'>
               {listPlanVencido.map((evento) => {
                 return <ListGroupItem className='py-1' key={evento.value}>
-                  {/* <Link to={{ pathname: '/eventoRiesgo/Mostrar/' + evento.id }} className='text-dark'> */}
                   <Calendar size={15} className='text-danger mr-2' />
                   {evento.id} | {evento.codigo !== null ? evento.codigo : <span>Sin código</span>} | {evento.fechaFinPlan}
-                  {/* </Link> */}
                 </ListGroupItem>
               })}
             </ListGroup>

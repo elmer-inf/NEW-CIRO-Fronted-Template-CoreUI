@@ -23,7 +23,7 @@ const CanalE = ({ fechaIniTrim, fechaFinTrim }) => {
     },
     {
       dataField: 'codigoEnvio',
-      text: 'Codigo envio',
+      text: 'Código envio',
       headerFormatter: typeFormatter
     },
     {
@@ -33,7 +33,7 @@ const CanalE = ({ fechaIniTrim, fechaFinTrim }) => {
     },
     {
       dataField: 'codigoEvento',
-      text: 'Codigo evento',
+      text: 'Código evento',
       headerFormatter: typeFormatter
     },
     {

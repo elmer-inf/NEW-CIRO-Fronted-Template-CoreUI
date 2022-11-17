@@ -22,7 +22,7 @@ const LineaNegocioI = ({ fechaIniTrim, fechaFinTrim }) => {
     },
     {
       dataField: 'codigoEnvio',
-      text: 'Codigo envio',
+      text: 'Código envio',
       headerFormatter: typeFormatter
     },
     {
@@ -32,29 +32,30 @@ const LineaNegocioI = ({ fechaIniTrim, fechaFinTrim }) => {
     },
     {
       dataField: 'codigoEvento',
-      text: 'Codigo evento',
+      text: 'Código evento',
       headerFormatter: typeFormatter
     },
     {
       dataField: 'lineaNegocio',
-      text: 'Linea negocio',
+      text: 'Línea negocio',
       headerFormatter: typeFormatter
     },
     {
       dataField: 'lineaNegocioNivel3',
-      text: 'Linea negocio nivel 3',
+      text: 'Línea negocio nivel 3',
       headerFormatter: typeFormatter
     },
     {
       dataField: 'tipoEnvio',
       text: 'Tipo envio',
       headerFormatter: typeFormatter
-
     },
   ];
+
   const paging = paginationFactory({
     page: 1,
   });
+  
   const getLineaNegocio = async (data) => {
     setSpin(true)
     await reportLineaNegocio(data)

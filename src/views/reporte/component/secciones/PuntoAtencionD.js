@@ -23,7 +23,7 @@ const PuntoAtencionD = ({ fechaIniTrim, fechaFinTrim }) => {
     },
     {
       dataField: 'codigoEnvio',
-      text: 'Codigo envio',
+      text: 'Código envio',
       headerFormatter: typeFormatter
     },
     {
@@ -33,12 +33,12 @@ const PuntoAtencionD = ({ fechaIniTrim, fechaFinTrim }) => {
     },
     {
       dataField: 'codigoEvento',
-      text: 'Codigo evento',
+      text: 'Código evento',
       headerFormatter: typeFormatter
     },
     {
       dataField: 'codigoPaf',
-      text: 'Codigo PAF',
+      text: 'Código PAF',
       headerFormatter: typeFormatter
     },
     {

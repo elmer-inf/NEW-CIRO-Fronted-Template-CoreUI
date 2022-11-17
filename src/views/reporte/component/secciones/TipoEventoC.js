@@ -27,7 +27,7 @@ const TipoEventoC = ({ fechaIniTrim, fechaFinTrim }) => {
     },
     {
       dataField: 'codigoEnvio',
-      text: 'Codigo envio',
+      text: 'Código envio',
       headerFormatter: typeFormatter
     },
     {
@@ -37,7 +37,7 @@ const TipoEventoC = ({ fechaIniTrim, fechaFinTrim }) => {
     },
     {
       dataField: 'codigoEvento',
-      text: 'Codigo evento',
+      text: 'Código evento',
       headerFormatter: typeFormatter
     },
     {
@@ -47,7 +47,7 @@ const TipoEventoC = ({ fechaIniTrim, fechaFinTrim }) => {
     },
     {
       dataField: 'descripcionTipoEvento',
-      text: 'Descripcion tipo evento',
+      text: 'Descripción tipo evento',
       headerFormatter: typeFormatter
     },
     {

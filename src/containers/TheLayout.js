@@ -1,28 +1,3 @@
-/* import React from 'react'
-import {
-  TheContent,
-  TheSidebar,
-  TheFooter,
-  TheHeader
-} from './index'
-const TheLayout = () => {
-  return (
-    <div className="c-app c-default-layout">
-      <TheSidebar/>
-      <div className="c-wrapper">
-        <TheHeader/>
-        <div className="c-body">
-          <TheContent/>
-        </div>
-        <TheFooter/>
-      </div>
-    </div>
-  )
-}
-export default TheLayout
- */
-
-
 import React, { useState, useEffect } from 'react'
 import { faBox } from '@fortawesome/free-solid-svg-icons';
 import { TheContent, TheSidebar, TheFooter, TheHeader} from './index'
@@ -34,7 +9,6 @@ import { Redirect} from 'react-router-dom'
 import { getMenuPath, getMenuToNavigate } from 'src/functions/FunctionApi';
 import { iconList } from 'src/reusable/variables/Variables';
 export const PathContext = React.createContext([]);
-
 var _ = require('lodash');
 
 const TheLayout = () => {

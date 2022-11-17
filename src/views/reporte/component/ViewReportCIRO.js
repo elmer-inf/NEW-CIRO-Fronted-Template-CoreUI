@@ -70,7 +70,7 @@ const ViewReportCIRO = ({ fechaInicio, fechaFin, trimestre }) => {
 
               <CNavItem>
                 <CNavLink>
-                  <FileText size={17} /><span className='pl-1 pr-2 h6 font-weight-bold'>Linea de negocio</span>
+                  <FileText size={17} /><span className='pl-1 pr-2 h6 font-weight-bold'>Línea de negocio</span>
                 </CNavLink>
               </CNavItem>
 

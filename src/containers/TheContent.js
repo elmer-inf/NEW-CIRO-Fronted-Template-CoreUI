@@ -1,58 +1,7 @@
-/*import React, { Suspense } from 'react'
-import {
-  Redirect,
-  Route,
-  Switch
-} from 'react-router-dom'
-import { CContainer, CFade } from '@coreui/react'
-// routes config
-import routes from '../routes'
-  
-const loading = (
-  <div className="pt-3 text-center">
-    <div className="sk-spinner sk-spinner-pulse"></div>
-  </div>
-)
-const TheContent = () => {
-  return (
-    <main className="c-main">
-      <CContainer fluid>
-        <Suspense fallback={loading}>
-          <Switch>
-            {routes.map((route, idx) => {
-              return route.component && (
-                <Route
-                  key={idx}
-                  path={route.path}
-                  exact={route.exact}
-                  name={route.name}
-                  render={props => (
-                    <CFade>
-                      <route.component {...props} />
-                    </CFade>
-                  )} />
-              )
-            })}
-            <Redirect from="/" to="/dashboard" />
-          </Switch>
-        </Suspense>
-      </CContainer>
-    </main>
-  )
-}
-export default React.memo(TheContent)*/
-
-
-import React, { Suspense, useEffect, useState } from 'react'
-import {
-  Redirect,
-  Route,
-  Switch
-} from 'react-router-dom'
-import { CContainer, CFade } from '@coreui/react'
-
-// routes config
-import routes from '../routes'
+import React, { Suspense, useEffect, useState } from 'react';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import { CContainer, CFade } from '@coreui/react';
+import routes from '../routes';
 import CCSpinner from 'src/reusable/spinner/CCSpinner';
 var _ = require('lodash');
 
@@ -60,7 +9,6 @@ const loading = (
   <div className="pt-3 text-center">
     <div className="sk-spinner sk-spinner-pulse">Cargando...</div>
   </div>
-
 )
 
 const TheContent = ({ routesProp }) => {
@@ -70,7 +18,6 @@ const TheContent = ({ routesProp }) => {
 
   const matching = () => {
     setSpin(true);
-
     const newRoute = [];
     newRoute.push(routes[0]);
     newRoute.push(routes[1]);
@@ -87,8 +34,8 @@ const TheContent = ({ routesProp }) => {
     });
     setListRoute(newRoute);
     setSpin(false);
-
   }
+
   useEffect(() => {
     matching();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -98,7 +45,6 @@ const TheContent = ({ routesProp }) => {
   return (
     <main className="c-main">
       <CCSpinner show={spin} />
-
       <CContainer fluid>
         <Suspense fallback={loading}>
           <Switch>
@@ -124,8 +70,6 @@ const TheContent = ({ routesProp }) => {
           </Switch>
         </Suspense>
       </CContainer>
-
-
     </main>
   )
 }

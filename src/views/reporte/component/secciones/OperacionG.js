@@ -23,7 +23,7 @@ const OperacionG = ({ fechaIniTrim, fechaFinTrim }) => {
     },
     {
       dataField: 'codigoEnvio',
-      text: 'Codigo envio',
+      text: 'Código envio',
       headerFormatter: typeFormatter
     },
     {
@@ -33,12 +33,12 @@ const OperacionG = ({ fechaIniTrim, fechaFinTrim }) => {
     },
     {
       dataField: 'codigoEvento',
-      text: 'Codigo evento',
+      text: 'Código evento',
       headerFormatter: typeFormatter
     },
     {
       dataField: 'operacion',
-      text: 'Operacion',
+      text: 'Operación',
       headerFormatter: typeFormatter
     },
     {
@@ -47,9 +47,11 @@ const OperacionG = ({ fechaIniTrim, fechaFinTrim }) => {
       headerFormatter: typeFormatter
     },
   ];
+
   const paging = paginationFactory({
     page: 1,
   });
+  
   const getOperacion = async (data) => {
     setSpin(true)
     await reportOpreacion(data)

@@ -1,25 +1,13 @@
-import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-/* import { CardHeader, Row } from 'reactstrap' */
-import {
-  CHeader,
-  CToggler,
-  CHeaderBrand,
-  CHeaderNav,
-  CSubheader,
-  CBreadcrumbRouter
-} from '@coreui/react'
-import CIcon from '@coreui/icons-react'
-
-// routes config
-import routes from '../routes'
-
-import {
-  TheHeaderDropdown
-} from './index'
-import TheHeaderDropdownNotif from './TheHeaderDropdownNotif'
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { CHeader, CToggler, CHeaderBrand, CHeaderNav, CSubheader, CBreadcrumbRouter } from '@coreui/react';
+import CIcon from '@coreui/icons-react';
+import routes from '../routes';
+import { TheHeaderDropdown } from './index';
+import TheHeaderDropdownNotif from './TheHeaderDropdownNotif';
 
 const TheHeader = () => {
+
   const dispatch = useDispatch()
   const sidebarShow = useSelector(state => state.sidebarShow)
 

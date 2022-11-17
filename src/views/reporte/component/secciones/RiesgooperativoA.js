@@ -24,7 +24,7 @@ const RiesgooperativoA = ({ fechaIniTrim, fechaFinTrim }) => {
     },
     {
       dataField: 'codigoEnvio',
-      text: 'Codigo envio',
+      text: 'Código envio',
       headerFormatter: typeFormatter
     },
     {
@@ -34,7 +34,7 @@ const RiesgooperativoA = ({ fechaIniTrim, fechaFinTrim }) => {
     },
     {
       dataField: 'codigoEvento',
-      text: 'Codigo evento',
+      text: 'Código evento',
       headerFormatter: typeFormatter
     },
     {
@@ -54,12 +54,12 @@ const RiesgooperativoA = ({ fechaIniTrim, fechaFinTrim }) => {
     },
     {
       dataField: 'cargoInvolucrado',
-      text: 'Cargo Involucrado',
+      text: 'Cargo involucrado',
       headerFormatter: typeFormatter
     },
     {
       dataField: 'areaInvolucrada',
-      text: 'Area involucrada',
+      text: 'Área involucrada',
       headerFormatter: typeFormatter
     },
     {
@@ -69,12 +69,12 @@ const RiesgooperativoA = ({ fechaIniTrim, fechaFinTrim }) => {
     },
     {
       dataField: 'perdidaRiesgoOperativoContable',
-      text: 'Perdidiad de resgo operativo (valor contable)',
+      text: 'Pérdida de riesgo operativo (valor contable)',
       headerFormatter: typeFormatter
     },
     {
       dataField: 'perdidaRiesgoOperativoMercado',
-      text: 'Perdidiad de resgo operativo (valor mercado)',
+      text: 'Pérdida de riesgo operativo (valor mercado)',
       headerFormatter: typeFormatter
     },
     {
@@ -94,22 +94,22 @@ const RiesgooperativoA = ({ fechaIniTrim, fechaFinTrim }) => {
     },
     {
       dataField: 'recuperacionActivo',
-      text: 'Recuperacion activo',
+      text: 'Recuperación activo',
       headerFormatter: typeFormatter
     },
     {
       dataField: 'relacionRiesgoCredito',
-      text: 'Relación riesgo credito',
+      text: 'Relación riesgo crédito',
       headerFormatter: typeFormatter
     },
     {
       dataField: 'eventoCritico',
-      text: 'Evento critico',
+      text: 'Evento crítico',
       headerFormatter: typeFormatter
     },
     {
       dataField: 'detalleEventoCritico',
-      text: 'Detalle eveto Critico',
+      text: 'Detalle eveto crítico',
       headerFormatter: typeFormatter
     },
     {
@@ -119,12 +119,12 @@ const RiesgooperativoA = ({ fechaIniTrim, fechaFinTrim }) => {
     },
     {
       dataField: 'horaDescubrimiento',
-      text: 'Hora descubrimeento',
+      text: 'Hora descubrimiento',
       headerFormatter: typeFormatter
     },
     {
       dataField: 'fechaInicio',
-      text: 'fechja inicio',
+      text: 'fecha inicio',
       headerFormatter: typeFormatter
     },
     {
@@ -139,7 +139,7 @@ const RiesgooperativoA = ({ fechaIniTrim, fechaFinTrim }) => {
     },
     {
       dataField: 'horaFinalizacion',
-      text: 'Hora finalizacion',
+      text: 'Hora finalización',
       headerFormatter: typeFormatter
     },
     {

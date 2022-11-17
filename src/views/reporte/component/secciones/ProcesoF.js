@@ -24,7 +24,7 @@ const ProcesoF = ({ fechaIniTrim, fechaFinTrim }) => {
     },
     {
       dataField: 'codigoEnvio',
-      text: 'Codigo envio',
+      text: 'Código envio',
       headerFormatter: typeFormatter
     },
     {
@@ -39,12 +39,12 @@ const ProcesoF = ({ fechaIniTrim, fechaFinTrim }) => {
     },
     {
       dataField: 'procesoCritico',
-      text: 'Proceso Critico',
+      text: 'Proceso crítico',
       headerFormatter: typeFormatter
     },
     {
       dataField: 'detalleEventoCritico',
-      text: 'Detalle Evento critico',
+      text: 'Detalle evento crítico',
       headerFormatter: typeFormatter
     },
     {
