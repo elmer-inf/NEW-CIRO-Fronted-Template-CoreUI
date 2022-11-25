@@ -373,6 +373,11 @@ const MatrizRiesgoListar = () => {
       param['codigo'] = event.value;
     }
 
+    // add exception for "procesoId.clave"
+    if (fieldName === 'procesoId.clave' && !_.isEmpty(event.value)) {
+      param['procesoId.clave'] = event.value;
+    }
+
     //deleteok
     if (param['procesoId.clave'] === '' || _.isEmpty(param['procesoId.clave'])) {
       delete param['procesoId.clave'];

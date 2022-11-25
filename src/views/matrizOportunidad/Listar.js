@@ -372,6 +372,11 @@ const MatrizOportunidadListar = () => {
       param['codigo'] = event.value;
     }
 
+    // add exception for "procesoId.clave"
+    if (fieldName === 'procesoId.clave' && !_.isEmpty(event.value)) {
+      param['procesoId.clave'] = event.value;
+    }
+
     //deleteok
     if (param['fechaEvaluacion'] === '' || _.isEmpty(param['fechaEvaluacion'])) {
       delete param['fechaEvaluacion'];
