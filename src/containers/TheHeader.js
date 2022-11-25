@@ -22,7 +22,7 @@ const TheHeader = () => {
   }
 
   return (
-    <CHeader withSubheader className='mx-3 mx-md-4 mt-4 mb-0 card'>
+    <CHeader withSubheader className='mx-3 mx-md-4 my-4 mb-0 card'>
       <CToggler
         inHeader
         className="ml-md-3 d-lg-none"
@@ -44,13 +44,12 @@ const TheHeader = () => {
       </CHeaderBrand>
 
       <CHeaderNav className="d-md-down-none mr-auto">
-        <span className='text-primary h5 pl-1 pt-2'>
+        <span className='text-primary h5 pl-1 pt-2 system-tittle'>
           <b><i>SISTEMA DE GESTION</i></b>
         </span>
-        <span style={{ color: '#009eb2' }} className='h5 pl-1 pt-2'>
+        <span className='h5 pl-1 pt-2 system-tittle' style={{ color: '#009eb2' }}>
           <b><i>DE RIESGOS INTEGRALES</i></b>
         </span>
-
         {/* <CIcon
           className="c-sidebar-brand-full pl-2"
           src = "/logo/titulo.png"

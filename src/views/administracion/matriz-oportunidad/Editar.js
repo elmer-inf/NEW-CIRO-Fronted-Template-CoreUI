@@ -157,7 +157,7 @@ const AdministracionMatrizOEditar = ({ match }) => {
       <Fragment>
         <Card>
           <CardHeader>
-            <CardTitle className='float-left h4 pt-2'>Editar Parámetro de Matriz de oportunidad</CardTitle>
+            <CardTitle className='float-left h4 pt-2'>Editar Parámetro de Matriz de Oportunidad</CardTitle>
           </CardHeader>
           <CardBody className='mt-4'>
             {

@@ -368,6 +368,11 @@ const MatrizRiesgoListar = () => {
       param[fieldName] = valueToSearch;
     }
 
+    // add exception for "codigo"
+    if (fieldName === 'codigo' && !_.isEmpty(event.value)) {
+      param['codigo'] = event.value;
+    }
+
     //deleteok
     if (param['procesoId.clave'] === '' || _.isEmpty(param['procesoId.clave'])) {
       delete param['procesoId.clave'];

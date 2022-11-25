@@ -80,16 +80,7 @@ const EventoRiesgoListar = () => {
       filterRenderer: (onFilter, column) =>
         <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
       headerFormatter: typeFormatter,
-    }, /* {
-      dataField: 'areaID.clave',
-      text: 'AREA',
-      style: { whiteSpace: 'nowrap' },
-      sort: true,
-      filter: customFilter(),
-      filterRenderer: (onFilter, column) =>
-        <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
-      headerFormatter: typeFormatter,
-    }, */ {
+    }, {
       dataField: 'fechaDesc',
       text: 'FECHA DESC',
       sort: true,
@@ -105,15 +96,7 @@ const EventoRiesgoListar = () => {
       filterRenderer: (onFilter, column) =>
         <CFilterDate placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
       headerFormatter: typeFormatter,
-    },/*  {
-      dataField: 'descripcionCompleta',
-      text: 'DESCRIPCION',
-      sort: true,
-      filter: customFilter(),
-      filterRenderer: (onFilter, column) =>
-        <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
-      headerFormatter: typeFormatter,
-    }, */ {
+    },{
       dataField: 'tipoEvento',
       text: 'TIPO',
       sort: true,
@@ -414,6 +397,11 @@ const EventoRiesgoListar = () => {
       param['fechaDesc'] = event.value;
     } else {
       param[fieldName] = valueToSearch;
+    }
+
+    // add exception for "codigo"
+    if (fieldName === 'codigo' && !_.isEmpty(event.value)) {
+      param['codigo'] = event.value;
     }
 
     //deleteok

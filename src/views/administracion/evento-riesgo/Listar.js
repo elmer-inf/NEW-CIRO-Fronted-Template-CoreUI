@@ -356,7 +356,7 @@ const AdministracionEventoListar = () => {
       <Fragment>
         <Card>
           <CardHeader>
-            <CardTitle className='float-left h4 pt-2'>Listado de Parámetros de Eventos de Riesgo</CardTitle>
+            <CardTitle className='float-left h4 pt-2'>Parámetros de Eventos de Riesgo</CardTitle>
             <Button color='primary' onClick={(e) => { redirect(e) }} className='float-right mt-1 text-white' style={{ width: '130px' }}>
               <Plus size={15} className='mr-2' /><span>Registrar</span>
             </Button>
@@ -373,7 +373,7 @@ const AdministracionEventoListar = () => {
                   className='react-select'
                   classNamePrefix='select'
                   options={tablaListaOptions}
-                  isLoading={true}
+                  isLoading={false}
                   //isClearable={true}
                   styles={customStyles}
                   theme={theme => ({

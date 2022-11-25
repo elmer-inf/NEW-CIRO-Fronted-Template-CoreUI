@@ -303,7 +303,7 @@ const AdministracionMatrizRiesgosListar = () => {
       <Fragment>
         <Card>
           <CardHeader>
-            <CardTitle className='float-left h4 pt-2'>Listado de Parámetros de Matriz de Riesgos</CardTitle>
+            <CardTitle className='float-left h4 pt-2'>Parámetros de Matriz de Riesgos</CardTitle>
             <Button color='primary' onClick={(e) => { redirect(e) }} className='float-right mt-1' style={{ width: '130px' }}>
               <span className='text-white'>Registrar</span>
             </Button>
@@ -320,7 +320,7 @@ const AdministracionMatrizRiesgosListar = () => {
                   className='react-select'
                   classNamePrefix='select'
                   options={tablaListaOptions}
-                  isLoading={true}
+                  isLoading={false}
                   styles={customStyles}
                   theme={theme => ({
                     ...theme,

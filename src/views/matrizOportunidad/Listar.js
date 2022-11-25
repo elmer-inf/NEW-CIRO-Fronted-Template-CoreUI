@@ -367,6 +367,11 @@ const MatrizOportunidadListar = () => {
       param[fieldName] = valueToSearch;
     }
 
+    // add exception for "codigo"
+    if (fieldName === 'codigo' && !_.isEmpty(event.value)) {
+      param['codigo'] = event.value;
+    }
+
     //deleteok
     if (param['fechaEvaluacion'] === '' || _.isEmpty(param['fechaEvaluacion'])) {
       delete param['fechaEvaluacion'];

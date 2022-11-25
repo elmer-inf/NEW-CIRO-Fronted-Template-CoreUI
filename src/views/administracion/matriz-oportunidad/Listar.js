@@ -260,7 +260,7 @@ const AdministracionMatrizOportunidadListar = () => {
       <Fragment>
         <Card>
           <CardHeader>
-            <CardTitle className='float-left h4 pt-2'>Listado de Parámetros de Matriz de oportunidades</CardTitle>
+            <CardTitle className='float-left h4 pt-2'>Parámetros de Matriz de Oportunidades</CardTitle>
             <Button color='primary' onClick={(e) => { redirect(e) }} className='float-right mt-1 text-white' style={{ width: '130px' }}>
               <Plus size={15} className='mr-2' /><span>Registrar</span>
             </Button>
@@ -277,7 +277,7 @@ const AdministracionMatrizOportunidadListar = () => {
                   className='react-select'
                   classNamePrefix='select'
                   options={tablaListaOptions}
-                  isLoading={true}
+                  isLoading={false}
                   styles={customStyles}
                   theme={theme => ({
                     ...theme,

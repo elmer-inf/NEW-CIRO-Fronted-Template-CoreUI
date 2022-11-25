@@ -107,7 +107,7 @@ const AdministracionMatrizOportunidadRegistrar = () => {
       <Fragment>
         <Card>
           <CardHeader>
-            <CardTitle className='float-left h4 pt-2'>Registrar Parámetro de Matriz de oportunidad</CardTitle>
+            <CardTitle className='float-left h4 pt-2'>Registrar Parámetro de Matriz de Oportunidad</CardTitle>
           </CardHeader>
           <CardBody className='mt-4'>
             <Formulario

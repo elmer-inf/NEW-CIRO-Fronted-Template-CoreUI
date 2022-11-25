@@ -205,7 +205,7 @@ const AdministracionSeguridadListar = () => {
       <Fragment>
         <Card>
           <CardHeader>
-            <CardTitle className='float-left h4 pt-2'>Listado de Parámetros de Seguridad</CardTitle>
+            <CardTitle className='float-left h4 pt-2'>Parámetros de Seguridad</CardTitle>
             <Button color='primary' onClick={(e) => { redirect(e) }} className='float-right mt-1' style={{ width: '130px' }}>
               <span className='text-white'>Registrar</span>
             </Button>
@@ -222,7 +222,7 @@ const AdministracionSeguridadListar = () => {
                   className='react-select'
                   classNamePrefix='select'
                   options={tablaListaOptions}
-                  isLoading={true}
+                  isLoading={false}
                   styles={customStyles}
                   theme={theme => ({
                     ...theme,
