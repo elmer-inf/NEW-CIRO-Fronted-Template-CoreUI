@@ -147,7 +147,7 @@ const SeguridadEditar = ({ match }) => {
       <Fragment>
         <Card>
           <CardHeader>
-            <CardTitle className='float-left h4 pt-2'>Editar Parámetro de Evento de Riesgo</CardTitle>
+            <CardTitle className='float-left h4 pt-2'>Editar Riesgo en Seguridad</CardTitle>
           </CardHeader>
           <CardBody className='mt-4'>
             {

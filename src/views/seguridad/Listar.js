@@ -261,7 +261,7 @@ const SeguridadListar = () => {
           <Col sm='12'>
             <Card>
               <CardHeader>
-                <CardTitle className='float-left h4 pt-2'>Riesgo en Seguridad</CardTitle>
+                <CardTitle className='float-left h4 pt-2'>Riesgos en Seguridad</CardTitle>
                 <Button color='primary' onClick={(e) => { redirect(e) }} className='float-right mt-1' style={{ width: '130px' }}>
                   <span className='text-white'>Registrar</span>
                 </Button>
