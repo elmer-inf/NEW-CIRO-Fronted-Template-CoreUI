@@ -1,5 +1,5 @@
 import { React, Fragment, useState, useEffect } from 'react'
-import { ChevronRight, Delete } from 'react-feather'
+import { ChevronRight, Delete, XSquare } from 'react-feather'
 import { Label, FormGroup, Row, Col, Form, Button } from 'reactstrap'
 import { useFormik } from "formik"
 import * as Yup from "yup"
@@ -13,6 +13,7 @@ import { CInputFile } from 'src/reusable/CInputFile'
 import { useHistory } from 'react-router-dom'
 import AuthService from 'src/views/authentication/AuthService'
 import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
+import { Messages } from 'src/reusable/variables/Messages'
 
 const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFiles, optionsEstado }) => {
 
@@ -20,35 +21,39 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
   const profile = Auth.getProfile();
   const user = profile.usuario;
 
+  const today = new Date();
+  //const tenYearsFromNow = new Date();
+  //tenYearsFromNow.setFullYear(today.getFullYear() + 10);
+
   const formik = useFormik({
     initialValues: initValues,
     validationSchema: Yup.object().shape({
-      fechaIni: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").required('Campo obligatorio'),
-      horaIni: Yup.mixed().required('Campo obligatorio'),
-      fechaDesc: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").required('Campo obligatorio'),
-      horaDesc: Yup.mixed().required('Campo obligatorio'),
-      fechaFin: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
+      fechaIni: Yup.date().min(new Date('01-01-1900'), Messages.dateValidation4).max(today, Messages.dateValidation3).required(Messages.required),
+      horaIni: Yup.mixed().required(Messages.required),
+      fechaDesc: Yup.date().min(Yup.ref('fechaIni'), Messages.dateValidation2).max(today, Messages.dateValidation3).required(Messages.required),
+      horaDesc: Yup.mixed().required(Messages.required),
+      fechaFin: Yup.date().typeError(Messages.required).min(Yup.ref('fechaIni'), Messages.dateValidation1).max(today, Messages.dateValidation3).required(Messages.required),
       horaFin: Yup.mixed().nullable(),
       agenciaId: Yup.mixed().nullable(),
       ciudadId: Yup.mixed().nullable(),
-      areaID: Yup.mixed().required('Campo obligatorio'),
+      areaID: Yup.mixed().required(Messages.required),
       unidadId: Yup.mixed().nullable(),
       entidadAfectada: Yup.string().nullable(),
       comercioAfectado: Yup.string().nullable(),
       entidadId: Yup.mixed().nullable(),
-      cargoId: Yup.mixed().required('Campo obligatorio'),
+      cargoId: Yup.mixed().required(Messages.required),
       estadoReportado: Yup.mixed().nullable(),
       fuenteInfId: Yup.mixed().nullable(),
-      canalAsfiId: Yup.mixed().required('Campo obligatorio'),
-      descripcion: Yup.string().required('Campo obligatorio'),
+      canalAsfiId: Yup.mixed().required(Messages.required),
+      descripcion: Yup.string().required(Messages.required),
       descripcionCompleta: Yup.string().nullable(),
       files: Yup.mixed().nullable(),
 
-      /* fechaIni: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
+      /* fechaIni: Yup.date().max(new Date('12-31-3000'), Messages.yearOutOfRange).nullable(),
       horaIni: Yup.string().nullable(),
-      fechaDesc: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
+      fechaDesc: Yup.date().max(new Date('12-31-3000'), Messages.yearOutOfRange).nullable(),
       horaDesc: Yup.string().nullable(),
-      fechaFin: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
+      fechaFin: Yup.date().max(new Date('12-31-3000'), Messages.yearOutOfRange).nullable(),
       horaFin: Yup.string().nullable(),
       agenciaId: Yup.mixed().nullable(),
       ciudadId: Yup.mixed().nullable(),
@@ -397,10 +402,10 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
               isSearchable={true}
               isDisabled={false}
               dependence={true}
-              cleareableDependences={clearDependenceOfAgencia}  //FUNCION PARA LIMPIA LOS VALORES FORMIK...
+              cleareableDependences={clearDependenceOfAgencia}
               getAddValue={true}
-              getSelectValue={getValueAgencia} // AGGARA EL EL VALOR DEL SELECT VALUE
-              inputIsClearable={clearInputAgencia} // AGGARA EL EL VALOR DEL SELECT VALUE
+              getSelectValue={getValueAgencia}
+              inputIsClearable={clearInputAgencia}
             />
           </FormGroup>
 
@@ -440,10 +445,10 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
               isSearchable={true}
               isDisabled={false}
               dependence={true}
-              cleareableDependences={clearDependenceOfArea}  //FUNCION PARA LIMPIA LOS VALORES FORMIK...
+              cleareableDependences={clearDependenceOfArea}
               getAddValue={true}
-              getSelectValue={getValueArea} // AGGARA EL EL VALOR DEL SELECT VALUE
-              inputIsClearable={clearInputArea} // AGGARA EL EL VALOR DEL SELECT VALUE
+              getSelectValue={getValueArea}
+              inputIsClearable={clearInputArea}
             />
           </FormGroup>
 
@@ -623,36 +628,39 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
           </FormGroup>
         </Row>
 
-        <div className='d-flex justify-content-between pt-4'>
-          <Button
-            style={{ width: '130px' }}
-            color="primary"
-            outline
-            onClick={(e) => { redirect(e) }}
-          >
-            Cancelar
-          </Button>
-          <Button
-            style={{ width: '130px' }}
-            color="dark"
-            outline
-            onClick={() => { formik.handleReset() }}
-            disabled={!formik.dirty || formik.isSubmitting}
-          >
-            <Delete size={17} className='mr-2' />
-            Limpiar
-          </Button>
-          <Button
-            style={{ width: '130px' }}
-            className='text-white'
-            color="primary"
-            type="submit"
-          >
-            Siguiente
-            <ChevronRight size={17} className='ml-1' />
-          </Button>
-        </div>
-
+        <Row className='pt-4'>
+          <Col xs={4} md={{ size: 2, order: 0, offset: 3 }}>
+            <Button
+              color="primary"
+              outline
+              block
+              onClick={(e) => { redirect(e) }}
+            >
+              <XSquare size={17} className='mr-2' />Cancelar
+            </Button>
+          </Col>
+          <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
+            <Button
+              color="dark"
+              block
+              onClick={() => { formik.handleReset(); }}
+              disabled={!formik.dirty || formik.isSubmitting}
+            >
+              <Delete size={17} className='mr-2' /> Limpiar
+            </Button>
+          </Col>
+          <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
+            <Button
+              className='text-white'
+              block
+              color="primary"
+              type="submit"
+            >
+              Siguiente
+              <ChevronRight size={17} className='ml-1' />
+            </Button>
+          </Col>
+        </Row>
       </Form>
     </Fragment>
   )

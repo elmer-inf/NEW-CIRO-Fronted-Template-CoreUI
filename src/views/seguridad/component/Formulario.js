@@ -8,8 +8,9 @@ import { buildSelectTwo, buildSelectThree } from 'src/functions/Function'
 import { getTablaDescripcionSeguridadN1 } from 'src/views/administracion/seguridad/controller/AdminSeguridadController'
 import { getTablaDescripcionRiesgoN1 } from 'src/views/administracion/matriz-riesgo/controller/AdminRiesgoController'
 import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController'
-import { Delete, Save } from 'react-feather'
+import { Delete, Save, XSquare } from 'react-feather'
 import { useHistory } from 'react-router-dom'
+import { Messages } from 'src/reusable/variables/Messages'
 
 const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
 
@@ -17,14 +18,14 @@ const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
     initialValues: initialValuess,
     validationSchema: Yup.object().shape(
       {
-        fechaRegistro: Yup.date().nullable(),
+        fechaRegistro: Yup.date().min(new Date('01-01-1900'), Messages.dateValidation4).max(new Date('12-31-2500'), Messages.dateValidation4).nullable(),
         ipUrl: Yup.string().nullable(),
         activoInformacion: Yup.string().nullable(),
         red: Yup.mixed().nullable(),
         descripcionRiesgo: Yup.string().nullable(),
         recomendacion: Yup.string().nullable(),
-        fechaSolucion: Yup.date().nullable(),
-        fechaLimite: Yup.date().nullable(),
+        fechaSolucion: Yup.date().min(new Date('01-01-1900'), Messages.dateValidation4).max(new Date('12-31-2500'), Messages.dateValidation4).nullable(),
+        fechaLimite: Yup.date().min(new Date('01-01-1900'), Messages.dateValidation4).max(new Date('12-31-2500'), Messages.dateValidation4).nullable(),
         planTrabajo: Yup.string().nullable(),
         informeEmitido: Yup.string().nullable(),
         ciSeguimiento: Yup.string().nullable(),
@@ -388,36 +389,39 @@ const FormSeguridad = ({ initialValuess, handleOnSubmit }) => {
           </FormGroup>
         </Row>
 
-        <div className='d-flex justify-content-between pt-4'>
-          <Button
-            style={{ width: '130px' }}
-            color="primary"
-            outline
-            onClick={(e) => { redirect(e) }}
-          >
-            Cancelar
-          </Button>
-          <Button
-            style={{ width: '130px' }}
-            color="dark"
-            outline
-            onClick={() => { formik.handleReset() }}
-            disabled={!formik.dirty || formik.isSubmitting}
-          >
-            <Delete size={17} className='mr-2' />
-            Limpiar
-          </Button>
-          <Button
-            style={{ width: '130px' }}
-            className='text-white'
-            color="primary"
-            type="submit"
-          //disabled={formik.isSubmitting}
-          >
-            <Save size={17} className='mr-2' />
-            GUARDAR
-          </Button>
-        </div>
+        <Row className='pt-4'>
+          <Col xs={4} md={{ size: 2, order: 0, offset: 3 }}>
+            <Button
+              color="primary"
+              className='text-white'
+              type="submit"
+              block
+              disabled={formik.isSubmitting}
+            >
+              <Save size={17} className='mr-2' /> Guardar
+            </Button>
+          </Col>
+          <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
+            <Button
+              color="dark"
+              block
+              onClick={() => { formik.handleReset(); }}
+              disabled={!formik.dirty || formik.isSubmitting}
+            >
+              <Delete size={17} className='mr-2' /> Limpiar
+            </Button>
+          </Col>
+          <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
+            <Button
+              color="primary"
+              outline
+              block
+              onClick={(e) => { redirect(e) }}
+            >
+              <XSquare size={17} className='mr-2' />Cancelar
+            </Button>
+          </Col>
+        </Row>
       </Form>
     </Fragment>
   )

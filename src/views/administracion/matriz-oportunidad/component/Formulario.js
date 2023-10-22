@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { CInputReact } from 'src/reusable/CInputReact';
-import { FormGroup, Col, Form, Button, Label } from 'reactstrap';
+import { FormGroup, Col, Form, Button, Label, Row } from 'reactstrap';
 import { CSelectReact } from 'src/reusable/CSelectReact';
 import { getTablaDescripcionOportunidadN1 } from '../controller/AdminOportunidadController';
 import { buildSelectTwo } from 'src/functions/Function';
 import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo';
+import { Delete, Save, XSquare } from 'react-feather';
 
 const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit, optionsList, isEdit }) => {
   const formik = useFormik({
@@ -79,18 +80,6 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit, optionsList, is
           Tabla
         </Label>
         <Col sm='9' lg='5'>
-          {/*      <CSelectReact
-            type={"select"}
-            id={'tablaId'}
-            placeholder={'Seleccionar . . . '}
-            value={formik.values.tablaId}
-            onChange={formik.setFieldValue}
-            onBlur={formik.setFieldTouched}
-            error={formik.errors.tablaId}
-            touched={formik.touched.tablaId}
-            options={optionsList.opTabla || []}
-          /> */}
-
           <CSelectReactTwo
             label={""}
             id={'tablaId'}
@@ -100,17 +89,16 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit, optionsList, is
             onBlur={formik.setFieldTouched}
             errors={formik.errors.tablaId}
             touched={formik.touched.tablaId}
-            //options={tablaIdOptions}optionToSelect.tablaOp
             options={optionsList.opTabla || []}
             obligatorio={true}
             isClearable={true}
             isSearchable={true}
             isDisabled={false}
             dependence={true}
-            cleareableDependences={clearAllDependences}  //FUNCION PARA LIMPIA LOS VALORES FORMIK...
+            cleareableDependences={clearAllDependences}
             getAddValue={true}
-            getSelectValue={getSelectValueLevel2} // AGGARA EL EL VALOR DEL SELECT VALUE
-            inputIsClearable={inputIsClearableLevel2} // AGGARA EL EL VALOR DEL SELECT VALUE
+            getSelectValue={getSelectValueLevel2}
+            inputIsClearable={inputIsClearableLevel2}
           />
 
         </Col>
@@ -253,7 +241,7 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit, optionsList, is
             <CSelectReact
               type={"select"}
               id={'nivel2Id'}
-              placeholder={'Seleccionar . . . '}
+              placeholder={'Seleccionar'}
               value={formik.values.nivel2Id}
               onChange={formik.setFieldValue}
               onBlur={formik.setFieldTouched}
@@ -265,27 +253,39 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit, optionsList, is
         </FormGroup>
         : null}
 
-      <FormGroup className='mb-0' row>
-        <Col className='d-flex justify-content-center'>
+      <Row className='pt-4'>
+        <Col xs={4} md={{ size: 2, order: 0, offset: 3 }}>
           <Button
-            className='mr-4 text-white'
             color="primary"
+            className='text-white'
             type="submit"
-          //disabled={formik.isSubmitting}
-          //disabled={(formik.values.tablaId !== null && formik.values.tablaId.label === 'Tasa de cambio')? true : false}
+            block
+            disabled={formik.isSubmitting}
           >
-            Guardar
-          </Button>
-
-          <Button
-            outline color='dark'
-            onClick={() => { formik.handleReset() }}
-            disabled={!formik.dirty || formik.isSubmitting}
-          >
-            Limpiar
+            <Save size={17} className='mr-2' /> Guardar
           </Button>
         </Col>
-      </FormGroup>
+        <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
+          <Button
+            color="dark"
+            block
+            onClick={() => { formik.handleReset(); }}
+            disabled={!formik.dirty || formik.isSubmitting}
+          >
+            <Delete size={17} className='mr-2' /> Limpiar
+          </Button>
+        </Col>
+        <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
+          <Button
+            href='#/administracion/matriz-oportunidad/Listar'
+            color="primary"
+            outline
+            block
+          >
+            <XSquare size={17} className='mr-2' />Cancelar
+          </Button>
+        </Col>
+      </Row>
     </Form>
   )
 }

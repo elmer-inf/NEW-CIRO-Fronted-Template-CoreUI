@@ -291,7 +291,6 @@ const EventoRiesgoRegistrar = () => {
     var formData = new FormData();
 
     formData.append('eventoRiesgoPostDTO', JSON.stringify(_.omit(request, ['files'])));
-    //formData.append('file', getFiles);
     if (getFiles !== null) {
       for (let i = 0; i < getFiles.length; i++) {
         formData.append("file", getFiles[i]);
@@ -312,20 +311,6 @@ const EventoRiesgoRegistrar = () => {
         console.error('Error al registrar Evento de Riesgo: ', error);
         notificationToast('error', 'Algo salió mal, intente nuevamente');
       });
-
-    /*  postEventoRiesgo(request)
-        .then(res => {
-          if (res.status >= 200 && res.status < 300) {
-            notificationToast('success', 'Evento de Riesgo registrado exitósamente');
-            //history.push("/eventoRiesgo/listar")
-          } else {
-            console.error('Hubo un  error ', res);
-            notificationToast('error', 'Algo salió mal, intente nuevamente');
-          }
-        }).catch((error) => {
-          console.error('Error al registrar Evento de Riesgo: ', error);
-          notificationToast('error', 'Algo salió mal, intente nuevamente');
-        });*/
   }
 
   return (

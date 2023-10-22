@@ -1,5 +1,5 @@
 import { React, Fragment, useState, useEffect } from 'react'
-import { ChevronRight, Delete } from 'react-feather'
+import { ChevronRight, Delete, XSquare } from 'react-feather'
 import { Label, FormGroup, Row, Col, Form, Button } from 'reactstrap'
 import { useFormik } from "formik"
 import * as Yup from "yup"
@@ -13,6 +13,7 @@ import { getEventos } from 'src/views/eventoRiesgo/controller/EventoController'
 import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
 import CInputRadio from 'src/reusable/CInputRadio'
 import { useHistory } from 'react-router-dom'
+import { Messages } from 'src/reusable/variables/Messages'
 
 var _ = require('lodash');
 
@@ -23,9 +24,9 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   const formik = useFormik({
     initialValues: { ...initValues, otrosAux: false },
     validationSchema: Yup.object().shape({
-      areaId: Yup.mixed().required('Campo obligatorio'),
-      unidadId: Yup.mixed().required('Campo obligatorio'),
-      procesoId: Yup.mixed().required('Campo obligatorio'),
+      areaId: Yup.mixed().required(Messages.required),
+      unidadId: Yup.mixed().required(Messages.required),
+      procesoId: Yup.mixed().required(Messages.required),
 
       // Campos solo para mostrar:
       macroNombre: Yup.string().nullable(),
@@ -36,17 +37,17 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
       eventoDescAux: Yup.string().nullable(),
       // FIN Campos solo para mostrar:
 
-      procedimientoId: Yup.mixed().required('Campo obligatorio'),
-      duenoCargoId: Yup.mixed().required('Campo obligatorio'),
-      responsableCargoId: Yup.mixed().required('Campo obligatorio'),
-      fechaEvaluacion: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").required('Campo obligatorio'),
+      procedimientoId: Yup.mixed().required(Messages.required),
+      duenoCargoId: Yup.mixed().required(Messages.required),
+      responsableCargoId: Yup.mixed().required(Messages.required),
+      fechaEvaluacion: Yup.date().min(new Date('01-01-1900'), Messages.dateValidation4).max(new Date('12-31-2500'), Messages.dateValidation4).required(Messages.required),
       identificadoId: Yup.mixed().nullable().when('otrosAux', {
         is: (val) => (val === false),
-        then: Yup.mixed().nullable().required("Campo obligatorio"),
+        then: Yup.mixed().nullable().required(Messages.required),
       }),
       identificadoOtro: Yup.string().nullable().when('otrosAux', {
         is: (val) => (val === true),
-        then: Yup.string().nullable().required("Campo obligatorio"),
+        then: Yup.string().nullable().required(Messages.required),
       }),
       eventoRiesgoId: Yup.mixed().nullable(),
       eventoMaterializado: Yup.boolean(),
@@ -54,7 +55,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
 
       /* areaId: Yup.mixed().nullable(),
       unidadId: Yup.mixed().nullable(),
-      procesoId: Yup.mixed().required("Campo obligatorio"),
+      procesoId: Yup.mixed().required(Messages.required),
 
       // Campos solo para mostrar:
       macroNombre: Yup.string().nullable(),
@@ -68,14 +69,14 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
       procedimientoId: Yup.mixed().nullable(),
       duenoCargoId: Yup.mixed().nullable(),
       responsableCargoId: Yup.mixed().nullable(),
-      fechaEvaluacion: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
+      fechaEvaluacion: Yup.date().min(new Date('01-01-1900'), Messages.dateValidation4).max(new Date('12-31-2500'), Messages.dateValidation4).nullable(),
       identificadoId : Yup.mixed().nullable().when('otrosAux',{
         is:(val) =>  (val === false),
-        then: Yup.mixed().nullable().required("Campo obligatorio"),
+        then: Yup.mixed().nullable().required(Messages.required),
       }),
       identificadoOtro: Yup.string().nullable().when('otrosAux',{
         is:(val) => (val === true),
-        then: Yup.string().nullable().required("Campo obligatorio"),
+        then: Yup.string().nullable().required(Messages.required),
       }),
       eventoRiesgoId: Yup.mixed().nullable(),
       eventoMaterializado: Yup.boolean(), */
@@ -320,18 +321,6 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
       })
   }
 
-
-  /*  // Limita El año de la fecha a 3000
-   useEffect(() => {
-     var arrayFecha = formik.values.fechaEvaluacion.split('-')
-     if (arrayFecha[0] > 3000){
-       formik.setFieldValue('fechaEvaluacion', '3000-' + arrayFecha[1] + '-' + arrayFecha[2] , false);
-       //console.error('fecha fff: ', '3000-' + arrayFecha[1] + '-' + arrayFecha[2]);
-     }
-     //eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [formik.values.fechaEvaluacion]) */
-
-
   // Redirecciona a Listar
   const history = useHistory();
   const redirect = (e) => {
@@ -409,7 +398,6 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
               getSelectValue={getValueMacroproceso}
               inputIsClearable={clearInputMacroproceso}
             />
-
           </FormGroup>
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
@@ -650,35 +638,39 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         </Row>
 
 
-        <div className='d-flex justify-content-between pt-4'>
-          <Button
-            style={{ width: '130px' }}
-            color="primary"
-            outline
-            onClick={(e) => { redirect(e) }}
-          >
-            Cancelar
-          </Button>
-          <Button
-            style={{ width: '130px' }}
-            color="dark"
-            outline
-            onClick={() => { formik.handleReset() }}
-            disabled={!formik.dirty || formik.isSubmitting}
-          >
-            <Delete size={17} className='mr-2' />
-            Limpiar
-          </Button>
-          <Button
-            style={{ width: '130px' }}
-            className='text-white'
-            color="primary"
-            type="submit"
-          >
-            Siguiente
-            <ChevronRight size={17} className='ml-1' />
-          </Button>
-        </div>
+        <Row className='pt-4'>
+          <Col xs={4} md={{ size: 2, order: 0, offset: 3 }}>
+            <Button
+              color="primary"
+              outline
+              block
+              onClick={(e) => { redirect(e) }}
+            >
+              <XSquare size={17} className='mr-2' />Cancelar
+            </Button>
+          </Col>
+          <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
+            <Button
+              color="dark"
+              block
+              onClick={() => { formik.handleReset(); }}
+              disabled={!formik.dirty || formik.isSubmitting}
+            >
+              <Delete size={17} className='mr-2' /> Limpiar
+            </Button>
+          </Col>
+          <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
+            <Button
+              className='text-white'
+              block
+              color="primary"
+              type="submit"
+            >
+              Siguiente
+              <ChevronRight size={17} className='ml-1' />
+            </Button>
+          </Col>
+        </Row>
 
       </Form>
     </Fragment>

@@ -12,9 +12,7 @@ var _ = require('lodash');
 
 const EventoRiesgo = ({ match }) => {
 
-  const [dataArchivos, setDataArchivo] = useState([])
-
-  //const forceUpdate = useReducer(bool => !bool)[1];
+  const [dataArchivos, setDataArchivo] = useState([]);
 
   // Configuracion sweetalert2
   const swalWithBootstrapButtons = Swal.mixin({
@@ -47,7 +45,6 @@ const EventoRiesgo = ({ match }) => {
   }
 
   useEffect(() => {
-    //forceUpdate();
     getById();
     getByIdObservacion();
     getCodigo();
@@ -200,7 +197,6 @@ const EventoRiesgo = ({ match }) => {
     var link = document.createElement('a');
     document.body.appendChild(link);
     pdfWindow.location.href = data2;
-    //link.download = "file.pdf";
     link.click();
     window.URL.revokeObjectURL(data2);
     link.remove();
@@ -274,8 +270,6 @@ const EventoRiesgo = ({ match }) => {
                         Cerrar
                       </Button>
                     </CModalBody>
-                    {/* <CModalFooter> */}
-                    {/* </CModalFooter> */}
                   </CModal>
                 </CardTitle>
                 <span className='float-right'>
@@ -458,7 +452,6 @@ const EventoRiesgo = ({ match }) => {
                                           <td className='pl-3'>{archivo.nombreArchivo}</td>
                                           <td>{formatSizeUnits(archivo.size)}</td>
                                           <td>{formatDate(archivo.updated)}</td>
-                                          {/* <td><embed type="application/pdf" src={'data:application/pdf;base64,'+archivo.archivoBase64} /></td> */}
                                           <td>
                                             <CButton onClick={() => base64toPDF(archivo.archivoBase64)}>
                                               <CIcon

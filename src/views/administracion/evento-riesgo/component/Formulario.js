@@ -7,12 +7,7 @@ import { getTablaDescripcionEventoN1 } from '../controller/AdminEventoController
 import { buildSelectTwo } from 'src/functions/Function';
 import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo';
 import { CSelectReact } from 'src/reusable/CSelectReact';
-
-/**
- * @param handleOnSubmit : function
- * @description handleOnSubmit es una funcionm que se recibe del prop y es usada para realizar el post request (guardar registros)
- * @returns
- */
+import { Delete, Save, XSquare } from 'react-feather';
 
 const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelect }) => {
 
@@ -140,37 +135,25 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
           Tabla
         </Label>
         <Col sm='9' lg='5'>
-          {/* <CSelectReact
-            type={"select"}
-            id={'tablaLista'}
-            placeholder={'Seleccionar . . . '}
-            value={formik.values.tablaLista}
-            onChange={formik.setFieldValue}
-            onBlur={formik.setFieldTouched}
-            error={formik.errors.tablaLista}
-            touched={formik.touched.tablaLista}
-            options={tablaListaOptions}
-          /> */}
           <CSelectReactTwo
             //label={""}
             id={'tablaLista'}
-            placeholder={'Seleccione'}
+            placeholder={'Seleccionar'}
             value={formik.values.tablaLista}
             onChange={formik.setFieldValue}
             onBlur={formik.setFieldTouched}
             errors={formik.errors.tablaLista}
             touched={formik.touched.tablaLista}
-            //options={tablaListaOptions}optionToSelect.tablaOp
             options={optionToSelect.tablaOp || []}
             obligatorio={true}
             isClearable={true}
             isSearchable={true}
             isDisabled={false}
             dependence={true}
-            cleareableDependences={clearAllDependences}  //FUNCION PARA LIMPIA LOS VALORES FORMIK...
+            cleareableDependences={clearAllDependences}
             getAddValue={true}
-            getSelectValue={getSelectValueLevel2} // AGGARA EL VALOR DEL SELECT VALUE
-            inputIsClearable={inputIsClearableLevel2} // AGGARA EL VALOR DEL SELECT VALUE
+            getSelectValue={getSelectValueLevel2}
+            inputIsClearable={inputIsClearableLevel2}
           />
         </Col>
       </FormGroup>
@@ -492,19 +475,6 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
               {formik.values.tablaLista.label === 'Descripción de servicio' ? 'Tipo de servicio' : null}
             </Label>
             <Col sm='9' lg='5'>
-              {/*   <CSelectReact
-                // type={"select"}
-                placeholder={'Seleccionaaaaar . . . '}
-                value={formik.values.nivel2_id}
-                onChange={formik.setFieldValue}
-                onBlur={formik.setFieldTouched}
-                error={formik.errors.nivel2_id}
-                touched={formik.touched.nivel2_id}
-                id={'nivel2_id'}
-                label={'ddeddddd'}
-                options={varListN2}
-              /> */}
-
               <CSelectReactTwo
                 label={""}
                 id={'nivel2_id'}
@@ -520,10 +490,7 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
                 isSearchable={false}
                 isDisabled={false}
                 dependence={false}
-                //cleareableDependences={clearDependencesN2}  //FUNCION PARA LIMPIA LOS VALORES FORMIK...
                 getAddValue={false}
-              //getSelectValue={getSelectValueLevel3} // AGGARA EL EL VALOR DEL SELECT VALUE
-              //inputIsClearable={inputIsClearableLevel3} // AGGARA EL EL VALOR DEL SELECT VALUE
               />
             </Col>
           </FormGroup>
@@ -539,17 +506,6 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
               {formik.values.tablaLista.label === 'Clase Evento - Basilea' ? 'Categoria de tipo de Evento' : null}
             </Label>
             <Col sm='9' lg='5'>
-              {/* <CSelectReact
-                type={"select"}
-                id={'nivel2_id'}
-                placeholder={'sssSeleccionar . . . '}
-                value={formik.values.nivel2_id}
-                onChange={formik.setFieldValue}
-                onBlur={formik.setFieldTouched}
-                error={formik.errors.nivel2_id}
-                touched={formik.touched.nivel2_id}
-                options={varListN2}
-              /> */}
               <CSelectReactTwo
                 label={""}
                 id={'nivel2_id'}
@@ -565,10 +521,7 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
                 isSearchable={false}
                 isDisabled={false}
                 dependence={false}
-                //cleareableDependences={clearDependencesN2}  //FUNCION PARA LIMPIA LOS VALORES FORMIK...
                 getAddValue={false}
-              // getSelectValue={getSelectValueLevel3} // AGGARA EL EL VALOR DEL SELECT VALUE
-              //  inputIsClearable={inputIsClearableLevel3} // AGGARA EL EL VALOR DEL SELECT VALUE
               />
 
             </Col>
@@ -579,19 +532,6 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
               {formik.values.tablaLista.label === 'Descripción de servicio' ? 'Tipo de servicio' : null}
             </Label>
             <Col sm='9' lg='5'>
-              {/*  <CSelectReact
-                type={"select"}
-                id={'nivel3_id'}
-                placeholder={'Seleccionar . . . '}
-                value={formik.values.nivel3_id}
-                onChange={formik.setFieldValue}
-                onBlur={formik.setFieldTouched}
-                error={formik.errors.nivel3_id}
-                touched={formik.touched.nivel3_id}
-                options={varListN3}
-              /> */}
-
-
               <CSelectReactTwo
                 label={""}
                 id={'nivel3_id'}
@@ -607,10 +547,7 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
                 isSearchable={true}
                 isDisabled={false}
                 dependence={false}
-                //cleareableDependences={cleareableDependences}  //FUNCION PARA LIMPIA LOS VALORES FORMIK...
                 getAddValue={false}
-              // getSelectValue={getSelectValue} // AGGARA EL EL VALOR DEL SELECT VALUE
-              // inputIsClearable={inputIsClearable} // AGGARA EL EL VALOR DEL SELECT VALUE
               />
             </Col>
           </Row>
@@ -619,27 +556,39 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
         : null
       }
 
-      <FormGroup className='mb-0' row>
-        <Col className='d-flex justify-content-center'>
+      <Row className='pt-4'>
+        <Col xs={4} md={{ size: 2, order: 0, offset: 3 }}>
           <Button
-            className='mr-4 text-white'
             color="primary"
+            className='text-white'
             type="submit"
-          //disabled={formik.isSubmitting}
-          //disabled={(formik.values.tablaLista !== null && formik.values.tablaLista.label === 'Tasa de cambio')? true : false}
+            block
+            disabled={formik.isSubmitting}
           >
-            Guardar
-          </Button>
-
-          <Button
-            outline color='dark'
-            onClick={() => { formik.handleReset() }}
-            disabled={!formik.dirty || formik.isSubmitting}
-          >
-            Limpiar
+            <Save size={17} className='mr-2' /> Guardar
           </Button>
         </Col>
-      </FormGroup>
+        <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
+          <Button
+            color="dark"
+            block
+            onClick={() => { formik.handleReset(); }}
+            disabled={!formik.dirty || formik.isSubmitting}
+          >
+            <Delete size={17} className='mr-2' /> Limpiar
+          </Button>
+        </Col>
+        <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
+          <Button
+            href='#/administracion/evento-riesgo/Listar'
+            color="primary"
+            outline
+            block
+          >
+            <XSquare size={17} className='mr-2' />Cancelar
+          </Button>
+        </Col>
+      </Row>
     </Form>
   )
 }

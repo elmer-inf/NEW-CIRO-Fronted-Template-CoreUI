@@ -10,6 +10,7 @@ import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik';
 import { CBadge, CCallout, CProgress } from '@coreui/react'
 import BootstrapTable from 'react-bootstrap-table-next'
 import Select from "react-select";
+import { Messages } from 'src/reusable/variables/Messages'
 
 var _ = require('lodash');
 
@@ -23,11 +24,11 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
         estrategia: Yup.string().nullable(),
         descripcion: Yup.string().nullable(),
         cargo: Yup.mixed().nullable(),
-        fechaAccion: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
-        fechaImpl: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
+        fechaAccion: Yup.date().min(new Date('01-01-1900'), Messages.dateValidation4).max(new Date('12-31-2500'), Messages.dateValidation4).nullable(),
+        fechaImpl: Yup.date().min(new Date('01-01-1900'), Messages.dateValidation4).max(new Date('12-31-2500'), Messages.dateValidation4).nullable(),
         estado: Yup.mixed().nullable(),
 
-        fechaSeg: Yup.date().nullable(),
+        fechaSeg: Yup.date().min(new Date('01-01-1900'), Messages.dateValidation4).max(new Date('12-31-2500'), Messages.dateValidation4).nullable(),
         comenPropuesta: Yup.string().nullable(),
         comenEnProceso: Yup.string().nullable(),
       })
@@ -104,20 +105,6 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
     return deployOption;
   }
 
-  // Options Num de Planes
-  /*  const optionsPlanes = [
-    { value: 1, label: 1 },
-    { value: 2, label: 2 },
-    { value: 3, label: 3 },
-    { value: 4, label: 4 },
-    { value: 5, label: 5 },
-    { value: 6, label: 6 },
-    { value: 7, label: 7 },
-    { value: 8, label: 8 },
-    { value: 9, label: 9 },
-    { value: 10, label: 10 },
-  ] */
-
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
   const columns = [
@@ -173,21 +160,6 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
       ...styles,
       boxShadow: 'none'
     }),
-    /* option: (styles, { isDisabled, isSelected }) => {
-      return {
-        ...styles,
-        backgroundColor: isSelected ? '#e79140' : 'white',
-        cursor: isDisabled ? 'not-allowed' : 'default',
-        ':active': {
-          backgroundColor: '#e79140',
-          color: 'white'
-        },
-        ':hover': {
-          backgroundColor: isSelected ? '#e79140' : '#fbf3eb',
-          color: isSelected ? 'white' : '#e79140'
-        }
-      }
-    } */
   }
 
   // Construye objeto para Select CARGO
@@ -203,7 +175,6 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
     }
     return result;
   }
-
 
   return (
     <Formik initialValues={initValues} validationSchema={formik} onSubmit={onSubmit}>
@@ -471,39 +442,41 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
             }))}
           </FieldArray>
 
-          <div className='d-flex justify-content-between pt-4'>
-            <Button
-              style={{ width: '130px' }}
-              className='text-white'
-              color="primary"
-              onClick={() => beforeSection(5)}
-            >
-              <ChevronLeft size={17} className='mr-1' />
-              Atrás
-            </Button>
-            <Button
-              style={{ width: '130px' }}
-              color="dark"
-              outline
-              type='reset'
-            /* onClick={() => { formik.handleReset() }}
-            disabled={(!formik.dirty || formik.isSubmitting)} */
-            >
-              <Delete size={17} className='mr-2' />
-              Limpiar
-            </Button>
-            <Button
-              style={{ width: '130px' }}
-              className='text-white'
-              color="primary"
-              type="submit"
-            //disabled={formik.isSubmitting}
-            >
-              Siguiente
-              <ChevronRight size={17} className='ml-1' />
-            </Button>
-          </div>
-
+          <Row className='pt-4'>
+            <Col xs={4} md={{ size: 2, order: 0, offset: 3 }}>
+              <Button
+                outline
+                color="primary"
+                block
+                onClick={() => beforeSection(5)}
+              >
+                <ChevronLeft size={17} className='mr-1' />
+                Atrás
+              </Button>
+            </Col>
+            <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
+              <Button
+                color="dark"
+                block
+                type='reset'
+                //onClick={() => { formik.handleReset(); }}
+                //disabled={!formik.dirty || formik.isSubmitting}
+              >
+                <Delete size={17} className='mr-2' /> Limpiar
+              </Button>
+            </Col>
+            <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
+              <Button
+                className='text-white'
+                color="primary"
+                block
+                type="submit"
+              >
+                Siguiente
+                <ChevronRight size={17} className='ml-1' />
+              </Button>
+            </Col>
+          </Row>
         </Form>
       )}
     </Formik>

@@ -49,3 +49,10 @@ export const getMatrizPaging = async (page, size) => {
     const response = await axios.get(uri);
     return response;
 };
+
+
+// Eliminacion logica de Riesgo por ID
+export const deleteRiesgoId = (id) => {
+    const uri = HOST + 'v1/matrizRiesgo/eliminar/' + id;
+    return axios.put(uri, {});
+}

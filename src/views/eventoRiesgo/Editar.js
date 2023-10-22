@@ -23,7 +23,6 @@ const UpdateEventoRiesgo = ({ match }) => {
 
   const history = useHistory();
   const [spin, setSpin] = useState(true);
-  //const [getFiles, setGetFiles] = useState(null)
   const [dataApiTipoEvento, setDataApiTipoEvento] = useState([])
 
   const obtainFiles = (f) => {
@@ -212,7 +211,7 @@ const UpdateEventoRiesgo = ({ match }) => {
       horaDesc: args.horaDesc,
       fechaFin: args.fechaFin,
       horaFin: args.horaFin,
-      agenciaId: buildOptionSelect(args.agenciaId, 'id', 'nombre', true, 'agenciaId'),// { ...args.agenciaId.id, value: args.agenciaId.id, label: args.agenciaId.nombre ,'agenciaId'},
+      agenciaId: buildOptionSelect(args.agenciaId, 'id', 'nombre', true, 'agenciaId'),
       ciudadId: buildOptionSelect(args.ciudadId, 'id', 'nombre', true, 'ciudadId'),
       areaID: buildOptionSelect(args.areaID, 'id', 'nombre', true, 'areaID'),
       unidadId: buildOptionSelect(args.unidadId, 'id', 'nombre', true, 'unidadId'),
@@ -225,7 +224,7 @@ const UpdateEventoRiesgo = ({ match }) => {
       canalAsfiId: buildOptionSelect(args.canalAsfiId, 'id', 'nombre', true, 'canalAsfiId'),
       descripcion: args.descripcion,
       descripcionCompleta: args.descripcionCompleta,
-      files: null,//buildOptionSelect(args.files, 'id', 'nombre', true),
+      files: null,
       responsableElaborador: args.responsableElaborador,
     };
     const planesAccion = {
@@ -396,18 +395,13 @@ const UpdateEventoRiesgo = ({ match }) => {
   }
 
   const handleOnSubmmit = (values) => {
+    console.log("DATA: " + JSON.stringify(values, null, 2));
     setSpin(true);
     const dataRequest = setObject(values);
     var request = {
       ...dataRequest,
       tipoEvento: formik.values.tipoEvento
     }
-    /* if (formik.values.tipoEvento !== 'A') {
-       request = _.omit(request, ['tasaCambioId', 'monedaId', 'montoPerdida', 'gastoAsociado',
-         'montoRecuperado', 'impactoId', 'coberturaSeguro', 'polizaSeguroId', 'montoRecuperadoSeguro',
-         'recuperacionActivoId', 'perdidaMercado', 'cuentaContableId', 'fechaContable'])
- 
-     }*/
 
     if (formik.values.tipoEvento === 'A') {
       request = {
@@ -420,29 +414,8 @@ const UpdateEventoRiesgo = ({ match }) => {
         ...formValueInitialImportes,
         tipoEvento: formik.values.tipoEvento
       }
+      
     }
-
-
-    //console.log('Lo que se enviara en el request: ', request)
-    // console.log('JSON.stringify(request) ', JSON.stringify(request))
-    //  var formData = new FormData();
-    //console.log('REQUEEEST:: ', request);
-    // formData.append('eventoRiesgoPostDTO', JSON.stringify(_.omit(request, ['files'])));
-    //formData.append('file', getFiles);
-    /* if (getFiles !== null) {
-       for (let i = 0; i < getFiles.length; i++) {
-         formData.append("file", getFiles[i]);
-       }
-     } else {
-       formData.append("file", new Blob([]));
-     }*/
-    /*
-
-        for (var value of formData.values()) {
-           console.log('===========================================')
-           console.log('--> ', value);
-           console.log('===========================================')
-         }*/
 
     const idEvento = match.params.id;
     putEventoRiesgoId(idEvento, _.omit(request, ['files', 'riesgoRelacionado']))
@@ -457,37 +430,6 @@ const UpdateEventoRiesgo = ({ match }) => {
         console.error('Error al modificar Evento de Riesgo: ', error);
         notificationToast('error', 'Algo salió mal, intente nuevamente');
       });
-
-    /*   postEventoRiesgoFormData(formData)
-        .then(res => {
-          if (res.status >= 200 && res.status < 300) {
-            console.log('Envio el request: ', res);
-            notificationToast('success', 'Evento de Riesgo registrado exitósamente');
-            //history.push("/eventoRiesgo/listar")
-          } else {
-            console.log('Hubo un  error ', res);
-            notificationToast('error', 'Algo salió mal, intente nuevamente');
-          }
-        }).catch((error) => {
-          console.log('Error al registrar Evento de Riesgo: ', error);
-          notificationToast('error', 'Algo salió mal, intente nuevamente');
-        }); */
-
-
-    /*  postEventoRiesgo(request)
-        .then(res => {
-          if (res.status >= 200 && res.status < 300) {
-            console.log('Envio el request: ', res);
-            notificationToast('success', 'Evento de Riesgo registrado exitósamente');
-            //history.push("/eventoRiesgo/listar")
-          } else {
-            console.log('Hubo un  error ', res);
-            notificationToast('error', 'Algo salió mal, intente nuevamente');
-          }
-        }).catch((error) => {
-          console.log('Error al registrar Evento de Riesgo: ', error);
-          notificationToast('error', 'Algo salió mal, intente nuevamente');
-        });*/
   }
 
   return (

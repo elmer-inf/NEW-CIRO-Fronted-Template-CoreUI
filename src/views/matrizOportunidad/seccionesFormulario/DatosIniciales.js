@@ -1,5 +1,5 @@
 import { React, Fragment, useState, useEffect } from 'react'
-import { ChevronRight, Delete } from 'react-feather'
+import { ChevronRight, Delete, XSquare } from 'react-feather'
 import { Label, FormGroup, Row, Col, Form, Button } from 'reactstrap'
 import { useFormik } from "formik"
 import * as Yup from "yup"
@@ -10,6 +10,7 @@ import { getTablaDescripcionOportunidadN1, getTablaDescripcionOportunidadN2 } fr
 import { buildSelectTwo } from 'src/functions/Function'
 import { useHistory } from 'react-router-dom'
 import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
+import { Messages } from 'src/reusable/variables/Messages'
 
 var _ = require('lodash');
 
@@ -18,13 +19,13 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   const formik = useFormik({
     initialValues: initValues,
     validationSchema: Yup.object().shape({
-      areaId: Yup.mixed().required("Campo obligatorio"),
-      unidadId: Yup.mixed().required("Campo obligatorio"),
-      procesoId: Yup.mixed().required("Campo obligatorio"),
-      procedimientoId: Yup.mixed().required("Campo obligatorio"),
-      duenoCargoId: Yup.mixed().required("Campo obligatorio"),
-      responsableCargoId: Yup.mixed().required("Campo obligatorio"),
-      fechaEvaluacion: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").required("Campo obligatorio"),
+      areaId: Yup.mixed().required(Messages.required),
+      unidadId: Yup.mixed().required(Messages.required),
+      procesoId: Yup.mixed().required(Messages.required),
+      procedimientoId: Yup.mixed().required(Messages.required),
+      duenoCargoId: Yup.mixed().required(Messages.required),
+      responsableCargoId: Yup.mixed().required(Messages.required),
+      fechaEvaluacion: Yup.date().min(new Date('01-01-1900'), Messages.dateValidation4).max(new Date('12-31-2500'), Messages.dateValidation4).required(Messages.required),
       fodaId: Yup.mixed().nullable(),
       fodaDesccripcionId: Yup.mixed().nullable(),
       // Campos solo para mostrar:
@@ -311,10 +312,10 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
               isSearchable={true}
               isDisabled={false}
               dependence={true}
-              cleareableDependences={clearDependenceOfMacroproceso}  //FUNCION PARA LIMPIA LOS VALORES FORMIK...
+              cleareableDependences={clearDependenceOfMacroproceso}
               getAddValue={true}
-              getSelectValue={getValueMacroproceso} // AGGARA EL EL VALOR DEL SELECT VALUE
-              inputIsClearable={clearInputMacroproceso} // AGGARA EL EL VALOR DEL SELECT VALUE
+              getSelectValue={getValueMacroproceso}
+              inputIsClearable={clearInputMacroproceso}
             />
           </FormGroup>
 
@@ -444,35 +445,39 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
           </FormGroup>
         </Row>
 
-        <div className='d-flex justify-content-between pt-4'>
-          <Button
-            style={{ width: '130px' }}
-            color="primary"
-            outline
-            onClick={(e) => { redirect(e) }}
-          >
-            Cancelar
-          </Button>
-          <Button
-            style={{ width: '130px' }}
-            color="dark"
-            outline
-            onClick={() => { formik.handleReset() }}
-            disabled={!formik.dirty || formik.isSubmitting}
-          >
-            <Delete size={17} className='mr-2' />
-            Limpiar
-          </Button>
-          <Button
-            style={{ width: '130px' }}
-            className='text-white'
-            color="primary"
-            type="submit"
-          >
-            Siguiente
-            <ChevronRight size={17} className='ml-1' />
-          </Button>
-        </div>
+        <Row className='pt-4'>
+          <Col xs={4} md={{ size: 2, order: 0, offset: 3 }}>
+            <Button
+              color="primary"
+              outline
+              block
+              onClick={(e) => { redirect(e) }}
+            >
+              <XSquare size={17} className='mr-2' />Cancelar
+            </Button>
+          </Col>
+          <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
+            <Button
+              color="dark"
+              block
+              onClick={() => { formik.handleReset(); }}
+              disabled={!formik.dirty || formik.isSubmitting}
+            >
+              <Delete size={17} className='mr-2' /> Limpiar
+            </Button>
+          </Col>
+          <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
+            <Button
+              className='text-white'
+              block
+              color="primary"
+              type="submit"
+            >
+              Siguiente
+              <ChevronRight size={17} className='ml-1' />
+            </Button>
+          </Col>
+        </Row>
 
       </Form>
     </Fragment>

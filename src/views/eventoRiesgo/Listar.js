@@ -5,7 +5,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import ActionFormatter from 'src/reusable/ActionFormatterEvento';
 import ActionFormatterEvaluar from 'src/reusable/ActionFormatterEvaluar';
 import { useHistory } from 'react-router-dom'
-import { putEvaluaEvento, getEventosPaging, getGeneraCodigo } from './controller/EventoController'
+import { putEvaluaEvento, getEventosPaging, getGeneraCodigo, deleteEventoRiesgoId } from './controller/EventoController'
 import { pagingInit } from 'src/reusable/variables/Variables';
 import CCSpinner from 'src/reusable/spinner/CCSpinner';
 import CPagination from 'src/reusable/pagination/CPagination';
@@ -17,6 +17,7 @@ import { PathContext } from 'src/containers/TheLayout';
 import { ToastContainer, toast } from 'react-toastify';
 import { Messages } from 'src/reusable/variables/Messages';
 import Swal from 'sweetalert2'
+import { PlusSquare } from 'react-feather';
 
 var _ = require('lodash');
 
@@ -31,7 +32,6 @@ const EventoRiesgoListar = () => {
     buttonsStyling: false
   })
 
-  //useContext
   const valuePathFromContext = React.useContext(PathContext);
 
   const history = useHistory();
@@ -40,25 +40,57 @@ const EventoRiesgoListar = () => {
   const [spin, setSpin] = useState(false);
 
   const redirect = (e) => {
-    //history.push('/eventoRiesgo/Registrar');
     e.preventDefault();
     const path = '/eventoRiesgo/Registrar';
     if (hasPermission(path, valuePathFromContext)) {
       history.push(path);
     } else {
-      notificationToast();
+      notificationToast('permission', Messages.dontHavePermission);
     }
   }
 
-  const notificationToast = () => {
-    toast.error(Messages.dontHavePermission, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: true,
-      draggable: true,
-    });
+  const notificationToast = (type, mensaje) => {
+    switch (type) {
+      case 'error':
+        toast.error(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        break;
+      case 'success':
+        toast.success(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        break;
+      case 'permission':
+        toast.error(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        break;
+      default:
+        toast(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
+    }
   }
 
   const columns = [
@@ -96,7 +128,7 @@ const EventoRiesgoListar = () => {
       filterRenderer: (onFilter, column) =>
         <CFilterDate placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
       headerFormatter: typeFormatter,
-    },{
+    }, {
       dataField: 'tipoEvento',
       text: 'TIPO',
       sort: true,
@@ -190,7 +222,7 @@ const EventoRiesgoListar = () => {
   }
 
   const actionFormatter = (cell, row) => {
-    return <ActionFormatter cell={cell} row={row} detailFunction={detailsRow} editFunction={editRow} />
+    return <ActionFormatter cell={cell} row={row} detailFunction={detailsRow} editFunction={editRow} deleteFunction={deleteFunction} allowDelete={true} />
   }
 
   const detailsRow = (row) => {
@@ -202,9 +234,25 @@ const EventoRiesgoListar = () => {
     if (hasPermission(path, valuePathFromContext)) {
       history.push('/eventoRiesgo/Editar/' + row.id);
     } else {
-      notificationToast();
+      notificationToast('permission', Messages.dontHavePermission);
     }
   }
+
+  const deleteFunction = (row) => {
+    const path = '/eventoRiesgo/Editar/:id';
+    if (hasPermission(path, valuePathFromContext)) {
+      deleteEventoRiesgoId(row.id)
+        .then((response) => {
+          callApi(pagination.page, pagination.size);
+          notificationToast('success', Messages.ok);
+        }).catch((error) => {
+          notificationToast('error', Messages.no_ok);
+        })
+    } else {
+      notificationToast('permission', Messages.dontHavePermission);
+    }
+  };
+
 
   const actionFormatterEvaluar = (cell, row) => {
     return <ActionFormatterEvaluar cell={cell} row={row} autorizarFunction={autorizaEvento} descartarFunction={descartaEvento} />
@@ -454,10 +502,16 @@ const EventoRiesgoListar = () => {
           <Col sm='12'>
             <Card>
               <CardHeader>
-                <CardTitle className='float-left h4 pt-2'>Eventos de Riesgo</CardTitle>
-                <Button color='primary' onClick={(e) => { redirect(e) }} className='float-right mt-1' style={{ width: '130px' }}>
-                  <span className='text-white'>Registrar</span>
-                </Button>
+                <Row>
+                  <Col xs={12} md={{ size: 6, offset: 0 }}>
+                    <CardTitle className='float-left h4 pt-2'>Eventos de Riesgo</CardTitle>
+                  </Col>
+                  <Col xs={4} md={{ size: 2, offset: 4 }}>
+                    <Button block onClick={(e) => { redirect(e) }} color="primary" className='text-white'>
+                      <PlusSquare size={15} className='mr-2' /> Registrar
+                    </Button>
+                  </Col>
+                </Row>
               </CardHeader>
               <CardBody className='pb-4'>
                 <BootstrapTable

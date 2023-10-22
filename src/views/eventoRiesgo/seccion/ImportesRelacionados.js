@@ -10,6 +10,7 @@ import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-rie
 import { buildSelectTwo } from 'src/functions/Function'
 import { covierteMoneda } from 'src/functions/FunctionEvento'
 import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
+import { Messages } from 'src/reusable/variables/Messages'
 
 var _ = require('lodash');
 
@@ -19,25 +20,25 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
     initialValues: { ...initValues, totalPerdida: 0 },
     validationSchema: Yup.object().shape(
       {
-        monedaId: Yup.mixed().required('Campo obligatorio'),
-        montoPerdida: Yup.number().required('Campo obligatorio'),
-        gastoAsociado: Yup.number().required('Campo obligatorio'),
-        montoRecuperado: Yup.number().required('Campo obligatorio'),
+        monedaId: Yup.mixed().required(Messages.required),
+        montoPerdida: Yup.number().required(Messages.required),
+        gastoAsociado: Yup.number().required(Messages.required),
+        montoRecuperado: Yup.number().required(Messages.required),
         impactoId: Yup.mixed().nullable(),
         coberturaSeguro: Yup.string().nullable(),
         polizaSeguroId: Yup.mixed().nullable(),
         montoRecuperadoSeguro: Yup.number().nullable(),
-        recuperacionActivoId: Yup.mixed().required('Campo obligatorio'),
-        perdidaMercado: Yup.number().required('Campo obligatorio'),
+        recuperacionActivoId: Yup.mixed().required(Messages.required),
+        perdidaMercado: Yup.number().required(Messages.required),
         cuentaContableId: Yup.mixed().nullable(),
-        fechaContable: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
+        fechaContable: Yup.date().min(new Date('01-01-1900'), Messages.dateValidation4).max(new Date('12-31-2500'), Messages.dateValidation4).nullable(),
         // Solo para mostrar
         montoPerdidaRiesgo: Yup.number().nullable(),
         totalPerdida: Yup.number().nullable(),
         totalRecuperado: Yup.number().nullable()
 
 
-        /* monedaId: Yup.mixed().required('Campo obligatorio'),
+        /* monedaId: Yup.mixed().required(Messages.required),
         montoPerdida: Yup.number().nullable(),
         gastoAsociado: Yup.number().nullable(),
         montoRecuperado: Yup.number().nullable(),
@@ -260,17 +261,6 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
             <Label className='form-label'>
               Moneda <span className='text-primary h5'><b>*</b></span>
             </Label>
-            {/* <CSelectReact
-              type={"select"}
-              id={'monedaId'}
-              placeholder={'Seleccionar'}
-              value={formik.values.monedaId}
-              onChange={formik.setFieldValue}
-              onBlur={formik.setFieldTouched}
-              error={formik.errors.monedaId}
-              touched={formik.touched.monedaId}
-              options={dataApiMoneda}
-            /> */}
             <CSelectReactTwo
               id={'monedaId'}
               placeholder={'Seleccionar'}
@@ -310,14 +300,13 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
-              Valor contable - Monto de pérdida (BOB){/* Monto de pérdida por riesgo operativo (USD) */} <span className='text-primary h5'><b>*</b></span>
+              Valor contable - Monto de pérdida (BOB) <span className='text-primary h5'><b>*</b></span>
             </Label>
             <CInputReact
               type={"number"}
               id={'montoPerdidaRiesgo'}
               placeholder={'Valor contable - Monto de pérdida (BOB)'}
               value={formik.values.montoPerdidaRiesgo}
-              //value={covierteMoneda(formik.values.monedaId.label, formik.values.montoPerdida, dataApiTasaCambio)}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               touched={formik.touched.montoPerdidaRiesgo}
@@ -526,36 +515,41 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
           </FormGroup>
         </Row>
 
-        <div className='d-flex justify-content-between pt-4'>
-          <Button
-            style={{ width: '130px' }}
-            className='text-white'
-            color="primary"
-            onClick={() => beforeSection(4)}
-          >
-            <ChevronLeft size={17} className='mr-1' />
-            Atrás
-          </Button>
-          <Button
-            style={{ width: '130px' }}
-            color="dark"
-            outline
-            onClick={() => { formik.handleReset()/* ; this.reset() */ }}
-            disabled={(!formik.dirty || formik.isSubmitting)}
-          >
-            <Delete size={17} className='mr-2' />
-            Limpiar
-          </Button>
-          <Button
-            style={{ width: '130px' }}
-            className='text-white'
-            color="primary"
-            type="submit"
-          >
-            Siguiente
-            <ChevronRight size={17} className='ml-1' />
-          </Button>
-        </div>
+        <Row className='pt-4'>
+          <Col xs={4} md={{ size: 2, order: 0, offset: 3 }}>
+            <Button
+              outline
+              color="primary"
+              block
+              onClick={() => beforeSection(4)}
+            >
+              <ChevronLeft size={17} className='mr-1' />
+              Atrás
+            </Button>
+          </Col>
+          <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
+            <Button
+              color="dark"
+              block
+              onClick={() => { formik.handleReset(); }}
+              disabled={!formik.dirty || formik.isSubmitting}
+            >
+              <Delete size={17} className='mr-2' /> Limpiar
+
+            </Button>
+          </Col>
+          <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
+            <Button
+              className='text-white'
+              color="primary"
+              block
+              type="submit"
+            >
+              Siguiente
+              <ChevronRight size={17} className='ml-1' />
+            </Button>
+          </Col>
+        </Row>
       </Form>
     </Fragment>
   )

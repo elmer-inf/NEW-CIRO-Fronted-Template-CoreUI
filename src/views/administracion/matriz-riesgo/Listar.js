@@ -12,6 +12,7 @@ import { PathContext } from 'src/containers/TheLayout';
 import { ToastContainer, toast } from 'react-toastify';
 import { Messages } from 'src/reusable/variables/Messages';
 import Swal from 'sweetalert2'
+import { PlusSquare } from 'react-feather';
 
 const AdministracionMatrizRiesgosListar = () => {
 
@@ -303,10 +304,16 @@ const AdministracionMatrizRiesgosListar = () => {
       <Fragment>
         <Card>
           <CardHeader>
-            <CardTitle className='float-left h4 pt-2'>Parámetros de Matriz de Riesgos</CardTitle>
-            <Button color='primary' onClick={(e) => { redirect(e) }} className='float-right mt-1' style={{ width: '130px' }}>
-              <span className='text-white'>Registrar</span>
-            </Button>
+            <Row>
+              <Col xs={12} md={{ size: 6, offset: 0 }}>
+                <CardTitle className='float-left h4 pt-2'>Parámetros de Matriz de Riesgos</CardTitle>
+              </Col>
+              <Col xs={4} md={{ size: 2, offset: 4 }}>
+                <Button block onClick={(e) => { redirect(e) }} color="primary" className='text-white'>
+                  <PlusSquare size={15} className='mr-2' /> Registrar
+                </Button>
+              </Col>
+            </Row>
           </CardHeader>
           <CardBody>
             <Row className='justify-content-center pt-4'>
@@ -316,7 +323,7 @@ const AdministracionMatrizRiesgosListar = () => {
               <Col sm='9' lg='4'>
                 <Select
                   onChange={(e) => handleSelectOnChange(e)}
-                  placeholder={'Buscar . . .'}
+                  placeholder={'Buscar'}
                   className='react-select'
                   classNamePrefix='select'
                   options={tablaListaOptions}

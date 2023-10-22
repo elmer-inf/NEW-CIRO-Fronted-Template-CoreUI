@@ -8,23 +8,24 @@ import { buildSelectThree, buildSelectTwo } from 'src/functions/Function'
 import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik';
 import { CInputReact } from 'src/reusable/CInputReact'
 import Select from "react-select";
+import { Messages } from 'src/reusable/variables/Messages';
 
 var _ = require('lodash');
 
 const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux, dataApiControl, optionsObjetivo, isEdit }) => {
 
   const formik = Yup.object().shape({
-    controlId: Yup.mixed().required('Campo obligatorio'),
-    controlObjetivo: Yup.mixed().required('Campo obligatorio'),
+    controlId: Yup.mixed().required(Messages.required),
+    controlObjetivo: Yup.mixed().required(Messages.required),
     controlComentario: Yup.string().nullable(),
     // campos solo para mostrar
     controlValoracion: Yup.string().nullable(),
     controlDisminucion: Yup.string().nullable(),
 
-    controlesTiene: Yup.string().required('Campo obligatorio'),
+    controlesTiene: Yup.string().required(Messages.required),
     nroControles: Yup.string().nullable().when('controlesTiene', {
       is: (val) => (val === 'true'),
-      then: Yup.string().nullable().required("Campo obligatorio"),
+      then: Yup.string().nullable().required(Messages.required),
     }),
 
     controles: Yup.array().of(
@@ -423,39 +424,39 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
             </FieldArray>
             : null}
 
-          <div className='d-flex justify-content-between pt-4'>
-            <Button
-              style={{ width: '130px' }}
-              className='text-white'
-              color="primary"
-              onClick={() => beforeSection(3)}
-            >
-              <ChevronLeft size={17} className='mr-1' />
-              Atrás
-            </Button>
-            <Button
-              style={{ width: '130px' }}
-              color="dark"
-              outline
-              type='reset'
-            /* onClick={() => { formik.handleReset() }}
-            disabled={(!formik.dirty || formik.isSubmitting)} */
-            >
-              <Delete size={17} className='mr-2' />
-              Limpiar
-            </Button>
-            <Button
-              style={{ width: '130px' }}
-              className='text-white'
-              color="primary"
-              type="submit"
-            //disabled={formik.isSubmitting}
-            >
-              Siguiente
-              <ChevronRight size={17} className='ml-1' />
-            </Button>
-          </div>
-
+          <Row className='pt-4'>
+            <Col xs={4} md={{ size: 2, order: 0, offset: 3 }}>
+              <Button
+                outline
+                color="primary"
+                block
+                onClick={() => beforeSection(3)}
+              >
+                <ChevronLeft size={17} className='mr-1' />
+                Atrás
+              </Button>
+            </Col>
+            <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
+              <Button
+                color="dark"
+                block
+                type='reset'
+              >
+                <Delete size={17} className='mr-2' /> Limpiar
+              </Button>
+            </Col>
+            <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
+              <Button
+                className='text-white'
+                color="primary"
+                block
+                type="submit"
+              >
+                Siguiente
+                <ChevronRight size={17} className='ml-1' />
+              </Button>
+            </Col>
+          </Row>
         </Form>
       )}
     </Formik>

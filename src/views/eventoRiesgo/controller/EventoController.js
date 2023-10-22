@@ -87,3 +87,9 @@ export const getArchivosByEvento = async (idEvento) => {
     const response = await axios.get(uri)
     return response
 }
+
+// Eliminacion logica de Evento por ID
+export const deleteEventoRiesgoId = (id) => {
+    const uri = HOST + 'v1/eventoRiesgo/eliminar/' + id;
+    return axios.put(uri, {});
+}

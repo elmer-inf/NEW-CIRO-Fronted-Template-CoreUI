@@ -325,40 +325,43 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
               options={dataApiGobierno}
             />
           </FormGroup>
-
         </Row>
 
-        <div className='d-flex justify-content-between pt-4'>
-          <Button
-            style={{ width: '130px' }}
-            className='text-white'
-            color="primary"
-            onClick={() => (tipoEvento === 'A') ? beforeSection(5) : beforeSection(4)}
-          >
-            <ChevronLeft size={17} className='mr-1' />
-            Atrás
-          </Button>
-          <Button
-            style={{ width: '130px' }}
-            color="dark"
-            outline
-            onClick={() => { formik.handleReset()/* ; this.reset() */ }}
-            disabled={(!formik.dirty || formik.isSubmitting)}
-          >
-            <Delete size={17} className='mr-2' />
-            Limpiar
-          </Button>
-          <Button
-            style={{ width: '130px' }}
-            className='text-white'
-            color="primary"
-            type="submit"
-          //disabled={formik.isSubmitting}
-          >
-            <Save size={17} className='mr-2' />
-            GUARDAR
-          </Button>
-        </div>
+        <Row className='pt-4'>
+          <Col xs={4} md={{ size: 2, order: 0, offset: 3 }}>
+            <Button
+              color="primary"
+              outline
+              block
+              onClick={() => (tipoEvento === 'A') ? beforeSection(5) : beforeSection(4)}
+            >
+              <ChevronLeft size={17} className='mr-1' />
+              Atrás
+            </Button>
+          </Col>
+          <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
+            <Button
+              color="dark"
+              block
+              onClick={() => { formik.handleReset(); }}
+              disabled={!formik.dirty || formik.isSubmitting}
+            >
+              <Delete size={17} className='mr-2' /> Limpiar
+
+            </Button>
+          </Col>
+          <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
+            <Button
+              className='text-white'
+              block
+              color="primary"
+              type="submit"
+            >
+              <Save size={17} className='mr-2' />
+              Guardar
+            </Button>
+          </Col>
+        </Row>
       </Form>
     </Fragment>
   )

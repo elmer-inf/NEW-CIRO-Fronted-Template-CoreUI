@@ -10,6 +10,7 @@ import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik';
 import BootstrapTable from 'react-bootstrap-table-next'
 import { CBadge, CCallout, CProgress } from '@coreui/react';
 import Select from "react-select";
+import { Messages } from 'src/reusable/variables/Messages';
 
 var _ = require('lodash');
 
@@ -23,8 +24,8 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
         estrategia: Yup.string().nullable(),
         descripcion: Yup.string().nullable(),
         cargo: Yup.mixed().nullable(),
-        fechaAccion: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
-        fechaImpl: Yup.date().max(new Date('12-31-3000'), "Año fuera de rango").nullable(),
+        fechaAccion: Yup.date().min(new Date('01-01-1900'), Messages.dateValidation4).max(new Date('12-31-2500'), Messages.dateValidation4).nullable(),
+        fechaImpl: Yup.date().min(new Date('01-01-1900'), Messages.dateValidation4).max(new Date('12-31-2500'), Messages.dateValidation4).nullable(),
         estado: Yup.mixed().nullable(),
 
         fechaSeg: Yup.date().nullable(),
@@ -49,8 +50,6 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
       }
     }
     setValues({ ...values, planesAccion });
-
-    // call formik onChange method
     field.onChange(e);
   }
 
@@ -147,21 +146,6 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
       ...styles,
       boxShadow: 'none'
     }),
-    /* option: (styles, { isDisabled, isSelected }) => {
-      return {
-        ...styles,
-        backgroundColor: isSelected ? '#e79140' : 'white',
-        cursor: isDisabled ? 'not-allowed' : 'default',
-        ':active': {
-          backgroundColor: '#e79140',
-          color: 'white'
-        },
-        ':hover': {
-          backgroundColor: isSelected ? '#e79140' : '#fbf3eb',
-          color: isSelected ? 'white' : '#e79140'
-        }
-      }
-    } */
   }
 
   return (
@@ -430,39 +414,41 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
             }))}
           </FieldArray>
 
-          <div className='d-flex justify-content-between pt-4'>
-            <Button
-              style={{ width: '130px' }}
-              className='text-white'
-              color="primary"
-              onClick={() => beforeSection(5)}
-            >
-              <ChevronLeft size={17} className='mr-1' />
-              Atrás
-            </Button>
-            <Button
-              style={{ width: '130px' }}
-              color="dark"
-              outline
-              type='reset'
-            /* onClick={() => { formik.handleReset() }}
-            disabled={(!formik.dirty || formik.isSubmitting)} */
-            >
-              <Delete size={17} className='mr-2' />
-              Limpiar
-            </Button>
-            <Button
-              style={{ width: '130px' }}
-              className='text-white'
-              color="primary"
-              type="submit"
-            //disabled={formik.isSubmitting}
-            >
-              <Save size={17} className='mr-2' />
-              GUARDAR
-            </Button>
-          </div>
-
+          <Row className='pt-4'>
+            <Col xs={4} md={{ size: 2, order: 0, offset: 3 }}>
+              <Button
+                color="primary"
+                outline
+                block
+                onClick={() => beforeSection(5)}
+              >
+                <ChevronLeft size={17} className='mr-1' />
+                Atrás
+              </Button>
+            </Col>
+            <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
+              <Button
+                color="dark"
+                block
+                type='reset'
+              //onClick={() => { formik.handleReset(); }}
+              //disabled={!formik.dirty || formik.isSubmitting}
+              >
+                <Delete size={17} className='mr-2' /> Limpiar
+              </Button>
+            </Col>
+            <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
+              <Button
+                className='text-white'
+                block
+                color="primary"
+                type="submit"
+              >
+                <Save size={17} className='mr-2' />
+                Guardar
+              </Button>
+            </Col>
+          </Row>
         </Form>
       )}
     </Formik>

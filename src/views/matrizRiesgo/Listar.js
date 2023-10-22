@@ -5,7 +5,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import ActionFormatter from 'src/reusable/ActionFormatterEvento';
 import ActionFormatterEvaluar from 'src/reusable/ActionFormatterEvaluar';
 import { useHistory } from 'react-router-dom'
-import { putEvaluaRiesgo, getMatrizPaging, getGeneraCodigo } from './controller/RiesgoController'
+import { putEvaluaRiesgo, getMatrizPaging, getGeneraCodigo, deleteRiesgoId } from './controller/RiesgoController'
 import { pagingInit } from 'src/reusable/variables/Variables';
 import CPagination from 'src/reusable/pagination/CPagination';
 import { getParams, hasPermission } from 'src/functions/Function';
@@ -17,6 +17,7 @@ import { PathContext } from 'src/containers/TheLayout';
 import { ToastContainer, toast } from 'react-toastify';
 import { Messages } from 'src/reusable/variables/Messages';
 import Swal from 'sweetalert2'
+import { PlusSquare } from 'react-feather';
 
 var _ = require('lodash');
 
@@ -47,19 +48,52 @@ const MatrizRiesgoListar = () => {
       history.push(path);
 
     } else {
-      notificationToast();
+      notificationToast('permission', Messages.dontHavePermission);
     }
   }
 
-  const notificationToast = () => {
-    toast.error(Messages.dontHavePermission, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: true,
-      draggable: true,
-    });
+  const notificationToast = (type, mensaje) => {
+    switch (type) {
+      case 'error':
+        toast.error(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        break;
+      case 'success':
+        toast.success(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        break;
+      case 'permission':
+        toast.error(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        break;
+      default:
+        toast(mensaje, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+        });
+    }
   }
 
   const columns = [
@@ -170,7 +204,7 @@ const MatrizRiesgoListar = () => {
   }
 
   const actionFormatter = (cell, row) => {
-    return <ActionFormatter cell={cell} row={row} detailFunction={detailsRow} editFunction={editRow} />
+    return <ActionFormatter cell={cell} row={row} detailFunction={detailsRow} editFunction={editRow} deleteFunction={deleteFunction} allowDelete={true} />
   }
 
   const detailsRow = (row) => {
@@ -178,14 +212,28 @@ const MatrizRiesgoListar = () => {
   }
 
   const editRow = (row) => {
-    //history.push('/matrizRiesgo/Editar/' + row.id);
     const path = '/matrizRiesgo/editar/:id';
     if (hasPermission(path, valuePathFromContext)) {
       history.push('/matrizRiesgo/Editar/' + row.id);
     } else {
-      notificationToast();
+      notificationToast('permission', Messages.dontHavePermission);
     }
   }
+
+  const deleteFunction = (row) => {
+    const path = '/matrizRiesgo/editar/:id';
+    if (hasPermission(path, valuePathFromContext)) {
+      deleteRiesgoId(row.id)
+        .then((response) => {
+          callApi(pagination.page, pagination.size);
+          notificationToast('success', Messages.ok);
+        }).catch((error) => {
+          notificationToast('error', Messages.no_ok);
+        })
+    } else {
+      notificationToast('permission', Messages.dontHavePermission);
+    }
+  };
 
   const actionFormatterEvaluar = (cell, row) => {
     return <ActionFormatterEvaluar cell={cell} row={row} autorizarFunction={autorizaRiesgo} descartarFunction={descartaRiesgo} />
@@ -437,10 +485,16 @@ const MatrizRiesgoListar = () => {
           <Col sm='12'>
             <Card>
               <CardHeader>
-                <CardTitle className='float-left h4 pt-2'>Matriz de Riesgos</CardTitle>
-                <Button color='primary' onClick={(e) => { redirect(e) }} className='float-right mt-1' style={{ width: '130px' }}>
-                  <span className='text-white'>Registrar</span>
-                </Button>
+                <Row>
+                  <Col xs={12} md={{ size: 6, offset: 0 }}>
+                    <CardTitle className='float-left h4 pt-2'>Matriz de Riesgos</CardTitle>
+                  </Col>
+                  <Col xs={4} md={{ size: 2, offset: 4 }}>
+                    <Button block onClick={(e) => { redirect(e) }} color="primary" className='text-white'>
+                      <PlusSquare size={15} className='mr-2' /> Registrar
+                    </Button>
+                  </Col>
+                </Row>
               </CardHeader>
               <CardBody className='pb-4'>
                 <BootstrapTable

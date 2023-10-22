@@ -6,6 +6,7 @@ import { FormGroup, Row, Col, Form, Button, Label } from 'reactstrap'
 import { CSelectReact } from 'src/reusable/CSelectReact'
 import { getTablaListaRiesgo } from '../controller/AdminRiesgoController';
 import { buildSelectTwo } from 'src/functions/Function'
+import { Delete, Save, XSquare } from 'react-feather'
 
 const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
 
@@ -61,7 +62,7 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
           <CSelectReact
             type={"select"}
             id={'tablaId'}
-            placeholder={'Seleccionar . . . '}
+            placeholder={'Seleccionar'}
             value={formik.values.tablaId}
             onChange={formik.setFieldValue}
             onBlur={formik.setFieldTouched}
@@ -145,7 +146,6 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
             <CInputReact
               type={"textarea"}
               id={'campoB'}
-              //placeholder={''}
               value={formik.values.campoB}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -197,7 +197,6 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
             <CInputReact
               type={"textarea"}
               id={'campoD'}
-              //placeholder={''}
               value={formik.values.campoD}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -248,7 +247,6 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
                 <CInputReact
                   type={"number"}
                   id={'campoE'}
-                  //placeholder={''}
                   value={formik.values.campoE}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -270,7 +268,6 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
                 <CInputReact
                   type={"number"}
                   id={'campoF'}
-                  //placeholder={''}
                   value={formik.values.campoF}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -283,26 +280,39 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
           : null}
       </Row>
 
-      <FormGroup className='mb-0 mt-4' row>
-        <Col className='d-flex justify-content-center'>
+      <Row className='pt-4'>
+        <Col xs={4} md={{ size: 2, order: 0, offset: 3 }}>
           <Button
-            className='mr-4 text-white'
             color="primary"
+            className='text-white'
             type="submit"
+            block
             disabled={formik.isSubmitting}
           >
-            Guardar
-          </Button>
-
-          <Button
-            outline color='dark'
-            onClick={() => { formik.handleReset() }}
-            disabled={!formik.dirty || formik.isSubmitting}
-          >
-            Limpiar
+            <Save size={17} className='mr-2' /> Guardar
           </Button>
         </Col>
-      </FormGroup>
+        <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
+          <Button
+            color="dark"
+            block
+            onClick={() => { formik.handleReset(); }}
+            disabled={!formik.dirty || formik.isSubmitting}
+          >
+            <Delete size={17} className='mr-2' /> Limpiar
+          </Button>
+        </Col>
+        <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
+          <Button
+            href='#/administracion/matriz-riesgo/Listar'
+            color="primary"
+            outline
+            block
+          >
+            <XSquare size={17} className='mr-2' />Cancelar
+          </Button>
+        </Col>
+      </Row>
     </Form>
   )
 }

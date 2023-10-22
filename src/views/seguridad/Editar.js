@@ -31,8 +31,13 @@ const SeguridadEditar = ({ match }) => {
   }
 
   //useState
-  const [formValueToEdit, setformValueToEdit] = useState(formValueInitial)
-  const [spin, setSpin] = useState(false)
+  const [formValueToEdit, setformValueToEdit] = useState(formValueInitial);
+  const [spin, setSpin] = useState(false);
+
+  useEffect(() => {
+    getById();
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const notificationToast = (type, mensaje) => {
     switch (type) {
@@ -85,17 +90,16 @@ const SeguridadEditar = ({ match }) => {
           notificationToast('error', 'Algo salió mal, intente nuevamente');
         }
       }).catch((error) => {
-        console.error('Error al obtener datos: ', error);
         notificationToast('error', 'Algo salió mal, intente nuevamente')
       });
   }
 
   const matched = (dataResponse) => {
-    var tipoActivoIdAux = { value: dataResponse.tipoActivoId.id, label: dataResponse.tipoActivoId.nombre };
-    var estadoIdAux = { value: dataResponse.estadoId.id, label: dataResponse.estadoId.nombre };
-    var nivelRiesgoIdAux = { value: dataResponse.nivelRiesgoId.id, label: dataResponse.nivelRiesgoId.campoA + ' - ' + dataResponse.nivelRiesgoId.campoB };
-    var areaIdAux = { value: dataResponse.areaId.id, label: dataResponse.areaId.clave + ' - ' + dataResponse.areaId.nombre };
-    var redAux = { value: dataResponse.red, label: dataResponse.red };
+    var tipoActivoIdAux = dataResponse.tipoActivoId!==null? { value: dataResponse.tipoActivoId.id, label: dataResponse.tipoActivoId.nombre } : null;
+    var estadoIdAux = dataResponse.estadoId!==null? { value: dataResponse.estadoId.id, label: dataResponse.estadoId.nombre } : null;
+    var nivelRiesgoIdAux = dataResponse.nivelRiesgoId!==null? { value: dataResponse.nivelRiesgoId.id, label: dataResponse.nivelRiesgoId.campoA + ' - ' + dataResponse.nivelRiesgoId.campoB } : null;
+    var areaIdAux = dataResponse.areaId!==null? { value: dataResponse.areaId.id, label: dataResponse.areaId.clave + ' - ' + dataResponse.areaId.nombre } : null;
+    var redAux = dataResponse.red!==null? { value: dataResponse.red, label: dataResponse.red } : null;
 
     const valores = {
       fechaRegistro: dataResponse.fechaRegistro,
@@ -126,19 +130,15 @@ const SeguridadEditar = ({ match }) => {
     await getSeguridadId(idSeguridad)
       .then((response) => {
         const res = response.data;
+        console.log("" + JSON.stringify(res, null, 2));
         matched(res);
         setSpin(false);
       }).catch((error) => {
-        console.error("Error: ", error);
+        notificationToast('error', 'Algo salió mal, intente nuevamente')
         setSpin(false);
       });
   }
 
-  //Life Cycle
-  useEffect(() => {
-    getById();
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <div>

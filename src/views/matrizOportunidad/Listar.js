@@ -17,6 +17,7 @@ import { PathContext } from 'src/containers/TheLayout';
 import { ToastContainer, toast } from 'react-toastify';
 import { Messages } from 'src/reusable/variables/Messages';
 import Swal from 'sweetalert2'
+import { PlusSquare } from 'react-feather';
 
 var _ = require('lodash');
 
@@ -170,7 +171,7 @@ const MatrizOportunidadListar = () => {
   }
 
   const actionFormatter = (cell, row) => {
-    return <ActionFormatter cell={cell} row={row} detailFunction={detailsRow} editFunction={editRow} />
+    return <ActionFormatter cell={cell} row={row} detailFunction={detailsRow} editFunction={editRow} allowDelete={false} />
   }
 
   const detailsRow = (row) => {
@@ -432,10 +433,16 @@ const MatrizOportunidadListar = () => {
           <Col sm='12'>
             <Card>
               <CardHeader>
-                <CardTitle className='float-left h4 pt-2'>Matriz de Oportunidades</CardTitle>
-                <Button color='primary' onClick={(e) => { redirect(e) }} className='float-right mt-1' style={{ width: '130px' }}>
-                  <span className='text-white'>Registrar</span>
-                </Button>
+                <Row>
+                  <Col xs={12} md={{ size: 6, offset: 0 }}>
+                    <CardTitle className='float-left h4 pt-2'>Matriz de Oportunidades</CardTitle>
+                  </Col>
+                  <Col xs={4} md={{ size: 2, offset: 4 }}>
+                    <Button block onClick={(e) => { redirect(e) }} color="primary" className='text-white'>
+                      <PlusSquare size={15} className='mr-2' /> Registrar
+                    </Button>
+                  </Col>
+                </Row>
               </CardHeader>
               <CardBody className='pb-4'>
                 <BootstrapTable

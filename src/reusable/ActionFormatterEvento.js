@@ -1,37 +1,66 @@
-import React from 'react'
-import { CDropdown, CDropdownMenu, CDropdownToggle, CDropdownItem, CTooltip } from '@coreui/react';
-import { Edit3, FileText, MoreVertical } from 'react-feather'
+import { CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle, CTooltip } from '@coreui/react';
+import React from 'react';
+import { Edit3, FileText, MoreVertical, Trash2 } from 'react-feather';
+import Swal from 'sweetalert2';
 
-const ActionFormatterEvento = ({ cell, row, detailFunction, editFunction }) => {
+const ActionFormatterEvento = ({ row, detailFunction, editFunction, deleteFunction, allowDelete }) => {
+
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: 'btn btn-primary text-white',
+      cancelButton: 'btn btn-outline-primary',
+    },
+    buttonsStyling: false
+  });
+
+  const confirmDelete = () => {
+    swalWithBootstrapButtons.fire({
+      title: '¿Estás seguro?',
+      text: 'No podrás deshacer esta acción.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminarlo',
+      cancelButtonText: 'Cancelar',
+      position: 'top',
+      customClass: {
+        confirmButton: 'btn btn-primary text-white',
+        cancelButton: 'btn btn-outline-primary ml-4',
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if (deleteFunction) {
+          deleteFunction(row);
+        }
+      }
+    });
+  };
+
+
 
   return (
     <div>
       <CDropdown className='pb-2'>
-        <CTooltip content="Más opciones" placement="left" >
-          <CDropdownToggle className='icon-btn hide-arrow' color='transparent' size="sm">
+        <CTooltip content='Más opciones' placement='left'>
+          <CDropdownToggle className='icon-btn hide-arrow' color='transparent' size='sm'>
             <MoreVertical size={15} className='text-dark' />
           </CDropdownToggle>
         </CTooltip>
-        <CDropdownMenu placement="left">
-          <CDropdownItem onClick={() => {
-            // props.deleteRow(props.row)
-            detailFunction(row)
-          }} >
-            <FileText size={15} className='mr-2 text-primary' />Mostrar
+        <CDropdownMenu placement='left'>
+          <CDropdownItem onClick={() => detailFunction(row)}>
+            <FileText size={15} className='mr-2 text-primary' /> Mostrar
           </CDropdownItem>
-          <CDropdownItem href="#" onClick={() => {
-            editFunction(row)
-          }} >
-            <Edit3 size={15} className='mr-2 text-primary' />Editar
+          <CDropdownItem href='#' onClick={() => editFunction(row)}>
+            <Edit3 size={15} className='mr-2 text-primary' /> Editar
           </CDropdownItem>
-          {/* <CDropdownItem href="#" onClick={() => {
-            editFunction(row)
-          }} >
-            <Trash2 size={15} className='mr-2 text-primary' />Eliminar
-          </CDropdownItem> */}
+          {allowDelete ? (
+          <CDropdownItem href='#' onClick={confirmDelete}>
+            <Trash2 size={15} className='mr-2 text-primary' /> Eliminar
+          </CDropdownItem>
+        ) : null}
         </CDropdownMenu>
       </CDropdown>
     </div>
-  )
-}
-export default ActionFormatterEvento
+  );
+};
+
+export default ActionFormatterEvento;

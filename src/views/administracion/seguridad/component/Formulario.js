@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { useFormik } from "formik"
 import * as Yup from "yup"
 import { CInputReact } from 'src/reusable/CInputReact'
-import { FormGroup, Col, Form, Button, Label } from 'reactstrap'
+import { FormGroup, Col, Form, Button, Label, Row } from 'reactstrap'
 import { CSelectReact } from 'src/reusable/CSelectReact'
 import { getTablaListaSeguridad } from '../controller/AdminSeguridadController';
 import { buildSelectTwo } from 'src/functions/Function'
+import { Delete, Save, XSquare } from 'react-feather'
 
 const AdminFormSeguridad = ({ initialValuess, handleOnSubmit }) => {
 
@@ -53,7 +54,7 @@ const AdminFormSeguridad = ({ initialValuess, handleOnSubmit }) => {
           <CSelectReact
             type={"select"}
             id={'tablaId'}
-            placeholder={'Seleccionar . . . '}
+            placeholder={'Seleccionar'}
             value={formik.values.tablaId}
             onChange={formik.setFieldValue}
             onBlur={formik.setFieldTouched}
@@ -84,26 +85,39 @@ const AdminFormSeguridad = ({ initialValuess, handleOnSubmit }) => {
         </FormGroup>
         : null}
 
-      <FormGroup className='mb-0 mt-4' row>
-        <Col className='d-flex justify-content-center'>
+      <Row className='pt-4'>
+        <Col xs={4} md={{ size: 2, order: 0, offset: 3 }}>
           <Button
-            className='mr-4 text-white'
             color="primary"
+            className='text-white'
             type="submit"
+            block
             disabled={formik.isSubmitting}
           >
-            Guardar
-          </Button>
-
-          <Button
-            outline color='dark'
-            onClick={() => { formik.handleReset() }}
-            disabled={!formik.dirty || formik.isSubmitting}
-          >
-            Limpiar
+            <Save size={17} className='mr-2' /> Guardar
           </Button>
         </Col>
-      </FormGroup>
+        <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
+          <Button
+            color="dark"
+            block
+            onClick={() => { formik.handleReset(); }}
+            disabled={!formik.dirty || formik.isSubmitting}
+          >
+            <Delete size={17} className='mr-2' /> Limpiar
+          </Button>
+        </Col>
+        <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
+          <Button
+            href='#/administracion/seguridad/Listar'
+            color="primary"
+            outline
+            block
+          >
+            <XSquare size={17} className='mr-2' />Cancelar
+          </Button>
+        </Col>
+      </Row>
     </Form>
   )
 }

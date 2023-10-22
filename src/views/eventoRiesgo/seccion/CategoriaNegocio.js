@@ -10,6 +10,7 @@ import { getTablaDescripcionEventoN1, getTablaDescripcionEventoN2, getTablaDescr
 import { buildSelectThree, buildSelectTwo } from 'src/functions/Function'
 import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
 import { getRiesgos } from 'src/views/matrizRiesgo/controller/RiesgoController'
+import { Messages } from 'src/reusable/variables/Messages'
 
 var _ = require('lodash');
 
@@ -40,29 +41,29 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         codigoInicial: Yup.string().nullable(),
         subcategorizacionId: Yup.mixed().nullable(),
         trimestre: Yup.string().nullable(),
-        tipoEventoPerdidaId: Yup.mixed().required('Campo obligatorio'),
+        tipoEventoPerdidaId: Yup.mixed().required(Messages.required),
         subEventoId: Yup.mixed().nullable(),
         claseEventoId: Yup.mixed().nullable(),
         otros: Yup.string().nullable().when('claseEventoId', {
           is: (val) => (val !== null && val.label === 'Otros'),
           then: Yup.string().nullable().required("Campo obligatorio"),
         }),
-        detalleEventoCritico: Yup.string().required('Campo obligatorio').nullable(),
-        factorRiesgoId: Yup.mixed().required('Campo obligatorio'),
-        procesoId: Yup.mixed().required('Campo obligatorio'),
+        detalleEventoCritico: Yup.string().required(Messages.required).nullable(),
+        factorRiesgoId: Yup.mixed().required(Messages.required),
+        procesoId: Yup.mixed().required(Messages.required),
         procedimientoId: Yup.mixed().nullable(),
-        eventoCritico: Yup.mixed().required('Campo obligatorio'),
+        eventoCritico: Yup.mixed().required(Messages.required),
 
-        lineaNegocio: Yup.mixed().required('Campo obligatorio'),
-        lineaAsfiId: Yup.mixed().required('Campo obligatorio'),
-        operacionId: Yup.mixed().required('Campo obligatorio'),
+        lineaNegocio: Yup.mixed().required(Messages.required),
+        lineaAsfiId: Yup.mixed().required(Messages.required),
+        operacionId: Yup.mixed().required(Messages.required),
         efectoPerdidaId: Yup.mixed().nullable(),
         opeProSerId: Yup.mixed().nullable(),
         tipoServicioId: Yup.mixed().nullable(),
         descServicioId: Yup.mixed().nullable(),
         detalleEstado: Yup.string().nullable(),
 
-        procesoCriticoAsfi: Yup.mixed().required('Campo obligatorio'),
+        procesoCriticoAsfi: Yup.mixed().required(Messages.required),
         procesoCriticoAsfiAux: Yup.string().nullable(),
 
         listMatrizRiesgo: Yup.mixed().nullable(),
@@ -866,37 +867,40 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
           </FormGroup>
         </Row>
 
-        <div className='d-flex justify-content-between pt-4'>
-          <Button
-            style={{ width: '130px' }}
-            className='text-white'
-            color="primary"
-            onClick={() => beforeSection(3)}
-          >
-            <ChevronLeft size={17} className='mr-1' />
-            Atrás
-          </Button>
-          <Button
-            style={{ width: '130px' }}
-            color="dark"
-            outline
-            onClick={() => { formik.handleReset()/* ; this.reset() */ }}
-            disabled={(!formik.dirty || formik.isSubmitting)}
-          >
-            <Delete size={17} className='mr-2' />
-            Limpiar
-          </Button>
-          <Button
-            style={{ width: '130px' }}
-            className='text-white'
-            color="primary"
-            type="submit"
-          //disabled={formik.isSubmitting}
-          >
-            Siguiente
-            <ChevronRight size={17} className='ml-1' />
-          </Button>
-        </div>
+        <Row className='pt-4'>
+          <Col xs={4} md={{ size: 2, order: 0, offset: 3 }}>
+            <Button
+              outline
+              color="primary"
+              block
+              onClick={() => beforeSection(3)}
+            >
+              <ChevronLeft size={17} className='mr-1' />
+              Atrás
+            </Button>
+          </Col>
+          <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
+            <Button
+              color="dark"
+              block
+              onClick={() => { formik.handleReset(); }}
+              disabled={!formik.dirty || formik.isSubmitting}
+            >
+              <Delete size={17} className='mr-2' /> Limpiar
+            </Button>
+          </Col>
+          <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
+            <Button
+              className='text-white'
+              color="primary"
+              block
+              type="submit"
+            >
+              Siguiente
+              <ChevronRight size={17} className='ml-1' />
+            </Button>
+          </Col>
+        </Row>
       </Form>
     </Fragment>
   )
