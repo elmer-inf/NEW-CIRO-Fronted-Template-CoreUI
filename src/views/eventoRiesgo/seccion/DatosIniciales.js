@@ -215,7 +215,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
     callApiFuente(8);
     callApiCanal(9);
   }, [])
-
+  /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
   // Para el despliegue del select llenado al EDITAR
   useEffect(() => {
@@ -238,13 +238,6 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.entidadAfectada])
 
-  /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
-
-  const history = useHistory();
-  const redirect = (e) => {
-    history.push('/eventoRiesgo/Listar');
-  }
-
   // FORMIK RESET VALUE REUTILIZABLE
   const resetFormikValue = (field, valueToReset) => {
     formik.setFieldValue(field, valueToReset, false);
@@ -263,7 +256,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
   }
   const clearInputAgencia = (id) => {
     formik.setFieldValue(id, null, false); // limpia el select principal
-    resetFormikValue('ciudadId', null) // limpiar el valro de mi select hijo
+    resetFormikValue('ciudadId', null) // limpia el valor de select hijo
   }
   /* FIN  Values of AGENCIA */
 
@@ -282,6 +275,11 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
     formik.setFieldValue(id, null, false);
   }
   /* FIN  Values of AREA */
+
+  const history = useHistory();
+  const redirect = (e) => {
+    history.push('/eventoRiesgo/Listar');
+  }
 
   return (
     <Fragment>

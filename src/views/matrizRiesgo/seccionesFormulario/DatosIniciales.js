@@ -22,7 +22,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   const [relEventoRiesgo, setRelEventoRiesgo] = useState([]);
 
   const formik = useFormik({
-    initialValues: { ...initValues, otrosAux: false },
+    initialValues: initValues,
     validationSchema: Yup.object().shape({
       areaId: Yup.mixed().required(Messages.required),
       unidadId: Yup.mixed().required(Messages.required),
@@ -112,18 +112,6 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initValues])
 
-
-  // Para el despliegue del select llenado al EDITAR
-  useEffect(() => {
-    if (isEdit && initValues.areaId !== null) {
-      callApiUnidad(4, initValues.areaId.id);
-    }
-    if (isEdit && initValues.procesoId !== null) {
-      callApiProcedimiento(16, initValues.procesoId.id);
-    }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   /*   P  A  R  A  M  E  T  R  O  S   */
   // Area
   const [dataApiArea, setDataApiArea] = useState([])
@@ -211,9 +199,30 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
     getListEventosRiesgo();
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
+  // Funcion que lista los eventos de riesgo, (relacion de matriz de riesgo a Eventos de riesgo)
+  const getListEventosRiesgo = () => {
+    getEventos()
+      .then(res => {
+        var order = _.orderBy(res.data, ['id'], ['desc'])
+        const options = buildSelectThree(order, 'id', 'id', 'codigo', true)
+        setRelEventoRiesgo(options)
+      }).catch((error) => {
+        console.error('Error: ', error)
+      })
+  }
+
+   // Para el despliegue del select llenado al EDITAR
+   useEffect(() => {
+    if (isEdit && initValues.areaId !== null) {
+      callApiUnidad(4, initValues.areaId.id);
+    }
+    if (isEdit && initValues.procesoId !== null) {
+      callApiProcedimiento(16, initValues.procesoId.id);
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // FORMIK RESET VALUE REUTILIZABLE
   const resetFormikValue = (field, valueToReset) => {
@@ -250,17 +259,9 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   }
   /* FIN  Values of MACROPROCESO */
 
+  
 
-  // Autocompleta codigo, criticidad y valoracion de Macroproceso
-  useEffect(() => {
-    if (formik.values.procesoId !== null) {
-      formik.setFieldValue('macroNombre', formik.values.procesoId.clave, false)
-      formik.setFieldValue('macroCriticidad', formik.values.procesoId.descripcion, false)
-      formik.setFieldValue('macroValoracion', formik.values.procesoId.campoA, false)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.procesoId]);
-
+  
   // Resetea "otros" dependiendo del check
   const resetOtros = () => { formik.setFieldValue('identificadoOtro', null, false); }
   useEffect(() => {
@@ -270,23 +271,19 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.otrosAux])
 
-
-  // Autocompleta "Fecha y Descripcion" de Eventos
-  useEffect(() => {
-    if (formik.values.eventoRiesgoId !== null) {
-      formik.setFieldValue('eventoFechaAux', formik.values.eventoRiesgoId.fechaDesc !== null ? formik.values.eventoRiesgoId.fechaDesc : '', false);
-      formik.setFieldValue('eventoDescAux', formik.values.eventoRiesgoId.descripcion, false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.eventoRiesgoId]);
-
   // Resetea "Fecha y Descripcion" de Eventos dependiendo del check "Evento Materializado"
   const resetDatosEvento = () => {
     formik.setFieldValue('eventoRiesgoId', '', false);
     formik.setFieldValue('eventoFechaAux', '', false);
     formik.setFieldValue('eventoDescAux', '', false);
-
   }
+
+  useEffect(() => {
+    if (formik.values.eventoMaterializado === false) {
+      resetDatosEvento();
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.eventoMaterializado])
 
   // Reset codigo, criticidad y valoracion de Macroproceso
   useEffect(() => {
@@ -297,36 +294,31 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.procesoId]);
-
-
+  
+  // Autocompleta "Fecha y Descripcion" de Eventos
   useEffect(() => {
-    if (formik.values.eventoMaterializado === false) {
-      resetDatosEvento();
+    if (formik.values.eventoRiesgoId !== null) {
+      formik.setFieldValue('eventoFechaAux', formik.values.eventoRiesgoId.fechaDesc !== null ? formik.values.eventoRiesgoId.fechaDesc : '', false);
+      formik.setFieldValue('eventoDescAux', formik.values.eventoRiesgoId.descripcion, false);
     }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.eventoMaterializado])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.eventoRiesgoId]);
 
-
-  /**
-   * @description Funcion que lista los eventos de riesgo, (relacion de matriz de riesgo a Eventos de riesgo)
-   */
-  const getListEventosRiesgo = () => {
-    getEventos()
-      .then(res => {
-        var order = _.orderBy(res.data, ['id'], ['desc'])
-        const options = buildSelectThree(order, 'id', 'id', 'codigo', true)
-        setRelEventoRiesgo(options)
-      }).catch((error) => {
-        console.error('Error: ', error)
-      })
-  }
+   // Autocompleta codigo, criticidad y valoracion de Macroproceso
+   useEffect(() => {
+    if (formik.values.procesoId !== null) {
+      formik.setFieldValue('macroNombre', formik.values.procesoId.clave, false)
+      formik.setFieldValue('macroCriticidad', formik.values.procesoId.descripcion, false)
+      formik.setFieldValue('macroValoracion', formik.values.procesoId.campoA, false)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.procesoId]);
 
   // Redirecciona a Listar
   const history = useHistory();
   const redirect = (e) => {
     history.push('/matrizRiesgo/Listar');
   }
-
 
   return (
     <Fragment>

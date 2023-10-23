@@ -239,7 +239,7 @@ const EventoRiesgoListar = () => {
   }
 
   const deleteFunction = (row) => {
-    const path = '/eventoRiesgo/Editar/:id';
+    const path = '/eventoRiesgo/eliminar';
     if (hasPermission(path, valuePathFromContext)) {
       deleteEventoRiesgoId(row.id)
         .then((response) => {

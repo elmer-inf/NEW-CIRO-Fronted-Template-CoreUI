@@ -221,7 +221,7 @@ const MatrizRiesgoListar = () => {
   }
 
   const deleteFunction = (row) => {
-    const path = '/matrizRiesgo/editar/:id';
+    const path = '/matrizRiesgo/eliminar';
     if (hasPermission(path, valuePathFromContext)) {
       deleteRiesgoId(row.id)
         .then((response) => {
