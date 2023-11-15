@@ -11,11 +11,19 @@ import { getTablaDescripcionEventoN1, getTablaListaEvento, deleteTablaDescripcio
 import { buildSelectTwo, hasPermission } from 'src/functions/Function'
 import { PlusSquare } from 'react-feather';
 import { PathContext } from 'src/containers/TheLayout';
-import { ToastContainer, toast } from 'react-toastify';
 import { Messages } from 'src/reusable/variables/Messages';
 import Swal from 'sweetalert2'
+import { toastSweetAlert } from 'src/reusable/SweetAlert2';
 
 const AdministracionEventoListar = () => {
+
+  const history = useHistory();
+  const valuePathFromContext = React.useContext(PathContext);
+  const pagination = paginationFactory({page: 2});
+  const [labelTabla, setLabelTabla] = useState([]);
+  const [valueTabla, setValueTabla] = useState([]);
+  const [tablaListaOptions, setTablaListaOptions] = useState([]);
+  const [dataApi, setDAtaApi] = useState([]);
 
   // Configuracion sweetalert2
   const swalWithBootstrapButtons = Swal.mixin({
@@ -26,37 +34,29 @@ const AdministracionEventoListar = () => {
     buttonsStyling: false
   })
 
-  //useContext
-  const valuePathFromContext = React.useContext(PathContext);
-
-  const redirect = (e) => {
-    e.preventDefault();
-    const path = '/administracion/evento-riesgo/Registrar';
-    if (hasPermission(path, valuePathFromContext)) {
-      history.push(path);
-
-    } else {
-      notificationToast();
+  // Style Select
+  const customStyles = {
+    menu: provided => ({ ...provided, zIndex: "9999 !important" }),
+    control: (styles,) => ({
+      ...styles,
+      boxShadow: 'none',
+    }),
+    option: (styles, { isDisabled, isSelected }) => {
+      return {
+        ...styles,
+        backgroundColor: isSelected ? '#e79140' : 'white',
+        cursor: isDisabled ? 'not-allowed' : 'default',
+        ':active': {
+          backgroundColor: '#e79140',
+          color: 'white'
+        },
+        ':hover': {
+          backgroundColor: isSelected ? '#e79140' : '#fbf3eb',
+          color: isSelected ? 'white' : '#e79140'
+        }
+      }
     }
   }
-
-  const notificationToast = () => {
-    toast.error(Messages.dontHavePermission, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: true,
-      draggable: true,
-    });
-  }
-
-  const [labelTabla, setLabelTabla] = useState([]);
-  const [valueTabla, setValueTabla] = useState([]);
-
-  const pagination = paginationFactory({
-    page: 2,
-  });
 
   const columns = [
     {
@@ -233,7 +233,6 @@ const AdministracionEventoListar = () => {
     return <ActionFormatter cell={cell} row={row} deleteFunction={deleteRow} editFunction={editRow} />
   }
 
-  // Eliminar Parametro
   const deleteRow = (row) => {
     swalWithBootstrapButtons.fire({
       title: '',
@@ -248,65 +247,36 @@ const AdministracionEventoListar = () => {
       if (result.isConfirmed) {
         deleteTablaDescripcionEventoId(row.id)
           .then(res => {
-            swalWithBootstrapButtons.fire({
-              title: '',
-              text: 'Operación realizada exitósamente',
-              icon: 'success',
-              confirmButtonText: 'Aceptar',
-              position: 'top',
-            }).then(okay => {
-              if (okay) {
-                getTablaDescripcion(valueTabla);
-              }
-            })
+            getTablaDescripcion(valueTabla);
+            toastSweetAlert('success', Messages.ok, 3000);
           }).catch((error) => {
-            console.error('Error al eliminar Parámetro de Evento de Riesgo: ', error);
+            console.error('Error: ', error);
+            toastSweetAlert('error', Messages.no_ok, 3000);
           });
-      } else if (
-        result.dismiss === Swal.DismissReason.cancel
-      ) {
-        swalWithBootstrapButtons.fire({
-          title: '',
-          text: 'Operación cancelada',
-          icon: 'error',
-          confirmButtonText: 'Aceptar',
-          position: 'top'
-        })
       }
     })
   }
 
-  // Editar Parametro
   const editRow = (row) => {
-    // history.push('/administracion/evento-riesgo/Editar/' + row.id);
     const path = '/administracion/evento-riesgo/Editar/:id';
     if (hasPermission(path, valuePathFromContext)) {
       history.push('/administracion/evento-riesgo/Editar/' + row.id);
     } else {
-      notificationToast();
+      toastSweetAlert('error', Messages.dontHavePermission, 3000);
     }
   }
-
-  const [tablaListaOptions, setTablaListaOptions] = useState([])
-  const [dataApi, setDAtaApi] = useState([])
-  const history = useHistory()
 
   /* LISTA TABLA LISTA */
   const callApi = () => {
     getTablaListaEvento()
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre_tabla', false)
-        setTablaListaOptions(options)
+        setTablaListaOptions(options);
       }).catch((error) => {
         console.error('Error: ', error)
-        //notificationToast('error', Messages.notification.notOk)
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
-
-  useEffect(() => {
-    callApi();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   /* LISTA TABLA DESCRIPCION despendiento de seleccion tabla lista*/
   const handleSelectOnChange = (result) => {
@@ -323,33 +293,24 @@ const AdministracionEventoListar = () => {
         setDAtaApi(res.data)
       }).catch((error) => {
         console.error('Error: ', error)
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
-  // Style Select
-  const customStyles = {
-    menu: provided => ({ ...provided, zIndex: "9999 !important" }),
-    control: (styles,) => ({
-      ...styles,
-      boxShadow: 'none',
-    }),
-    option: (styles, { isDisabled, isSelected }) => {
-      return {
-        ...styles,
-        backgroundColor: isSelected ? '#e79140' : 'white',
-        cursor: isDisabled ? 'not-allowed' : 'default',
-        ':active': {
-          backgroundColor: '#e79140',
-          color: 'white'
-        },
-        ':hover': {
-          backgroundColor: isSelected ? '#e79140' : '#fbf3eb',
-          color: isSelected ? 'white' : '#e79140'
-        }
-      }
+  const redirect = (e) => {
+    e.preventDefault();
+    const path = '/administracion/evento-riesgo/Registrar';
+    if (hasPermission(path, valuePathFromContext)) {
+      history.push(path);
+    } else {
+      toastSweetAlert('error', Messages.dontHavePermission, 3000);
     }
   }
 
+  useEffect(() => {
+    callApi();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div className='table-hover-animation'>
@@ -413,18 +374,6 @@ const AdministracionEventoListar = () => {
           </CardBody>
         </Card>
       </Fragment>
-
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick={false}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
     </div>
   )
 }

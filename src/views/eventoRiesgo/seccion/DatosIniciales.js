@@ -14,16 +14,24 @@ import { useHistory } from 'react-router-dom'
 import AuthService from 'src/views/authentication/AuthService'
 import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
 import { Messages } from 'src/reusable/variables/Messages'
+import { toastSweetAlert } from 'src/reusable/SweetAlert2'
 
 const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFiles, optionsEstado }) => {
 
   const Auth = new AuthService();
   const profile = Auth.getProfile();
   const user = profile.usuario;
-
   const today = new Date();
-  //const tenYearsFromNow = new Date();
-  //tenYearsFromNow.setFullYear(today.getFullYear() + 10);
+  const history = useHistory();
+
+  const [dataApiAgencia, setDataApiAgencia] = useState([]);
+  const [dataApiCiudad, setDataApiCiudad] = useState([]);
+  const [dataApiArea, setDataApiArea] = useState([]);
+  const [dataApiUnidad, setDataApiUnidad] = useState([]);
+  const [dataApiEntidad, setDataApiEntidad] = useState([]);
+  const [dataApiCargo, setDataApiCargo] = useState([]);
+  const [dataApiFuente, setDataApiFuente] = useState([]);
+  const [dataApiCanal, setDataApiCanal] = useState([]);
 
   const formik = useFormik({
     initialValues: initValues,
@@ -102,132 +110,103 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
     }
   })
 
-  // Rellena Datos para Editar
-  useEffect(() => {
-    if (isEdit) {
-      formik.setValues({ ...initValues })
-    }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initValues])
-
   /*   P  A  R  A  M  E  T  R  O  S   */
   /* Agencia */
-  const [dataApiAgencia, setDataApiAgencia] = useState([])
   const callApiAgencia = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiAgencia(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   /* Ciudad (Nivel 2), depende de agencia */
-  const [dataApiCiudad, setDataApiCiudad] = useState([])
   const callApiCiudad = (idTablaDes, idNivel2) => {
     getTablaDescripcionEventoN2(idTablaDes, idNivel2)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiCiudad(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // Area
-  const [dataApiArea, setDataApiArea] = useState([])
   const callApiArea = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiArea(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // Unidad (Nivel 2), depende de area
-  const [dataApiUnidad, setDataApiUnidad] = useState([])
   const callApiUnidad = (idTablaDes, idNivel2) => {
     getTablaDescripcionEventoN2(idTablaDes, idNivel2)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiUnidad(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // Entidades
-  const [dataApiEntidad, setDataApiEntidad] = useState([])
   const callApiEntidad = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiEntidad(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // Cargos
-  const [dataApiCargo, setDataApiCargo] = useState([])
   const callApiCargo = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiCargo(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // Fuente de informacion
-  const [dataApiFuente, setDataApiFuente] = useState([])
   const callApiFuente = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiFuente(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // Canal Asfi
-  const [dataApiCanal, setDataApiCanal] = useState([])
   const callApiCanal = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiCanal(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
-
-  useEffect(() => {
-    callApiAgencia(1);
-    callApiArea(3);
-    callApiEntidad(5);
-    callApiCargo(7);
-    callApiFuente(8);
-    callApiCanal(9);
-  }, [])
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
-
-  // Para el despliegue del select llenado al EDITAR
-  useEffect(() => {
-    if (isEdit && initValues.agenciaId !== null) {
-      callApiCiudad(2, initValues.agenciaId.id);
-    }
-    if (isEdit && initValues.areaID !== null) {
-      callApiUnidad(4, initValues.areaID.id);
-    }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
 
   // Resetea "Entidad" dependiendo del check Entidad afectada
   const resetEntidad = () => { formik.setFieldValue('entidadId', null, false); }
@@ -254,6 +233,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
       callApiCiudad(2, value.id);
     }
   }
+
   const clearInputAgencia = (id) => {
     formik.setFieldValue(id, null, false); // limpia el select principal
     resetFormikValue('ciudadId', null) // limpia el valor de select hijo
@@ -276,10 +256,37 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
   }
   /* FIN  Values of AREA */
 
-  const history = useHistory();
   const redirect = (e) => {
     history.push('/eventoRiesgo/Listar');
-  }
+  } 
+
+  // Rellena Datos para Editar
+  useEffect(() => {
+    if (isEdit) {
+      formik.setValues({ ...initValues })
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initValues])
+
+  // Para el despliegue del select llenado al EDITAR
+  useEffect(() => {
+    if (isEdit && initValues.agenciaId !== null) {
+      callApiCiudad(2, initValues.agenciaId.id);
+    }
+    if (isEdit && initValues.areaID !== null) {
+      callApiUnidad(4, initValues.areaID.id);
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    callApiAgencia(1);
+    callApiArea(3);
+    callApiEntidad(5);
+    callApiCargo(7);
+    callApiFuente(8);
+    callApiCanal(9);
+  }, [])
 
   return (
     <Fragment>

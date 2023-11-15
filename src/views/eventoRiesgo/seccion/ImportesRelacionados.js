@@ -11,10 +11,19 @@ import { buildSelectTwo } from 'src/functions/Function'
 import { covierteMoneda } from 'src/functions/FunctionEvento'
 import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
 import { Messages } from 'src/reusable/variables/Messages'
+import { toastSweetAlert } from 'src/reusable/SweetAlert2'
 
 var _ = require('lodash');
 
 const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValues, isEdit, optionsCobertura }) => {
+
+  const [tasaCambio, setLabelTasaCambio] = useState('');
+  const [dataApiTasaCambio, setDataApiTasaCambio] = useState('');
+  const [dataApiMoneda, setDataApiMoneda] = useState([]);
+  const [dataApiImpacto, setDataApiImpacto] = useState([]);
+  const [dataApiPoliza, setDataApiPoliza] = useState([]);
+  const [dataApiRecuperacionActivo, setDataApiRecuperacionActivo] = useState([]);
+  const [dataApiCuentaContable, setDataApiCuentaContable] = useState([]);
 
   const formik = useFormik({
     initialValues: { ...initValues, totalPerdida: 0 },
@@ -56,7 +65,6 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
         totalRecuperado: Yup.number().nullable() */
       }
     ),
-
     onSubmit: values => {
       const data = {
         ...values,
@@ -77,9 +85,6 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
 
   /*   P  A  R  A  M  E  T  R  O  S   */
   // Tasa de cambio
-  const [tasaCambio, setLabelTasaCambio] = useState('')
-
-  const [dataApiTasaCambio, setDataApiTasaCambio] = useState('')
   const callApiTasaCambio = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
@@ -87,118 +92,71 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
         setLabelTasaCambio(options[0].label)
         setDataApiTasaCambio(options[0].label)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // Moneda
-  const [dataApiMoneda, setDataApiMoneda] = useState([])
   const callApiMoneda = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'clave', false)
         setDataApiMoneda(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // Impacto
-  const [dataApiImpacto, setDataApiImpacto] = useState([])
   const callApiImpacto = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiImpacto(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // Poliza
-  const [dataApiPoliza, setDataApiPoliza] = useState([])
   const callApiPoliza = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiPoliza(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // RecuperacionActivo
-  const [dataApiRecuperacionActivo, setDataApiRecuperacionActivo] = useState([])
   const callApiRecuperacionActivo = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiRecuperacionActivo(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // CuentaContable
-  const [dataApiCuentaContable, setDataApiCuentaContable] = useState([])
   const callApiCuentaContable = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiCuentaContable(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
-
-  useEffect(() => {
-    callApiMoneda(23);
-    callApiImpacto(24);
-    callApiPoliza(25);
-    callApiTasaCambio(14);
-    callApiRecuperacionActivo(37);
-    callApiCuentaContable(39);
-  }, [])
-
-  useEffect(() => {
-    if (isEdit) {
-      formik.setValues({ ...initValues })
-    }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initValues])
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
-
-  // Resetea "Poliza de seguro" y "Monto recuperado del seguro" dependiendo del check Cobertura seguro
-  const resetPoliza = () => {
-    formik.setFieldValue('polizaSeguroId', null, false);
-    formik.setFieldValue('montoRecuperadoSeguro', '', false);
-  }
-  useEffect(() => {
-    if (formik.values.coberturaSeguro !== true) {
-      resetPoliza();
-    }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.coberturaSeguro])
-
-
-  // Calcula "Monto de perdida" en bs en "Valor contable - monto perdida"
-  useEffect(() => {
-    if (formik.values.monedaId !== null) {
-      var mount = covierteMoneda(formik.values.monedaId.label, formik.values.montoPerdida, dataApiTasaCambio)
-      formik.setFieldValue('montoPerdidaRiesgo', mount, false)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.monedaId, formik.values.montoPerdida]);
-
-
-  // Para el despliegue del select llenado al EDITAR
-  useEffect(() => {
-    if (isEdit && initValues.monedaId !== null) {
-      var result = covierteMoneda(initValues.monedaId.clave, formik.values.montoPerdida, formik.values.tasaCambioId)
-      formik.setFieldValue('montoPerdidaRiesgo', result, false);
-    }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   /*  Values of MONEDA */
   const clearDependenceOfMoneda = () => {
@@ -218,6 +176,35 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
   }
   /* FIN  Values of MONEDA */
 
+  // Resetea "Poliza de seguro" y "Monto recuperado del seguro" dependiendo del check Cobertura seguro
+  const resetPoliza = () => {
+    formik.setFieldValue('polizaSeguroId', null, false);
+    formik.setFieldValue('montoRecuperadoSeguro', '', false);
+  }
+  useEffect(() => {
+    if (formik.values.coberturaSeguro !== true) {
+      resetPoliza();
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.coberturaSeguro])
+
+  // Calcula "Monto de perdida" en bs en "Valor contable - monto perdida"
+  useEffect(() => {
+    if (formik.values.monedaId !== null) {
+      var mount = covierteMoneda(formik.values.monedaId.label, formik.values.montoPerdida, dataApiTasaCambio)
+      formik.setFieldValue('montoPerdidaRiesgo', mount, false)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.monedaId, formik.values.montoPerdida]);
+
+   // Para el despliegue del select llenado al EDITAR
+   useEffect(() => {
+    if (isEdit && initValues.monedaId !== null) {
+      var result = covierteMoneda(initValues.monedaId.clave, formik.values.montoPerdida, formik.values.tasaCambioId)
+      formik.setFieldValue('montoPerdidaRiesgo', result, false);
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // Calcula "Monto total recuperado"
   useEffect(() => {
@@ -240,6 +227,23 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
       formik.setFieldValue('totalPerdida', 0, false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.montoPerdidaRiesgo, formik.values.totalRecuperado]);
+
+
+  useEffect(() => {
+    if (isEdit) {
+      formik.setValues({ ...initValues })
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initValues])
+  
+  useEffect(() => {
+    callApiMoneda(23);
+    callApiImpacto(24);
+    callApiPoliza(25);
+    callApiTasaCambio(14);
+    callApiRecuperacionActivo(37);
+    callApiCuentaContable(39);
+  }, [])
 
   return (
     <Fragment>

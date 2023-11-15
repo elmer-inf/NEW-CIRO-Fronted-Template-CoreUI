@@ -8,8 +8,12 @@ import { CSelectReact } from 'src/reusable/CSelectReact'
 import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
 import { buildSelectTwo } from 'src/functions/Function'
 import { Messages } from 'src/reusable/variables/Messages'
+import { toastSweetAlert } from 'src/reusable/SweetAlert2'
 
 const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdit, optionsPlanes }) => {
+
+  const [dataApiArea, setDataApiArea] = useState([]);
+  const [dataApiCargo, setDataApiCargo] = useState([])
 
   const formik = useFormik({
     initialValues: initValues,
@@ -38,26 +42,26 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
 
   /*   P  A  R  A  M  E  T  R  O  S   */
   // Area
-  const [dataApiArea, setDataApiArea] = useState([])
   const callApiArea = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiArea(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // Cargos
-  const [dataApiCargo, setDataApiCargo] = useState([])
   const callApiCargo = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiCargo(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 

@@ -8,11 +8,28 @@ import { buildSelectTwo } from 'src/functions/Function';
 import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo';
 import { CSelectReact } from 'src/reusable/CSelectReact';
 import { Delete, Save, XSquare } from 'react-feather';
+import { toastSweetAlert } from 'src/reusable/SweetAlert2';
+import { Messages } from 'src/reusable/variables/Messages';
 
 const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelect }) => {
 
   const [varListN2, setVarListN2] = useState(optionToSelect.tabla_n2);
   const [varListN3, setVarListN3] = useState(optionToSelect.tabla_n3);
+
+  // Cargos
+  const dataApiCargo = [
+    { value: 'Gerente de Riesgos Integrales', label: 'Gerente de Riesgos Integrales' },
+    { value: 'Subgerente de Riesgos', label: 'Subgerente de Riesgos' },
+    { value: 'Analista de Riesgos', label: 'Analista de Riesgos' },
+    { value: 'Asistente de Riesgos', label: 'Asistente de Riesgos' },
+  ]
+
+  // Tipo de Responsable
+  const optionsTipoRes = [
+    { value: 'Elaborador', label: 'Elaborador' },
+    { value: 'Revisor', label: 'Revisor' },
+    { value: 'Aprobador', label: 'Aprobador' }
+  ]
 
   const formik = useFormik({
     initialValues: initialValuess,
@@ -51,7 +68,8 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setVarListN2(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
@@ -62,7 +80,8 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setVarListN3(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
@@ -79,7 +98,6 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
     formik.setFieldValue('nivel3_id', null, false);
   }
 
-  /* Get List Level 2v*/
   const clearAllDependences = () => {
     resetAllValues();
     setVarListN2([]);
@@ -102,7 +120,6 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
     //clearAllDependences();
   }
 
-  //Life Cycle
   useEffect(() => {
     if (isEdit) {
       setVarListN2(optionToSelect.tabla_n2)
@@ -110,23 +127,6 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [optionToSelect]);
-
-  // P A R A M E T R O S
-  // Cargos
-  const dataApiCargo = [
-    { value: 'Gerente de Riesgos Integrales', label: 'Gerente de Riesgos Integrales' },
-    { value: 'Subgerente de Riesgos', label: 'Subgerente de Riesgos' },
-    { value: 'Analista de Riesgos', label: 'Analista de Riesgos' },
-    { value: 'Asistente de Riesgos', label: 'Asistente de Riesgos' },
-  ]
-
-  // Opciones Select Tipo de Responsable
-  const optionsTipoRes = [
-    { value: 'Elaborador', label: 'Elaborador' },
-    { value: 'Revisor', label: 'Revisor' },
-    { value: 'Aprobador', label: 'Aprobador' }
-  ]
-  // F I N   P A R A M E T R O S
 
   return (
     <Form onSubmit={formik.handleSubmit} autoComplete="off">
@@ -136,7 +136,6 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
         </Label>
         <Col sm='9' lg='5'>
           <CSelectReactTwo
-            //label={""}
             id={'tablaLista'}
             placeholder={'Seleccionar'}
             value={formik.values.tablaLista}

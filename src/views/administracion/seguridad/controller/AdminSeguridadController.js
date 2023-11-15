@@ -5,14 +5,14 @@ const HOST = HOSTURI.endpoint_riesgos
 
 export const getTablaListaSeguridad = async () => {
     const uri = HOST.concat('v1/tablaListaSeguridad/listar')
-    const response = await axios.get(uri)
-    return response
+    const response = await axios.get(uri);
+    return response;
 }
 
 export const getTablaDescripcionSeguridadN1 = async (idTabla) => {
     const uri = HOST.concat('v1/tablaDescripcionSeguridad/listarNivel1/', idTabla)
-    const response = await axios.get(uri)
-    return response
+    const response = await axios.get(uri);
+    return response;
 }
 
 export const postTablaDescripcionSeguridad = (data) => {

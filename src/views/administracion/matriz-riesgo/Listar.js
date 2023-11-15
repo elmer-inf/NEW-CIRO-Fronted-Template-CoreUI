@@ -9,12 +9,19 @@ import { useHistory } from 'react-router-dom'
 import { getTablaListaRiesgo, getTablaDescripcionRiesgoN1, deleteTablaDescripcionRiesgoId } from './controller/AdminRiesgoController'
 import { buildSelectTwo, hasPermission } from 'src/functions/Function'
 import { PathContext } from 'src/containers/TheLayout';
-import { ToastContainer, toast } from 'react-toastify';
 import { Messages } from 'src/reusable/variables/Messages';
 import Swal from 'sweetalert2'
 import { PlusSquare } from 'react-feather';
+import { toastSweetAlert } from 'src/reusable/SweetAlert2';
 
 const AdministracionMatrizRiesgosListar = () => {
+
+  const [tablaListaOptions, setTablaListaOptions] = useState([])
+  const [dataApi, setDAtaApi] = useState([])
+  const history = useHistory()
+  const valuePathFromContext = React.useContext(PathContext);
+  const [labelTabla, setLabelTabla] = useState([]);
+  const [valueTabla, setValueTabla] = useState([]);
 
   // Configuracion sweetalert2
   const swalWithBootstrapButtons = Swal.mixin({
@@ -25,33 +32,28 @@ const AdministracionMatrizRiesgosListar = () => {
     buttonsStyling: false
   })
 
-  //useContext
-  const valuePathFromContext = React.useContext(PathContext);
-
-  const redirect = (e) => {
-    //history.push('/administracion/matriz-riesgo/Registrar');
-    e.preventDefault();
-    const path = '/administracion/matriz-riesgo/Registrar';
-    if (hasPermission(path, valuePathFromContext)) {
-      history.push(path);
-    } else {
-      notificationToast();
+  const customStyles = {
+    menu: provided => ({ ...provided, zIndex: "9999 !important" }),
+    control: (styles,) => ({
+      ...styles,
+      boxShadow: 'none'
+    }),
+    option: (styles, { isDisabled, isSelected }) => {
+      return {
+        ...styles,
+        backgroundColor: isSelected ? '#e79140' : 'white',
+        cursor: isDisabled ? 'not-allowed' : 'default',
+        ':active': {
+          backgroundColor: '#e79140',
+          color: 'white'
+        },
+        ':hover': {
+          backgroundColor: isSelected ? '#e79140' : '#fbf3eb',
+          color: isSelected ? 'white' : '#e79140'
+        }
+      }
     }
   }
-
-  const notificationToast = () => {
-    toast.error(Messages.dontHavePermission, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: true,
-      draggable: true,
-    });
-  }
-
-  const [labelTabla, setLabelTabla] = useState([]);
-  const [valueTabla, setValueTabla] = useState([]);
 
   const columns = [
     {
@@ -197,48 +199,25 @@ const AdministracionMatrizRiesgosListar = () => {
       if (result.isConfirmed) {
         deleteTablaDescripcionRiesgoId(row.id)
           .then(res => {
-            swalWithBootstrapButtons.fire({
-              title: '',
-              text: 'Operación realizada exitósamente',
-              icon: 'success',
-              confirmButtonText: 'Aceptar',
-              position: 'top',
-            }).then(okay => {
-              if (okay) {
-                getTablaDescripcion(valueTabla);
-              }
-            })
+            getTablaDescripcion(valueTabla);
+            toastSweetAlert('success', Messages.ok, 3000);
           }).catch((error) => {
             console.error('Error al eliminar Parámetro de Matriz de Riesgo: ', error);
+            toastSweetAlert('error', Messages.no_ok, 3000);
           });
-      } else if (
-        result.dismiss === Swal.DismissReason.cancel
-      ) {
-        swalWithBootstrapButtons.fire({
-          title: '',
-          text: 'Operación cancelada',
-          icon: 'error',
-          confirmButtonText: 'Aceptar',
-          position: 'top'
-        })
       }
     })
   }
 
   // Editar Parametro
   const editRow = (row) => {
-    //history.push('/administracion/matriz-riesgo/Editar/' + row.id);
     const path = '/administracion/matriz-riesgo/Editar/:id';
     if (hasPermission(path, valuePathFromContext)) {
       history.push('/administracion/matriz-riesgo/Editar/' + row.id);
     } else {
-      notificationToast();
+      toastSweetAlert('error', Messages.dontHavePermission, 3000);
     }
   }
-
-  const [tablaListaOptions, setTablaListaOptions] = useState([])
-  const [dataApi, setDAtaApi] = useState([])
-  const history = useHistory()
 
   /* LISTA TABLA LISTA */
   const callApi = () => {
@@ -248,13 +227,9 @@ const AdministracionMatrizRiesgosListar = () => {
         setTablaListaOptions(options)
       }).catch((error) => {
         console.error('Error: ', error)
-        //notificationToast('error', Messages.notification.notOk)
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
-
-  useEffect(() => {
-    callApi()
-  }, [])
 
   /* LISTA TABLA DESCRIPCION despendiento de seleccion tabla lista*/
   const handleSelectOnChange = (result) => {
@@ -267,37 +242,27 @@ const AdministracionMatrizRiesgosListar = () => {
 
   const getTablaDescripcion = (idTabla) => {
     getTablaDescripcionRiesgoN1(idTabla)
-      .then(res => {
+      .then(res => {   
         setDAtaApi(res.data)
       }).catch((error) => {
         console.error('Error: ', error)
-        //notificationToast('error', Messages.notification.notOk)
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
-  // Style Select
-  const customStyles = {
-    menu: provided => ({ ...provided, zIndex: "9999 !important" }),
-    control: (styles,) => ({
-      ...styles,
-      boxShadow: 'none'
-    }),
-    option: (styles, { isDisabled, isSelected }) => {
-      return {
-        ...styles,
-        backgroundColor: isSelected ? '#e79140' : 'white',
-        cursor: isDisabled ? 'not-allowed' : 'default',
-        ':active': {
-          backgroundColor: '#e79140',
-          color: 'white'
-        },
-        ':hover': {
-          backgroundColor: isSelected ? '#e79140' : '#fbf3eb',
-          color: isSelected ? 'white' : '#e79140'
-        }
-      }
+  const redirect = (e) => {
+    e.preventDefault();
+    const path = '/administracion/matriz-riesgo/Registrar';
+    if (hasPermission(path, valuePathFromContext)) {
+      history.push(path);
+    } else {
+      toastSweetAlert('error', Messages.dontHavePermission, 3000);
     }
   }
+
+  useEffect(() => {
+    callApi()
+  }, [])
 
   return (
     <div className='table-hover-animation'>
@@ -340,7 +305,6 @@ const AdministracionMatrizRiesgosListar = () => {
                 />
               </Col>
             </Row>
-
             <BootstrapTable
               classes={'table-hover-animation mt-5'}
               bootstrap4={true}
@@ -359,18 +323,6 @@ const AdministracionMatrizRiesgosListar = () => {
           </CardBody>
         </Card>
       </Fragment>
-
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick={false}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
     </div>
   )
 }

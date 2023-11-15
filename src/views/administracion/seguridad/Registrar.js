@@ -1,58 +1,18 @@
 import { Fragment, useState } from 'react'
 import { Card, CardHeader, CardTitle, CardBody } from 'reactstrap'
-import { useHistory } from 'react-router-dom'
 import Formulario from './component/Formulario'
 import { postTablaDescripcionSeguridad } from './controller/AdminSeguridadController'
-import { ToastContainer, toast } from 'react-toastify'
 import CCSpinner from 'src/reusable/spinner/CCSpinner'
+import { toastSweetAlertRedirect } from 'src/reusable/SweetAlert2'
+import { Messages } from 'src/reusable/variables/Messages'
 
 const AdministracionSeguridadRegistrar = () => {
 
-  const history = useHistory();
   const [spin, setSpin] = useState(false);
 
   const formValueInitial = {
     nombre: '',
-    tablaId: null
-  }
-
-  const notificationToast = (type, mensaje) => {
-    switch (type) {
-      case 'error':
-        toast.error(mensaje, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-        });
-        break;
-      case 'success':
-        toast.success(mensaje, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-        });
-        break;
-
-      default:
-        toast(mensaje, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-        });
-    }
-    setTimeout(() => {
-      history.push('/administracion/seguridad/Listar');
-      setSpin(false);
-    }, 5000);
+    tablaId: ''
   }
 
   const handleOnSubmit = (dataToRequest) => {
@@ -60,14 +20,14 @@ const AdministracionSeguridadRegistrar = () => {
     postTablaDescripcionSeguridad(dataToRequest)
       .then(res => {
         if (res.status >= 200 && res.status < 300) {
-          notificationToast('success', 'Párametro de Seguridad registrado exitósamente');
+          toastSweetAlertRedirect('success', Messages.ok, 3000, "#/administracion/seguridad/Listar");
         } else {
-          console.error('Hubo un  error ', res);
-          notificationToast('error', 'Algo salió mal, intente nuevamente');
+          console.error('Error: ', res);
+          toastSweetAlertRedirect('error', Messages.no_ok, 3000, "#/administracion/seguridad/Listar");
         }
       }).catch((error) => {
-        console.error('Error al registrar Párametro de Seguridad: ', error);
-        notificationToast('error', 'Algo salió mal, intente nuevamente');
+        console.error('Error: ', error);
+        toastSweetAlertRedirect('error', Messages.no_ok, 3000, "#/administracion/seguridad/Listar");
       })
   }
 
@@ -87,17 +47,6 @@ const AdministracionSeguridadRegistrar = () => {
           </CardBody>
         </Card>
       </Fragment>
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick={false}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
     </div>
   )
 }

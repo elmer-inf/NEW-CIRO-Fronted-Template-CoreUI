@@ -6,10 +6,22 @@ import * as Yup from "yup"
 import { CSelectReact } from 'src/reusable/CSelectReact'
 import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
 import { buildSelectThree } from 'src/functions/Function'
+import { toastSweetAlert } from 'src/reusable/SweetAlert2'
+import { Messages } from 'src/reusable/variables/Messages'
 
 var _ = require('lodash');
 
 const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit, tipoEvento }) => {
+
+  const [dataApiReputacional, setDataApiReputacional] = useState([]);
+  const [dataApiLegal, setDataApiLegal] = useState([]);
+  const [dataApiCumplimiento, setDataApiCumplimiento] = useState([]);
+  const [dataApiEstrategico, setDataApiEstrategico] = useState([]);
+  const [dataApiGobierno, setDataApiGobierno] = useState([]);
+  const [dataApiFraude, setDataApiFraude] = useState([]);
+  const [dataApiLiquidez, setDataApiLiquidez] = useState([]);
+  const [dataApiOperativo, setDataApiOperativo] = useState([]);
+  const [dataApiSeguridad, setDataApiSeguridad] = useState([]);
 
   const formik = useFormik({
     initialValues: initValues,
@@ -26,7 +38,6 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
         seguridadId: Yup.mixed().nullable(),
       }
     ),
-
     onSubmit: values => {
       const data = {
         ...values,
@@ -46,112 +57,111 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
   })
 
   /*   P  A  R  A  M  E  T  R  O  S   */
-
   // Reputacional
-  const [dataApiReputacional, setDataApiReputacional] = useState([])
   const callApiReputacional = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
         setDataApiReputacional(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // Legal
-  const [dataApiLegal, setDataApiLegal] = useState([])
   const callApiLegal = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
         setDataApiLegal(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // Cumplimiento
-  const [dataApiCumplimiento, setDataApiCumplimiento] = useState([])
   const callApiCumplimiento = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
         setDataApiCumplimiento(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // Estrategico
-  const [dataApiEstrategico, setDataApiEstrategico] = useState([])
   const callApiEstrategico = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
         setDataApiEstrategico(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // Gobierno
-  const [dataApiGobierno, setDataApiGobierno] = useState([])
   const callApiGobierno = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
         setDataApiGobierno(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // Fraude
-  const [dataApiFraude, setDataApiFraude] = useState([])
   const callApiFraude = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
         setDataApiFraude(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // Liquidez
-  const [dataApiLiquidez, setDataApiLiquidez] = useState([])
   const callApiLiquidez = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
         setDataApiLiquidez(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // Operativo
-  const [dataApiOperativo, setDataApiOperativo] = useState([])
   const callApiOperativo = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
         setDataApiOperativo(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // Seguridad
-  const [dataApiSeguridad, setDataApiSeguridad] = useState([])
   const callApiSeguridad = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
         setDataApiSeguridad(_.orderBy(options, ['value'], ['desc']))
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
@@ -172,7 +182,6 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
     <Fragment>
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
         <Row className='pt-4'>
-
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
               Operativo

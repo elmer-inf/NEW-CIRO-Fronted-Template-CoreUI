@@ -12,7 +12,8 @@ var _ = require('lodash');
 
 const FormEvaluaEvento = ({ initialValuess, handleOnSubmit }) => {
 
-  // Valores de estado para evaluar evento
+  const dataObservados = [];
+
   const optionEstadoRegistro = [
     { value: 'Pendiente', label: 'Pendiente' },
     { value: 'Observado', label: 'Observado' },
@@ -22,146 +23,83 @@ const FormEvaluaEvento = ({ initialValuess, handleOnSubmit }) => {
 
   //Drag and drop
   const data1 = [
-    {
-      text: 'Fecha Inicio'
-    }, {
-      text: 'Hora Inicio'
-    }, {
-      text: 'Fecha descubrimiento'
-    }, {
-      text: 'Hora descubrimiento'
-    }, {
-      text: 'Agencia'
-    }, {
-      text: 'Ciudad'
-    }, {
-      text: 'Área'
-    }, {
-      text: 'Unidad'
-    }, {
-      text: 'Comercio afectado'
-    }, {
-      text: 'Entidad afectada'
-    }, {
-      text: 'Entidad'
-    }, {
-      text: 'Cargo persona afectada ASFI'
-    }, {
-      text: 'Estado'
-    }, {
-      text: 'Fuente de información'
-    }, {
-      text: 'Canales ASFI'
-    }, {
-      text: 'Descripción'
-    }, {
-      text: 'Descripción completa'
-    }
-  ]
+    {text: 'Fecha Inicio'},
+    {text: 'Hora Inicio'},
+    {text: 'Fecha descubrimiento'},
+    {text: 'Hora descubrimiento'},
+    {text: 'Agencia'},
+    {text: 'Ciudad'},
+    {text: 'Área'},
+    {text: 'Unidad'},
+    {text: 'Comercio afectado'},
+    {text: 'Entidad afectada'},
+    {text: 'Entidad'},
+    {text: 'Cargo persona afectada ASFI'},
+    {text: 'Estado'},
+    {text: 'Fuente de información'},
+    {text: 'Canales ASFI'},
+    {text: 'Descripción'},
+    {text: 'Descripción completa'}
+  ];
+
   const data2 = [
-    {
-      text: 'Código inicial'
-    }, {
-      text: 'Sub categorización'
-    }, {
-      text: 'Trimestre'
-    }, {
-      text: 'Tipo de evento de pérdida'
-    }, {
-      text: 'Sub evento - Basilea'
-    }, {
-      text: 'Clase evento - Basilea - ASFI'
-    }, {
-      text: 'Detalle evento crítico'
-    }, {
-      text: 'Factor de riesgo operativo'
-    }, {
-      text: 'Proceso'
-    }, {
-      text: 'Procedimiento'
-    }, {
-      text: 'Evento crítico ASFI'
-    }, {
-      text: 'Línea de negocio'
-    }, {
-      text: 'Línea de negocio ASFI'
-    }, {
-      text: 'Efectos de pérdida'
-    }, {
-      text: 'Riesgo relacionado'
-    }, {
-      text: 'Operación - producto o servicio afectado'
-    }, {
-      text: 'Tipo de servicio'
-    }, {
-      text: 'Descripción de servicio'
-    }, {
-      text: 'Operaciones ASFI'
-    }, {
-      text: 'Detalle estado del evento'
-    }
-  ]
+    {text: 'Código inicial'},
+    {text: 'Sub categorización'},
+    {text: 'Trimestre'},
+    {text: 'Tipo de evento de pérdida'},
+    {text: 'Sub evento - Basilea'},
+    {text: 'Clase evento - Basilea - ASFI'},
+    {text: 'Detalle evento crítico'},
+    {text: 'Factor de riesgo operativo'},
+    {text: 'Proceso'},
+    {text: 'Procedimiento'},
+    {text: 'Evento crítico ASFI'},
+    {text: 'Línea de negocio'},
+    {text: 'Línea de negocio ASFI'},
+    {text: 'Efectos de pérdida'},
+    {text: 'Riesgo relacionado'},
+    {text: 'Operación - producto o servicio afectado'},
+    {text: 'Tipo de servicio'},
+    {text: 'Descripción de servicio'},
+    {text: 'Operaciones ASFI'},
+    {text: 'Detalle estado del evento'}
+  ];
+
   const data3 = [
-    {
-      text: 'Tasa de cambio'
-    }, {
-      text: 'Moneda'
-    }, {
-      text: 'Monto de pérdida'
-    }, {
-      text: 'Monto de pérdida por riesgo operativo (USD)',
-    }, {
-      text: 'Gastos asociados'
-    }, {
-      text: 'Monto recuperado'
-    }, {
-      text: 'Impacto'
-    }, {
-      text: 'Cobertura seguro'
-    }, {
-      text: 'Póliza de seguro'
-    }, {
-      text: 'Monto recuperado del seguro'
-    }, {
-      text: 'Recuperación activo'
-    }, {
-      text: 'Pérdida de valor de mercado'
-    }, {
-      text: 'Monto total de pérdida'
-    }
-  ]
+    {text: 'Tasa de cambio'},
+    {text: 'Moneda'},
+    {text: 'Monto de pérdida'},
+    {text: 'Monto de pérdida por riesgo operativo (USD)',},
+    {text: 'Gastos asociados'},
+    {text: 'Monto recuperado'},
+    {text: 'Impacto'},
+    {text: 'Cobertura seguro'},
+    {text: 'Póliza de seguro'},
+    {text: 'Monto recuperado del seguro'},
+    {text: 'Recuperación activo'},
+    {text: 'Pérdida de valor de mercado'},
+    {text: 'Monto total de pérdida'}
+  ];
+
   const data4 = [
-    {
-      text: 'Operativo'
-    }, {
-      text: 'Seguridad de la información'
-    }, {
-      text: 'Liquidez y mercado'
-    }, {
-      text: 'LGI FT y/o DP'
-    }, {
-      text: 'Fraude con medios de pago electrónico'
-    }, {
-      text: 'Legal y regulatorio'
-    }, {
-      text: 'Reputacional'
-    }, {
-      text: 'Cumplimiento'
-    }, {
-      text: 'Estratégico'
-    }, {
-      text: 'Gobierno corporativo'
-    }
-  ]
+    {text: 'Operativo'},
+    {text: 'Seguridad de la información'},
+    {text: 'Liquidez y mercado'},
+    {text: 'LGI FT y/o DP'},
+    {text: 'Fraude con medios de pago electrónico'},
+    {text: 'Legal y regulatorio'},
+    {text: 'Reputacional'},
+    {text: 'Cumplimiento'},
+    {text: 'Estratégico'},
+    {text: 'Gobierno corporativo'}
+  ];
 
-  const dataObservados = []
-
-  const [datosIniciales, setList] = useState(data1)
-  const [datosCategoria, setList2] = useState(data2)
-  const [datosImportes, setList3] = useState(data3)
-  const [datosRiesgos, setList4] = useState(data4)
-  const [observados, setListObservados] = useState(dataObservados)
-
+  const [datosIniciales, setList] = useState(data1);
+  const [datosCategoria, setList2] = useState(data2);
+  const [datosImportes, setList3] = useState(data3);
+  const [datosRiesgos, setList4] = useState(data4);
+  const [observados, setListObservados] = useState(dataObservados);
+  
   const formik = useFormik({
     initialValues: initialValuess,
     validationSchema: Yup.object().shape(
@@ -186,13 +124,8 @@ const FormEvaluaEvento = ({ initialValuess, handleOnSubmit }) => {
     }
   })
 
-  /* var string = JSON.stringify(_.map(observados, 'text'));
-  console.log('observados string : ', string);
-  console.log('observados json  convert : ', JSON.parse(string)) ; */
-
   return (
     <Form onSubmit={formik.handleSubmit} autoComplete="off">
-
       <FormGroup>
         <CInputRadio
           data={optionEstadoRegistro}
@@ -298,7 +231,6 @@ const FormEvaluaEvento = ({ initialValuess, handleOnSubmit }) => {
               <div className='px-3 py-1' style={{ border: '2px solid #e55353', borderRadius: '10px', minHeight: '130px' }}>
                 <div className='my-1 font-weight-bold'><AlertTriangle size={15} className='text-danger' /> Campos observados</div>
                 <ReactSortable
-                  //tag='ul'
                   className='list-group list-group-flush sortable'
                   group={{ name: 'shared-badge-group', put: ['group1', 'group2', 'group3', 'group4'] }}
                   list={observados}
@@ -347,7 +279,6 @@ const FormEvaluaEvento = ({ initialValuess, handleOnSubmit }) => {
           >
             Guardar
           </Button>
-
           <Button
             outline color='dark'
             onClick={() => { formik.handleReset() }}

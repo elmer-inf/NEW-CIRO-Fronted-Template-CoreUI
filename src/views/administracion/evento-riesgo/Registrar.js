@@ -1,19 +1,24 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import { Card, CardHeader, CardTitle, CardBody } from 'reactstrap'
-import { useHistory } from 'react-router-dom'
 import Formulario from './component/Formulario'
 import { getTablaListaEvento, postTablaDescripcionEvento } from './controller/AdminEventoController'
 import { buildSelectTwo } from 'src/functions/Function'
-import { ToastContainer, toast } from 'react-toastify'
 import CCSpinner from 'src/reusable/spinner/CCSpinner'
+import { toastSweetAlert, toastSweetAlertRedirect } from 'src/reusable/SweetAlert2'
+import { Messages } from 'src/reusable/variables/Messages'
 
 const AdministracionEventoRegistrar = () => {
 
-  const history = useHistory();
   const [spin, setSpin] = useState(false);
+  const [tablaListaOptions, setTablaListaOptions] = useState([]);
+  const optionsToFormik = {
+    tablaOp: tablaListaOptions,
+    tabla_n2: [],
+    tabla_n3: [],
+  }
 
   const formValueInitial = {
-    tablaLista: null,
+    tablaLista: '',
     nombre: '',
     clave: '',
     descripcion: '',
@@ -22,64 +27,19 @@ const AdministracionEventoRegistrar = () => {
     campoC: '',
     campoD: '',
     codigoAsfi: '',
-    nivel2_id: null,
-    nivel3_id: null
+    nivel2_id: '',
+    nivel3_id: ''
   }
 
-  const [tablaListaOptions, setTablaListaOptions] = useState([])
-
-  const optionsToFormik = {
-    tablaOp: tablaListaOptions,
-    tabla_n2: [],
-    tabla_n3: [],
-  }
   const getTablaLista = async () => {
     await getTablaListaEvento()
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre_tabla', true)
-        setTablaListaOptions(options)
+        const options = buildSelectTwo(res.data, 'id', 'nombre_tabla', true);
+        setTablaListaOptions(options);
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
-  }
-
-  const notificationToast = (type, mensaje) => {
-    switch (type) {
-      case 'error':
-        toast.error(mensaje, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-        });
-        break;
-      case 'success':
-        toast.success(mensaje, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-        });
-        break;
-
-      default:
-        toast(mensaje, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-        });
-    }
-    setTimeout(() => {
-      history.push('/administracion/evento-riesgo/Listar');
-      setSpin(false);
-    }, 5000);
   }
 
   const handleOnSubmit = (dataToRequest) => {
@@ -87,16 +47,17 @@ const AdministracionEventoRegistrar = () => {
     postTablaDescripcionEvento(dataToRequest)
       .then(res => {
         if (res.status >= 200 && res.status < 300) {
-          notificationToast('success', 'Parámetro de Evento de Riesgo registrado exitósamente');
+          toastSweetAlertRedirect('success', Messages.ok, 3000, "#/administracion/evento-riesgo/Listar");
         } else {
           console.error('Hubo un  error ', res);
-          notificationToast('error', 'Algo salió mal, intente nuevamente');
+          toastSweetAlertRedirect('error', Messages.no_ok, 3000, "#/administracion/evento-riesgo/Listar");
         }
       }).catch((error) => {
-        console.error('Error al registrar Parámetro de Evento de Riesgo: ', error);
-        notificationToast('error', 'Algo salió mal, intente nuevamente');
+        console.error('Error: ', error);
+        toastSweetAlertRedirect('error', Messages.no_ok, 3000, "#/administracion/evento-riesgo/Listar");
       })
   }
+
   useEffect(() => {
     getTablaLista();
   }, [])
@@ -119,17 +80,6 @@ const AdministracionEventoRegistrar = () => {
           </CardBody>
         </Card>
       </Fragment>
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick={false}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
     </div>
   )
 }

@@ -7,8 +7,12 @@ import { CSelectReact } from 'src/reusable/CSelectReact'
 import { getTablaListaRiesgo } from '../controller/AdminRiesgoController';
 import { buildSelectTwo } from 'src/functions/Function'
 import { Delete, Save, XSquare } from 'react-feather'
+import { toastSweetAlert } from 'src/reusable/SweetAlert2'
+import { Messages } from 'src/reusable/variables/Messages'
 
 const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
+
+  const [tablaListaOptions, setTablaListaOptions] = useState([]);
 
   const formik = useFormik({
     initialValues: initialValuess,
@@ -22,7 +26,6 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
         campoE: Yup.string().nullable(),
         campoF: Yup.string().nullable(),
         campoG: Yup.string().nullable(),
-
         tablaId: Yup.mixed().required('Campo obligatorio')
       }
     ),
@@ -37,14 +40,14 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
   })
 
   /* LISTA LAS TABLAS LISTA DE MATRIZ DE RIESGO*/
-  const [tablaListaOptions, setTablaListaOptions] = useState([])
-
   const callApi = () => {
     getTablaListaRiesgo()
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombreTabla', true)
         setTablaListaOptions(options)
       }).catch((error) => {
+        console.error("Error: " + error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 

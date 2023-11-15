@@ -1,13 +1,12 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import { Card, CardHeader, CardTitle, CardBody } from 'reactstrap'
-import { useHistory } from 'react-router-dom'
 import Formulario from './component/Formulario'
 import { putTablaDescripcionRiesgo, getTablaDescripcionRiesgoId } from './controller/AdminRiesgoController'
-import { ToastContainer, toast } from 'react-toastify'
+import { Messages } from 'src/reusable/variables/Messages'
+import { toastSweetAlert, toastSweetAlertRedirect } from 'src/reusable/SweetAlert2'
 
 const AdministracionMatrizRiesgoEditar = ({ match }) => {
 
-  const history = useHistory();
   const [spin, setSpin] = useState(false);
 
   const formValueInitial = {
@@ -19,49 +18,10 @@ const AdministracionMatrizRiesgoEditar = ({ match }) => {
     campoE: '',
     campoF: '',
     campoG: '',
-    tablaId: null
+    tablaId: ''
   }
 
   const [formValueToEdit, setformValueToEdit] = useState(formValueInitial)
-
-  const notificationToast = (type, mensaje) => {
-    switch (type) {
-      case 'error':
-        toast.error(mensaje, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-        });
-        break;
-      case 'success':
-        toast.success(mensaje, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-        });
-        break;
-
-      default:
-        toast(mensaje, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-        });
-    }
-    setTimeout(() => {
-      history.push('/administracion/matriz-riesgo/listar');
-      setSpin(false);
-    }, 5000);
-  }
 
   const handleOnSubmit = (dataToRequest) => {
     setSpin(true);
@@ -69,14 +29,13 @@ const AdministracionMatrizRiesgoEditar = ({ match }) => {
     putTablaDescripcionRiesgo(idTabDesc, dataToRequest)
       .then(res => {
         if (res.status >= 200 && res.status < 300) {
-          notificationToast('success', 'Párametro de Matriz de Riesgo modificado exitósamente');
+          toastSweetAlertRedirect('success', Messages.ok, 3000, "#/administracion/matriz-riesgo/listar");
         } else {
-          console.error('Hubo un  error ', res);
-          notificationToast('error', 'Algo salió mal, intente nuevamente');
+          toastSweetAlertRedirect('error', Messages.no_ok, 3000, "#/administracion/matriz-riesgo/listar");
         }
       }).catch((error) => {
         console.error('Error al modificar Párametro de Matriz de Riesgo: ', error);
-        notificationToast('error', 'Algo salió mal, intente nuevamente');
+        toastSweetAlertRedirect('error', Messages.no_ok, 3000, "#/administracion/matriz-riesgo/listar");
       });
   }
 
@@ -106,8 +65,9 @@ const AdministracionMatrizRiesgoEditar = ({ match }) => {
         matched(res);
         setSpin(false);
       }).catch((error) => {
-        console.error("Error: ", error);
         setSpin(false);
+        console.error("Error: ", error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       });
   }
 
@@ -130,24 +90,12 @@ const AdministracionMatrizRiesgoEditar = ({ match }) => {
                 ? <div></div>
                 : <Formulario
                   initialValuess={formValueToEdit}
-                  //optionToSelect={{}}
                   handleOnSubmit={handleOnSubmit}
                 />
             }
           </CardBody>
         </Card>
       </Fragment>
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick={false}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
     </div>
   )
 }

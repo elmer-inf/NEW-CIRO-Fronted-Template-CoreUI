@@ -1,18 +1,20 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import { Card, CardHeader, CardTitle, CardBody } from 'reactstrap'
-import { useHistory } from 'react-router-dom'
 import Formulario from './component/Formulario'
 import { putTablaDescripcionEventoId, getTablaDescripcionEventoId, getTablaListaEvento, getTablaDescripcionEventoN1 } from './controller/AdminEventoController'
 import { buildSelectTwo } from 'src/functions/Function'
-import { ToastContainer, toast } from 'react-toastify'
+import { toastSweetAlert, toastSweetAlertRedirect } from 'src/reusable/SweetAlert2'
+import { Messages } from 'src/reusable/variables/Messages'
 
 const AdministracionEventoEditar = ({ match }) => {
 
-  const history = useHistory();
   const [spin, setSpin] = useState(false);
+  const [tablaListaOptions, setTablaListaOptions] = useState([]);
+  const [dataApi2, setDataApi2] = useState([]);
+  const [dataApi3, setDataApi3] = useState([]);
 
   const formValueInitial = {
-    tablaLista: null,
+    tablaLista: '',
     nombre: '',
     clave: '',
     descripcion: '',
@@ -21,79 +23,32 @@ const AdministracionEventoEditar = ({ match }) => {
     campoC: '',
     campoD: '',
     codigoAsfi: '',
-    nivel2_id: null,
-    nivel3_id: null
+    nivel2_id: '',
+    nivel3_id: ''
   }
-  //Lista las tablas Lista
-  const [tablaListaOptions, setTablaListaOptions] = useState([])
-  /* LISTA TABLA DESCRIPCION NIVEL 2 */
-  const [dataApi2, setDataApi2] = useState([]);
-  /* LISTA TABLA DESCRIPCION NIVEL 3 */
-  const [dataApi3, setDataApi3] = useState([]);
 
+  const [formValueToEdit, setformValueToEdit] = useState(formValueInitial);
+  
   const optionsToFormik = {
     tablaOp: tablaListaOptions,
     tabla_n2: dataApi2,
     tabla_n3: dataApi3,
   }
 
-  //useState
-  const [formValueToEdit, setformValueToEdit] = useState(formValueInitial)
-
-  const notificationToast = (type, mensaje) => {
-    switch (type) {
-      case 'error':
-        toast.error(mensaje, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-        });
-        break;
-      case 'success':
-        toast.success(mensaje, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-        });
-        break;
-
-      default:
-        toast(mensaje, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-        });
-    }
-    setTimeout(() => {
-      history.push('/administracion/evento-riesgo/Listar');
-      setSpin(false);
-    }, 5000);
-  }
-
-  // functions
   const handleOnSubmit = (dataToRequest) => {
     setSpin(true);
     const idTabDesc = match.params.id;
     putTablaDescripcionEventoId(idTabDesc, dataToRequest)
       .then(res => {
         if (res.status >= 200 && res.status < 300) {
-          notificationToast('success', 'Parámetro de Evento de Riesgo modificado exitósamente');
+          toastSweetAlertRedirect('success', Messages.ok, 3000, "#/administracion/evento-riesgo/Listar");
         } else {
-          console.error('Hubo un  error ', res);
-          notificationToast('error', 'Algo salió mal, intente nuevamente');
+          console.error('Error: ', res);
+          toastSweetAlertRedirect('error', Messages.no_ok, 3000, "#/administracion/evento-riesgo/Listar");
         }
       }).catch((error) => {
-        console.error('Error al modificar Parámetro de Evento de Riesgo: ', error);
-        notificationToast('error', 'Algo salió mal, intente nuevamente');
+        console.error('Error: ', error);
+        toastSweetAlertRedirect('error', Messages.no_ok, 3000, "#/administracion/evento-riesgo/Listar");
       });
   }
 
@@ -115,10 +70,8 @@ const AdministracionEventoEditar = ({ match }) => {
     const valores = {
       nombre: dataResponse.nombre,
       clave: dataResponse.clave,
-      //descripcion: dataResponse.descripcion,
       campoA: dataResponse.campoA,
       campoB: dataResponse.campoB,
-      //campoC: dataResponse.campoC,
       campoD: dataResponse.campoD,
       codigoAsfi: dataResponse.codigoAsfi,
       tablaLista: nivel1,
@@ -148,8 +101,9 @@ const AdministracionEventoEditar = ({ match }) => {
         macthed(res)
         setSpin(false)
       }).catch((error) => {
-        console.error("Error: ", error);
         setSpin(false);
+        console.error("Error: ", error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       });
   }
 
@@ -160,7 +114,7 @@ const AdministracionEventoEditar = ({ match }) => {
         setTablaListaOptions(options)
       }).catch((error) => {
         console.error('Error: ', error)
-        //notificationToast('error', Messages.notification.notOk)
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
@@ -173,7 +127,7 @@ const AdministracionEventoEditar = ({ match }) => {
         setDataApi2(options)
       }).catch((error) => {
         console.error('Error: ', error)
-        //notificationToast('error', Messages.notification.notOk)
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
   /* LISTA TABLA DESCRIPCION NIVEL 3 */
@@ -184,11 +138,10 @@ const AdministracionEventoEditar = ({ match }) => {
         setDataApi3(options)
       }).catch((error) => {
         console.error('Error: ', error)
-        //notificationToast('error', Messages.notification.notOk)
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
-  //Life Cycle
   useEffect(() => {
     getById();
     getTablaLista();
@@ -216,17 +169,6 @@ const AdministracionEventoEditar = ({ match }) => {
           </CardBody>
         </Card>
       </Fragment>
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick={false}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
     </div>
   )
 }

@@ -16,6 +16,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { ToastContainer, toast } from 'react-toastify';
 import CCSpinner from 'src/reusable/spinner/CCSpinner';
+import { toastSweetAlert } from 'src/reusable/SweetAlert2';
+import { Messages } from 'src/reusable/variables/Messages';
 
 var _ = require('lodash');
 
@@ -23,7 +25,9 @@ const UpdateEventoRiesgo = ({ match }) => {
 
   const history = useHistory();
   const [spin, setSpin] = useState(true);
-  const [dataApiTipoEvento, setDataApiTipoEvento] = useState([])
+  const [dataApiTipoEvento, setDataApiTipoEvento] = useState([]);
+
+  const [activeTab, setActiveTap] = useState('1');
 
   const obtainFiles = (f) => {
     //setGetFiles(f)
@@ -138,7 +142,6 @@ const UpdateEventoRiesgo = ({ match }) => {
     detalleEstado: '',
 
     procesoCriticoAsfi: '',
-
     listMatrizRiesgo: null
   }
 
@@ -184,7 +187,8 @@ const UpdateEventoRiesgo = ({ match }) => {
     ...formValueInitialRiesgosSec,
     ...formValueInitialTipoEvento
   }
-
+  
+  const [requestData, setRequestData] = useState(dataResult);
 
   // Tipo de evento
   const callApiTipoEvento = (idTablaDes) => {
@@ -193,14 +197,13 @@ const UpdateEventoRiesgo = ({ match }) => {
         const options = buildSelectTwo(res.data, 'id', 'clave', false)
         setDataApiTipoEvento(_.orderBy(options, ['value'], ['asc']))
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   const macthedValues = (args) => {
-
     formik.setFieldValue('tipoEvento', args.tipoEvento, false);
-
     const datosIniciales = {
       codigo: args.codigo,
       estadoRegistro: args.estadoRegistro,
@@ -260,7 +263,6 @@ const UpdateEventoRiesgo = ({ match }) => {
       detalleEstado: args.detalleEstado,
 
       procesoCriticoAsfi: args.procesoCriticoAsfi,
-
       listMatrizRiesgo: buildSelectThree(args.riesgoRelacionado, 'id', 'codigo', 'definicion', true)
     };
     const importes = {
@@ -289,7 +291,6 @@ const UpdateEventoRiesgo = ({ match }) => {
       gobiernoId: buildOptionSelectThree(args.gobiernoId, 'id', 'clave', 'nombre', true, 'gobiernoId'),
       seguridadId: buildOptionSelectThree(args.seguridadId, 'id', 'clave', 'nombre', true, 'seguridadId'),
     };
-
     setformValueInitialDatosSec(datosIniciales);
     setformValueInitialPlanesSec(planesAccion);
     setformValueInitialCategoriaSec(categoria);
@@ -304,9 +305,10 @@ const UpdateEventoRiesgo = ({ match }) => {
       .then((response) => {
         const res = response.data;
         macthedValues(res);
-        setSpin(false)
+        setSpin(false);
       }).catch((error) => {
         console.error("Error: ", error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       });
   }
 
@@ -316,9 +318,6 @@ const UpdateEventoRiesgo = ({ match }) => {
     getById(match.params.id);
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const [requestData, setRequestData] = useState(dataResult);
-  const [activeTab, setActiveTap] = useState('1');
 
   /* manejo de botones siguiente */
   const nextSection = (tab) => {
@@ -395,7 +394,6 @@ const UpdateEventoRiesgo = ({ match }) => {
   }
 
   const handleOnSubmmit = (values) => {
-    console.log("DATA: " + JSON.stringify(values, null, 2));
     setSpin(true);
     const dataRequest = setObject(values);
     var request = {
@@ -414,7 +412,6 @@ const UpdateEventoRiesgo = ({ match }) => {
         ...formValueInitialImportes,
         tipoEvento: formik.values.tipoEvento
       }
-      
     }
 
     const idEvento = match.params.id;
@@ -424,16 +421,15 @@ const UpdateEventoRiesgo = ({ match }) => {
           notificationToast('success', 'Evento de Riesgo modificado exitósamente');
         } else {
           console.error('Hubo un  error ', res);
-          notificationToast('error', 'Algo salió mal, intente nuevamente');
+          toastSweetAlert('error', Messages.no_ok, 3000);
         }
       }).catch((error) => {
         console.error('Error al modificar Evento de Riesgo: ', error);
-        notificationToast('error', 'Algo salió mal, intente nuevamente');
+        toastSweetAlert('error', Messages.no_ok, 3000);
       });
   }
 
   return (
-
     <div>
       <CCSpinner show={spin} />
       {

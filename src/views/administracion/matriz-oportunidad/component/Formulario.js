@@ -8,8 +8,13 @@ import { getTablaDescripcionOportunidadN1 } from '../controller/AdminOportunidad
 import { buildSelectTwo } from 'src/functions/Function';
 import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo';
 import { Delete, Save, XSquare } from 'react-feather';
+import { toastSweetAlert } from 'src/reusable/SweetAlert2';
+import { Messages } from 'src/reusable/variables/Messages';
 
 const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit, optionsList, isEdit }) => {
+
+  const [dataApi2, setDataApi] = useState(optionsList.opLebel2List);
+  
   const formik = useFormik({
     initialValues: initialValuess,
     validationSchema: Yup.object().shape(
@@ -35,14 +40,14 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit, optionsList, is
   })
 
   /* LISTA TABLA DESCRIPCION NIVEL 2 */
-  const [dataApi2, setDataApi] = useState(optionsList.opLebel2List);
   const callApi2 = (idTablaDes) => {
     getTablaDescripcionOportunidadN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true);
         setDataApi(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
@@ -61,6 +66,7 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit, optionsList, is
       callApi2(idnivel2);
     }
   }
+
   const inputIsClearableLevel2 = (id) => {
     //console.log('inputIsClearable aaa: ', id);
   }

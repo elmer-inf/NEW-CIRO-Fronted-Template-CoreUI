@@ -7,8 +7,12 @@ import { CSelectReact } from 'src/reusable/CSelectReact'
 import { getTablaListaSeguridad } from '../controller/AdminSeguridadController';
 import { buildSelectTwo } from 'src/functions/Function'
 import { Delete, Save, XSquare } from 'react-feather'
+import { toastSweetAlert } from 'src/reusable/SweetAlert2'
+import { Messages } from 'src/reusable/variables/Messages'
 
 const AdminFormSeguridad = ({ initialValuess, handleOnSubmit }) => {
+
+  const [tablaListaOptions, setTablaListaOptions] = useState([])
 
   const formik = useFormik({
     initialValues: initialValuess,
@@ -29,14 +33,14 @@ const AdminFormSeguridad = ({ initialValuess, handleOnSubmit }) => {
   })
 
   /* LISTA LAS TABLAS LISTA DE Seguridad */
-  const [tablaListaOptions, setTablaListaOptions] = useState([])
-
   const callApi = () => {
     getTablaListaSeguridad()
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombreTabla', true)
         setTablaListaOptions(options)
       }).catch((error) => {
+        console.error("Error: " + error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 

@@ -11,10 +11,28 @@ import { buildSelectThree, buildSelectTwo } from 'src/functions/Function'
 import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
 import { getRiesgos } from 'src/views/matrizRiesgo/controller/RiesgoController'
 import { Messages } from 'src/reusable/variables/Messages'
+import { toastSweetAlert } from 'src/reusable/SweetAlert2'
 
 var _ = require('lodash');
 
 const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, isEdit, tipoEvento, fechaDesc, optionsCritico, optionsAsfi, optionProcesoAsfi }) => {
+
+  // Riesgos realcionados:
+  const [listRiesgoRel, setListRiesgoRel] = useState([]);
+
+  const [dataApiSubcat, setDataApiSubcat] = useState([])
+  const [dataApiTipoEvento, setDataApiTipo] = useState([])
+  const [dataApiSubevento, setDataApiSubevento] = useState([])
+  const [dataApiClaseEvento, setDataApiClaseEvento] = useState([])
+  const [dataApiFactorRiesgo, setDataApiFactorRiesgo] = useState([])
+  const [dataApiProceso, setDataApiProceso] = useState([]);
+  const [dataApiProcedimiento, setDataApiProcedimiento] = useState([]);
+  const [dataApiLineaAsfi, setDataApiLineaAsfi] = useState([]);
+  const [dataApiOperacion, setDataApiOperacion] = useState([]);
+  const [dataApiEfectoPerdida, setDataApiEfectoPerdida] = useState([]);
+  const [dataApiOpeProSer, setDataApiOpeProSer] = useState([]);
+  const [dataApiTipoServicio, setDataApiTipoServicio] = useState([]);
+  const [dataApiServicioDesc, setDataApiServicioDesc] = useState([]);
 
   // Obtiene Trimestre a partir de la fechaDesc
   const generaTrimestre = () => {
@@ -99,14 +117,11 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         listMatrizRiesgo: Yup.mixed().nullable(), */
       }
     ),
-
     onSubmit: values => {
-
       var arrayIdMatrizRiesgo = [];
       _.forEach(values.listMatrizRiesgo, function (value, key) {
         arrayIdMatrizRiesgo.push(_.get(value, 'id', null))
       });
-
       const data = {
         ...values,
         subcategorizacionId: (values.subcategorizacionId !== null) ? values.subcategorizacionId.value : 0,
@@ -126,9 +141,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
 
         eventoCritico: (values.eventoCritico !== null) ? values.eventoCritico.value : null,
         lineaNegocio: (values.lineaNegocio !== null) ? values.lineaNegocio.value : null,
-
         trimestre: generaTrimestre(),
-
         listMatrizRiesgo: arrayIdMatrizRiesgo
       }
       //console.log('datos que se enviaran SECCION 3:', data)
@@ -141,176 +154,266 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
     }
   });
 
-
   /*   P  A  R  A  M  E  T  R  O  S   */
   // Subcategorizaciontipo
-  const [dataApiSubcat, setDataApiSubcat] = useState([])
   const callApiSubcat = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiSubcat(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // Tipo de evento de pérdida
-  const [dataApiTipoEvento, setDataApiTipo] = useState([])
   const callApiTipoEvento = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiTipo(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // Sub evento - Basilea (Nivel 2), depende de tipo de evento
-  const [dataApiSubevento, setDataApiSubevento] = useState([])
   const callApiSubevento = (idTablaDes, idNivel2) => {
     getTablaDescripcionEventoN2(idTablaDes, idNivel2)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiSubevento(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // Clase evento - Basilea (Nivel 3), depende de Subevento
-  const [dataApiClaseEvento, setDataApiClaseEvento] = useState([])
   const callApiClaseEvento = (idTablaDes, idNivel2, idNivel3) => {
     getTablaDescripcionEventoN3(idTablaDes, idNivel2, idNivel3)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiClaseEvento(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // Factor de riesgo operativo
-  const [dataApiFactorRiesgo, setDataApiFactorRiesgo] = useState([])
   const callApiFactorRiesgo = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiFactorRiesgo(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // Proceso
-  const [dataApiProceso, setDataApiProceso] = useState([])
   const callApiProceso = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiProceso(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // Procedimiento (Nivel 2), depende de proceso
-  const [dataApiProcedimiento, setDataApiProcedimiento] = useState([])
   const callApiProcedimiento = (idTablaDes, idNivel2) => {
     getTablaDescripcionEventoN2(idTablaDes, idNivel2)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'descripcion', true)
         setDataApiProcedimiento(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // Linea de negocio ASFI
-  const [dataApiLineaAsfi, setDataApiLineaAsfi] = useState([])
   const callApiLineaAsfi = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiLineaAsfi(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // Operaciones ASFI
-  const [dataApiOperacion, setDataApiOperacion] = useState([])
   const callApiOperacion = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiOperacion(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // Efecto de perdida
-  const [dataApiEfectoPerdida, setDataApiEfectoPerdida] = useState([])
   const callApiEfectoPerdida = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiEfectoPerdida(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // Operación, producto o servicio afectado
-  const [dataApiOpeProSer, setDataApiOpeProSer] = useState([])
   const callApiOpeProSer = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiOpeProSer(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // Tipo de servicio (Nivel 1)
-  const [dataApiTipoServicio, setDataApiTipoServicio] = useState([])
   const callApiTipoServicio = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiTipoServicio(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
   // Descripción de servicio (Nivel 2), depende de Tipo de servicio
-  const [dataApiServicioDesc, setDataApiServicioDesc] = useState([])
   const callApiServicioDesc = (idTablaDes, idNivel2) => {
     getTablaDescripcionEventoN2(idTablaDes, idNivel2)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true)
         setDataApiServicioDesc(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
+      })
+  }
+  /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
+
+  // Lista de Matriz de riesgos
+  const callLListMatrizRiesgos = () => {
+    getRiesgos()
+      .then(res => {
+        const options = buildSelectThree(res.data, 'id', 'codigo', 'definicion', true)
+        setListRiesgoRel(options)
+      }).catch((error) => {
+        console.error('Error: ', error);
+        toastSweetAlert('error', Messages.no_ok, 3000);
       })
   }
 
+  // FORMIK RESET VALUE REUTILIZABLE
+  const resetFormikValue = (field, valueToReset) => {
+    formik.setFieldValue(field, valueToReset, false);
+  }
+
+  /*  Values of TIPO DE EVENTO DE PERDIDA N1*/
+  const clearDependenceOfTipoEventoP = () => {
+    resetFormikValue('subEventoId', null);
+    resetFormikValue('claseEventoId', null);
+    setDataApiSubevento([]);
+    setDataApiClaseEvento([]);
+  }
+
+  const getValueTipoEventoP = (value) => {
+    if (value !== null) {
+      callApiSubevento(12, value.id);
+    }
+  }
+
+  const clearInputTipoEventoP = (id) => {
+    formik.setFieldValue(id, null, false); // limpia el select N1
+    resetFormikValue('subEventoId', null); // limpiar el valor del select N2
+    resetFormikValue('claseEventoId', null); // limpia el valor del select N3
+  }
+  /* FIN  Values of TIPO DE EVENTO DE PERDIDA N1*/
+
+  /*  Values of SUB EVENTO N2 */
+  const clearDependenceOfSubEvento = () => {
+    resetFormikValue('claseEventoId', null);
+    setDataApiClaseEvento([]);
+  }
+
+  const getValueSubEvento = (value) => {
+    if (value !== null && formik.values.tipoEventoPerdidaId !== null) {
+      callApiClaseEvento(13, value.id, formik.values.tipoEventoPerdidaId.id);
+    }
+  }
+
+  const clearInputSubEvento = (id) => {
+    formik.setFieldValue(id, null, false); // limpia el select N1
+    resetFormikValue('claseEventoId', null) // limpia el valor del select N2
+  }
+
+  /* FIN  Values of SUB EVENTO N2 */
+
+  /*  Values of PROCESO N1 */
+  const clearDependenceOfProceso = () => {
+    resetFormikValue('procedimientoId', null);
+    setDataApiProcedimiento([]);
+  }
+
+  const getValueProceso = (value) => {
+    if (value !== null) {
+      callApiProcedimiento(16, value.id);
+    }
+  }
+
+  const clearInputProceso = (id) => {
+    formik.setFieldValue(id, null, false);
+    resetFormikValue('procedimientoId', null);
+  }
+  /* FIN  Values of PROCESO N1 */
+
+  /*  Values of TIPO DE SERVICIO N1 */
+  const clearDependenceOfTipoServicio = () => {
+    resetFormikValue('descServicioId', null);
+    setDataApiServicioDesc([]);
+  }
+
+  const getValueTipoServicio = (value) => {
+    if (value !== null) {
+      callApiServicioDesc(22, value.id);
+    }
+  }
+
+  const clearInputTipoServicio = (id) => {
+    formik.setFieldValue(id, null, false);
+    resetFormikValue('descServicioId', null);
+  }
+  /* FIN  Values of TIPO DE SERVICIO N1 */
+
+  // Resetea "otros" dependiendo del check
+  const resetOtros = () => { formik.setFieldValue('otros', '', false); }
+
   useEffect(() => {
-    callApiSubcat(10);
-    callApiTipoEvento(11);
-    callApiFactorRiesgo(26);
-    callApiProceso(15);
-    callApiLineaAsfi(17);
-    callApiOperacion(18);
-    callApiEfectoPerdida(19);
-    callApiOpeProSer(20);
-    callApiTipoServicio(21);
-    callLListMatrizRiesgos();
-  }, [])
+    if (formik.values.claseEventoId !== null) {
+      resetOtros();
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.claseEventoId])
 
   // Para el despliegue del select llenado al EDITAR
   useEffect(() => {
@@ -329,102 +432,18 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-
-  // FORMIK RESET VALUE REUTILIZABLE
-  const resetFormikValue = (field, valueToReset) => {
-    formik.setFieldValue(field, valueToReset, false);
-  }
-
-  /*  Values of TIPO DE EVENTO DE PERDIDA N1*/
-  const clearDependenceOfTipoEventoP = () => {
-    resetFormikValue('subEventoId', null);
-    resetFormikValue('claseEventoId', null);
-    setDataApiSubevento([]);
-    setDataApiClaseEvento([]);
-  }
-  const getValueTipoEventoP = (value) => {
-    if (value !== null) {
-      callApiSubevento(12, value.id);
-    }
-  }
-  const clearInputTipoEventoP = (id) => {
-    formik.setFieldValue(id, null, false); // limpia el select N1
-    resetFormikValue('subEventoId', null); // limpiar el valor del select N2
-    resetFormikValue('claseEventoId', null); // limpiar el valor del select N3
-  }
-  /* FIN  Values of TIPO DE EVENTO DE PERDIDA N1*/
-
-  /*  Values of SUB EVENTO N2 */
-  const clearDependenceOfSubEvento = () => {
-    resetFormikValue('claseEventoId', null);
-    setDataApiClaseEvento([]);
-  }
-  const getValueSubEvento = (value) => {
-    if (value !== null && formik.values.tipoEventoPerdidaId !== null) {
-      callApiClaseEvento(13, value.id, formik.values.tipoEventoPerdidaId.id);
-    }
-  }
-  const clearInputSubEvento = (id) => {
-    formik.setFieldValue(id, null, false); // limpia el select N1
-    resetFormikValue('claseEventoId', null) // limpiar el valor del select N2
-  }
-  /* FIN  Values of SUB EVENTO N2 */
-
-  /*  Values of PROCESO N1 */
-  const clearDependenceOfProceso = () => {
-    resetFormikValue('procedimientoId', null);
-    setDataApiProcedimiento([]);
-  }
-  const getValueProceso = (value) => {
-    if (value !== null) {
-      callApiProcedimiento(16, value.id);
-    }
-  }
-  const clearInputProceso = (id) => {
-    formik.setFieldValue(id, null, false);
-    resetFormikValue('procedimientoId', null);
-  }
-  /* FIN  Values of PROCESO N1 */
-
-  /*  Values of TIPO DE SERVICIO N1 */
-  const clearDependenceOfTipoServicio = () => {
-    resetFormikValue('descServicioId', null);
-    setDataApiServicioDesc([]);
-  }
-  const getValueTipoServicio = (value) => {
-    if (value !== null) {
-      callApiServicioDesc(22, value.id);
-    }
-  }
-  const clearInputTipoServicio = (id) => {
-    formik.setFieldValue(id, null, false);
-    resetFormikValue('descServicioId', null);
-  }
-  /* FIN  Values of TIPO DE SERVICIO N1 */
-
-  // Resetea "otros" dependiendo del check
-  const resetOtros = () => { formik.setFieldValue('otros', '', false); }
   useEffect(() => {
-    if (formik.values.claseEventoId !== null) {
-      resetOtros();
-    }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.claseEventoId])
-  /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
-
-
-  // Riesgos realcionados:
-  const [listRiesgoRel, setListRiesgoRel] = useState([]);
-
-  const callLListMatrizRiesgos = () => {
-    getRiesgos()
-      .then(res => {
-        const options = buildSelectThree(res.data, 'id', 'codigo', 'definicion', true)
-        setListRiesgoRel(options)
-      }).catch((error) => {
-        console.error('Error: ', error)
-      })
-  }
+    callApiSubcat(10);
+    callApiTipoEvento(11);
+    callApiFactorRiesgo(26);
+    callApiProceso(15);
+    callApiLineaAsfi(17);
+    callApiOperacion(18);
+    callApiEfectoPerdida(19);
+    callApiOpeProSer(20);
+    callApiTipoServicio(21);
+    callLListMatrizRiesgos();
+  }, [])
 
   return (
     <Fragment>
@@ -474,7 +493,6 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
             <CInputReact
               type={"text"}
               id={'trimestre'}
-              //placeholder={'Trimestre'}
               value={generaTrimestre()}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
