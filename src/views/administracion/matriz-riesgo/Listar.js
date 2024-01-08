@@ -211,16 +211,6 @@ const AdministracionMatrizRiesgosListar = () => {
           }).catch((error) => {
             console.error('Error al eliminar Parámetro de Matriz de Riesgo: ', error);
           });
-      } else if (
-        result.dismiss === Swal.DismissReason.cancel
-      ) {
-        swalWithBootstrapButtons.fire({
-          title: '',
-          text: 'Operación cancelada',
-          icon: 'error',
-          confirmButtonText: 'Aceptar',
-          position: 'top'
-        })
       }
     })
   }

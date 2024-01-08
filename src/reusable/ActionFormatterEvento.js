@@ -14,27 +14,34 @@ const ActionFormatterEvento = ({ row, detailFunction, editFunction, deleteFuncti
   });
 
   const confirmDelete = () => {
-    swalWithBootstrapButtons.fire({
-      title: '¿Estás seguro?',
-      text: 'No podrás deshacer esta acción.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, eliminarlo',
-      cancelButtonText: 'Cancelar',
-      position: 'top',
-      customClass: {
-        confirmButton: 'btn btn-primary text-white',
-        cancelButton: 'btn btn-outline-primary ml-4',
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        if (deleteFunction) {
+    if (row.codigo !== null && row.estadoRegistro === 'Autorizado') {
+      swalWithBootstrapButtons.fire({
+        title: '',
+        text: 'El registro está Autorizado y no puede ser eliminado.',
+        icon: 'error',
+        confirmButtonText: 'Aceptar',
+        position: 'top'
+      });
+    } else {
+      swalWithBootstrapButtons.fire({
+        title: '¿Estás seguro?',
+        text: 'No podrás deshacer esta acción.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, eliminarlo',
+        cancelButtonText: 'Cancelar',
+        position: 'top',
+        customClass: {
+          confirmButton: 'btn btn-primary text-white',
+          cancelButton: 'btn btn-outline-primary ml-4',
+        },
+      }).then((result) => {
+        if (result.isConfirmed && deleteFunction) {
           deleteFunction(row);
         }
-      }
-    });
+      });
+    }
   };
-
 
 
   return (

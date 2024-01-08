@@ -262,16 +262,6 @@ const AdministracionEventoListar = () => {
           }).catch((error) => {
             console.error('Error al eliminar Parámetro de Evento de Riesgo: ', error);
           });
-      } else if (
-        result.dismiss === Swal.DismissReason.cancel
-      ) {
-        swalWithBootstrapButtons.fire({
-          title: '',
-          text: 'Operación cancelada',
-          icon: 'error',
-          confirmButtonText: 'Aceptar',
-          position: 'top'
-        })
       }
     })
   }

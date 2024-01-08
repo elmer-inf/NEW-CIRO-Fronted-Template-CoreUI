@@ -304,16 +304,6 @@ const EventoRiesgoListar = () => {
                   }).catch((error) => {
                     console.error('Error al obtener datos: ', error);
                   });
-              } else if (
-                result.dismiss === Swal.DismissReason.cancel
-              ) {
-                swalWithBootstrapButtons.fire({
-                  title: '',
-                  text: 'Operación cancelada',
-                  icon: 'error',
-                  confirmButtonText: 'Aceptar',
-                  position: 'top'
-                })
               }
             })
           } else {
@@ -374,16 +364,6 @@ const EventoRiesgoListar = () => {
             }).catch((error) => {
               console.error('Error al obtener datos: ', error);
             });
-        } else if (
-          result.dismiss === Swal.DismissReason.cancel
-        ) {
-          swalWithBootstrapButtons.fire({
-            title: '',
-            text: 'Operación cancelada',
-            icon: 'error',
-            confirmButtonText: 'Aceptar',
-            position: 'top'
-          })
         }
       })
     } else {

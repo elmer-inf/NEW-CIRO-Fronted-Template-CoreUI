@@ -112,16 +112,6 @@ const AdministracionSeguridadListar = () => {
           }).catch((error) => {
             console.error('Error al eliminar Parámetro de Seguridad: ', error);
           });
-      } else if (
-        result.dismiss === Swal.DismissReason.cancel
-      ) {
-        swalWithBootstrapButtons.fire({
-          title: '',
-          text: 'Operación cancelada',
-          icon: 'error',
-          confirmButtonText: 'Aceptar',
-          position: 'top'
-        })
       }
     })
   }

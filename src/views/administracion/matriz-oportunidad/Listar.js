@@ -166,16 +166,6 @@ const AdministracionMatrizOportunidadListar = () => {
           }).catch((error) => {
             console.error('Error al eliminar Parámetro de Matriz de Oportunidad: ', error);
           });
-      } else if (
-        result.dismiss === Swal.DismissReason.cancel
-      ) {
-        swalWithBootstrapButtons.fire({
-          title: '',
-          text: 'Operación cancelada',
-          icon: 'error',
-          confirmButtonText: 'Aceptar',
-          position: 'top'
-        })
       }
     })
   }
