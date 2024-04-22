@@ -34,7 +34,7 @@ const AdministracionMatrizRiesgoEditar = ({ match }) => {
           closeOnClick: false,
           pauseOnHover: true,
           draggable: true,
-        });
+        }); 
         break;
       case 'success':
         toast.success(mensaje, {
