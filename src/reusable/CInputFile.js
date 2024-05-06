@@ -31,7 +31,7 @@ export const CInputFile = (props) => {
         placeholder={props.placeholder}
         disabled={props.disabled || false}
         style={(props.type === 'file') ? { backgroundColor: '#f2f2f2' } : null}
-        accept={(props.type === 'file') ? ".pdf" : null}
+        //accept={(props.type === 'file') ? ".pdf" : null}
         multiple={props.multiple || false}
       />
       <FormFeedback>{props.errors}</FormFeedback>

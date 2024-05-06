@@ -25,8 +25,18 @@ const UpdateEventoRiesgo = ({ match }) => {
   const [spin, setSpin] = useState(true);
   const [dataApiTipoEvento, setDataApiTipoEvento] = useState([])
 
-  const obtainFiles = (f) => {
-    //setGetFiles(f)
+  const [newFiles, setNewFiles] = useState([]);
+  const [filesToDelete, setFilesToDelete] = useState([]);
+
+
+  /* const obtainFiles = (newFiles, filesToRemove = []) => { // Asegúrate de que filesToRemove tenga un valor por defecto
+    setNewFiles(newFiles); // Nuevos archivos a subir
+    setFilesToDelete(filesToRemove.map(file => file.id)); // IDs de archivos para eliminar, asegúrate de que filesToRemove siempre es una lista
+  } */
+
+  const obtainFiles = (newFiles, filesToRemove = []) => {
+    setNewFiles(newFiles); // Nuevos archivos a subir
+    setFilesToDelete(filesToRemove.map(file => typeof file === 'object' ? file.source : file)); // IDs de archivos para eliminar
   }
 
   const formValueInitialTipoEvento = {
@@ -100,7 +110,7 @@ const UpdateEventoRiesgo = ({ match }) => {
     canalAsfiId: null,
     descripcion: '',
     descripcionCompleta: '',
-    files: null,
+    files: [],
     responsableElaborador: ''
   }
 
@@ -199,7 +209,20 @@ const UpdateEventoRiesgo = ({ match }) => {
 
   const macthedValues = (args) => {
 
+    console.log('args: ', args);
+
+   
+
     formik.setFieldValue('tipoEvento', args.tipoEvento, false);
+
+    // Transformación de la estructura de los archivos para FilePond
+    const existingFiles = args.archivoId.map(file => ({
+      name: file.nombreArchivo,
+      size: file.size,
+      type: file.tipo,
+      lastModified: new Date().getTime() // Si no tienes un timestamp real, usa el timestamp actual
+    }));
+    
 
     const datosIniciales = {
       codigo: args.codigo,
@@ -224,9 +247,17 @@ const UpdateEventoRiesgo = ({ match }) => {
       canalAsfiId: buildOptionSelect(args.canalAsfiId, 'id', 'nombre', true, 'canalAsfiId'),
       descripcion: args.descripcion,
       descripcionCompleta: args.descripcionCompleta,
-      files: null,
+      //files: args.archivoId,
       responsableElaborador: args.responsableElaborador,
+      files: existingFiles
     };
+
+
+    
+
+
+  
+
     const planesAccion = {
       areaResponsableId: buildOptionSelect(args.areaResponsableId, 'id', 'nombre', true, 'areaResponsableId'),
       cargoResponsableId: buildOptionSelect(args.cargoResponsableId, 'id', 'nombre', true, 'cargoResponsableId'),
@@ -291,6 +322,10 @@ const UpdateEventoRiesgo = ({ match }) => {
     };
 
     setformValueInitialDatosSec(datosIniciales);
+   
+    
+  formik.setFieldValue('files', existingFiles);
+
     setformValueInitialPlanesSec(planesAccion);
     setformValueInitialCategoriaSec(categoria);
     setformValueInitialImportesSec(importes);
@@ -303,6 +338,7 @@ const UpdateEventoRiesgo = ({ match }) => {
     await getEventoRiesgoId(idEventoRiesgo)
       .then((response) => {
         const res = response.data;
+        console.log('res: ', res);
         macthedValues(res);
         setSpin(false)
       }).catch((error) => {
@@ -310,7 +346,7 @@ const UpdateEventoRiesgo = ({ match }) => {
       });
   }
 
-  //Life Cycle
+
   useEffect(() => {
     callApiTipoEvento(6);
     getById(match.params.id);
@@ -395,8 +431,28 @@ const UpdateEventoRiesgo = ({ match }) => {
   }
 
   const handleOnSubmmit = (values) => {
-    console.log("DATA: " + JSON.stringify(values, null, 2));
     setSpin(true);
+
+
+
+    const formData = new FormData();
+    formData.append('eventoRiesgoPutDTO', JSON.stringify(_.omit(values, ['files'])));
+
+    // Añadir archivos nuevos si existen
+    if (values.files && values.files.length) {
+      values.files.forEach(file => {
+        formData.append("file", file);
+      });
+    }
+
+    // Añadir IDs de archivos a eliminar si existen
+    if (values.filesToDelete && values.filesToDelete.length) {
+      formData.append("filesToDelete", values.filesToDelete.join(','));
+    }
+
+
+
+
     const dataRequest = setObject(values);
     var request = {
       ...dataRequest,
@@ -414,7 +470,7 @@ const UpdateEventoRiesgo = ({ match }) => {
         ...formValueInitialImportes,
         tipoEvento: formik.values.tipoEvento
       }
-      
+
     }
 
     const idEvento = match.params.id;
@@ -431,6 +487,9 @@ const UpdateEventoRiesgo = ({ match }) => {
         notificationToast('error', 'Algo salió mal, intente nuevamente');
       });
   }
+
+
+  //console.log('formValueInitialDatosSec.files: ', formValueInitialDatosSec.files);
 
   return (
 
@@ -540,6 +599,7 @@ const UpdateEventoRiesgo = ({ match }) => {
                           obtainFiles={obtainFiles}
                           optionsEstado={optionsEstado}
                           isEdit={true}
+                          existingFiles={formValueInitialDatosSec.files} 
                         />
                       </TabPane>
 

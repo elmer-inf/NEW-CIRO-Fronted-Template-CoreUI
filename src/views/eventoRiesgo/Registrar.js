@@ -115,7 +115,7 @@ const EventoRiesgoRegistrar = () => {
     canalAsfiId: null,
     descripcion: '',
     descripcionCompleta: '',
-    files: null,
+    files: [],
     responsableElaborador: ''
   }
 
@@ -275,6 +275,7 @@ const EventoRiesgoRegistrar = () => {
     setSpin(true);
     const dataRequest = setObject(values);
     var request = {}
+   
     if (formik.values.tipoEvento === 'A') {
       request = {
         ...dataRequest,

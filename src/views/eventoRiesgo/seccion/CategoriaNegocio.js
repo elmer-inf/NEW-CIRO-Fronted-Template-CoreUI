@@ -38,7 +38,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
     initialValues: initValues,
     validationSchema: Yup.object().shape(
       {
-        codigoInicial: Yup.string().nullable(),
+        /* codigoInicial: Yup.string().nullable(),
         subcategorizacionId: Yup.mixed().nullable(),
         trimestre: Yup.string().nullable(),
         tipoEventoPerdidaId: Yup.mixed().required(Messages.required),
@@ -66,9 +66,9 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         procesoCriticoAsfi: Yup.mixed().required(Messages.required),
         procesoCriticoAsfiAux: Yup.string().nullable(),
 
-        listMatrizRiesgo: Yup.mixed().nullable(),
+        listMatrizRiesgo: Yup.mixed().nullable(), */
 
-        /* codigoInicial: Yup.string().nullable(),
+        codigoInicial: Yup.string().nullable(),
         subcategorizacionId: Yup.mixed().nullable(),
         trimestre: Yup.string().nullable(),
         tipoEventoPerdidaId: Yup.mixed().nullable(),
@@ -96,7 +96,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         procesoCriticoAsfi: Yup.mixed().nullable(),
         procesoCriticoAsfiAux: Yup.string().nullable(),
 
-        listMatrizRiesgo: Yup.mixed().nullable(), */
+        listMatrizRiesgo: Yup.mixed().nullable(),
       }
     ),
 

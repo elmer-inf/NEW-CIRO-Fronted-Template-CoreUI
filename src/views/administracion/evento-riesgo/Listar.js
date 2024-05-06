@@ -222,10 +222,10 @@ const AdministracionEventoListar = () => {
                           'Área' : '',
       sort: true,
      } */, {
-      text: (labelTabla.length !== 0) ? 'ACCIONES' : '',
+      text: (labelTabla.length !== 0) ? labelTabla==='Macroproceso'? '' : 'ACCIONES' : '',
       headerAlign: 'center',
       style: { textAlign: 'center' },
-      formatter: (cell, row) => actionFormatter(cell, row)
+      formatter: (cell, row) => labelTabla==='Macroproceso'? null : actionFormatter(cell, row)
     }
   ]
 

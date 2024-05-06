@@ -7,12 +7,39 @@ import FormularioEvaluar from './component/FormularioEvaluar'
 import { formatSizeUnits, formatDate } from 'src/functions/FunctionEvento'
 import Swal from 'sweetalert2'
 import CIcon from '@coreui/icons-react';
+import BootstrapTable from 'react-bootstrap-table-next';
 
 var _ = require('lodash');
 
 const EventoRiesgo = ({ match }) => {
 
   const [dataArchivos, setDataArchivo] = useState([]);
+
+  const columns = [{
+    dataField: 'nombreArchivo',
+    text: 'Nombre',
+    sort: true
+  }, {
+    dataField: 'size',
+    text: 'Tamaño',
+    formatter: (cell,) => formatSizeUnits(cell),
+    style: {
+      whiteSpace: 'nowrap'
+    }
+  }, {
+    dataField: 'archivoBase64',
+    text: 'Archivo',
+    formatter: (cell, row) => (
+      <CButton onClick={() => base64toPDF(row.archivoBase64, row.nombreArchivo, row.tipo)}>
+        <CIcon
+          className="mb-2"
+          src={getFileIcon(row.mimeType)}
+          height={30}
+        />
+      </CButton>
+    )
+  }];
+
 
   // Configuracion sweetalert2
   const swalWithBootstrapButtons = Swal.mixin({
@@ -60,6 +87,7 @@ const EventoRiesgo = ({ match }) => {
     await getEventoRiesgoId(idEvento)
       .then((response) => {
         const res = response.data;
+        console.log('res: ', res);
         setDataApi(res)
       }).catch((error) => {
         console.error("Error: ", error);
@@ -185,22 +213,26 @@ const EventoRiesgo = ({ match }) => {
     return build
   }
 
-  function base64toPDF(data) {
+
+  function base64toPDF(data, filename, mimeType) {
     var bufferArray = base64ToArrayBuffer(data);
-    var blobStore = new Blob([bufferArray], { type: "application/pdf" });
+    var blobStore = new Blob([bufferArray], { type: mimeType });
+
     if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-      window.navigator.msSaveOrOpenBlob(blobStore);
+      window.navigator.msSaveOrOpenBlob(blobStore, filename);
       return;
     }
-    var data2 = window.URL.createObjectURL(blobStore);
-    var pdfWindow = window.open();
+
+    var url = window.URL.createObjectURL(blobStore);
     var link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
     document.body.appendChild(link);
-    pdfWindow.location.href = data2;
     link.click();
-    window.URL.revokeObjectURL(data2);
+    window.URL.revokeObjectURL(url);
     link.remove();
   }
+
 
   function base64ToArrayBuffer(data) {
     var bString = window.atob(data);
@@ -212,6 +244,27 @@ const EventoRiesgo = ({ match }) => {
     }
     return bytes;
   };
+
+  const getFileIcon = (mimeType) => {
+    switch (mimeType) {
+      case 'application/pdf':
+        return '/icon/pdf.png';
+      case 'application/vnd.ms-excel':
+      case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+        return '/icon/pdf.png';
+      case 'application/msword':
+      case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+        return '/icon/pdf.png';
+      case 'application/vnd.ms-outlook':
+        return '/icon/pdf.png';
+      case 'application/zip':
+      case 'application/x-zip-compressed':
+        return '/icon/pdf.png';
+      default:
+        return '/icon/pdf.png';
+    }
+  };
+
 
   return (
     <div>
@@ -421,7 +474,7 @@ const EventoRiesgo = ({ match }) => {
                               <div className='text-data'>{dataApi.canalAsfiId !== null ? dataApi.canalAsfiId.nombre : <i>Sin registro</i>}</div>
                             </Col>
 
-                            <Col xs='12' className='pt-2'>
+                            <Col xs='12' sm='6' md='4' xl='9' className='pt-2'>
                               <div className='text-label'>Descripción: </div>
                               <div className='text-data'>{dataApi.descripcion !== '' ? dataApi.descripcion : <i>Sin registro</i>}</div>
                             </Col>
@@ -433,40 +486,21 @@ const EventoRiesgo = ({ match }) => {
                           </Row>
 
                           <Row>
-                            <Col xs='12' md='6' className='pt-2'>
-                              <div className='text-label'>Archivo(s) adjunto(s): </div>
-                              {(dataArchivos !== null && !_.isEmpty(dataArchivos)) ?
-                                <Table responsive size="sm" borderless="false" className='mt-2'>
-                                  <thead>
-                                    <tr>
-                                      <th className='pl-3'>Nombre</th>
-                                      <th>Tamaño</th>
-                                      <th>Fecha registro</th>
-                                      <th>Archivo</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {dataArchivos.map((archivo) => {
-                                      return (
-                                        <tr key={archivo.id}>
-                                          <td className='pl-3'>{archivo.nombreArchivo}</td>
-                                          <td>{formatSizeUnits(archivo.size)}</td>
-                                          <td>{formatDate(archivo.updated)}</td>
-                                          <td>
-                                            <CButton onClick={() => base64toPDF(archivo.archivoBase64)}>
-                                              <CIcon
-                                                className="mb-2"
-                                                src="/icon/pdf.png"
-                                                height={30}
-                                              />
-                                            </CButton>
-                                          </td>
-                                        </tr>
-                                      )
-                                    })}
-                                  </tbody>
-                                </Table>
-                                : <i>Sin Archivos</i>}
+                            <Col sm={12} md={{ size: 6, order: 0, offset: 3 }} className='pt-2'>
+                              <div className='text-label pb-4'>Archivo(s) adjunto(s): </div>
+
+                              <BootstrapTable
+                                bootstrap4={true}
+                                keyField="id"
+                                data={dataArchivos}
+                                columns={columns}
+                                noDataIndication={() => 'Sin Archivos'}
+                                bordered={false}
+                                striped={true}
+                                hover={false}
+                                condensed={true}
+                                wrapperClasses="table-responsive"
+                              />
                             </Col>
                           </Row>
                         </CTabPane>

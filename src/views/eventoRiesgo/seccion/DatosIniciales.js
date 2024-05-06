@@ -15,11 +15,16 @@ import AuthService from 'src/views/authentication/AuthService'
 import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
 import { Messages } from 'src/reusable/variables/Messages'
 
-const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFiles, optionsEstado }) => {
+import { FilePond } from 'react-filepond';
+import 'filepond/dist/filepond.min.css';
+
+const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFiles, optionsEstado, existingFiles, setFilesToDelete }) => {
 
   const Auth = new AuthService();
   const profile = Auth.getProfile();
   const user = profile.usuario;
+
+
 
   const today = new Date();
   //const tenYearsFromNow = new Date();
@@ -28,11 +33,11 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
   const formik = useFormik({
     initialValues: initValues,
     validationSchema: Yup.object().shape({
-      fechaIni: Yup.date().min(new Date('01-01-1900'), Messages.dateValidation4).max(today, Messages.dateValidation3).required(Messages.required),
+      /* fechaIni: Yup.date().min(new Date('01-01-1900'), Messages.dateValidation4).max(today, Messages.dateValidation3).required(Messages.required),
       horaIni: Yup.mixed().required(Messages.required),
       fechaDesc: Yup.date().min(Yup.ref('fechaIni'), Messages.dateValidation2).max(today, Messages.dateValidation3).required(Messages.required),
       horaDesc: Yup.mixed().required(Messages.required),
-      fechaFin: Yup.date().typeError(Messages.required).min(Yup.ref('fechaIni'), Messages.dateValidation1).max(today, Messages.dateValidation3).required(Messages.required),
+      fechaFin: Yup.date().typeError(Messages.required).min(Yup.ref('fechaIni'), Messages.dateValidation1).max(today, Messages.dateValidation3).nullable(),
       horaFin: Yup.mixed().nullable(),
       agenciaId: Yup.mixed().nullable(),
       ciudadId: Yup.mixed().nullable(),
@@ -47,9 +52,9 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
       canalAsfiId: Yup.mixed().required(Messages.required),
       descripcion: Yup.string().required(Messages.required),
       descripcionCompleta: Yup.string().nullable(),
-      files: Yup.mixed().nullable(),
+      files: Yup.mixed().nullable(), */
 
-      /* fechaIni: Yup.date().max(new Date('12-31-3000'), Messages.yearOutOfRange).nullable(),
+      fechaIni: Yup.date().max(new Date('12-31-3000'), Messages.yearOutOfRange).nullable(),
       horaIni: Yup.string().nullable(),
       fechaDesc: Yup.date().max(new Date('12-31-3000'), Messages.yearOutOfRange).nullable(),
       horaDesc: Yup.string().nullable(),
@@ -57,7 +62,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
       horaFin: Yup.string().nullable(),
       agenciaId: Yup.mixed().nullable(),
       ciudadId: Yup.mixed().nullable(),
-      areaID:  Yup.mixed().nullable(),
+      areaID: Yup.mixed().nullable(),
       unidadId: Yup.mixed().nullable(),
       entidadAfectada: Yup.string().nullable(),
       comercioAfectado: Yup.string().nullable(),
@@ -68,11 +73,12 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
       canalAsfiId: Yup.mixed().nullable(),
       descripcion: Yup.string().nullable(),
       descripcionCompleta: Yup.string().nullable(),
-      files: Yup.mixed().nullable(), */
+      files: Yup.mixed().nullable(),
     }
     ),
 
     onSubmit: values => {
+      console.log('datos enviados: ', values);
       const data = {
         ...values,
         estadoRegistro: 'Pendiente',
@@ -95,12 +101,50 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
 
         estadoReportado: (values.estadoReportado !== null) ? values.estadoReportado.value : null,
       }
-      //console.log('datos que se enviaran SECCION 1:', data)
+      console.log('datos que se enviaran SECCION 1:', data)
       setObject(data);
       obtainFiles(values.files)
       nextSection(1);
     }
   })
+
+  // FilePond instance
+  /* /* const handlePondFile = (fileItems) => {
+    const newFiles = fileItems.map(fileItem => fileItem.file);
+    formik.setFieldValue('files', newFiles);
+  }; */
+  const handlePondFile = (fileItems) => {
+    // Extrae los archivos como instancias de File o como referencias a archivos existentes
+    const newFiles = fileItems.map(fileItem => {
+      if (fileItem.file instanceof File) {
+        return fileItem.file; // Archivo nuevo
+      } else {
+        return { // Archivo existente mapeado correctamente
+          id: fileItem.source,
+          name: fileItem.file.name,
+          size: fileItem.file.size,
+          type: fileItem.file.type
+        };
+      }
+    });
+
+    // Filtra para obtener solo los archivos eliminados que son existentes
+    const existingFilesRemoved = existingFiles.filter(ef =>
+      !fileItems.some(fi => fi.source === ef.id)
+    );
+
+    // Actualiza el estado de archivos en formik
+    formik.setFieldValue('files', newFiles);
+
+    // Llama a una función de callback si es necesario
+    obtainFiles(newFiles, existingFilesRemoved.map(file => file.id));
+  };
+
+
+
+
+
+
 
   // Rellena Datos para Editar
   useEffect(() => {
@@ -280,6 +324,28 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
   const redirect = (e) => {
     history.push('/eventoRiesgo/Listar');
   }
+
+
+  console.log('existingFiles: ', existingFiles);
+  useEffect(() => {
+    if (isEdit && existingFiles && existingFiles.length > 0) {
+      const formattedFiles = existingFiles.map(file => ({
+        source: file.id,
+        options: {
+          type: 'local',
+          file: {
+            name: file.name,
+            size: file.size,
+            type: file.type
+          }
+        }
+      }));
+      formik.setFieldValue('files', formattedFiles);
+    }
+  }, [existingFiles, isEdit]);
+
+
+  console.log('formik.values.files: ', formik.values.files);
 
   return (
     <Fragment>
@@ -577,9 +643,8 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
             />
           </FormGroup>
 
-          <FormGroup tag={Col} sm='12' className='mb-0'>
-            <Label className='form-label'>
-              Descripción <span className='text-primary h5'><b>*</b></span>
+          <FormGroup tag={Col} md='6' lg='9' className='mb-0'>
+            <Label className='form-label'>Descripción <span className='text-primary h5'><b>*</b></span>
             </Label>
             <CInputReact
               type={"textarea"}
@@ -590,7 +655,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
               onBlur={formik.handleBlur}
               touched={formik.touched.descripcion}
               errors={formik.errors.descripcion}
-              rows={3}
+              rows={1}
             />
           </FormGroup>
 
@@ -611,8 +676,8 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
             />
           </FormGroup>
 
-          <FormGroup tag={Col} sm='12' className='mb-0'>
-            <CInputFile
+          <FormGroup tag={Col} sm={12} md={{ size: 6, order: 0, offset: 3 }} className='mb-0'>
+            {/* <CInputFile
               label={"Adjuntar Archivos"}
               type={"file"}
               id="files"
@@ -622,6 +687,43 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
               touched={formik.touched.files}
               errors={formik.errors.files}
               multiple={true}
+            /> */}
+            Adjuntar archivos
+
+
+            <FilePond
+              files={formik.values.files}
+              allowMultiple={true}
+              onupdatefiles={fileItems => {
+                const newFiles = fileItems.map(item => {
+                  if (item.file instanceof File) {
+                    // Es un nuevo archivo que se acaba de cargar
+                    return item.file;
+                  } else {
+                    // Preserva la estructura de archivos existentes
+                    return {
+                      source: item.source,
+                      options: {
+                        type: 'local',
+                        file: {
+                          name: item.file.name,
+                          size: item.file.size,
+                          type: item.file.type
+                        }
+                      }
+                    };
+                  }
+                });
+
+                formik.setFieldValue('files', newFiles);
+                // Filtra solo los nuevos archivos para upload y los archivos existentes para mantener track de eliminados
+                obtainFiles(
+                  newFiles.filter(file => file instanceof File),
+                  newFiles.filter(file => !(file instanceof File) && file.source)
+                );
+              }}
+              name="files"
+              labelIdle='Arrastra y suelta los archivos aquí o <span class="filepond--label-action">haz clic para seleccionar</span>'
             />
           </FormGroup>
         </Row>

@@ -21,7 +21,8 @@ export const postEventoRiesgo = (data) => {
 
 export const putEventoRiesgoId = (id, data) => {
     const uri = HOST + 'v1/eventoRiesgo/editar/' + id;
-    return axios.put(uri, data);
+    const headerFormData = Auth.getHeaderFormData(data);
+    return axios.put(uri, data, headerFormData);
 }
 
 export const postEventoRiesgoFormData = (data) => {
@@ -91,5 +92,11 @@ export const getArchivosByEvento = async (idEvento) => {
 // Eliminacion logica de Evento por ID
 export const deleteEventoRiesgoId = (id) => {
     const uri = HOST + 'v1/eventoRiesgo/eliminar/' + id;
+    return axios.put(uri, {});
+}
+
+// Eliminacion logica de Archivo por ID
+export const deleteArchivoId = (id) => {
+    const uri = HOST + 'v1/archivo/eliminar/' + id;
     return axios.put(uri, {});
 }
