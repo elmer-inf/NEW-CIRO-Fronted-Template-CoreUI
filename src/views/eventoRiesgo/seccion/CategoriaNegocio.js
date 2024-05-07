@@ -10,7 +10,7 @@ import { getTablaDescripcionEventoN1, getTablaDescripcionEventoN2, getTablaDescr
 import { buildSelectThree, buildSelectTwo } from 'src/functions/Function'
 import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
 import { getRiesgos } from 'src/views/matrizRiesgo/controller/RiesgoController'
-import { Messages } from 'src/reusable/variables/Messages'
+//import { Messages } from 'src/reusable/variables/Messages'
 
 var _ = require('lodash');
 

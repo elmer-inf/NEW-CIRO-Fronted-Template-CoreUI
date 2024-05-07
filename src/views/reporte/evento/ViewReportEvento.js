@@ -1,60 +1,57 @@
 import React, { useEffect, useState } from 'react';
-import { typeFormatter } from 'src/reusable/Component';
 import BootstrapTable from 'react-bootstrap-table-next';
-import { reportOpreacion } from '../../controller/ReporteCiroController';
 import CCSpinner from 'src/reusable/spinner/CCSpinner';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import paginationFactory from 'react-bootstrap-table2-paginator';
+import { reporteEvento } from '../controller/ReporteEventoController';
 
-const OperacionG = ({ fechaIniTrim, fechaFinTrim }) => {
+const ViewReportEvento = ({ fechaInicio, fechaDescubrimiento, estadoEvento, loadDataEvento }) => {
 
   const [spin, setSpin] = useState(false);
   const [dataApi, setdataApi] = useState([]);
-  const sendRequest = {
-    fechaIniTrim: fechaIniTrim,
-    fechaFinTrim: fechaFinTrim
-  }
+
   const columns = [
     {
-      dataField: 'id',
-      text: 'Nro',
-      hidden: false,
-      fechaFinTrim: fechaFinTrim
+      dataField: 'codigo',
+      text: 'Código',
+      style: { whiteSpace: 'nowrap' }
     },
     {
-      dataField: 'codigoEnvio',
-      text: 'Código envio',
-      headerFormatter: typeFormatter
+      dataField: 'descripcion',
+      text: 'Descripción'
     },
     {
-      dataField: 'fechaCorte',
-      text: 'Fecha corte',
-      headerFormatter: typeFormatter
+      dataField: 'estadoEvento',
+      text: 'Estado evento'
     },
     {
-      dataField: 'codigoEvento',
-      text: 'Código evento',
-      headerFormatter: typeFormatter
+      dataField: 'fechaDesc',
+      text: 'Fecha desc.',
+      style: { whiteSpace: 'nowrap' }
     },
     {
-      dataField: 'operacion',
-      text: 'Operación',
-      headerFormatter: typeFormatter
-    },
-    {
-      dataField: 'tipoEnvio',
-      text: 'Tipo envio',
-      headerFormatter: typeFormatter
+      dataField: 'fechaFin',
+      text: 'Fecha fin',
+      style: { whiteSpace: 'nowrap' }
     },
   ];
 
+  const paginationTotalRenderer = (from, to, size) => (
+    <span className="pl-2 react-bootstrap-table-pagination-total">
+      {from} a {to} de <b>{size} resultados</b>
+    </span>
+  );
+
   const paging = paginationFactory({
     page: 1,
+    paginationTotalRenderer,
+    showTotal: true
   });
-  
-  const getOperacion = async (data) => {
-    setSpin(true)
-    await reportOpreacion(data)
+
+  const getReporteEvento = async (data) => 
+  {
+    setSpin(true);
+    await reporteEvento(data)
       .then((response) => {
         setdataApi(response.data);
         setSpin(false)
@@ -64,11 +61,22 @@ const OperacionG = ({ fechaIniTrim, fechaFinTrim }) => {
       })
   }
 
-  // Cycle life
+  // Genera KEY unico para Tabla, ya que no se tiene un identificador unico
+  dataApi.forEach((item, index) => {
+    item.uniqueKey = `${item.codigo || ''}-${item.descripcion || ''}-${index}`;
+  });
+
   useEffect(() => {
-    getOperacion(sendRequest);
+    if (loadDataEvento) {
+      const sendRequest = {
+        fechaIni: fechaInicio,
+        fechaDesc: fechaDescubrimiento,
+        estadoEvento: estadoEvento
+      };
+      getReporteEvento(sendRequest);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [loadDataEvento]);
 
 
   return (
@@ -82,7 +90,7 @@ const OperacionG = ({ fechaIniTrim, fechaFinTrim }) => {
                 classes={'table-hover-animation'}
                 bootstrap4={true}
                 noDataIndication={'No se encontraron resultados'}
-                keyField='id'
+                keyField='uniqueKey'
                 data={dataApi}
                 columns={columns}
                 bordered={false}
@@ -101,4 +109,4 @@ const OperacionG = ({ fechaIniTrim, fechaFinTrim }) => {
   )
 }
 
-export default OperacionG
+export default ViewReportEvento

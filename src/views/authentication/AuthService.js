@@ -1,16 +1,14 @@
 import jwt_decode from 'jwt-decode';
-//var CryptoJS = require("crypto-js");
 import { HOSTURI } from 'src/config';
 
 const https = require('https');
 const sistema = HOSTURI.sis;
 
 export default class AuthService {
+
   constructor(domain) {
     this.state = {
     };
-    //this.fetch = this.fetch.bind(this);
-    //this.login = this.login.bind(this);
     this.getProfile = this.getProfile.bind(this);
   }
 
@@ -88,7 +86,6 @@ export default class AuthService {
         rejectUnauthorized: false
       })
     }
-
     return header;
   }
 
@@ -104,6 +101,20 @@ export default class AuthService {
       // data: dataHeader
     }
     return header;
+  }
+
+
+  getHeaderByExcel() {
+    const token = this.getToken();
+    var config_excel = {
+      responseType: 'arraybuffer',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token,
+        'sistema': sistema
+      }
+    }
+    return config_excel;
   }
 
 }

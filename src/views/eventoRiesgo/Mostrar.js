@@ -1,10 +1,10 @@
 import { React, useState, useEffect } from 'react'
 import { FileText, Activity, DollarSign, BarChart2, CheckSquare } from 'react-feather'
-import { Row, Col, Card, CardBody, CardHeader, CardTitle, Badge, Button, ListGroup, ListGroupItem, Table } from 'reactstrap';
+import { Row, Col, Card, CardBody, CardHeader, CardTitle, Badge, Button, ListGroup, ListGroupItem } from 'reactstrap';
 import { CNav, CNavItem, CNavLink, CTabContent, CTabPane, CTabs, CButton, CCollapse, CCard, CModal, CModalBody, CModalHeader, CModalTitle } from '@coreui/react'
 import { getEventoRiesgoId, getUltimaObservacion, putEvaluaEvento, getGeneraCodigo, getArchivosByEvento } from './controller/EventoController';
 import FormularioEvaluar from './component/FormularioEvaluar'
-import { formatSizeUnits, formatDate } from 'src/functions/FunctionEvento'
+import { formatSizeUnits } from 'src/functions/FunctionEvento'
 import Swal from 'sweetalert2'
 import CIcon from '@coreui/icons-react';
 import BootstrapTable from 'react-bootstrap-table-next';

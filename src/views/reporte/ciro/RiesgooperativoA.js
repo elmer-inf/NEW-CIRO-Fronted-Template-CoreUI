@@ -1,19 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { typeFormatter } from 'src/reusable/Component';
 import BootstrapTable from 'react-bootstrap-table-next';
-import { reportRiesgoOperativo } from '../../controller/ReporteCiroController';
+import { reportRiesgoOperativo } from '../controller/ReporteCiroController';
 import CCSpinner from 'src/reusable/spinner/CCSpinner';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 
-const RiesgooperativoA = ({ fechaIniTrim, fechaFinTrim }) => {
-
+const RiesgooperativoA = ({ fechaIniTrim, fechaFinTrim, loadDataCiro }) => {
+  
   const [spin, setSpin] = useState(false);
   const [dataApi, setdataApi] = useState([]);
-  const sendRequest = {
-    fechaIniTrim: fechaIniTrim,
-    fechaFinTrim: fechaFinTrim
-  }
+
+  const paginationTotalRenderer = (from, to, size) => (
+    <span className="pl-2 react-bootstrap-table-pagination-total">
+      {from} a {to} de <b>{size} resultados</b>
+    </span>
+  );
+
+  const paging = paginationFactory({
+    page: 1,
+    paginationTotalRenderer,
+    showTotal: true
+  });
+
 
   const columns = [
     {
@@ -179,9 +188,6 @@ const RiesgooperativoA = ({ fechaIniTrim, fechaFinTrim }) => {
     },
   ];
 
-  const paging = paginationFactory({
-    page: 1,
-  });
 
   const getRiesgoOperativo = async (data) => {
     setSpin(true)
@@ -195,11 +201,16 @@ const RiesgooperativoA = ({ fechaIniTrim, fechaFinTrim }) => {
       })
   }
 
-  // Cycle life
   useEffect(() => {
-    getRiesgoOperativo(sendRequest);
+    if (loadDataCiro) {
+      const sendRequest = {
+        fechaIniTrim: fechaIniTrim,
+        fechaFinTrim: fechaFinTrim
+      }
+      getRiesgoOperativo(sendRequest);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [loadDataCiro]);
 
 
   return (

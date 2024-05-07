@@ -27,8 +27,7 @@ const UpdateEventoRiesgo = ({ match }) => {
 
   const [newFiles, setNewFiles] = useState([]);
   const [filesToDelete, setFilesToDelete] = useState([]);
-
-
+console.log('', newFiles + filesToDelete);
   /* const obtainFiles = (newFiles, filesToRemove = []) => { // Asegúrate de que filesToRemove tenga un valor por defecto
     setNewFiles(newFiles); // Nuevos archivos a subir
     setFilesToDelete(filesToRemove.map(file => file.id)); // IDs de archivos para eliminar, asegúrate de que filesToRemove siempre es una lista

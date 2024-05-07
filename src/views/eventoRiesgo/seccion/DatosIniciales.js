@@ -9,7 +9,7 @@ import CInputCheckbox from 'src/reusable/CInputCheckbox'
 import { getTablaDescripcionEventoN1, getTablaDescripcionEventoN2 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
 import { buildSelectTwo } from 'src/functions/Function'
 import { formatTime } from 'src/functions/FunctionEvento'
-import { CInputFile } from 'src/reusable/CInputFile'
+//import { CInputFile } from 'src/reusable/CInputFile'
 import { useHistory } from 'react-router-dom'
 import AuthService from 'src/views/authentication/AuthService'
 import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
@@ -26,7 +26,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
 
 
 
-  const today = new Date();
+  //const today = new Date();
   //const tenYearsFromNow = new Date();
   //tenYearsFromNow.setFullYear(today.getFullYear() + 10);
 
@@ -113,7 +113,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
     const newFiles = fileItems.map(fileItem => fileItem.file);
     formik.setFieldValue('files', newFiles);
   }; */
-  const handlePondFile = (fileItems) => {
+  /* const handlePondFile = (fileItems) => {
     // Extrae los archivos como instancias de File o como referencias a archivos existentes
     const newFiles = fileItems.map(fileItem => {
       if (fileItem.file instanceof File) {
@@ -138,7 +138,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
 
     // Llama a una función de callback si es necesario
     obtainFiles(newFiles, existingFilesRemoved.map(file => file.id));
-  };
+  }; */
 
 
 
@@ -342,6 +342,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
       }));
       formik.setFieldValue('files', formattedFiles);
     }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [existingFiles, isEdit]);
 
 

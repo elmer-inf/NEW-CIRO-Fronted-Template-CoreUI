@@ -1,18 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { typeFormatter } from 'src/reusable/Component';
 import BootstrapTable from 'react-bootstrap-table-next';
-import { reportLineaNegocio } from '../../controller/ReporteCiroController';
+import { reportAtencionFinanciera } from '../controller/ReporteCiroController';
 import CCSpinner from 'src/reusable/spinner/CCSpinner';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 
-const LineaNegocioI = ({ fechaIniTrim, fechaFinTrim }) => {
+const PuntoAtencionD = ({ fechaIniTrim, fechaFinTrim, loadDataCiro }) => {
+
   const [spin, setSpin] = useState(false);
   const [dataApi, setdataApi] = useState([]);
-  const sendRequest = {
-    fechaIniTrim: fechaIniTrim,
-    fechaFinTrim: fechaFinTrim
-  }
+
+  const paginationTotalRenderer = (from, to, size) => (
+    <span className="pl-2 react-bootstrap-table-pagination-total">
+      {from} a {to} de <b>{size} resultados</b>
+    </span>
+  );
+
+  const paging = paginationFactory({
+    page: 1,
+    paginationTotalRenderer,
+    showTotal: true
+  });
+
   const columns = [
     {
       dataField: 'id',
@@ -36,13 +46,8 @@ const LineaNegocioI = ({ fechaIniTrim, fechaFinTrim }) => {
       headerFormatter: typeFormatter
     },
     {
-      dataField: 'lineaNegocio',
-      text: 'Línea negocio',
-      headerFormatter: typeFormatter
-    },
-    {
-      dataField: 'lineaNegocioNivel3',
-      text: 'Línea negocio nivel 3',
+      dataField: 'codigoPaf',
+      text: 'Código PAF',
       headerFormatter: typeFormatter
     },
     {
@@ -52,13 +57,9 @@ const LineaNegocioI = ({ fechaIniTrim, fechaFinTrim }) => {
     },
   ];
 
-  const paging = paginationFactory({
-    page: 1,
-  });
-  
-  const getLineaNegocio = async (data) => {
+  const getPuntoAtencion = async (data) => {
     setSpin(true)
-    await reportLineaNegocio(data)
+    await reportAtencionFinanciera(data)
       .then((response) => {
         setdataApi(response.data);
         setSpin(false)
@@ -68,11 +69,16 @@ const LineaNegocioI = ({ fechaIniTrim, fechaFinTrim }) => {
       })
   }
 
-  // Cycle life
   useEffect(() => {
-    getLineaNegocio(sendRequest);
+    if (loadDataCiro) {
+      const sendRequest = {
+        fechaIniTrim: fechaIniTrim,
+        fechaFinTrim: fechaFinTrim
+      }
+      getPuntoAtencion(sendRequest);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [loadDataCiro]);
 
 
   return (
@@ -105,4 +111,4 @@ const LineaNegocioI = ({ fechaIniTrim, fechaFinTrim }) => {
   )
 }
 
-export default LineaNegocioI
+export default PuntoAtencionD

@@ -1,21 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { typeFormatter } from 'src/reusable/Component';
 import BootstrapTable from 'react-bootstrap-table-next';
-import { reporteTipoEvento } from '../../controller/ReporteCiroController';
+import { reportOpreacion } from '../controller/ReporteCiroController';
 import CCSpinner from 'src/reusable/spinner/CCSpinner';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 
-const TipoEventoC = ({ fechaIniTrim, fechaFinTrim }) => {
+const OperacionG = ({ fechaIniTrim, fechaFinTrim, loadDataCiro }) => {
 
   const [spin, setSpin] = useState(false);
   const [dataApi, setdataApi] = useState([]);
-  const sendRequest = {
-    fechaIniTrim: fechaIniTrim,
-    fechaFinTrim: fechaFinTrim
-  }
+
+  const paginationTotalRenderer = (from, to, size) => (
+    <span className="pl-2 react-bootstrap-table-pagination-total">
+      {from} a {to} de <b>{size} resultados</b>
+    </span>
+  );
+
   const paging = paginationFactory({
     page: 1,
+    paginationTotalRenderer,
+    showTotal: true
   });
 
   const columns = [
@@ -41,13 +46,8 @@ const TipoEventoC = ({ fechaIniTrim, fechaFinTrim }) => {
       headerFormatter: typeFormatter
     },
     {
-      dataField: 'tipoEvento',
-      text: 'Tipo evento',
-      headerFormatter: typeFormatter
-    },
-    {
-      dataField: 'descripcionTipoEvento',
-      text: 'Descripción tipo evento',
+      dataField: 'operacion',
+      text: 'Operación',
       headerFormatter: typeFormatter
     },
     {
@@ -56,10 +56,10 @@ const TipoEventoC = ({ fechaIniTrim, fechaFinTrim }) => {
       headerFormatter: typeFormatter
     },
   ];
-
-  const getTipoEvento = async (data) => {
+  
+  const getOperacion = async (data) => {
     setSpin(true)
-    await reporteTipoEvento(data)
+    await reportOpreacion(data)
       .then((response) => {
         setdataApi(response.data);
         setSpin(false)
@@ -69,11 +69,16 @@ const TipoEventoC = ({ fechaIniTrim, fechaFinTrim }) => {
       })
   }
 
-  // Cycle life
   useEffect(() => {
-    getTipoEvento(sendRequest);
+    if (loadDataCiro) {
+      const sendRequest = {
+        fechaIniTrim: fechaIniTrim,
+        fechaFinTrim: fechaFinTrim
+      }
+      getOperacion(sendRequest);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [loadDataCiro]);
 
   return (
     <div>
@@ -105,4 +110,4 @@ const TipoEventoC = ({ fechaIniTrim, fechaFinTrim }) => {
   )
 }
 
-export default TipoEventoC
+export default OperacionG
