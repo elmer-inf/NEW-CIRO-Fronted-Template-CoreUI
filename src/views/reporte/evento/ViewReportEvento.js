@@ -5,7 +5,7 @@ import { Card, CardBody, Col, Row } from 'reactstrap';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { reporteEvento } from '../controller/ReporteEventoController';
 
-const ViewReportEvento = ({ fechaInicio, fechaDescubrimiento, estadoEvento, loadDataEvento }) => {
+const ViewReportEvento = ({ fechaDesde, fechaHasta, estadoEvento, loadDataEvento }) => {
 
   const [spin, setSpin] = useState(false);
   const [dataApi, setdataApi] = useState([]);
@@ -48,8 +48,7 @@ const ViewReportEvento = ({ fechaInicio, fechaDescubrimiento, estadoEvento, load
     showTotal: true
   });
 
-  const getReporteEvento = async (data) => 
-  {
+  const getReporteEvento = async (data) => {
     setSpin(true);
     await reporteEvento(data)
       .then((response) => {
@@ -69,8 +68,8 @@ const ViewReportEvento = ({ fechaInicio, fechaDescubrimiento, estadoEvento, load
   useEffect(() => {
     if (loadDataEvento) {
       const sendRequest = {
-        fechaIni: fechaInicio,
-        fechaDesc: fechaDescubrimiento,
+        fechaDesde: fechaDesde,
+        fechaHasta: fechaHasta,
         estadoEvento: estadoEvento
       };
       getReporteEvento(sendRequest);

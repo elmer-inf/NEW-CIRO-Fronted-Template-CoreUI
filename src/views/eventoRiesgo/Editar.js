@@ -24,19 +24,15 @@ const UpdateEventoRiesgo = ({ match }) => {
   const history = useHistory();
   const [spin, setSpin] = useState(true);
   const [dataApiTipoEvento, setDataApiTipoEvento] = useState([])
+  const [getFiles, setGetFiles] = useState(null)
 
-  const [newFiles, setNewFiles] = useState([]);
-  const [filesToDelete, setFilesToDelete] = useState([]);
-console.log('', newFiles + filesToDelete);
-  /* const obtainFiles = (newFiles, filesToRemove = []) => { // Asegúrate de que filesToRemove tenga un valor por defecto
-    setNewFiles(newFiles); // Nuevos archivos a subir
-    setFilesToDelete(filesToRemove.map(file => file.id)); // IDs de archivos para eliminar, asegúrate de que filesToRemove siempre es una lista
-  } */
-
-  const obtainFiles = (newFiles, filesToRemove = []) => {
-    setNewFiles(newFiles); // Nuevos archivos a subir
-    setFilesToDelete(filesToRemove.map(file => typeof file === 'object' ? file.source : file)); // IDs de archivos para eliminar
+  
+  const obtainFiles = (f) => {
+    setGetFiles(f)
   }
+  
+
+
 
   const formValueInitialTipoEvento = {
     tipoEvento: null,
@@ -168,15 +164,16 @@ console.log('', newFiles + filesToDelete);
   }
 
   const formValueInitialRiesgos = {
-    operativoId: null,
-    liquidezId: null,
-    fraudeId: null,
-    legalId: null,
-    reputacionalId: null,
-    cumplimientoId: null,
-    estrategicoId: null,
-    gobiernoId: null,
-    seguridadId: null,
+    operativoId: 0,
+    liquidezId: 0,
+    lgiId: 0,
+    fraudeId: 0,
+    legalId: 0,
+    reputacionalId: 0,
+    cumplimientoId: 0,
+    estrategicoId: 0,
+    gobiernoId: 0,
+    seguridadId: 0,
   }
 
   const [formValueInitialDatosSec, setformValueInitialDatosSec] = useState(formValueInitialDatos);
@@ -207,10 +204,6 @@ console.log('', newFiles + filesToDelete);
   }
 
   const macthedValues = (args) => {
-
-    console.log('args: ', args);
-
-   
 
     formik.setFieldValue('tipoEvento', args.tipoEvento, false);
 
@@ -251,11 +244,6 @@ console.log('', newFiles + filesToDelete);
       files: existingFiles
     };
 
-
-    
-
-
-  
 
     const planesAccion = {
       areaResponsableId: buildOptionSelect(args.areaResponsableId, 'id', 'nombre', true, 'areaResponsableId'),
@@ -311,6 +299,7 @@ console.log('', newFiles + filesToDelete);
     const riesgos = {
       operativoId: buildOptionSelectThree(args.operativoId, 'id', 'clave', 'nombre', true, 'operativoId'),
       liquidezId: buildOptionSelectThree(args.liquidezId, 'id', 'clave', 'nombre', true, 'liquidezId'),
+      lgiId: buildOptionSelectThree(args.lgiId, 'id', 'clave', 'nombre', true, 'lgiId'),
       fraudeId: buildOptionSelectThree(args.fraudeId, 'id', 'clave', 'nombre', true, 'fraudeId'),
       legalId: buildOptionSelectThree(args.legalId, 'id', 'clave', 'nombre', true, 'legalId'),
       reputacionalId: buildOptionSelectThree(args.reputacionalId, 'id', 'clave', 'nombre', true, 'reputacionalId'),
@@ -323,7 +312,7 @@ console.log('', newFiles + filesToDelete);
     setformValueInitialDatosSec(datosIniciales);
    
     
-  formik.setFieldValue('files', existingFiles);
+  //formik.setFieldValue('files', existingFiles);
 
     setformValueInitialPlanesSec(planesAccion);
     setformValueInitialCategoriaSec(categoria);
@@ -337,7 +326,6 @@ console.log('', newFiles + filesToDelete);
     await getEventoRiesgoId(idEventoRiesgo)
       .then((response) => {
         const res = response.data;
-        console.log('res: ', res);
         macthedValues(res);
         setSpin(false)
       }).catch((error) => {
@@ -432,26 +420,6 @@ console.log('', newFiles + filesToDelete);
   const handleOnSubmmit = (values) => {
     setSpin(true);
 
-
-
-    const formData = new FormData();
-    formData.append('eventoRiesgoPutDTO', JSON.stringify(_.omit(values, ['files'])));
-
-    // Añadir archivos nuevos si existen
-    if (values.files && values.files.length) {
-      values.files.forEach(file => {
-        formData.append("file", file);
-      });
-    }
-
-    // Añadir IDs de archivos a eliminar si existen
-    if (values.filesToDelete && values.filesToDelete.length) {
-      formData.append("filesToDelete", values.filesToDelete.join(','));
-    }
-
-
-
-
     const dataRequest = setObject(values);
     var request = {
       ...dataRequest,
@@ -472,8 +440,29 @@ console.log('', newFiles + filesToDelete);
 
     }
 
+
+    const formData = new FormData();
+    formData.append('eventoRiesgoPutDTO', JSON.stringify(_.omit(request, ['files', 'riesgoRelacionado'])));
+
+    if (getFiles !== null) {
+      for (let i = 0; i < getFiles.length; i++) {
+        formData.append("file", getFiles[i]);
+      }
+    } else {
+      formData.append("file", new Blob([]));
+    }
+
+
+    // arma string de ids de archivos para eliminar separado por comas
+    formData.append("filesToDelete", "");
+
+    for (let [key, value] of formData.entries()) {
+      console.log("key edit: ",key);
+      console.log("value edit: ", value);
+    }
+
     const idEvento = match.params.id;
-    putEventoRiesgoId(idEvento, _.omit(request, ['files', 'riesgoRelacionado']))
+    putEventoRiesgoId(idEvento, formData)
       .then(res => {
         if (res.status >= 200 && res.status < 300) {
           notificationToast('success', 'Evento de Riesgo modificado exitósamente');
@@ -483,6 +472,11 @@ console.log('', newFiles + filesToDelete);
         }
       }).catch((error) => {
         console.error('Error al modificar Evento de Riesgo: ', error);
+        if (error.response) {
+          console.log('Data:', error.response.data);
+          console.log('Status:', error.response.status);
+          console.log('Headers:', error.response.headers);
+      }
         notificationToast('error', 'Algo salió mal, intente nuevamente');
       });
   }

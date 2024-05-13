@@ -17,6 +17,7 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
       {
         operativoId: Yup.mixed().nullable(),
         liquidezId: Yup.mixed().nullable(),
+        lgiId: Yup.mixed().nullable(),
         fraudeId: Yup.mixed().nullable(),
         legalId: Yup.mixed().nullable(),
         reputacionalId: Yup.mixed().nullable(),
@@ -32,6 +33,7 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
         ...values,
         operativoId: (values.operativoId !== null) ? values.operativoId.value : 0,
         liquidezId: (values.liquidezId !== null) ? values.liquidezId.value : 0,
+        lgiId: (values.lgiId !== null) ? values.lgiId.value : 0,
         fraudeId: (values.fraudeId !== null) ? values.fraudeId.value : 0,
         legalId: (values.legalId !== null) ? values.legalId.value : 0,
         reputacionalId: (values.reputacionalId !== null) ? values.reputacionalId.value : 0,
@@ -155,6 +157,18 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
       })
   }
 
+  // LGI FT y/o DP
+  const [dataApiLgi, setDataApiLgi] = useState([])
+  const callApiLgi = (idTablaDes) => {
+    getTablaDescripcionEventoN1(idTablaDes)
+      .then(res => {
+        const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
+        setDataApiLgi(_.orderBy(options, ['value'], ['desc']))
+      }).catch((error) => {
+        console.error('Error: ', error)
+      })
+  }
+
   useEffect(() => {
     callApiReputacional(28);
     callApiLegal(29);
@@ -165,6 +179,7 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
     callApiLiquidez(34);
     callApiOperativo(35);
     callApiSeguridad(36);
+    callApiLgi(40);
   }, [])
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
@@ -221,6 +236,23 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
               error={formik.errors.liquidezId}
               touched={formik.touched.liquidezId}
               options={dataApiLiquidez}
+            />
+          </FormGroup>
+
+          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+            <Label className='form-label'>
+              LGI FT y/o DP
+            </Label>
+            <CSelectReact
+              type={"select"}
+              id={'lgiId'}
+              placeholder={'Seleccionar'}
+              value={formik.values.lgiId}
+              onChange={formik.setFieldValue}
+              onBlur={formik.setFieldTouched}
+              error={formik.errors.lgiId}
+              touched={formik.touched.lgiId}
+              options={dataApiLgi}
             />
           </FormGroup>
 

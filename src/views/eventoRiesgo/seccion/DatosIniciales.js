@@ -20,6 +20,9 @@ import 'filepond/dist/filepond.min.css';
 
 const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFiles, optionsEstado, existingFiles, setFilesToDelete }) => {
 
+console.log('asi lke llega a Datoas iniciales initValues.:', initValues);
+
+
   const Auth = new AuthService();
   const profile = Auth.getProfile();
   const user = profile.usuario;
@@ -223,7 +226,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiCargo(options)
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error) 
       })
   }
 

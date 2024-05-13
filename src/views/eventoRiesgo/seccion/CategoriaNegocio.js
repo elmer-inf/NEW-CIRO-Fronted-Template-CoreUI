@@ -23,13 +23,13 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
       var anio = parseInt(fechaDesc.substring(0, 4));
       var trimestre = '';
       if (mes >= 1 && mes <= 3)
-        trimestre = 'T1 / ' + anio;
+        trimestre = 'Trimestre 1 - ' + anio;
       if (mes >= 4 && mes <= 6)
-        trimestre = 'T2 / ' + anio;
+        trimestre = 'Trimestre 2 - ' + anio;
       if (mes >= 7 && mes <= 9)
-        trimestre = 'T3 / ' + anio;
+        trimestre = 'Trimestre 3 - ' + anio;
       if (mes >= 10 && mes <= 12)
-        trimestre = 'T4 / ' + anio;
+        trimestre = 'Trimestre 4 - ' + anio;
       return trimestre;
     }
   }

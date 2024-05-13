@@ -174,15 +174,16 @@ const EventoRiesgoRegistrar = () => {
   }
 
   const formValueInitialRiesgos = {
-    operativoId: null,
-    liquidezId: null,
-    fraudeId: null,
-    legalId: null,
-    reputacionalId: null,
-    cumplimientoId: null,
-    estrategicoId: null,
-    gobiernoId: null,
-    seguridadId: null,
+    operativoId: 0,
+    liquidezId: 0,
+    lgiId: 0,
+    fraudeId: 0,
+    legalId: 0,
+    reputacionalId: 0,
+    cumplimientoId: 0,
+    estrategicoId: 0,
+    gobiernoId: 0,
+    seguridadId: 0,
   }
 
   const dataResult = {
@@ -292,6 +293,7 @@ const EventoRiesgoRegistrar = () => {
     var formData = new FormData();
 
     formData.append('eventoRiesgoPostDTO', JSON.stringify(_.omit(request, ['files'])));
+
     if (getFiles !== null) {
       for (let i = 0; i < getFiles.length; i++) {
         formData.append("file", getFiles[i]);
@@ -299,6 +301,12 @@ const EventoRiesgoRegistrar = () => {
     } else {
       formData.append("file", new Blob([]));
     }
+
+    for (let [key, value] of formData.entries()) {
+      console.log("key reg: ",key);
+      console.log("value reg: ", value);
+    }
+
 
     postEventoRiesgoFormData(formData)
       .then(res => {

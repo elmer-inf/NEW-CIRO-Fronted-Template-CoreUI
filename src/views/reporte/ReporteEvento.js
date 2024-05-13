@@ -11,7 +11,7 @@ import { generateAllReport } from './controller/ReporteCiroController';
 import ViewReportCIRO from './ciro/component/ViewReportCIRO';
 import { CInputReact } from 'src/reusable/CInputReact';
 import ViewReportEvento from './evento/ViewReportEvento';
-import { reporteEventoExcel } from './controller/ReporteEventoController';
+import { reporteAsfiExcel, reporteAuditExtExcel, reporteAuditIntExcel, reporteEventoExcel } from './controller/ReporteEventoController';
 import { saveAs } from 'file-saver';
 import { toastSweetAlert } from 'src/reusable/SweetAlert2';
 var _ = require('lodash');
@@ -31,8 +31,9 @@ const ReporteEventos = () => {
     tipo: null,
     anio: '',
     trimestre: null,
-    fechaInicio: '',
-    fechaDescubrimiento: '',
+
+    fechaDesde: '',
+    fechaHasta: '',
     estadoEvento: null,
   }
 
@@ -40,6 +41,9 @@ const ReporteEventos = () => {
   const optionsTipo = [
     { value: 'evento', label: 'Eventos de Riesgos' },
     { value: 'ciro', label: 'CIRO' },
+    { value: 'auditoriaExt', label: 'Auditoria externa' },
+    { value: 'auditoriaInt', label: 'Auditoria interna' },
+    { value: 'asfi', label: 'ASFI' },
   ]
 
   // Opciones para Estado de Evento
@@ -83,6 +87,7 @@ const ReporteEventos = () => {
     initialValues: formValueInitial,
     validationSchema: Yup.object().shape(
       {
+        // Campos para el reporte CIRO
         tipo: Yup.mixed().nullable().required(Messages.required),
         anio: Yup.mixed().when('tipo', {
           is: (val) => (val !== null && val.value === 'ciro'),
@@ -92,14 +97,24 @@ const ReporteEventos = () => {
           is: (val) => (val !== null && val.value === 'ciro'),
           then: Yup.mixed().nullable().required(Messages.required),
         }),
-        fechaInicio: Yup.mixed().when('tipo', {
-          is: (val) => (val !== null && val.value === 'evento'),
+
+        // Campos para reporte de Auditoría y ASFI
+        fechaDesde: Yup.mixed().when('tipo', {
+          is: (val) => val !== null && ['evento', 'auditoriaExt', 'auditoriaInt', 'asfi'].includes(val.value),
           then: Yup.date().nullable().required(Messages.required),
+          otherwise: Yup.date().nullable(), // No obligatorio para otros tipos
         }),
-        fechaDescubrimiento: Yup.mixed().when('tipo', {
-          is: (val) => (val !== null && val.value === 'evento'),
-          then: Yup.date().min(Yup.ref('fechaInicio'), Messages.dateValidation1).max(today, Messages.dateValidation3).required(Messages.required),
+        fechaHasta: Yup.mixed().when('tipo', {
+          is: (val) => val !== null && ['evento', 'auditoriaExt', 'auditoriaInt', 'asfi'].includes(val.value),
+          then: Yup.date()
+            .min(Yup.ref('fechaDesde'), Messages.dateValidation1)
+            .max(today, Messages.dateValidation3)
+            .nullable()
+            .required(Messages.required),
+          otherwise: Yup.date().nullable(), // No obligatorio para otros tipos
         }),
+
+        // Campo para "estadoEvento" para tipo "evento"
         estadoEvento: Yup.mixed().when('tipo', {
           is: (val) => (val !== null && val.value === 'evento'),
           then: Yup.mixed().nullable().required(Messages.required),
@@ -114,6 +129,9 @@ const ReporteEventos = () => {
       if (values.tipo.value === 'evento') {
         setshowEventoReport(true);
         setLoadDataEvento(true);
+      }
+      if (values.tipo.value === 'auditoriaExt' || values.tipo.value === 'auditoriaInt' || values.tipo.value === 'asfi') {
+        getButtonAction();
       }
     }
   });
@@ -195,8 +213,8 @@ const ReporteEventos = () => {
   // Genera Reporte Eventos de riesgo
   const generateReportEvent = async () => {
     const dataFilter = {
-      fechaIni: formik.values.fechaInicio,
-      fechaDesc: formik.values.fechaDescubrimiento,
+      fechaDesde: formik.values.fechaDesde,
+      fechaHasta: formik.values.fechaHasta,
       estadoEvento: formik.values.estadoEvento.label === 'Ambos' ? ['Seguimiento', 'Solución'] : [formik.values.estadoEvento.label]
     };
     setSpin(true);
@@ -220,6 +238,91 @@ const ReporteEventos = () => {
   }
 
 
+
+
+  //Genera reporte de Auditoria Externa
+  const dataFilter = {
+    fechaDesde: formik.values.fechaDesde,
+    fechaHasta: formik.values.fechaHasta,
+  };
+
+  const generateReportAuditExt = async () => {
+    setSpin(true);
+    await reporteAuditExtExcel(dataFilter)
+      .then(res => {
+        if (res.status >= 200 && res.status < 300) {
+          const blob = new Blob([res.data], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+          });
+          saveAs(blob, 'Reporte de Auditoria Externa.xlsx');
+          toastSweetAlert('success', Messages.ok, 2000);
+        } else {
+          toastSweetAlert('error', Messages.no_ok, 2000);
+        }
+        setSpin(false);
+      }).catch((error) => {
+        console.error('Error al generar reporte Auditoria Externa: ', error);
+        toastSweetAlert('error', Messages.no_ok, 2000);
+        setSpin(false);
+      })
+  }
+
+  //Genera reporte de Auditoria Externa
+  const generateReportAuditInt = async () => {
+    setSpin(true);
+    await reporteAuditIntExcel(dataFilter)
+      .then(res => {
+        if (res.status >= 200 && res.status < 300) {
+          const blob = new Blob([res.data], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+          });
+          saveAs(blob, 'Reporte de Auditoria Interna.xlsx');
+          toastSweetAlert('success', Messages.ok, 2000);
+        } else {
+          toastSweetAlert('error', Messages.no_ok, 2000);
+        }
+        setSpin(false);
+      }).catch((error) => {
+        console.error('Error al generar reporte Auditoria Interna: ', error);
+        toastSweetAlert('error', Messages.no_ok, 2000);
+        setSpin(false);
+      })
+  }
+
+  //Genera reporte de Auditoria Externa
+  const generateReportAuditAsfi = async () => {
+    setSpin(true);
+    await reporteAsfiExcel(dataFilter)
+      .then(res => {
+        if (res.status >= 200 && res.status < 300) {
+          const blob = new Blob([res.data], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+          });
+          saveAs(blob, 'Reporte ASFI.xlsx');
+          toastSweetAlert('success', Messages.ok, 2000);
+        } else {
+          toastSweetAlert('error', Messages.no_ok, 2000);
+        }
+        setSpin(false);
+      }).catch((error) => {
+        console.error('Error al generar reporte ASFI: ', error);
+        toastSweetAlert('error', Messages.no_ok, 2000);
+        setSpin(false);
+      })
+  }
+
+
+  const getButtonAction = () => {
+    if (formik.values.tipo.value === 'auditoriaExt') {
+      return generateReportAuditExt();
+    } else if (formik.values.tipo.value === 'auditoriaInt') {
+      return generateReportAuditInt();
+    } else if (formik.values.tipo.value === 'asfi') {
+      return generateReportAuditAsfi();
+    }
+  };
+
+
   useEffect(() => {
     if (formik.values.tipo === null || formik.values.tipo.value !== 'ciro') {
       setshowCiroReport(false)
@@ -231,15 +334,15 @@ const ReporteEventos = () => {
   }, [formik.values.tipo]);
 
 
-   useEffect(() => {
-     if (loadDataEvento) {
-       setLoadDataEvento(false);
-     }
-     if (loadDataCiro) {
+  useEffect(() => {
+    if (loadDataEvento) {
+      setLoadDataEvento(false);
+    }
+    if (loadDataCiro) {
       setLoadDataCiro(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [loadDataEvento, loadDataCiro]);
+  }, [loadDataEvento, loadDataCiro]);
 
   return (
     <div className='table-hover-animation'>
@@ -311,59 +414,63 @@ const ReporteEventos = () => {
                   : null
               }
 
-              {
-                (formik.values.tipo !== null && formik.values.tipo.value === 'evento')
-                  ?
-                  <Row className='justify-content-center'>
-                    <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
-                      <Label className='form-label'>
-                        Fecha Desde <span className='text-primary h5'><b>*</b></span>
-                      </Label>
-                      <CInputReact
-                        type={"date"}
-                        id={'fechaInicio'}
-                        placeholder={'Fecha desde'}
-                        value={formik.values.fechaInicio}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        touched={formik.touched.fechaInicio}
-                        errors={formik.errors.fechaInicio}
-                      />
-                    </FormGroup>
-                    <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
-                      <Label className='form-label'>
-                        Fecha hasta <span className='text-primary h5'><b>*</b></span>
-                      </Label>
-                      <CInputReact
-                        type={"date"}
-                        id={'fechaDescubrimiento'}
-                        placeholder={'Fecha hasta'}
-                        value={formik.values.fechaDescubrimiento}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        touched={formik.touched.fechaDescubrimiento}
-                        errors={formik.errors.fechaDescubrimiento}
-                      />
-                    </FormGroup>
-                    <FormGroup tag={Col} xs='12' md='6' lg='4' xl='3' className='mb-0'>
-                      <Label className='form-label text-label'>
-                        Tipo de Reporte
-                      </Label>
-                      <CSelectReact
-                        type={"select"}
-                        id={'estadoEvento'}
-                        placeholder={'Seleccionar'}
-                        value={formik.values.estadoEvento}
-                        onChange={formik.setFieldValue}
-                        onBlur={formik.setFieldTouched}
-                        error={formik.errors.estadoEvento}
-                        touched={formik.touched.estadoEvento}
-                        options={optionsEstadoEvento}
-                      />
-                    </FormGroup>
-                  </Row>
-                  : null
-              }
+              <Row className='justify-content-center'>
+                {(formik.values.tipo !== null && ['evento', 'auditoriaExt', 'auditoriaInt', 'asfi'].includes(formik.values.tipo.value)) && (
+                  <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+                    <Label className='form-label'>
+                      Fecha Desde <span className='text-primary h5'><b>*</b></span>
+                    </Label>
+                    <CInputReact
+                      type={"date"}
+                      id={'fechaDesde'}
+                      placeholder={'Fecha desde'}
+                      value={formik.values.fechaDesde}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      touched={formik.touched.fechaDesde}
+                      errors={formik.errors.fechaDesde}
+                    />
+                  </FormGroup>
+                )}
+
+                {(formik.values.tipo !== null && ['evento', 'auditoriaExt', 'auditoriaInt', 'asfi'].includes(formik.values.tipo.value)) && (
+                  <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+                    <Label className='form-label'>
+                      Fecha Hasta <span className='text-primary h5'><b>*</b></span>
+                    </Label>
+                    <CInputReact
+                      type={"date"}
+                      id={'fechaHasta'}
+                      placeholder={'Fecha hasta'}
+                      value={formik.values.fechaHasta}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      touched={formik.touched.fechaHasta}
+                      errors={formik.errors.fechaHasta}
+                    />
+                  </FormGroup>
+                )}
+
+                {formik.values.tipo !== null && formik.values.tipo.value === 'evento' && (
+                  <FormGroup tag={Col} xs='12' md='6' lg='4' xl='3' className='mb-0'>
+                    <Label className='form-label'>
+                      Estado de Evento <span className='text-primary h5'><b>*</b></span>
+                    </Label>
+                    <CSelectReact
+                      type={"select"}
+                      id={'estadoEvento'}
+                      placeholder={'Seleccionar'}
+                      value={formik.values.estadoEvento}
+                      onChange={formik.setFieldValue}
+                      onBlur={formik.setFieldTouched}
+                      error={formik.errors.estadoEvento}
+                      touched={formik.touched.estadoEvento}
+                      options={optionsEstadoEvento}
+                    />
+                  </FormGroup>
+                )}
+              </Row>
+
 
               <Row className='justify-content-center py-4'>
                 <Col xs={4} md={2}>
@@ -384,20 +491,20 @@ const ReporteEventos = () => {
                     className='text-white'
                     color="primary"
                     type="submit"
-                    //disabled={formik.isSubmitting}
+                  //disabled={formik.isSubmitting}
                   >
-                    <File size={17} className='mr-2'/>
-                    Generar
+                    <File size={17} className='mr-2' />
+                    {(formik.values.tipo !== null && ['Auditoria externa', 'Auditoria interna'].includes(formik.values.tipo.label))? 'Descargar reporte' : 'Generar'}        
                   </Button>
                 </Col>
 
                 <Col xs={4} md={2} className={formik.values.tipo !== null && (
-                  (formik.values.tipo.value === 'ciro' && formik.values.trimestre !== null) ||
-                  (formik.values.tipo.value === 'evento' && formik.values.fechaInicio !== null && formik.values.fechaDescubrimiento !== null && formik.values.estadoEvento !== null))
+                  (formik.values.tipo.value === 'ciro' && formik.values.trimestre !== null && formik.values.anio !== null) ||
+                  (formik.values.tipo.value === 'evento' && formik.values.fechaDesde !== null && formik.values.fechaHasta !== null && formik.values.estadoEvento !== null))
                   ? '' : 'd-none'}
                 >
                   {
-                    (formik.values.tipo !== null && formik.values.tipo.value === 'ciro' && formik.values.trimestre !== null)
+                    (formik.values.tipo !== null && formik.values.tipo.value === 'ciro' && formik.values.trimestre !== null && formik.values.anio !== null)
                       ? <Button
                         block
                         color='primary'
@@ -421,6 +528,8 @@ const ReporteEventos = () => {
                       </Button>
                       : null
                   }
+
+
                 </Col>
               </Row>
             </Form>
@@ -430,7 +539,6 @@ const ReporteEventos = () => {
                 ? <ViewReportCIRO
                   fechaInicio={fechaReporte(0)}
                   fechaFin={fechaReporte(1)}
-                  trimestre={formik.values.trimestre}
                   loadDataCiro={loadDataCiro}
                 />
                 : null
@@ -439,8 +547,8 @@ const ReporteEventos = () => {
             {
               (formik.values.tipo !== null && formik.values.estadoEvento !== null && formik.values.tipo.value === 'evento' && showEventoReport === true)
                 ? <ViewReportEvento
-                  fechaInicio={formik.values.fechaInicio}
-                  fechaDescubrimiento={formik.values.fechaDescubrimiento}
+                  fechaDesde={formik.values.fechaDesde}
+                  fechaHasta={formik.values.fechaHasta}
                   estadoEvento={formik.values.estadoEvento.label === 'Ambos' ? ['Seguimiento', 'Solución'] : [formik.values.estadoEvento.label]}
                   loadDataEvento={loadDataEvento}
                 />
