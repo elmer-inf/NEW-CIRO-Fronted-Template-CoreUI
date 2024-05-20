@@ -13,6 +13,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { Messages } from 'src/reusable/variables/Messages';
 import Swal from 'sweetalert2'
 import { PlusSquare } from 'react-feather';
+import paginationFactory from 'react-bootstrap-table2-paginator';
 
 const AdministracionSeguridadListar = () => {
 
@@ -53,6 +54,10 @@ const AdministracionSeguridadListar = () => {
 
   const [labelTabla, setLabelTabla] = useState([]);
   const [valueTabla, setValueTabla] = useState([]);
+
+  const pagination = paginationFactory({
+    page: 2,
+  });
 
   const columns = [
     {
@@ -246,6 +251,7 @@ const AdministracionSeguridadListar = () => {
               hover={false}
               condensed={false}
               wrapperClasses="table-responsive"
+              pagination={pagination}
               filter={filterFactory()}
             />
           </CardBody>

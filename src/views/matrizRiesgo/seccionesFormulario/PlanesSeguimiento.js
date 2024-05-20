@@ -287,6 +287,8 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
                         <option value="No iniciado">No iniciado</option>
                         <option value="En proceso">En proceso</option>
                         <option value="Concluido">Concluido</option>
+                        <option value="En proceso">Vencido</option>
+                        <option value="Concluido">No aplicable</option>
                       </Field>
                       <ErrorMessage name={`planesAccion.${i}.estado`} component="div" className="invalid-feedback" />
                     </FormGroup>
@@ -414,23 +416,23 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
                       <ErrorMessage name={`planesAccion.${i}.fechaSeg`} component="div" className="invalid-feedback" />
                     </FormGroup>
 
-                    <FormGroup tag={Col} md='6' xl='5' className='mb-2'>
+                    <FormGroup tag={Col} md='12' xl='5' className='mb-2'>
                       <Label>Comentarios: Tareas Propuestas</Label>
                       <Field
                         name={`planesAccion.${i}.comenPropuesta`}
                         as="textarea"
-                        rows="3"
+                        rows="7"
                         className={'form-control' + (planErrors.comenPropuesta && planTouched.comenPropuesta ? ' is-invalid' : '')}
                       />
                       <ErrorMessage name={`planesAccion.${i}.comenPropuesta`} component="div" className="invalid-feedback" />
                     </FormGroup>
 
-                    <FormGroup tag={Col} md='6' xl='5' className='mb-2'>
+                    <FormGroup tag={Col} md='12' xl='5' className='mb-2'>
                       <Label>Comentarios: Tareas en Proceso</Label>
                       <Field
                         name={`planesAccion.${i}.comenEnProceso`}
                         as="textarea"
-                        rows="3"
+                        rows="7"
                         className={'form-control' + (planErrors.comenEnProceso && planTouched.comenEnProceso ? ' is-invalid' : '')}
                       />
                       <ErrorMessage name={`planesAccion.${i}.comenEnProceso`} component="div" className="invalid-feedback" />

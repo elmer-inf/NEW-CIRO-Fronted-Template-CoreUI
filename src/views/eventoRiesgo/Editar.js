@@ -26,12 +26,10 @@ const UpdateEventoRiesgo = ({ match }) => {
   const [dataApiTipoEvento, setDataApiTipoEvento] = useState([])
   const [getFiles, setGetFiles] = useState(null)
 
-  
+
   const obtainFiles = (f) => {
     setGetFiles(f)
   }
-  
-
 
 
   const formValueInitialTipoEvento = {
@@ -144,7 +142,7 @@ const UpdateEventoRiesgo = ({ match }) => {
 
     procesoCriticoAsfi: '',
 
-    listMatrizRiesgo: null
+    listMatrizRiesgo: null,
   }
 
   const formValueInitialImportes = {
@@ -203,7 +201,7 @@ const UpdateEventoRiesgo = ({ match }) => {
       })
   }
 
-  const macthedValues = (args) => {
+  const matchedValues = (args) => {
 
     formik.setFieldValue('tipoEvento', args.tipoEvento, false);
 
@@ -212,9 +210,9 @@ const UpdateEventoRiesgo = ({ match }) => {
       name: file.nombreArchivo,
       size: file.size,
       type: file.tipo,
-      lastModified: new Date().getTime() // Si no tienes un timestamp real, usa el timestamp actual
+      lastModified: new Date().getTime()
     }));
-    
+
 
     const datosIniciales = {
       codigo: args.codigo,
@@ -233,7 +231,8 @@ const UpdateEventoRiesgo = ({ match }) => {
       entidadAfectada: args.entidadAfectada,
       comercioAfectado: args.comercioAfectado,
       entidadId: buildOptionSelect(args.entidadId, 'id', 'nombre', true, 'entidadId'),
-      cargoId: buildOptionSelect(args.cargoId, 'id', 'nombre', true, 'cargoId'),
+      //cargoId: buildOptionSelect(args.cargoId, 'id', 'nombre', false, 'cargoId'),
+      cargoId: args.cargoId.map(item => buildOptionSelect(item, 'id', 'nombre', true, 'cargoId')),
       estadoReportado: { value: args.estadoReportado, label: args.estadoReportado },
       fuenteInfId: buildOptionSelect(args.fuenteInfId, 'id', 'nombre', true, 'fuenteInfId'),
       canalAsfiId: buildOptionSelect(args.canalAsfiId, 'id', 'nombre', true, 'canalAsfiId'),
@@ -244,7 +243,6 @@ const UpdateEventoRiesgo = ({ match }) => {
       files: existingFiles
     };
 
-
     const planesAccion = {
       areaResponsableId: buildOptionSelect(args.areaResponsableId, 'id', 'nombre', true, 'areaResponsableId'),
       cargoResponsableId: buildOptionSelect(args.cargoResponsableId, 'id', 'nombre', true, 'cargoResponsableId'),
@@ -253,6 +251,7 @@ const UpdateEventoRiesgo = ({ match }) => {
       descripcionEstado: args.descripcionEstado,
       estadoPlan: { value: args.estadoPlan, label: args.estadoPlan }
     };
+
     const categoria = {
       codigoInicial: args.codigoInicial,
       subcategorizacionId: buildOptionSelect(args.subcategorizacionId, 'id', 'nombre', true, 'subcategorizacionId'),
@@ -281,6 +280,7 @@ const UpdateEventoRiesgo = ({ match }) => {
 
       listMatrizRiesgo: buildSelectThree(args.riesgoRelacionado, 'id', 'codigo', 'definicion', true)
     };
+
     const importes = {
       tasaCambioId: args.tasaCambioId,
       monedaId: buildOptionSelect(args.monedaId, 'id', 'clave', true, 'monedaId'),
@@ -296,6 +296,7 @@ const UpdateEventoRiesgo = ({ match }) => {
       cuentaContableId: buildOptionSelect(args.cuentaContableId, 'id', 'nombre', true, 'cuentaContableId'),
       fechaContable: args.fechaContable,
     };
+
     const riesgos = {
       operativoId: buildOptionSelectThree(args.operativoId, 'id', 'clave', 'nombre', true, 'operativoId'),
       liquidezId: buildOptionSelectThree(args.liquidezId, 'id', 'clave', 'nombre', true, 'liquidezId'),
@@ -309,11 +310,13 @@ const UpdateEventoRiesgo = ({ match }) => {
       seguridadId: buildOptionSelectThree(args.seguridadId, 'id', 'clave', 'nombre', true, 'seguridadId'),
     };
 
-    setformValueInitialDatosSec(datosIniciales);
-   
-    
-  //formik.setFieldValue('files', existingFiles);
 
+    console.log('datosIniciales: ', datosIniciales);
+    setformValueInitialDatosSec(datosIniciales);
+
+
+    //formik.setFieldValue('files', existingFiles);
+    console.log('categoria: ', categoria);
     setformValueInitialPlanesSec(planesAccion);
     setformValueInitialCategoriaSec(categoria);
     setformValueInitialImportesSec(importes);
@@ -326,7 +329,7 @@ const UpdateEventoRiesgo = ({ match }) => {
     await getEventoRiesgoId(idEventoRiesgo)
       .then((response) => {
         const res = response.data;
-        macthedValues(res);
+        matchedValues(res);
         setSpin(false)
       }).catch((error) => {
         console.error("Error: ", error);
@@ -457,7 +460,7 @@ const UpdateEventoRiesgo = ({ match }) => {
     formData.append("filesToDelete", "");
 
     for (let [key, value] of formData.entries()) {
-      console.log("key edit: ",key);
+      console.log("key edit: ", key);
       console.log("value edit: ", value);
     }
 
@@ -476,7 +479,7 @@ const UpdateEventoRiesgo = ({ match }) => {
           console.log('Data:', error.response.data);
           console.log('Status:', error.response.status);
           console.log('Headers:', error.response.headers);
-      }
+        }
         notificationToast('error', 'Algo salió mal, intente nuevamente');
       });
   }
@@ -552,14 +555,6 @@ const UpdateEventoRiesgo = ({ match }) => {
                       <NavItem>
                         <NavLink className={classnames({ active: activeTab === '2' })}>
                           <span className={activeTab === '2' ? '' : 'd-none'}></span>
-                          <CheckSquare size={20} /><span className='pl-2 h6 font-weight-bold'>Planes de acción</span>
-                          <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
-                        </NavLink>
-                      </NavItem>
-
-                      <NavItem>
-                        <NavLink className={classnames({ active: activeTab === '3' })}>
-                          <span className={activeTab === '3' ? '' : 'd-none'}></span>
                           <BarChart2 size={20} /><span className='pl-2 h6 font-weight-bold'>Categoria y Línea de negocio</span>
                           <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
                         </NavLink>
@@ -567,8 +562,8 @@ const UpdateEventoRiesgo = ({ match }) => {
 
                       {(formik.values.tipoEvento === 'A') ?
                         <NavItem>
-                          <NavLink className={classnames({ active: activeTab === '4' })}>
-                            <span className={activeTab === '4' ? '' : 'd-none'}></span>
+                          <NavLink className={classnames({ active: activeTab === '3' })}>
+                            <span className={activeTab === '3' ? '' : 'd-none'}></span>
                             <DollarSign size={20} /><span className='pl-2 h6 font-weight-bold'>Importes relacionados</span>
                             <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
                           </NavLink>
@@ -576,11 +571,20 @@ const UpdateEventoRiesgo = ({ match }) => {
                         : null}
 
                       <NavItem>
-                        <NavLink className={classnames({ active: activeTab === '5' })}>
-                          <span className={activeTab === '5' ? '' : 'd-none'}></span>
+                        <NavLink className={classnames({ active: activeTab === '4' })}>
+                          <span className={activeTab === '4' ? '' : 'd-none'}></span>
                           <Activity size={20} /><span className='pl-2 h6 font-weight-bold'>Riesgos relacionados</span>
+                          <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
                         </NavLink>
                       </NavItem>
+
+                      <NavItem>
+                        <NavLink className={classnames({ active: activeTab === '5' })}>
+                          <span className={activeTab === '5' ? '' : 'd-none'}></span>
+                          <CheckSquare size={20} /><span className='pl-2 h6 font-weight-bold'>Planes de acción</span>
+                        </NavLink>
+                      </NavItem>
+
                     </Nav>
 
                     <TabContent activeTab={activeTab}>
@@ -592,22 +596,10 @@ const UpdateEventoRiesgo = ({ match }) => {
                           obtainFiles={obtainFiles}
                           optionsEstado={optionsEstado}
                           isEdit={true}
-                          existingFiles={formValueInitialDatosSec.files} 
+                          existingFiles={formValueInitialDatosSec.files}
                         />
                       </TabPane>
-
                       <TabPane tabId="2">
-                        <Planes
-                          nextSection={nextSection}
-                          beforeSection={beforeSection}
-                          setObject={setObject}
-                          initValues={formValueInitialPlanesSec}
-                          optionsPlanes={optionEstadoPlanes}
-                          isEdit={true}
-                        />
-                      </TabPane>
-
-                      <TabPane tabId="3">
                         <CategoriaNegocio
                           nextSection={nextSection}
                           beforeSection={beforeSection}
@@ -621,8 +613,7 @@ const UpdateEventoRiesgo = ({ match }) => {
                           isEdit={true}
                         />
                       </TabPane>
-
-                      <TabPane tabId="4">
+                      <TabPane tabId="3">
                         <ImportesRelacionados
                           nextSection={nextSection}
                           beforeSection={beforeSection}
@@ -632,16 +623,24 @@ const UpdateEventoRiesgo = ({ match }) => {
                           isEdit={true}
                         />
                       </TabPane>
-
-                      <TabPane tabId="5">
+                      <TabPane tabId="4">
                         <RiesgosRelacionados
+                          nextSection={nextSection}
+                          setObject={setObject}
                           beforeSection={beforeSection}
                           initValues={formValueInitialRiesgosSec}
+                          tipoEvento={formik.values.tipoEvento}
+                        />
+                      </TabPane>
+                      <TabPane tabId="5">
+                        <Planes
+                          beforeSection={beforeSection}
+                          initValues={formValueInitialPlanesSec}
+                          optionsPlanes={optionEstadoPlanes}
                           tipoEvento={formik.values.tipoEvento}
                           handleOnSubmmit={handleOnSubmmit}
                         />
                       </TabPane>
-
                     </TabContent>
                   </Col>
                 </Row>
@@ -649,7 +648,6 @@ const UpdateEventoRiesgo = ({ match }) => {
               }
             </CardBody>
           </Card>
-
           : null
       }
 

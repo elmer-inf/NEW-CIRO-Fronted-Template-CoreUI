@@ -8,10 +8,11 @@ import { CSelectReact } from 'src/reusable/CSelectReact'
 import CInputCheckbox from 'src/reusable/CInputCheckbox'
 import CInputRadio from 'src/reusable/CInputRadio'
 import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController'
-import { getTablaDescripcionRiesgoN1 } from 'src/views/administracion/matriz-riesgo/controller/AdminRiesgoController';
+import { getTablaDescripcionRiesgoN1, getTablaDescripcionRiesgoN2 } from 'src/views/administracion/matriz-riesgo/controller/AdminRiesgoController';
 import { buildSelectTwo } from 'src/functions/Function'
 import { calculaRiesgo, buscaValorLiteralRiesgoI } from 'src/functions/FunctionsMatriz'
 import { Messages } from 'src/reusable/variables/Messages'
+import CSelectReactTwo from 'src/reusable/CSelectReactTwo'
 
 var _ = require('lodash');
 
@@ -48,6 +49,19 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
         impactoInherente: Yup.string().nullable(),
         impactoPorcentaje: Yup.string().nullable(),
         impactoValoracion: Yup.string().nullable(),
+
+        fraudeInterno: Yup.boolean(),
+        tipoFraudeId: Yup.mixed().nullable().when('fraudeInterno', {
+          is: (val) => (val === true),
+          then: Yup.mixed().nullable().required(Messages.required),
+        }),
+        subtipoFraudeId: Yup.mixed().nullable().when('fraudeInterno', {
+          is: (val) => (val === true),
+          then: Yup.mixed().nullable().required(Messages.required),
+        }),
+
+
+
 
         /* definicion : Yup.string().nullable(),
         causa : Yup.string().nullable(),
@@ -89,9 +103,12 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
 
         probabilidadId: (values.probabilidadId !== null) ? values.probabilidadId.value : 0,
         impactoId: (values.impactoId !== null) ? values.impactoId.value : 0,
+
+        tipoFraudeId: (values.tipoFraudeId !== null) ? values.tipoFraudeId.value : 0,
+        subtipoFraudeId: (values.subtipoFraudeId !== null) ? values.subtipoFraudeId.value : 0,
       }
       const dataSelect = _.omit(data, ['defConcatenado', 'probInherente', 'probPorcentaje', 'probValoracion', 'impactoInherente', 'impactoPorcentaje', 'impactoValoracion', 'riesgoInherente', 'valorRiesgoInherente']);
-      //console.log('datos que se enviaran SECCION 2:', dataSelect)
+      console.log('datos que se enviaran SECCION 2:', dataSelect)
       setObject(dataSelect, values);
       nextSection(2);
     }
@@ -178,12 +195,66 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
       })
   }
 
+  // Tipo de fraude
+  const [dataApiTipoFraude, setDataApiTipoFraude] = useState([])
+  const callApiTipoFraude = (idTablaDes) => {
+    getTablaDescripcionRiesgoN1(idTablaDes)
+      .then(res => {
+        const options = buildSelectTwo(res.data, 'id', 'nombre', true);
+        setDataApiTipoFraude(options)
+      }).catch((error) => {
+        console.error('Error: ', error)
+      })
+  }
+
+  const clearDependenceOfTipoFraude = () => {
+    resetFormikValue('subtipoFraudeId', null);
+    setDataApiSubtipoFraude([]);
+  }
+
+  const getValueTipoFraude = (value) => {
+    if (value !== null) {
+      callApiSubtipoFraude(13, value.id);
+    }
+  }
+
+  const clearInputTipoFraude = (id) => {
+    formik.setFieldValue(id, null, false);
+    resetFormikValue('subtipoFraudeId', null);
+  }
+
+  const resetFormikValue = (field, valueToReset) => {
+    formik.setFieldValue(field, valueToReset, false);
+  }
+
+  // Subtipo de fraude (Nivel 2), Tipo de fraude
+  const [dataApiSubtipoFraude, setDataApiSubtipoFraude] = useState([])
+  const callApiSubtipoFraude = (idTablaDes, idNivel2) => {
+    getTablaDescripcionRiesgoN2(idTablaDes, idNivel2)
+      .then(res => {
+        const options = buildSelectTwo(res.data, 'id', 'nombre', false);
+        setDataApiSubtipoFraude(options)
+      }).catch((error) => {
+        console.error('Error: ', error)
+      })
+  }
+
+
+  // Para el despliegue del select llenado al EDITAR
+  useEffect(() => {
+    if (isEdit && initValues.tipoFraudeId !== null) {
+      callApiSubtipoFraude(13, initValues.tipoFraudeId.id);
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   useEffect(() => {
     callApiProbabilidad(2);
     callApiImpacto(3);
     callApiEfectoPerdida(19)
     callApiPerdidaAsfi(1)
     callApiFactorRiesgo(26);
+    callApiTipoFraude(12)
   }, [])
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
@@ -236,6 +307,28 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.otrosAux2])
+
+
+  // Resetea "Tipo fraude Inteno" y "Subtipo fraude interno" dependiendo del check "Fraude interno"
+
+  useEffect(() => {
+    if (!formik.values.fraudeInterno) {
+      formik.setFieldValue('tipoFraudeId', null, false);
+      formik.setFieldValue('subtipoFraudeId', null, false);
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.fraudeInterno])
+
+
+  // Forzar validación de campos segun el campo fraudeInterno
+  useEffect(() => {
+    if (formik.values.fraudeInterno) {
+      formik.setFieldTouched('tipoFraudeId', true, true);
+      formik.setFieldTouched('subtipoFraudeId', true, true);
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.fraudeInterno]);
+
 
 
   return (
@@ -312,6 +405,65 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
               errors={formik.errors.defConcatenado}
               disabled={true}
               rows={4}
+            />
+          </FormGroup>
+
+
+
+
+
+          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+            <br />
+            <CInputCheckbox
+              id={'fraudeInterno'}
+              type={"checkbox"}
+              value={formik.values.fraudeInterno}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              label='Fraude interno'
+              disabled={false}
+            />
+          </FormGroup>
+
+          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+            <Label className='form-label'>
+              Tipo <span className='text-primary h5'><b>{formik.values.fraudeInterno? '*' : ''}</b></span>
+            </Label>
+            <CSelectReactTwo
+              id={'tipoFraudeId'}
+              placeholder={'Seleccionar'}
+              value={formik.values.tipoFraudeId}
+              onChange={formik.setFieldValue}
+              onBlur={formik.setFieldTouched}
+              errors={formik.errors.tipoFraudeId}
+              touched={formik.touched.tipoFraudeId}
+              options={dataApiTipoFraude}
+              isClearable={true}
+              isSearchable={true}
+              isDisabled={formik.values.fraudeInterno ? false : true}
+              dependence={true}
+              cleareableDependences={clearDependenceOfTipoFraude}
+              getAddValue={true}
+              getSelectValue={getValueTipoFraude}
+              inputIsClearable={clearInputTipoFraude}
+            />
+          </FormGroup>
+
+          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+            <Label className='form-label'>
+              Subtipo <span className='text-primary h5'><b>{formik.values.fraudeInterno ? '*' : ''}</b></span>
+            </Label>
+            <CSelectReact
+              type={"select"}
+              id={'subtipoFraudeId'}
+              placeholder={'Seleccionar'}
+              value={formik.values.subtipoFraudeId}
+              onChange={formik.setFieldValue}
+              onBlur={formik.setFieldTouched}
+              error={formik.errors.subtipoFraudeId}
+              touched={formik.touched.subtipoFraudeId}
+              options={dataApiSubtipoFraude}
+              isDisabled={formik.values.tipoFraudeId === null ? true : false}
             />
           </FormGroup>
 
@@ -582,7 +734,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
             />
           </FormGroup>
         </Row>
-        
+
         <Row className='pt-4'>
           <Col xs={4} md={{ size: 2, order: 0, offset: 3 }}>
             <Button

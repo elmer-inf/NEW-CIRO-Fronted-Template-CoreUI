@@ -1,45 +1,42 @@
 import React, { useEffect, useState } from 'react'
 import { CBadge, CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle } from '@coreui/react'
 import { Bell, Calendar } from 'react-feather'
-import { getDiezDiasAntes, getCincoDiasAntes, getPlanVencido } from 'src/views/eventoRiesgo/controller/EventoController'
-import { buildSelectTwo } from 'src/functions/Function'
 import { ListGroup, ListGroupItem } from 'reactstrap'
+import { getPlanesCincoDiasVencer, getPlanesDiezDiasVencer, getPlanesVencidos } from 'src/views/matrizRiesgo/controller/RiesgoController'
 
 const TheHeaderDropdownNotif = () => {
 
-  // Eventos 10 dias antes de vencer el plan
-  const [listDiezDiasAntes, setDiezDiasAntes] = useState([])
+  // Planes de Riesgo 10 dias antes de vencer
+  const [listDiezDiasAntes, setDiezDiasAntes] = useState([]);
+  const [listCincoDiasAntes, setCincoDiasAntes] = useState([]);
+  const [listPlanesVencidos, setPlanesVencidos] = useState([]);
+
   const callApiDiezDiasAntes = () => {
-    getDiezDiasAntes()
+    getPlanesDiezDiasVencer()
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'codigo', true)
-        setDiezDiasAntes(options)
+        setDiezDiasAntes(res.data);
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
       })
   }
 
-  // Eventos 5 dias antes de vencer el plan
-  const [listCincoDiasAntes, setCincoDiasAntes] = useState([])
+  // Planes de Riesgo 5 dias antes de vencer
   const callApiCincoDiasAntes = () => {
-    getCincoDiasAntes()
+    getPlanesCincoDiasVencer()
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'codigo', true)
-        setCincoDiasAntes(options)
+        setCincoDiasAntes(res.data);
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
       })
   }
 
-  // Eventos con plan vencido
-  const [listPlanVencido, setPlanVencido] = useState([])
+  // Planes de Riesgo vencidos
   const callApiPlanVencido = () => {
-    getPlanVencido()
+    getPlanesVencidos()
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'codigo', true)
-        setPlanVencido(options)
+        setPlanesVencidos(res.data);
       }).catch((error) => {
-        console.error('Error: ', error)
+        console.error('Error: ', error);
       })
   }
 
@@ -47,6 +44,7 @@ const TheHeaderDropdownNotif = () => {
     callApiDiezDiasAntes();
     callApiCincoDiasAntes();
     callApiPlanVencido();
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
 
@@ -57,51 +55,49 @@ const TheHeaderDropdownNotif = () => {
     >
       <CDropdownToggle className="c-header-nav-link" caret={false}>
         <Bell size={20} />
-        <CBadge shape="pill" color="primary"><span className='text-white'>{listDiezDiasAntes.length + listCincoDiasAntes.length + listPlanVencido.length}</span></CBadge>
+        <CBadge shape="pill" color="primary"><span className='text-white'>{listDiezDiasAntes.length + listCincoDiasAntes.length + listPlanesVencidos.length}</span></CBadge>
       </CDropdownToggle>
-      <CDropdownMenu placement="bottom-end" className="pt-0" style={{ maxHeight: '250px', overflowY: 'scroll' }}>
+      <CDropdownMenu placement="bottom-end" className="pt-0" style={{ maxHeight: '250px', overflowY: 'scroll', marginTop: '10px' }}>
         <CDropdownItem header tag="div" className="text-center" color="light">
-          <strong>{listDiezDiasAntes.length} Evento(s) a 10 dias de vencer la fecha fin del Plan de Acción</strong>
+          <strong>{listDiezDiasAntes.length} Riesgos(s) a 10 dias de vencer la fecha de implementación</strong>
         </CDropdownItem>
         {
           listDiezDiasAntes !== null && listDiezDiasAntes.length !== 0 ?
             <ListGroup flush className='pt-2'>
-              {listDiezDiasAntes.map((evento) => {
-                return <ListGroupItem className='py-1' key={evento.value}>
-                  <Calendar size={15} className='text-success mr-2' />
-                  {/* <Link to={{ pathname: '/eventoRiesgo/Mostrar/' + evento.id }} className='text-dark'> */}
-                  {evento.id} | {evento.codigo !== null ? evento.codigo : <span>Sin código</span>} | {evento.fechaFinPlan}
-                  {/* </Link> */}
+              {listDiezDiasAntes.map((riesgo) => {
+                return <ListGroupItem className='py-1' key={riesgo.descripcion}>
+                  <Calendar size={15} className='text-primary mr-2' />
+                  {riesgo.id} | {riesgo.codigo !== null ? riesgo.codigo : <span>Sin código</span>} | {riesgo.fechaImpl} | {riesgo.estado}
                 </ListGroupItem>
               })}
             </ListGroup>
             : <CDropdownItem header><i>Sin notificaciones</i></CDropdownItem>
         }
         <CDropdownItem header tag="div" className="text-center" color="light">
-          <strong>{listCincoDiasAntes.length} Evento(s) a 5 dias de vencer la fecha fin del Plan de Acción</strong>
+          <strong>{listCincoDiasAntes.length} Riesgos(s) a 5 dias de vencer la fecha de implementación</strong>
         </CDropdownItem>
         {
           listCincoDiasAntes !== null && listCincoDiasAntes.length !== 0 ?
             <ListGroup flush className='pt-2'>
-              {listCincoDiasAntes.map((evento) => {
-                return <ListGroupItem className='py-1' key={evento.value}>
+              {listCincoDiasAntes.map((riesgo) => {
+                return <ListGroupItem className='py-1' key={riesgo.descripcion}>
                   <Calendar size={15} className='text-primary mr-2' />
-                  {evento.id} | {evento.codigo !== null ? evento.codigo : <span>Sin código</span>} | {evento.fechaFinPlan}
+                  {riesgo.id} | {riesgo.codigo !== null ? riesgo.codigo : <span>Sin código</span>} | {riesgo.fechaImpl} | {riesgo.estado}
                 </ListGroupItem>
               })}
             </ListGroup>
             : <CDropdownItem header><i>Sin notificaciones</i></CDropdownItem>
         }
         <CDropdownItem header tag="div" className="text-center" color="light">
-          <strong>{listPlanVencido.length} Evento(s) que {listPlanVencido.length === 1 ? 'venció' : 'vencieron'} a la fecha fin del Plan de Acción</strong>
+          <strong>{listPlanesVencidos.length} Riesgos(s) que {listPlanesVencidos.length === 1 ? 'venció' : 'vencieron'} la fecha de implementación</strong>
         </CDropdownItem>
         {
-          listPlanVencido !== null && listPlanVencido.length !== 0 ?
+          listPlanesVencidos !== null && listPlanesVencidos.length !== 0 ?
             <ListGroup flush className='pt-2'>
-              {listPlanVencido.map((evento) => {
-                return <ListGroupItem className='py-1' key={evento.value}>
+              {listPlanesVencidos.map((riesgo) => {
+                return <ListGroupItem className='py-1' key={riesgo.descripcion}>
                   <Calendar size={15} className='text-danger mr-2' />
-                  {evento.id} | {evento.codigo !== null ? evento.codigo : <span>Sin código</span>} | {evento.fechaFinPlan}
+                  {riesgo.id} | {riesgo.codigo !== null ? riesgo.codigo : <span>Sin código</span>} | {riesgo.fechaImpl} | {riesgo.estado}
                 </ListGroupItem>
               })}
             </ListGroup>

@@ -56,3 +56,34 @@ export const deleteRiesgoId = (id) => {
     const uri = HOST + 'v1/matrizRiesgo/eliminar/' + id;
     return axios.put(uri, {});
 }
+
+// Lista de Riesgos por IDs
+export const postListRiesgosByIds = (filter) => {
+    const uri = HOST.concat('v1/matrizRiesgo/listbyids')
+    return axios.post(uri, filter);
+}
+
+
+// NOTIFICACIONES
+// Planes 10 dias antes de vencer
+export const getPlanesDiezDiasVencer = () => {
+    const uri = HOST.concat('v1/matrizRiesgo/planesdiezavencer');
+    const response = axios.get(uri);
+    return response;
+}
+
+// Planes 5 dias antes de vencer
+export const getPlanesCincoDiasVencer = () => {
+    const uri = HOST.concat('v1/matrizRiesgo/planescincoavencer');
+    const response = axios.get(uri);
+    return response;
+}
+
+
+
+// Planes vencidos
+export const getPlanesVencidos = () => {
+    const uri = HOST.concat('v1/matrizRiesgo/planesvencidos');
+    const response = axios.get(uri);
+    return response;
+}

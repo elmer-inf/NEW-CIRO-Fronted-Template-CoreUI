@@ -108,7 +108,9 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
               formik.values.tablaId.label === 'Tipo de control' ||
               formik.values.tablaId.label === 'Nivel de automatización' ||
               formik.values.tablaId.label === 'Identificado por' ||
-              formik.values.tablaId.label === 'Estrategia para administrar el riesgo') ? 'Nombre' : null}
+              formik.values.tablaId.label === 'Estrategia para administrar el riesgo' ||
+              formik.values.tablaId.label === 'Tipo fraude interno' ||
+              formik.values.tablaId.label === 'Subtipo fraude interno') ? 'Nombre' : null}
             {(formik.values.tablaId.label === 'Probabilidad' ||
               formik.values.tablaId.label === 'Impacto de Riesgo') ? 'Descriptivo' : null}
             {formik.values.tablaId.label === 'Controles' ? 'Descripción' : null}

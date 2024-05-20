@@ -15,6 +15,12 @@ export const getTablaDescripcionRiesgoN1 = async (idTabla) => {
     return response
 }
 
+export const getTablaDescripcionRiesgoN2 = async (idTabla, idNivel2) => {
+    const uri = HOST.concat('v1/tablaDescripcionMatrizRiesgo/listarNivel2/', idTabla, '/', idNivel2);
+    const response = await axios.get(uri)
+    return response
+}
+
 export const postTablaDescripcionRiesgo = (data) => {
     const uri = HOST.concat('v1/tablaDescripcionMatrizRiesgo/registrar')
     return axios.post(uri, data);

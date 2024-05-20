@@ -14,20 +14,15 @@ import { useHistory } from 'react-router-dom'
 import AuthService from 'src/views/authentication/AuthService'
 import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
 import { Messages } from 'src/reusable/variables/Messages'
-
 import { FilePond } from 'react-filepond';
 import 'filepond/dist/filepond.min.css';
+var _ = require('lodash');
 
 const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFiles, optionsEstado, existingFiles, setFilesToDelete }) => {
-
-console.log('asi lke llega a Datoas iniciales initValues.:', initValues);
-
 
   const Auth = new AuthService();
   const profile = Auth.getProfile();
   const user = profile.usuario;
-
-
 
   //const today = new Date();
   //const tenYearsFromNow = new Date();
@@ -55,7 +50,7 @@ console.log('asi lke llega a Datoas iniciales initValues.:', initValues);
       canalAsfiId: Yup.mixed().required(Messages.required),
       descripcion: Yup.string().required(Messages.required),
       descripcionCompleta: Yup.string().nullable(),
-      files: Yup.mixed().nullable(), */
+      files: Yup.mixed().nullable() */
 
       fechaIni: Yup.date().max(new Date('12-31-3000'), Messages.yearOutOfRange).nullable(),
       horaIni: Yup.string().nullable(),
@@ -81,7 +76,13 @@ console.log('asi lke llega a Datoas iniciales initValues.:', initValues);
     ),
 
     onSubmit: values => {
-      console.log('datos enviados: ', values);
+
+      var arrayIdEventoCargos = [];
+      _.forEach(values.cargoId, function (value) {
+        arrayIdEventoCargos.push(value.value);
+       // console.log('value.value: ', value.value);
+      });
+
       const data = {
         ...values,
         estadoRegistro: 'Pendiente',
@@ -98,11 +99,11 @@ console.log('asi lke llega a Datoas iniciales initValues.:', initValues);
         areaID: (values.areaID !== null) ? values.areaID.value : 0,
         unidadId: (values.unidadId !== null) ? values.unidadId.value : 0,
         entidadId: (values.entidadId !== null) ? values.entidadId.value : 0,
-        cargoId: (values.cargoId !== null) ? values.cargoId.value : 0,
+        cargoId: arrayIdEventoCargos,
         fuenteInfId: (values.fuenteInfId !== null) ? values.fuenteInfId.value : 0,
         canalAsfiId: (values.canalAsfiId !== null) ? values.canalAsfiId.value : 0,
 
-        estadoReportado: (values.estadoReportado !== null) ? values.estadoReportado.value : null,
+        estadoReportado: (values.estadoReportado !== null) ? values.estadoReportado.value : null
       }
       console.log('datos que se enviaran SECCION 1:', data)
       setObject(data);
@@ -142,9 +143,6 @@ console.log('asi lke llega a Datoas iniciales initValues.:', initValues);
     // Llama a una función de callback si es necesario
     obtainFiles(newFiles, existingFilesRemoved.map(file => file.id));
   }; */
-
-
-
 
 
 
@@ -229,6 +227,8 @@ console.log('asi lke llega a Datoas iniciales initValues.:', initValues);
         console.error('Error: ', error) 
       })
   }
+
+
 
   // Fuente de informacion
   const [dataApiFuente, setDataApiFuente] = useState([])
@@ -579,7 +579,7 @@ console.log('asi lke llega a Datoas iniciales initValues.:', initValues);
             />
           </FormGroup>
 
-          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+          <FormGroup tag={Col} md='12' lg='6' className='mb-0'>
             <Label className='form-label'>
               Cargos Involucrados ASFI <span className='text-primary h5'><b>*</b></span>
             </Label>
@@ -593,6 +593,7 @@ console.log('asi lke llega a Datoas iniciales initValues.:', initValues);
               error={formik.errors.cargoId}
               touched={formik.touched.cargoId}
               options={dataApiCargo}
+              isMulti={true}
             />
           </FormGroup>
 
@@ -647,7 +648,7 @@ console.log('asi lke llega a Datoas iniciales initValues.:', initValues);
             />
           </FormGroup>
 
-          <FormGroup tag={Col} md='6' lg='9' className='mb-0'>
+          <FormGroup tag={Col} md='6' lg='6' className='mb-0'>
             <Label className='form-label'>Descripción <span className='text-primary h5'><b>*</b></span>
             </Label>
             <CInputReact
@@ -659,7 +660,7 @@ console.log('asi lke llega a Datoas iniciales initValues.:', initValues);
               onBlur={formik.handleBlur}
               touched={formik.touched.descripcion}
               errors={formik.errors.descripcion}
-              rows={1}
+              rows={2}
             />
           </FormGroup>
 

@@ -1,7 +1,7 @@
 import { React, useState, useEffect } from 'react'
 import { FileText, Activity, DollarSign, BarChart2, CheckSquare } from 'react-feather'
 import { Row, Col, Card, CardBody, CardHeader, CardTitle, Badge, Button, ListGroup, ListGroupItem } from 'reactstrap';
-import { CNav, CNavItem, CNavLink, CTabContent, CTabPane, CTabs, CButton, CCollapse, CCard, CModal, CModalBody, CModalHeader, CModalTitle } from '@coreui/react'
+import { CNav, CNavItem, CNavLink, CTabContent, CTabPane, CTabs, CButton, CCollapse, CCard, CModal, CModalBody, CModalHeader, CModalTitle, CBadge } from '@coreui/react'
 import { getEventoRiesgoId, getUltimaObservacion, putEvaluaEvento, getGeneraCodigo, getArchivosByEvento } from './controller/EventoController';
 import FormularioEvaluar from './component/FormularioEvaluar'
 import { formatSizeUnits } from 'src/functions/FunctionEvento'
@@ -265,6 +265,88 @@ const EventoRiesgo = ({ match }) => {
     }
   };
 
+  const ListaRiesgos = ({ listRiesgos }) => {
+    if (listRiesgos.length === 0) {
+      return <div className='text-data text-center py-4'>No existen Riesgos relacionados a este Evento de Riesgo.</div>;
+    }
+    return (
+      <div>
+        {listRiesgos.map((dataApi, index) => (
+          <div key={index}>
+            <div className='divider divider-left divider-dark pt-2'>
+              <div className='divider-text'><span className='text-label'>{dataApi.codigo !== null ? 'Riesgo relacionado: ' + dataApi.codigo : ''}</span></div>
+            </div>
+            <Row>
+              <Col xs='12' className='pb-2'>
+                <span className='text-label'>Gerencia responsable: </span>
+                <span className='text-data'>{dataApi.areaId !== null ? dataApi.areaId.nombre : <i>Sin registro</i>}</span>
+              </Col>
+              <Row>
+              </Row>
+              <Col xs='12'>
+                <BootstrapTable
+                  classes={'table-hover-animation'}
+                  bootstrap4={true}
+                  sort={{ dataField: 'nroPlan', order: 'asc' }}
+                  noDataIndication={'No hay registros de Planes de acción'}
+                  keyField='nroPlan'
+                  data={dataApi.planesAccion ? JSON.parse(dataApi.planesAccion) : []}
+                  columns={columnsPlanes}
+                  bordered={false}
+                  striped={true}
+                  hover={false}
+                  condensed={false}
+                  wrapperClasses="table-responsive"
+                />
+              </Col>
+            </Row>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  
+  const columnsPlanes = [
+    {
+      dataField: 'nroPlan',
+      text: 'Plan',
+    }, {
+      dataField: 'descripcion',
+      text: 'Descripción',
+    }, {
+      dataField: 'cargo',
+      text: 'Cargo',
+    }, {
+      dataField: 'fechaImpl',
+      text: 'Fecha implementación',
+      sort: true,
+    }, {
+      dataField: 'estado',
+      text: 'Estado',
+      sort: true,
+      formatter: colorEstado,
+    }
+  ]
+
+  function colorEstado(cell) {
+    if (cell === 'No iniciado') {
+      return (
+        <CBadge className="mt-1 mb-2 mr-1 px-2 py-1 badge-danger-light">{cell}</CBadge>
+      );
+    }
+    if (cell === 'Concluido') {
+      return (
+        <CBadge className="mt-1 mb-2 mr-1 px-2 py-1 badge-success-light">{cell}</CBadge>
+      );
+    }
+    if (cell === 'En proceso') {
+      return (
+        <CBadge className="mt-1 mb-2 mr-1 px-2 py-1 badge-warning-light">{cell}</CBadge>
+      );
+    }
+  }
+
 
   return (
     <div>
@@ -342,7 +424,6 @@ const EventoRiesgo = ({ match }) => {
                     <span className='pl-4'>{dataApi.tipoEvento}</span>
                   </Col>
                 </Row>
-
                 <Row>
                   <Col xs="12" className="mb-4">
                     <CTabs>
@@ -352,19 +433,11 @@ const EventoRiesgo = ({ match }) => {
                             <FileText size={20} /><span className='pl-1 pr-2 h6 font-weight-bold'>Datos iniciales</span>
                           </CNavLink>
                         </CNavItem>
-
-                        <CNavItem>
-                          <CNavLink>
-                            <CheckSquare size={20} /><span className='pl-1 pr-2 h6 font-weight-bold'>Planes de acción</span>
-                          </CNavLink>
-                        </CNavItem>
-
                         <CNavItem>
                           <CNavLink>
                             <BarChart2 size={20} /><span className='pl-1 pr-2 h6 font-weight-bold'>Categoria y Línea de negocio</span>
                           </CNavLink>
                         </CNavItem>
-
                         {(dataApi.tipoEvento === 'A') ?
                           <CNavItem>
                             <CNavLink>
@@ -372,10 +445,14 @@ const EventoRiesgo = ({ match }) => {
                             </CNavLink>
                           </CNavItem>
                           : null}
-
                         <CNavItem>
                           <CNavLink>
                             <Activity size={20} /><span className='pl-1 h6 font-weight-bold'>Riesgos relacionados</span>
+                          </CNavLink>
+                        </CNavItem>
+                        <CNavItem>
+                          <CNavLink>
+                            <CheckSquare size={20} /><span className='pl-1 pr-2 h6 font-weight-bold'>Planes de acción</span>
                           </CNavLink>
                         </CNavItem>
                       </CNav>
@@ -501,40 +578,6 @@ const EventoRiesgo = ({ match }) => {
                                 condensed={true}
                                 wrapperClasses="table-responsive"
                               />
-                            </Col>
-                          </Row>
-                        </CTabPane>
-
-                        <CTabPane>
-                          <Row className='pt-3'>
-                            <Col xs='12' sm='6' className='pt-2'>
-                              <div className='text-label'>Gerencia responsable: </div>
-                              <div className='text-data'>{dataApi.areaResponsableId !== null ? dataApi.areaResponsableId.nombre : <i>Sin registro</i>}</div>
-                            </Col>
-
-                            <Col xs='12' sm='6' className='pt-2'>
-                              <div className='text-label'>Cargo responsable: </div>
-                              <div className='text-data'>{dataApi.cargoResponsableId !== null ? dataApi.cargoResponsableId.nombre : <i>Sin registro</i>}</div>
-                            </Col>
-
-                            <Col xs='12' md='12' className='pt-2'>
-                              <div className='text-label'>Detalle del plan: </div>
-                              <div className='text-data'>{dataApi.detallePlan !== '' ? dataApi.detallePlan : <i>Sin registro</i>}</div>
-                            </Col>
-
-                            <Col xs='12' sm='6' className='pt-2'>
-                              <div className='text-label'>Fecha fin del plan: </div>
-                              <div className='text-data'>{dataApi.fechaFinPlan !== null ? dataApi.fechaFinPlan : <i>Sin registro</i>}</div>
-                            </Col>
-
-                            <Col xs='12' sm='6' className='pt-2'>
-                              <div className='text-label'>Estado: </div>
-                              <div className='text-data'>{dataApi.estadoPlan !== null ? dataApi.estadoPlan : <i>Sin registro</i>}</div>
-                            </Col>
-
-                            <Col xs='12' md='6' className='pt-2'>
-                              <div className='text-label'>Descripción del estado: </div>
-                              <div className='text-data'>{dataApi.descripcionEstado !== '' ? dataApi.descripcionEstado : <i>Sin registro</i>}</div>
                             </Col>
                           </Row>
                         </CTabPane>
@@ -776,6 +819,13 @@ const EventoRiesgo = ({ match }) => {
                             </Col>
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                              <div className='text-label'>LGI FT y/o DP: </div>
+                              <div className='text-data'>
+                                {dataApi.lgiId !== null ? dataApi.lgiId.clave + ' - ' + dataApi.lgiId.nombre : <i>Sin registro</i>}
+                              </div>
+                            </Col>
+
+                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Fraude con medios de pago electrónico: </div>
                               <div className='text-data'>
                                 {dataApi.fraudeId !== null ? dataApi.fraudeId.clave + ' - ' + dataApi.fraudeId.nombre : <i>Sin registro</i>}
@@ -815,6 +865,14 @@ const EventoRiesgo = ({ match }) => {
                               <div className='text-data'>
                                 {dataApi.gobiernoId !== null ? dataApi.gobiernoId.clave + ' - ' + dataApi.gobiernoId.nombre : <i>Sin registro</i>}
                               </div>
+                            </Col>
+                          </Row>
+                        </CTabPane>
+
+                        <CTabPane>
+                          <Row className='pt-3'>
+                            <Col xs={12}>
+                              <ListaRiesgos listRiesgos={dataApi.riesgoRelacionado !== null ?  dataApi.riesgoRelacionado  : []} />
                             </Col>
                           </Row>
                         </CTabPane>

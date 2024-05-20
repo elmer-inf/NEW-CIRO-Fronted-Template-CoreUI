@@ -1,15 +1,14 @@
 import { React, Fragment, useState, useEffect } from 'react'
-import { ChevronLeft, ChevronRight, Delete } from 'react-feather'
-import { Label, FormGroup, Row, Col, Form, Button } from 'reactstrap'
+import { ChevronLeft, Delete, Save } from 'react-feather'
+import { Row, Col, Form, Button } from 'reactstrap'
 import { useFormik } from "formik"
 import * as Yup from "yup"
-import { CInputReact } from 'src/reusable/CInputReact'
-import { CSelectReact } from 'src/reusable/CSelectReact'
-import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
-import { buildSelectTwo } from 'src/functions/Function'
 import { Messages } from 'src/reusable/variables/Messages'
+import { postListRiesgosByIds } from 'src/views/matrizRiesgo/controller/RiesgoController'
+import { CBadge } from '@coreui/react'
+import BootstrapTable from 'react-bootstrap-table-next'
 
-const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdit, optionsPlanes }) => {
+const PlanesAccion = ({ beforeSection, initValues, optionsPlanes, tipoEvento, handleOnSubmmit, dataAuxListRiesgos }) => {
 
   const formik = useFormik({
     initialValues: initValues,
@@ -31,154 +30,126 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
         estadoPlan: (values.estadoPlan !== null) ? values.estadoPlan.value : null,
       }
       //console.log('datos que se enviaran SECCION 2:', data)
-      setObject(data);
-      nextSection(2);
+      handleOnSubmmit(data)
     }
   })
 
-  /*   P  A  R  A  M  E  T  R  O  S   */
-  // Area
-  const [dataApiArea, setDataApiArea] = useState([])
-  const callApiArea = (idTablaDes) => {
-    getTablaDescripcionEventoN1(idTablaDes)
-      .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
-        setDataApiArea(options)
-      }).catch((error) => {
-        console.error('Error: ', error)
-      })
+
+
+  const columnsPlanes = [
+    {
+      dataField: 'nroPlan',
+      text: 'Plan',
+    }, {
+      dataField: 'descripcion',
+      text: 'Descripción',
+    }, {
+      dataField: 'cargo',
+      text: 'Cargo',
+    }, {
+      dataField: 'fechaImpl',
+      text: 'Fecha implementación',
+      sort: true,
+    }, {
+      dataField: 'estado',
+      text: 'Estado',
+      sort: true,
+      formatter: colorEstado,
+    }
+  ]
+
+  function colorEstado(cell) {
+    if (cell === 'No iniciado') {
+      return (
+        <CBadge className="mt-1 mb-2 mr-1 px-2 py-1 badge-danger-light">{cell}</CBadge>
+      );
+    }
+    if (cell === 'Concluido') {
+      return (
+        <CBadge className="mt-1 mb-2 mr-1 px-2 py-1 badge-success-light">{cell}</CBadge>
+      );
+    }
+    if (cell === 'En proceso') {
+      return (
+        <CBadge className="mt-1 mb-2 mr-1 px-2 py-1 badge-warning-light">{cell}</CBadge>
+      );
+    }
   }
 
-  // Cargos
-  const [dataApiCargo, setDataApiCargo] = useState([])
-  const callApiCargo = (idTablaDes) => {
-    getTablaDescripcionEventoN1(idTablaDes)
+  // Lista de Riesgos:
+  const [listRiesgos, setListRiesgos] = useState([]);
+  const listRiesgosByIds = (filter) => {
+    postListRiesgosByIds(filter)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', false)
-        setDataApiCargo(options)
+        setListRiesgos(res.data)
       }).catch((error) => {
         console.error('Error: ', error)
       })
   }
 
   useEffect(() => {
-    callApiArea(3);
-    callApiCargo(7);
-  }, [])
-  /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
+    listRiesgosByIds(dataAuxListRiesgos);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataAuxListRiesgos])
+
+  const ListaRiesgos = ({ listRiesgos }) => {
+    if (listRiesgos.length === 0) {
+      return <div className='text-data text-center py-4'>No existen Riesgos relacionados a este Evento de Riesgo.</div>;
+    }
+    return (
+      <div>
+        {listRiesgos.map((dataApi, index) => (
+          <div key={index}>
+            <div className='divider divider-left divider-dark pt-2'>
+              <div className='divider-text'><span className='text-label'>{dataApi.codigo !== null ? 'Riesgo relacionado: ' + dataApi.codigo : ''}</span></div>
+            </div>
+            <Row>
+              <Col xs='12' className='pb-2'>
+                <span className='text-label'>Gerencia responsable: </span>
+                <span className='text-data'>{dataApi.areaId !== null ? dataApi.areaId.nombre : <i>Sin registro</i>}</span>
+              </Col>
+              <Row>
+              </Row>
+              <Col xs='12'>
+                <BootstrapTable
+                  classes={'table-hover-animation'}
+                  bootstrap4={true}
+                  sort={{ dataField: 'nroPlan', order: 'asc' }}
+                  noDataIndication={'No hay registros de Planes de acción'}
+                  keyField='nroPlan'
+                  data={dataApi.planesAccion ? JSON.parse(dataApi.planesAccion) : []}
+                  columns={columnsPlanes}
+                  bordered={false}
+                  striped={true}
+                  hover={false}
+                  condensed={false}
+                  wrapperClasses="table-responsive"
+                />
+              </Col>
+            </Row>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
 
   return (
     <Fragment>
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
         <Row className='pt-4'>
-          <FormGroup tag={Col} md='6' className='mb-0'>
-            <Label className='form-label'>
-              Gerencia responsable
-            </Label>
-            <CSelectReact
-              type={"select"}
-              id={'areaResponsableId'}
-              placeholder={'Seleccionar'}
-              value={formik.values.areaResponsableId}
-              onChange={formik.setFieldValue}
-              onBlur={formik.setFieldTouched}
-              error={formik.errors.areaResponsableId}
-              touched={formik.touched.areaResponsableId}
-              options={dataApiArea}
-            />
-          </FormGroup>
-
-          <FormGroup tag={Col} md='6' className='mb-0'>
-            <Label className='form-label'>
-              Cargo responsable
-            </Label>
-            <CSelectReact
-              type={"select"}
-              id={'cargoResponsableId'}
-              placeholder={'Seleccionar'}
-              value={formik.values.cargoResponsableId}
-              onChange={formik.setFieldValue}
-              onBlur={formik.setFieldTouched}
-              error={formik.errors.cargoResponsableId}
-              touched={formik.touched.cargoResponsableId}
-              options={dataApiCargo}
-            />
-          </FormGroup>
-
-          <FormGroup tag={Col} sm='12' className='mb-0'>
-            <Label className='form-label'>
-              Detalle del plan
-            </Label>
-            <CInputReact
-              type={"textarea"}
-              id={'detallePlan'}
-              placeholder={'Detalle del plan'}
-              value={formik.values.detallePlan}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              touched={formik.touched.detallePlan}
-              errors={formik.errors.detallePlan}
-              rows={3}
-            />
-          </FormGroup>
-
-          <FormGroup tag={Col} md='6' className='mb-0'>
-            <Label className='form-label'>
-              Fecha fin del plan
-            </Label>
-            <CInputReact
-              type={"date"}
-              id={'fechaFinPlan'}
-              value={formik.values.fechaFinPlan}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              touched={formik.touched.fechaFinPlan}
-              errors={formik.errors.fechaFinPlan}
-            />
-          </FormGroup>
-
-          <FormGroup tag={Col} md='6' className='mb-0'>
-            <Label className='form-label'>
-              Estado
-            </Label>
-            <CSelectReact
-              type={"select"}
-              id={'estadoPlan'}
-              placeholder={'Seleccionar'}
-              value={formik.values.estadoPlan}
-              onChange={formik.setFieldValue}
-              onBlur={formik.setFieldTouched}
-              error={formik.errors.estadoPlan}
-              touched={formik.touched.estadoPlan}
-              options={optionsPlanes}
-            />
-          </FormGroup>
-
-          <FormGroup tag={Col} sm='12' className='mb-0'>
-            <Label className='form-label'>
-              Descripción del estado
-            </Label>
-            <CInputReact
-              type={"textarea"}
-              id={'descripcionEstado'}
-              placeholder={'Descripción del estado'}
-              value={formik.values.descripcionEstado}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              touched={formik.touched.descripcionEstado}
-              errors={formik.errors.descripcionEstado}
-              rows={3}
-            />
-          </FormGroup>
+          <Col xs={12}>
+            <ListaRiesgos listRiesgos={listRiesgos || []} />
+          </Col>
         </Row>
 
         <Row className='pt-4'>
           <Col xs={4} md={{ size: 2, order: 0, offset: 3 }}>
             <Button
-              outline
               color="primary"
+              outline
               block
-              onClick={() => beforeSection(2)}
+              onClick={() => beforeSection(5)}
             >
               <ChevronLeft size={17} className='mr-1' />
               Atrás
@@ -198,12 +169,12 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
           <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
             <Button
               className='text-white'
-              color="primary"
               block
+              color="primary"
               type="submit"
             >
-              Siguiente
-              <ChevronRight size={17} className='ml-1' />
+              <Save size={17} className='mr-2' />
+              Guardar
             </Button>
           </Col>
         </Row>

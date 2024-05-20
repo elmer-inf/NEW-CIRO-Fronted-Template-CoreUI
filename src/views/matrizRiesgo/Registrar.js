@@ -45,7 +45,7 @@ const MatrizRiesgoRegistrar = () => {
     identificadoId: null,
     identificadoOtro: '',
     eventoRiesgoId: null,
-    eventoMaterializado: '',
+    eventoMaterializado: false,
     otrosAux: false
   }
 
@@ -58,9 +58,11 @@ const MatrizRiesgoRegistrar = () => {
     perdidaAsfiId: null,
     monetario: false,
     factorRiesgoId: null,
-
     probabilidadId: null,
-    impactoId: null
+    impactoId: null,
+    fraudeInterno: false,
+    tipoFraudeId: null,
+    subtipoFraudeId: null
   }
 
   const formValueInitialControles = {
@@ -96,6 +98,7 @@ const MatrizRiesgoRegistrar = () => {
 
   const [requestData, setRequestData] = useState(dataResult);
   const [activeTab, setActiveTap] = useState('1');
+
   /* manejo de botones siguiente */
   const nextSection = (tab) => {
     if (tab === 1) {
@@ -142,7 +145,7 @@ const MatrizRiesgoRegistrar = () => {
       const dataAuxSeccion1 = {
         procedimientoAux: realValues.procedimientoId.label,
       }
-      setDataAuxSeccion1(dataAuxSeccion1)
+      setDataAuxSeccion1(dataAuxSeccion1);
     }
     // FIN Obtiene data Proceso para busqueda en Seccion Controles: Select Proceso
 
@@ -155,7 +158,7 @@ const MatrizRiesgoRegistrar = () => {
         probabilidaNivelAux: realValues.probabilidadId.campoA,
         impactoNivelAux: realValues.impactoId.campoA,
       }
-      setDataAuxSeccion2(dataAuxSeccion2)
+      setDataAuxSeccion2(dataAuxSeccion2);
     }
     // FIN Obtiene valores auxiliares de "Definicion y Riesgo inherente" para "Valoracion cuantitativa y Riesgo residual"
 

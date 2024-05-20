@@ -1,5 +1,5 @@
 import { React, Fragment, useState, useEffect } from 'react'
-import { ChevronLeft, Save, Delete } from 'react-feather'
+import { ChevronLeft, Delete, ChevronRight } from 'react-feather'
 import { Label, FormGroup, Row, Col, Form, Button } from 'reactstrap'
 import { useFormik } from "formik"
 import * as Yup from "yup"
@@ -9,7 +9,7 @@ import { buildSelectThree } from 'src/functions/Function'
 
 var _ = require('lodash');
 
-const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit, tipoEvento }) => {
+const RiesgoRelacionado = ({ nextSection, setObject, beforeSection, initValues, tipoEvento}) => {
 
   const formik = useFormik({
     initialValues: initValues,
@@ -42,8 +42,9 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
         gobiernoId: (values.gobiernoId !== null) ? values.gobiernoId.value : 0,
         seguridadId: (values.seguridadId !== null) ? values.seguridadId.value : 0
       }
-      //console.log('datos que se enviaran SECCION 5:', data)
-      handleOnSubmmit(data)
+      //console.log('datos que se enviaran SECCION 4:', data)
+      setObject(data);
+      nextSection(4);
     }
   })
 
@@ -362,10 +363,10 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
         <Row className='pt-4'>
           <Col xs={4} md={{ size: 2, order: 0, offset: 3 }}>
             <Button
-              color="primary"
               outline
+              color="primary"
               block
-              onClick={() => (tipoEvento === 'A') ? beforeSection(5) : beforeSection(4)}
+              onClick={() => (tipoEvento === 'A') ? beforeSection(4) : beforeSection(3)}
             >
               <ChevronLeft size={17} className='mr-1' />
               Atrás
@@ -385,12 +386,12 @@ const RiesgoRelacionado = ({ beforeSection, initValues, isEdit, handleOnSubmmit,
           <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
             <Button
               className='text-white'
-              block
               color="primary"
+              block
               type="submit"
             >
-              <Save size={17} className='mr-2' />
-              Guardar
+              Siguiente
+              <ChevronRight size={17} className='ml-1' />
             </Button>
           </Col>
         </Row>

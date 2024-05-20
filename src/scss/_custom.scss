@@ -477,3 +477,9 @@ th {
 }
 
 
+
+
+.dropdown-over-table {
+  position: fixed; /* Esto hará que el elemento se posicione relativo a la ventana del navegador */
+  z-index: 5000;
+}

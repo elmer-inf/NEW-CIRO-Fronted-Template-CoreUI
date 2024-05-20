@@ -71,7 +71,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
 
       //console.log('datos que se enviaran SECCION 4:', dataSelect)
       setObject(dataSelect);
-      nextSection(4);
+      nextSection(3);
     }
   })
 
@@ -521,7 +521,7 @@ const ImportesRelacionados = ({ nextSection, beforeSection, setObject, initValue
               outline
               color="primary"
               block
-              onClick={() => beforeSection(4)}
+              onClick={() => beforeSection(3)}
             >
               <ChevronLeft size={17} className='mr-1' />
               Atrás

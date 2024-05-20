@@ -13,6 +13,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { Messages } from 'src/reusable/variables/Messages';
 import Swal from 'sweetalert2'
 import { PlusSquare } from 'react-feather';
+import paginationFactory from 'react-bootstrap-table2-paginator';
 
 const AdministracionMatrizRiesgosListar = () => {
 
@@ -53,6 +54,10 @@ const AdministracionMatrizRiesgosListar = () => {
   const [labelTabla, setLabelTabla] = useState([]);
   const [valueTabla, setValueTabla] = useState([]);
 
+  const pagination = paginationFactory({
+    page: 2,
+  });
+
   const columns = [
     {
       dataField: 'id',
@@ -80,7 +85,9 @@ const AdministracionMatrizRiesgosListar = () => {
         labelTabla === 'Tipo de control' ||
         labelTabla === 'Nivel de automatización' ||
         labelTabla === 'Identificado por' ||
-        labelTabla === 'Estrategia para administrar el riesgo') ?
+        labelTabla === 'Estrategia para administrar el riesgo' ||
+        labelTabla === 'Tipo fraude interno' ||
+        labelTabla === 'Subtipo fraude interno' ) ?
         'NOMBRE' : (labelTabla === 'Probabilidad' || labelTabla === 'Impacto de Riesgo') ?
           'DESCRIPTIVO' : (labelTabla === 'Normas para control') ?
             'TITULO DEL DOCUMENTO' : (labelTabla === 'Controles') ?
@@ -91,7 +98,7 @@ const AdministracionMatrizRiesgosListar = () => {
         labelTabla === 'Nivel de automatización' || labelTabla === 'Identificado por' ||
         labelTabla === 'Estrategia para administrar el riesgo' || labelTabla === 'Probabilidad' ||
         labelTabla === 'Impacto de Riesgo' || labelTabla === 'Normas para control' ||
-        labelTabla === 'Controles' || labelTabla === 'Nivel de riesgo inherente') ? false : true,
+        labelTabla === 'Controles' || labelTabla === 'Nivel de riesgo inherente' || labelTabla === 'Tipo fraude interno' || labelTabla === 'Subtipo fraude interno') ? false : true,
       filter: textFilter({
         placeholder: 'Buscar'
       }),
@@ -217,7 +224,6 @@ const AdministracionMatrizRiesgosListar = () => {
 
   // Editar Parametro
   const editRow = (row) => {
-    //history.push('/administracion/matriz-riesgo/Editar/' + row.id);
     const path = '/administracion/matriz-riesgo/Editar/:id';
     if (hasPermission(path, valuePathFromContext)) {
       history.push('/administracion/matriz-riesgo/Editar/' + row.id);
@@ -248,8 +254,9 @@ const AdministracionMatrizRiesgosListar = () => {
 
   /* LISTA TABLA DESCRIPCION despendiento de seleccion tabla lista*/
   const handleSelectOnChange = (result) => {
-    const labelTable = result.label
-    setLabelTabla(labelTable)
+    const labelTable = result.label;
+    console.log('labelTable: ', labelTable);
+    setLabelTabla(labelTable);
     const valueTable = result.value;
     setValueTabla(valueTable);
     getTablaDescripcion(result.value);
@@ -258,7 +265,8 @@ const AdministracionMatrizRiesgosListar = () => {
   const getTablaDescripcion = (idTabla) => {
     getTablaDescripcionRiesgoN1(idTabla)
       .then(res => {
-        setDAtaApi(res.data)
+        console.log('resss: ', res.data);
+        setDAtaApi(res.data);
       }).catch((error) => {
         console.error('Error: ', error)
         //notificationToast('error', Messages.notification.notOk)
@@ -344,6 +352,7 @@ const AdministracionMatrizRiesgosListar = () => {
               hover={false}
               condensed={false}
               wrapperClasses="table-responsive"
+              pagination={pagination}
               filter={filterFactory()}
             />
           </CardBody>

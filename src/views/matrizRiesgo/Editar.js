@@ -49,7 +49,7 @@ const MatrizRiesgoEditar = ({ match }) => {
     identificadoId: null,
     identificadoOtro: '',
     eventoRiesgoId: null,
-    eventoMaterializado: ''
+    eventoMaterializado: false
   }
 
   const formValueInitialDefinicionRiesgos = {
@@ -61,9 +61,11 @@ const MatrizRiesgoEditar = ({ match }) => {
     perdidaAsfiId: null,
     monetario: false,
     factorRiesgoId: null,
-
     probabilidadId: null,
-    impactoId: null
+    impactoId: null,
+    fraudeInterno: false,
+    tipoFraudeId: null,
+    subtipoFraudeId: null
   }
 
   const formValueInitialControles = {
@@ -133,6 +135,10 @@ const MatrizRiesgoEditar = ({ match }) => {
 
       probabilidadId: buildOptionSelect(args.probabilidadId, 'id', 'campoD', true, 'probabilidadId'),
       impactoId: buildOptionSelect(args.impactoId, 'id', 'campoD', true, 'impactoId'),
+
+      fraudeInterno: args.tipoFraudeId !== null && args.subtipoFraudeId !== null ? true : false,
+      tipoFraudeId: buildOptionSelect(args.tipoFraudeId, 'id', 'nombre', true, 'tipoFraudeId'),
+      subtipoFraudeId: buildOptionSelect(args.subtipoFraudeId, 'id', 'nombre', true, 'subtipoFraudeId')
     };
 
     const controles = {

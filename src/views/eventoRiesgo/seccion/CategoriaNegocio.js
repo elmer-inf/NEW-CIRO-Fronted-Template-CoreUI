@@ -66,7 +66,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         procesoCriticoAsfi: Yup.mixed().required(Messages.required),
         procesoCriticoAsfiAux: Yup.string().nullable(),
 
-        listMatrizRiesgo: Yup.mixed().nullable(), */
+        listMatrizRiesgo: Yup.mixed().nullable() */
 
         codigoInicial: Yup.string().nullable(),
         subcategorizacionId: Yup.mixed().nullable(),
@@ -96,7 +96,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         procesoCriticoAsfi: Yup.mixed().nullable(),
         procesoCriticoAsfiAux: Yup.string().nullable(),
 
-        listMatrizRiesgo: Yup.mixed().nullable(),
+        listMatrizRiesgo: Yup.mixed().nullable()
       }
     ),
 
@@ -131,13 +131,13 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
 
         listMatrizRiesgo: arrayIdMatrizRiesgo
       }
-      //console.log('datos que se enviaran SECCION 3:', data)
+      console.log('datos que se enviaran SECCION 3:', data)
       setObject(data);
 
       if (tipoEvento === 'A')
-        nextSection(3);
+        nextSection(2);
       else
-        nextSection(4);
+        nextSection(3);
     }
   });
 
@@ -375,6 +375,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
     resetFormikValue('procedimientoId', null);
     setDataApiProcedimiento([]);
   }
+
   const getValueProceso = (value) => {
     if (value !== null) {
       callApiProcedimiento(16, value.id);
@@ -413,7 +414,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
 
-  // Riesgos realcionados:
+  // Lista de Riesgos:
   const [listRiesgoRel, setListRiesgoRel] = useState([]);
 
   const callLListMatrizRiesgos = () => {
@@ -873,7 +874,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
               outline
               color="primary"
               block
-              onClick={() => beforeSection(3)}
+              onClick={() => beforeSection(2)}
             >
               <ChevronLeft size={17} className='mr-1' />
               Atrás

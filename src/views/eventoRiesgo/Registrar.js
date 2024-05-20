@@ -109,7 +109,7 @@ const EventoRiesgoRegistrar = () => {
     entidadAfectada: false,
     comercioAfectado: false,
     entidadId: null,
-    cargoId: null,
+    cargoId: [],
     estadoReportado: '',
     fuenteInfId: null,
     canalAsfiId: null,
@@ -197,6 +197,7 @@ const EventoRiesgoRegistrar = () => {
 
   const [requestData, setRequestData] = useState(dataResult);
   const [activeTab, setActiveTap] = useState('1');
+  const [dataAuxListRiesgos, setDataAuxListRiesgos] = useState([])
 
   /* manejo de botones siguiente */
   const nextSection = (tab) => {
@@ -229,6 +230,11 @@ const EventoRiesgoRegistrar = () => {
       ...requestData,
       ...result
     }
+
+    if (activeTab === '2' && result !== undefined) {
+      setDataAuxListRiesgos(result.listMatrizRiesgo);
+    }
+
     setRequestData(values);
     return values;
   }
@@ -276,7 +282,7 @@ const EventoRiesgoRegistrar = () => {
     setSpin(true);
     const dataRequest = setObject(values);
     var request = {}
-   
+
     if (formik.values.tipoEvento === 'A') {
       request = {
         ...dataRequest,
@@ -303,7 +309,7 @@ const EventoRiesgoRegistrar = () => {
     }
 
     for (let [key, value] of formData.entries()) {
-      console.log("key reg: ",key);
+      console.log("key reg: ", key);
       console.log("value reg: ", value);
     }
 
@@ -367,14 +373,6 @@ const EventoRiesgoRegistrar = () => {
                   <NavItem>
                     <NavLink className={classnames({ active: activeTab === '2' })}>
                       <span className={activeTab === '2' ? '' : 'd-none'}></span>
-                      <CheckSquare size={20} /><span className='pl-2 h6 font-weight-bold'>Planes de acción</span>
-                      <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
-                    </NavLink>
-                  </NavItem>
-
-                  <NavItem>
-                    <NavLink className={classnames({ active: activeTab === '3' })}>
-                      <span className={activeTab === '3' ? '' : 'd-none'}></span>
                       <BarChart2 size={20} /><span className='pl-2 h6 font-weight-bold'>Categoria y Línea de negocio</span>
                       <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
                     </NavLink>
@@ -382,8 +380,8 @@ const EventoRiesgoRegistrar = () => {
 
                   {(formik.values.tipoEvento === 'A') ?
                     <NavItem>
-                      <NavLink className={classnames({ active: activeTab === '4' })}>
-                        <span className={activeTab === '4' ? '' : 'd-none'}></span>
+                      <NavLink className={classnames({ active: activeTab === '3' })}>
+                        <span className={activeTab === '3' ? '' : 'd-none'}></span>
                         <DollarSign size={20} /><span className='pl-2 h6 font-weight-bold'>Importes relacionados</span>
                         <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
                       </NavLink>
@@ -391,9 +389,18 @@ const EventoRiesgoRegistrar = () => {
                     : null}
 
                   <NavItem>
+                    <NavLink className={classnames({ active: activeTab === '4' })}>
+                      <span className={activeTab === '4' ? '' : 'd-none'}></span>
+                      <Activity size={20} /><span className='pl-2 h6 font-weight-bold'>Riesgos relacionados</span>
+                      <ChevronRight size={17} className='ml-1 d-none d-xl-inline arrow-right-secondary' />
+                    </NavLink>
+                  </NavItem>
+
+
+                  <NavItem>
                     <NavLink className={classnames({ active: activeTab === '5' })}>
                       <span className={activeTab === '5' ? '' : 'd-none'}></span>
-                      <Activity size={20} /><span className='pl-2 h6 font-weight-bold'>Riesgos relacionados</span>
+                      <CheckSquare size={20} /><span className='pl-2 h6 font-weight-bold'>Planes de acción</span>
                     </NavLink>
                   </NavItem>
                 </Nav>
@@ -411,17 +418,6 @@ const EventoRiesgoRegistrar = () => {
                   </TabPane>
 
                   <TabPane tabId="2">
-                    <Planes
-                      nextSection={nextSection}
-                      beforeSection={beforeSection}
-                      setObject={setObject}
-                      initValues={formValueInitialPlanes}
-                      optionsPlanes={optionEstadoPlanes}
-                      isEdit={false}
-                    />
-                  </TabPane>
-
-                  <TabPane tabId="3">
                     <CategoriaNegocio
                       nextSection={nextSection}
                       beforeSection={beforeSection}
@@ -436,7 +432,7 @@ const EventoRiesgoRegistrar = () => {
                     />
                   </TabPane>
 
-                  <TabPane tabId="4">
+                  <TabPane tabId="3">
                     <ImportesRelacionados
                       nextSection={nextSection}
                       beforeSection={beforeSection}
@@ -447,12 +443,24 @@ const EventoRiesgoRegistrar = () => {
                     />
                   </TabPane>
 
-                  <TabPane tabId="5">
+                  <TabPane tabId="4">
                     <RiesgosRelacionados
+                      nextSection={nextSection}
+                      setObject={setObject}
                       beforeSection={beforeSection}
                       initValues={formValueInitialRiesgos}
                       tipoEvento={formik.values.tipoEvento}
+                    />
+                  </TabPane>
+
+                  <TabPane tabId="5">
+                    <Planes    
+                      beforeSection={beforeSection}
+                      initValues={formValueInitialPlanes}
+                      optionsPlanes={optionEstadoPlanes}
+                      tipoEvento={formik.values.tipoEvento}
                       handleOnSubmmit={handleOnSubmmit}
+                      dataAuxListRiesgos={dataAuxListRiesgos}
                     />
                   </TabPane>
 
