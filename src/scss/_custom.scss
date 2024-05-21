@@ -475,11 +475,19 @@ th {
 .Select.is-open {
   z-index: 1000 !important;
 }
+/* 
+.react-bootstrap-table select {
+  z-index: 25; 
+  position: relative; 
+}
 
 
+select {
+  z-index: 25; 
+  position: relative;
+} */
 
-
-.dropdown-over-table {
-  position: fixed; /* Esto hará que el elemento se posicione relativo a la ventana del navegador */
-  z-index: 5000;
+.fixed-select-tre {
+  z-index: 1;
+  position: relative;
 }

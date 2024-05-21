@@ -64,3 +64,55 @@ export const formatTime = (hora) => {
   return time;
 }
 
+
+export function base64toPDF(data, filename, mimeType) {
+  var bufferArray = base64ToArrayBuffer(data);
+  var blobStore = new Blob([bufferArray], { type: mimeType });
+
+  if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+    window.navigator.msSaveOrOpenBlob(blobStore, filename);
+    return;
+  }
+
+  var url = window.URL.createObjectURL(blobStore);
+  var link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  window.URL.revokeObjectURL(url);
+  link.remove();
+}
+
+
+export function base64ToArrayBuffer(data) {
+  var bString = window.atob(data);
+  var bLength = bString.length;
+  var bytes = new Uint8Array(bLength);
+  for (var i = 0; i < bLength; i++) {
+    var ascii = bString.charCodeAt(i);
+    bytes[i] = ascii;
+  }
+  return bytes;
+};
+
+export const getFileIcon = (mimeType) => {
+  switch (mimeType) {
+    case 'application/pdf':
+      return '/icon/pdf.png';
+    case 'application/vnd.ms-excel':
+    case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+      return '/icon/excel.png';
+    case 'application/msword':
+    case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+      return '/icon/word.png';
+    case 'application/vnd.ms-outlook':
+      return '/icon/outlook.png';
+    case 'application/zip':
+    case 'application/x-zip-compressed':
+      return '/icon/zip.png';
+    default:
+      return '/icon/default.png';
+  }
+};
+

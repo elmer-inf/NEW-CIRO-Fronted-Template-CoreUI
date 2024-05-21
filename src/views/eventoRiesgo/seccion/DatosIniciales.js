@@ -8,30 +8,80 @@ import { CSelectReact } from 'src/reusable/CSelectReact'
 import CInputCheckbox from 'src/reusable/CInputCheckbox'
 import { getTablaDescripcionEventoN1, getTablaDescripcionEventoN2 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
 import { buildSelectTwo } from 'src/functions/Function'
-import { formatTime } from 'src/functions/FunctionEvento'
-//import { CInputFile } from 'src/reusable/CInputFile'
+import { base64toPDF, formatSizeUnits, formatTime, getFileIcon } from 'src/functions/FunctionEvento'
 import { useHistory } from 'react-router-dom'
 import AuthService from 'src/views/authentication/AuthService'
 import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
 import { Messages } from 'src/reusable/variables/Messages'
-import { FilePond } from 'react-filepond';
+import { getArchivosByEvento } from '../controller/EventoController'
+import { CButton } from '@coreui/react'
+import CIcon from '@coreui/icons-react'
+import BootstrapTable from 'react-bootstrap-table-next'
+import { FilePond, registerPlugin } from 'react-filepond';
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import 'filepond/dist/filepond.min.css';
+
 var _ = require('lodash');
 
-const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFiles, optionsEstado, existingFiles, setFilesToDelete }) => {
+const DatosIniciales = ({ nextSection, setObject, initValues, obtainFiles, optionsEstado, isEdit, existingFiles, idEvento }) => {
 
+  registerPlugin(FilePondPluginFileValidateType);
   const Auth = new AuthService();
   const profile = Auth.getProfile();
   const user = profile.usuario;
 
-  //const today = new Date();
+  const [dataArchivos, setDataArchivo] = useState([]);
+
+
+  const columns = [{
+    dataField: 'nombreArchivo',
+    text: 'Nombre',
+    sort: true
+  }, {
+    dataField: 'size',
+    text: 'Tamaño',
+    formatter: (cell,) => formatSizeUnits(cell),
+    style: {
+      whiteSpace: 'nowrap'
+    }
+  }, {
+    dataField: 'archivoBase64',
+    text: 'Archivo',
+    formatter: (cell, row) => (
+      <CButton onClick={() => base64toPDF(row.archivoBase64, row.nombreArchivo, row.tipo)}>
+        <CIcon
+          className="mb-2"
+          src={getFileIcon(row.tipo)}
+          height={30}
+        />
+      </CButton>
+    )
+  }];
+
+  const getArchivos = (idEvento) => {
+    getArchivosByEvento(idEvento)
+      .then(res => {
+        setDataArchivo(res.data)
+      }).catch((error) => {
+        console.error('Error: ', error)
+      })
+  }
+
+  useEffect(() => {
+    if (isEdit) {
+      getArchivos(idEvento);
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const today = new Date();
   //const tenYearsFromNow = new Date();
   //tenYearsFromNow.setFullYear(today.getFullYear() + 10);
 
   const formik = useFormik({
     initialValues: initValues,
     validationSchema: Yup.object().shape({
-      /* fechaIni: Yup.date().min(new Date('01-01-1900'), Messages.dateValidation4).max(today, Messages.dateValidation3).required(Messages.required),
+      fechaIni: Yup.date().min(new Date('01-01-1900'), Messages.dateValidation4).max(today, Messages.dateValidation3).required(Messages.required),
       horaIni: Yup.mixed().required(Messages.required),
       fechaDesc: Yup.date().min(Yup.ref('fechaIni'), Messages.dateValidation2).max(today, Messages.dateValidation3).required(Messages.required),
       horaDesc: Yup.mixed().required(Messages.required),
@@ -50,9 +100,9 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
       canalAsfiId: Yup.mixed().required(Messages.required),
       descripcion: Yup.string().required(Messages.required),
       descripcionCompleta: Yup.string().nullable(),
-      files: Yup.mixed().nullable() */
+      files: Yup.mixed().nullable()
 
-      fechaIni: Yup.date().max(new Date('12-31-3000'), Messages.yearOutOfRange).nullable(),
+      /* fechaIni: Yup.date().max(new Date('12-31-3000'), Messages.yearOutOfRange).nullable(),
       horaIni: Yup.string().nullable(),
       fechaDesc: Yup.date().max(new Date('12-31-3000'), Messages.yearOutOfRange).nullable(),
       horaDesc: Yup.string().nullable(),
@@ -71,7 +121,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
       canalAsfiId: Yup.mixed().nullable(),
       descripcion: Yup.string().nullable(),
       descripcionCompleta: Yup.string().nullable(),
-      files: Yup.mixed().nullable(),
+      files: Yup.mixed().nullable(), */
     }
     ),
 
@@ -80,7 +130,6 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
       var arrayIdEventoCargos = [];
       _.forEach(values.cargoId, function (value) {
         arrayIdEventoCargos.push(value.value);
-       // console.log('value.value: ', value.value);
       });
 
       const data = {
@@ -111,40 +160,6 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
       nextSection(1);
     }
   })
-
-  // FilePond instance
-  /* /* const handlePondFile = (fileItems) => {
-    const newFiles = fileItems.map(fileItem => fileItem.file);
-    formik.setFieldValue('files', newFiles);
-  }; */
-  /* const handlePondFile = (fileItems) => {
-    // Extrae los archivos como instancias de File o como referencias a archivos existentes
-    const newFiles = fileItems.map(fileItem => {
-      if (fileItem.file instanceof File) {
-        return fileItem.file; // Archivo nuevo
-      } else {
-        return { // Archivo existente mapeado correctamente
-          id: fileItem.source,
-          name: fileItem.file.name,
-          size: fileItem.file.size,
-          type: fileItem.file.type
-        };
-      }
-    });
-
-    // Filtra para obtener solo los archivos eliminados que son existentes
-    const existingFilesRemoved = existingFiles.filter(ef =>
-      !fileItems.some(fi => fi.source === ef.id)
-    );
-
-    // Actualiza el estado de archivos en formik
-    formik.setFieldValue('files', newFiles);
-
-    // Llama a una función de callback si es necesario
-    obtainFiles(newFiles, existingFilesRemoved.map(file => file.id));
-  }; */
-
-
 
 
   // Rellena Datos para Editar
@@ -224,10 +239,9 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
         setDataApiCargo(options)
       }).catch((error) => {
-        console.error('Error: ', error) 
+        console.error('Error: ', error)
       })
   }
-
 
 
   // Fuente de informacion
@@ -261,6 +275,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
     callApiCargo(7);
     callApiFuente(8);
     callApiCanal(9);
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
@@ -328,28 +343,6 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
     history.push('/eventoRiesgo/Listar');
   }
 
-
-  console.log('existingFiles: ', existingFiles);
-  useEffect(() => {
-    if (isEdit && existingFiles && existingFiles.length > 0) {
-      const formattedFiles = existingFiles.map(file => ({
-        source: file.id,
-        options: {
-          type: 'local',
-          file: {
-            name: file.name,
-            size: file.size,
-            type: file.type
-          }
-        }
-      }));
-      formik.setFieldValue('files', formattedFiles);
-    }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [existingFiles, isEdit]);
-
-
-  console.log('formik.values.files: ', formik.values.files);
 
   return (
     <Fragment>
@@ -681,57 +674,51 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit, obtainFile
             />
           </FormGroup>
 
-          <FormGroup tag={Col} sm={12} md={{ size: 6, order: 0, offset: 3 }} className='mb-0'>
-            {/* <CInputFile
-              label={"Adjuntar Archivos"}
-              type={"file"}
-              id="files"
-              value={formik.values.files}
-              onChange={formik.setFieldValue}
-              onBlur={formik.handleBlur}
-              touched={formik.touched.files}
-              errors={formik.errors.files}
-              multiple={true}
-            /> */}
-            Adjuntar archivos
+          {isEdit ?
+            <FormGroup tag={Col} sm={12} md={{ size: 6, order: 0, offset: 3 }} className='mb-0'>
+                <div className='text-label pb-4'>Archivo(s) adjunto(s): </div>
+                <BootstrapTable
+                  bootstrap4={true}
+                  keyField="id"
+                  data={dataArchivos}
+                  columns={columns}
+                  noDataIndication={() => 'Sin Archivos'}
+                  bordered={false}
+                  striped={true}
+                  hover={false}
+                  condensed={true}
+                  wrapperClasses=""
+                />
+              </FormGroup>
+            : null
+          }
 
-
-            <FilePond
-              files={formik.values.files}
-              allowMultiple={true}
-              onupdatefiles={fileItems => {
-                const newFiles = fileItems.map(item => {
-                  if (item.file instanceof File) {
-                    // Es un nuevo archivo que se acaba de cargar
-                    return item.file;
-                  } else {
-                    // Preserva la estructura de archivos existentes
-                    return {
-                      source: item.source,
-                      options: {
-                        type: 'local',
-                        file: {
-                          name: item.file.name,
-                          size: item.file.size,
-                          type: item.file.type
-                        }
-                      }
-                    };
-                  }
-                });
-
-                formik.setFieldValue('files', newFiles);
-                // Filtra solo los nuevos archivos para upload y los archivos existentes para mantener track de eliminados
-                obtainFiles(
-                  newFiles.filter(file => file instanceof File),
-                  newFiles.filter(file => !(file instanceof File) && file.source)
-                );
-              }}
-              name="files"
-              labelIdle='Arrastra y suelta los archivos aquí o <span class="filepond--label-action">haz clic para seleccionar</span>'
-            />
-          </FormGroup>
+          {!isEdit ?
+            <FormGroup tag={Col} sm={12} md={{ size: 6, order: 0, offset: 3 }} className='mb-0'>
+              <Label className='form-label'>Adjuntar archivos:</Label>
+              <FilePond
+                files={formik.values.files}
+                allowMultiple={true}
+                onupdatefiles={fileItems => {
+                  const newFiles = fileItems.map(item => item.file);
+                  formik.setFieldValue('files', newFiles);
+                }}
+                name="files"
+                labelIdle='Arrastra y suelta los archivos aquí o <span class="filepond--label-action">haz clic para seleccionar</span>'
+                acceptedFileTypes={[
+                  'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // Excel
+                  'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // Word
+                  'application/pdf', // PDF
+                  'application/zip', // ZIP
+                  'application/vnd.ms-outlook' // MSG
+                ]}
+              />
+            </FormGroup>
+            : null
+          }
+          
         </Row>
+
 
         <Row className='pt-4'>
           <Col xs={4} md={{ size: 2, order: 0, offset: 3 }}>

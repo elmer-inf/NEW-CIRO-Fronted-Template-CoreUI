@@ -23,14 +23,12 @@ const UpdateEventoRiesgo = ({ match }) => {
 
   const history = useHistory();
   const [spin, setSpin] = useState(true);
-  const [dataApiTipoEvento, setDataApiTipoEvento] = useState([])
-  const [getFiles, setGetFiles] = useState(null)
-
+  const [dataApiTipoEvento, setDataApiTipoEvento] = useState([]);
+  const [dataAuxListRiesgos, setDataAuxListRiesgos] = useState([]);
 
   const obtainFiles = (f) => {
-    setGetFiles(f)
+  //setGetFiles(f)
   }
-
 
   const formValueInitialTipoEvento = {
     tipoEvento: null,
@@ -49,32 +47,25 @@ const UpdateEventoRiesgo = ({ match }) => {
     { value: 'No reportado', label: 'No reportado' }
   ]
 
-  // Estado de Planes de accion - SECCION 2
-  const optionEstadoPlanes = [
-    { value: 'No iniciado', label: 'No iniciado' },
-    { value: 'En proceso', label: 'En proceso' },
-    { value: 'Concluido', label: 'Concluido' }
-  ]
-
-  // Evento critico - SECCION 3
+  // Evento critico - SECCION 2
   const optionsEventoCritico = [
     { value: 'Crítico', label: 'Crítico' },
     { value: 'No crítico', label: 'No crítico' }
   ]
 
-  // Línea de negocio - SECCION 3
+  // Línea de negocio - SECCION 2
   const optionsLineaAsfi = [
     { value: '1. Línea de Negocio Emisor', label: '1. Línea de Negocio Emisor' },
     { value: '2. Línea de Negocio Adquirente', label: '2. Línea de Negocio Adquirente' }
   ]
 
-  // Proceso critico ASFI - SECCION 3
+  // Proceso critico ASFI - SECCION 2
   const optionProcesoAsfi = [
     { value: 1, label: 1 },
     { value: 2, label: 2 }
   ]
 
-  // Cobertura seguro - SECCION 4
+  // Cobertura seguro - SECCION 3
   const optionsCobertura = [
     { value: true, label: 'Si' },
     { value: false, label: 'No' }
@@ -97,7 +88,7 @@ const UpdateEventoRiesgo = ({ match }) => {
     entidadAfectada: false,
     comercioAfectado: false,
     entidadId: null,
-    cargoId: null,
+    cargoId: [],
     estadoReportado: '',
     fuenteInfId: null,
     canalAsfiId: null,
@@ -105,15 +96,6 @@ const UpdateEventoRiesgo = ({ match }) => {
     descripcionCompleta: '',
     files: [],
     responsableElaborador: ''
-  }
-
-  const formValueInitialPlanes = {
-    areaResponsableId: null,
-    cargoResponsableId: null,
-    detallePlan: '',
-    fechaFinPlan: '',
-    descripcionEstado: '',
-    estadoPlan: null
   }
 
   const formValueInitialCategoria = {
@@ -129,7 +111,6 @@ const UpdateEventoRiesgo = ({ match }) => {
     procesoId: null,
     procedimientoId: null,
     eventoCritico: '',
-
     lineaNegocio: '',
     lineaAsfiId: null,
     operacionId: null,
@@ -139,10 +120,8 @@ const UpdateEventoRiesgo = ({ match }) => {
     descServicioId: null,
     riesgoRelacionado: '',
     detalleEstado: '',
-
     procesoCriticoAsfi: '',
-
-    listMatrizRiesgo: null,
+    listMatrizRiesgo: null
   }
 
   const formValueInitialImportes = {
@@ -162,27 +141,25 @@ const UpdateEventoRiesgo = ({ match }) => {
   }
 
   const formValueInitialRiesgos = {
-    operativoId: 0,
-    liquidezId: 0,
-    lgiId: 0,
-    fraudeId: 0,
-    legalId: 0,
-    reputacionalId: 0,
-    cumplimientoId: 0,
-    estrategicoId: 0,
-    gobiernoId: 0,
-    seguridadId: 0,
+    operativoId: null,
+    liquidezId: null,
+    lgiId: null,
+    fraudeId: null,
+    legalId: null,
+    reputacionalId: null,
+    cumplimientoId: null,
+    estrategicoId: null,
+    gobiernoId: null,
+    seguridadId: null,
   }
 
   const [formValueInitialDatosSec, setformValueInitialDatosSec] = useState(formValueInitialDatos);
-  const [formValueInitialPlanesSec, setformValueInitialPlanesSec] = useState(formValueInitialPlanes);
   const [formValueInitialCategoriaSec, setformValueInitialCategoriaSec] = useState(formValueInitialCategoria);
   const [formValueInitialImportesSec, setformValueInitialImportesSec] = useState(formValueInitialImportes);
   const [formValueInitialRiesgosSec, setformValueInitialRiesgosSec] = useState(formValueInitialRiesgos);
 
   const dataResult = {
     ...formValueInitialDatosSec,
-    ...formValueInitialPlanesSec,
     ...formValueInitialCategoriaSec,
     ...formValueInitialImportesSec,
     ...formValueInitialRiesgosSec,
@@ -201,18 +178,9 @@ const UpdateEventoRiesgo = ({ match }) => {
       })
   }
 
-  const matchedValues = (args) => {
+  const macthedValues = (args) => {
 
     formik.setFieldValue('tipoEvento', args.tipoEvento, false);
-
-    // Transformación de la estructura de los archivos para FilePond
-    const existingFiles = args.archivoId.map(file => ({
-      name: file.nombreArchivo,
-      size: file.size,
-      type: file.tipo,
-      lastModified: new Date().getTime()
-    }));
-
 
     const datosIniciales = {
       codigo: args.codigo,
@@ -238,18 +206,8 @@ const UpdateEventoRiesgo = ({ match }) => {
       canalAsfiId: buildOptionSelect(args.canalAsfiId, 'id', 'nombre', true, 'canalAsfiId'),
       descripcion: args.descripcion,
       descripcionCompleta: args.descripcionCompleta,
-      //files: args.archivoId,
+      files: null,
       responsableElaborador: args.responsableElaborador,
-      files: existingFiles
-    };
-
-    const planesAccion = {
-      areaResponsableId: buildOptionSelect(args.areaResponsableId, 'id', 'nombre', true, 'areaResponsableId'),
-      cargoResponsableId: buildOptionSelect(args.cargoResponsableId, 'id', 'nombre', true, 'cargoResponsableId'),
-      detallePlan: args.detallePlan,
-      fechaFinPlan: args.fechaFinPlan,
-      descripcionEstado: args.descripcionEstado,
-      estadoPlan: { value: args.estadoPlan, label: args.estadoPlan }
     };
 
     const categoria = {
@@ -275,9 +233,7 @@ const UpdateEventoRiesgo = ({ match }) => {
       descServicioId: buildOptionSelect(args.descServicioId, 'id', 'nombre', true, 'descServicioId'),
       riesgoRelacionado: args.riesgoRelacionado,
       detalleEstado: args.detalleEstado,
-
       procesoCriticoAsfi: args.procesoCriticoAsfi,
-
       listMatrizRiesgo: buildSelectThree(args.riesgoRelacionado, 'id', 'codigo', 'definicion', true)
     };
 
@@ -310,14 +266,7 @@ const UpdateEventoRiesgo = ({ match }) => {
       seguridadId: buildOptionSelectThree(args.seguridadId, 'id', 'clave', 'nombre', true, 'seguridadId'),
     };
 
-
-    console.log('datosIniciales: ', datosIniciales);
     setformValueInitialDatosSec(datosIniciales);
-
-
-    //formik.setFieldValue('files', existingFiles);
-    console.log('categoria: ', categoria);
-    setformValueInitialPlanesSec(planesAccion);
     setformValueInitialCategoriaSec(categoria);
     setformValueInitialImportesSec(importes);
     setformValueInitialRiesgosSec(riesgos);
@@ -329,13 +278,12 @@ const UpdateEventoRiesgo = ({ match }) => {
     await getEventoRiesgoId(idEventoRiesgo)
       .then((response) => {
         const res = response.data;
-        matchedValues(res);
+        macthedValues(res);
         setSpin(false)
       }).catch((error) => {
         console.error("Error: ", error);
       });
   }
-
 
   useEffect(() => {
     callApiTipoEvento(6);
@@ -377,6 +325,11 @@ const UpdateEventoRiesgo = ({ match }) => {
       ...requestData,
       ...result
     }
+
+    if (activeTab === '2' && result !== undefined) {
+      setDataAuxListRiesgos(result.listMatrizRiesgo);
+    }
+
     setRequestData(values);
     return values;
   }
@@ -422,7 +375,6 @@ const UpdateEventoRiesgo = ({ match }) => {
 
   const handleOnSubmmit = (values) => {
     setSpin(true);
-
     const dataRequest = setObject(values);
     var request = {
       ...dataRequest,
@@ -443,29 +395,8 @@ const UpdateEventoRiesgo = ({ match }) => {
 
     }
 
-
-    const formData = new FormData();
-    formData.append('eventoRiesgoPutDTO', JSON.stringify(_.omit(request, ['files', 'riesgoRelacionado'])));
-
-    if (getFiles !== null) {
-      for (let i = 0; i < getFiles.length; i++) {
-        formData.append("file", getFiles[i]);
-      }
-    } else {
-      formData.append("file", new Blob([]));
-    }
-
-
-    // arma string de ids de archivos para eliminar separado por comas
-    formData.append("filesToDelete", "");
-
-    for (let [key, value] of formData.entries()) {
-      console.log("key edit: ", key);
-      console.log("value edit: ", value);
-    }
-
     const idEvento = match.params.id;
-    putEventoRiesgoId(idEvento, formData)
+    putEventoRiesgoId(idEvento, _.omit(request, ['files', 'riesgoRelacionado']))
       .then(res => {
         if (res.status >= 200 && res.status < 300) {
           notificationToast('success', 'Evento de Riesgo modificado exitósamente');
@@ -475,20 +406,11 @@ const UpdateEventoRiesgo = ({ match }) => {
         }
       }).catch((error) => {
         console.error('Error al modificar Evento de Riesgo: ', error);
-        if (error.response) {
-          console.log('Data:', error.response.data);
-          console.log('Status:', error.response.status);
-          console.log('Headers:', error.response.headers);
-        }
         notificationToast('error', 'Algo salió mal, intente nuevamente');
       });
   }
 
-
-  //console.log('formValueInitialDatosSec.files: ', formValueInitialDatosSec.files);
-
   return (
-
     <div>
       <CCSpinner show={spin} />
       {
@@ -498,11 +420,9 @@ const UpdateEventoRiesgo = ({ match }) => {
             <CardHeader>
               <CardTitle className='float-left h4 pt-2'>
                 <span className='pr-3'>Editar Evento de Riesgo</span>
-
                 {(formValueInitialDatosSec.estadoRegistro === 'Autorizado') ?
                   <span className='pr-3 text-primary font-weight-bold'>{formValueInitialDatosSec.codigo}</span>
                   : null}
-
                 {(formValueInitialDatosSec.estadoRegistro === 'Autorizado') ?
                   <Badge className="px-4 badge-success-light">{formValueInitialDatosSec.estadoRegistro}</Badge>
                   : null}
@@ -590,6 +510,7 @@ const UpdateEventoRiesgo = ({ match }) => {
                     <TabContent activeTab={activeTab}>
                       <TabPane tabId="1">
                         <DatosIniciales
+                          idEvento={match.params.id}
                           nextSection={nextSection}
                           setObject={setObject}
                           initValues={formValueInitialDatosSec}
@@ -635,10 +556,9 @@ const UpdateEventoRiesgo = ({ match }) => {
                       <TabPane tabId="5">
                         <Planes
                           beforeSection={beforeSection}
-                          initValues={formValueInitialPlanesSec}
-                          optionsPlanes={optionEstadoPlanes}
                           tipoEvento={formik.values.tipoEvento}
                           handleOnSubmmit={handleOnSubmmit}
+                          dataAuxListRiesgos={dataAuxListRiesgos}
                         />
                       </TabPane>
                     </TabContent>

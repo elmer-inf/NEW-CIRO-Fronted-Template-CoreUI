@@ -42,7 +42,7 @@ const RiesgoRelacionado = ({ nextSection, setObject, beforeSection, initValues, 
         gobiernoId: (values.gobiernoId !== null) ? values.gobiernoId.value : 0,
         seguridadId: (values.seguridadId !== null) ? values.seguridadId.value : 0
       }
-      //console.log('datos que se enviaran SECCION 4:', data)
+      console.log('datos que se enviaran SECCION 4:', data)
       setObject(data);
       nextSection(4);
     }
@@ -164,7 +164,7 @@ const RiesgoRelacionado = ({ nextSection, setObject, beforeSection, initValues, 
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectThree(res.data, 'id', 'clave', 'nombre', false)
-        setDataApiLgi(_.orderBy(options, ['value'], ['desc']))
+        setDataApiLgi(_.orderBy(options, ['value'], ['asc']))
       }).catch((error) => {
         console.error('Error: ', error)
       })

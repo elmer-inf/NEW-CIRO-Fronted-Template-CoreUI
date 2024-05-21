@@ -23,9 +23,9 @@ const EventoRiesgoRegistrar = () => {
 
   const history = useHistory();
   const [spin, setSpin] = useState(false);
-  const [getFiles, setGetFiles] = useState(null)
-  // Tipo de evento
-  const [dataApiTipoEvento, setDataApiTipoEvento] = useState([])
+  const [getFiles, setGetFiles] = useState(null);
+  const [dataApiTipoEvento, setDataApiTipoEvento] = useState([]);
+
   const callApiTipoEvento = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
@@ -62,32 +62,26 @@ const EventoRiesgoRegistrar = () => {
     { value: 'No reportado', label: 'No reportado' }
   ]
 
-  // Estado de Planes de accion - SECCION 2
-  const optionEstadoPlanes = [
-    { value: 'No iniciado', label: 'No iniciado' },
-    { value: 'En proceso', label: 'En proceso' },
-    { value: 'Concluido', label: 'Concluido' }
-  ]
 
-  // Evento critico - SECCION 3
+  // Evento critico - SECCION 2
   const optionsEventoCritico = [
     { value: 'Crítico', label: 'Crítico' },
     { value: 'No crítico', label: 'No crítico' }
   ]
 
-  // Línea de negocio - SECCION 3
+  // Línea de negocio - SECCION 2
   const optionsLineaAsfi = [
     { value: '1. Línea de Negocio Emisor', label: '1. Línea de Negocio Emisor' },
     { value: '2. Línea de Negocio Adquirente', label: '2. Línea de Negocio Adquirente' }
   ]
 
-  // Proceso critico ASFI - SECCION 3
+  // Proceso critico ASFI - SECCION 2
   const optionProcesoAsfi = [
     { value: 1, label: 1 },
     { value: 2, label: 2 }
   ]
 
-  // Cobertura seguro - SECCION 4
+  // Cobertura seguro - SECCION 3
   const optionsCobertura = [
     { value: true, label: 'Si' },
     { value: false, label: 'No' }
@@ -117,15 +111,6 @@ const EventoRiesgoRegistrar = () => {
     descripcionCompleta: '',
     files: [],
     responsableElaborador: ''
-  }
-
-  const formValueInitialPlanes = {
-    areaResponsableId: null,
-    cargoResponsableId: null,
-    detallePlan: '',
-    fechaFinPlan: '',
-    descripcionEstado: '',
-    estadoPlan: null
   }
 
   const formValueInitialCategoria = {
@@ -188,7 +173,6 @@ const EventoRiesgoRegistrar = () => {
 
   const dataResult = {
     ...formValueInitialDatos,
-    ...formValueInitialPlanes,
     ...formValueInitialCategoria,
     ...formValueInitialImportes,
     ...formValueInitialRiesgos,
@@ -197,7 +181,7 @@ const EventoRiesgoRegistrar = () => {
 
   const [requestData, setRequestData] = useState(dataResult);
   const [activeTab, setActiveTap] = useState('1');
-  const [dataAuxListRiesgos, setDataAuxListRiesgos] = useState([])
+  const [dataAuxListRiesgos, setDataAuxListRiesgos] = useState([]);
 
   /* manejo de botones siguiente */
   const nextSection = (tab) => {
@@ -307,12 +291,6 @@ const EventoRiesgoRegistrar = () => {
     } else {
       formData.append("file", new Blob([]));
     }
-
-    for (let [key, value] of formData.entries()) {
-      console.log("key reg: ", key);
-      console.log("value reg: ", value);
-    }
-
 
     postEventoRiesgoFormData(formData)
       .then(res => {
@@ -454,10 +432,8 @@ const EventoRiesgoRegistrar = () => {
                   </TabPane>
 
                   <TabPane tabId="5">
-                    <Planes    
+                    <Planes
                       beforeSection={beforeSection}
-                      initValues={formValueInitialPlanes}
-                      optionsPlanes={optionEstadoPlanes}
                       tipoEvento={formik.values.tipoEvento}
                       handleOnSubmmit={handleOnSubmmit}
                       dataAuxListRiesgos={dataAuxListRiesgos}

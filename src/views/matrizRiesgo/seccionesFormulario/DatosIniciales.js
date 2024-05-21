@@ -24,7 +24,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
   const formik = useFormik({
     initialValues: initValues,
     validationSchema: Yup.object().shape({
-      /* areaId: Yup.mixed().required(Messages.required),
+      areaId: Yup.mixed().required(Messages.required),
       unidadId: Yup.mixed().required(Messages.required),
       procesoId: Yup.mixed().required(Messages.required),
 
@@ -50,10 +50,10 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         then: Yup.string().nullable().required(Messages.required),
       }),
       eventoRiesgoId: Yup.mixed().nullable(),
-      eventoMaterializado: Yup.boolean(), */
+      eventoMaterializado: Yup.boolean(),
 
 
-      areaId: Yup.mixed().nullable(),
+      /* areaId: Yup.mixed().nullable(),
       unidadId: Yup.mixed().nullable(),
       procesoId: Yup.mixed().required(Messages.required),
 
@@ -79,7 +79,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, isEdit }) => {
         then: Yup.string().nullable().required(Messages.required),
       }),
       eventoRiesgoId: Yup.mixed().nullable(),
-      eventoMaterializado: Yup.boolean(),
+      eventoMaterializado: Yup.boolean(), */
     }
     ),
 

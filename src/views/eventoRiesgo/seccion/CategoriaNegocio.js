@@ -10,9 +10,7 @@ import { getTablaDescripcionEventoN1, getTablaDescripcionEventoN2, getTablaDescr
 import { buildSelectThree, buildSelectTwo } from 'src/functions/Function'
 import { CSelectReactTwo } from 'src/reusable/CSelectReactTwo'
 import { getRiesgos } from 'src/views/matrizRiesgo/controller/RiesgoController'
-//import { Messages } from 'src/reusable/variables/Messages'
-
-var _ = require('lodash');
+import { Messages } from 'src/reusable/variables/Messages'
 
 const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, isEdit, tipoEvento, fechaDesc, optionsCritico, optionsAsfi, optionProcesoAsfi }) => {
 
@@ -38,7 +36,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
     initialValues: initValues,
     validationSchema: Yup.object().shape(
       {
-        /* codigoInicial: Yup.string().nullable(),
+        codigoInicial: Yup.string().nullable(),
         subcategorizacionId: Yup.mixed().nullable(),
         trimestre: Yup.string().nullable(),
         tipoEventoPerdidaId: Yup.mixed().required(Messages.required),
@@ -66,9 +64,10 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         procesoCriticoAsfi: Yup.mixed().required(Messages.required),
         procesoCriticoAsfiAux: Yup.string().nullable(),
 
-        listMatrizRiesgo: Yup.mixed().nullable() */
+        listMatrizRiesgo: Yup.mixed().nullable()
 
-        codigoInicial: Yup.string().nullable(),
+
+        /* codigoInicial: Yup.string().nullable(),
         subcategorizacionId: Yup.mixed().nullable(),
         trimestre: Yup.string().nullable(),
         tipoEventoPerdidaId: Yup.mixed().nullable(),
@@ -96,16 +95,21 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
         procesoCriticoAsfi: Yup.mixed().nullable(),
         procesoCriticoAsfiAux: Yup.string().nullable(),
 
-        listMatrizRiesgo: Yup.mixed().nullable()
+        listMatrizRiesgo: Yup.mixed().nullable() */
       }
     ),
 
     onSubmit: values => {
 
-      var arrayIdMatrizRiesgo = [];
-      _.forEach(values.listMatrizRiesgo, function (value, key) {
-        arrayIdMatrizRiesgo.push(_.get(value, 'id', null))
-      });
+      let arrayIdMatrizRiesgo = [];
+
+      if (Array.isArray(values.listMatrizRiesgo)) {
+        // Cuando es múltiple
+        arrayIdMatrizRiesgo = values.listMatrizRiesgo.map(item => item ? item.id : null).filter(id => id !== null);
+      } else if (values.listMatrizRiesgo) {
+        // Cuando es único
+        arrayIdMatrizRiesgo.push(values.listMatrizRiesgo.id);
+      }
 
       const data = {
         ...values,
@@ -131,7 +135,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
 
         listMatrizRiesgo: arrayIdMatrizRiesgo
       }
-      console.log('datos que se enviaran SECCION 3:', data)
+      console.log('datos que se enviaran SECCION 2:', data)
       setObject(data);
 
       if (tipoEvento === 'A')
@@ -676,7 +680,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
               error={formik.errors.listMatrizRiesgo}
               touched={formik.touched.listMatrizRiesgo}
               options={listRiesgoRel}
-              isMulti={tipoEvento!==null && tipoEvento==='A'? false: true}
+              isMulti={tipoEvento !== null && tipoEvento === 'A' ? false : true}
             />
           </FormGroup>
         </Row>
@@ -794,8 +798,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
             />
           </FormGroup>
 
-          {/* Campo NUEVO */}
-          <FormGroup tag={Col} md='6' lg='3' className='mb-0'> 
+          <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
               Proceso crítico ASFI <span className='text-primary h5'><b>*</b></span>
             </Label>
@@ -813,23 +816,23 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
 
           {
             (formik.values.procesoCriticoAsfi !== null && formik.values.procesoCriticoAsfi === 1) ?
-            <FormGroup tag={Col} sm='12' className='mb-0'>
-              <Label className='form-label'>
-                Detalle proceso crítico ASFI 
-              </Label>
-              <CInputReact
-                type={"textarea"}
-                id={'procesoCriticoAsfiAux'}
-                value={'Se encuentra definido dentro del Mapa de Procesos, priorizando los Procesos Operativos de acuerdo a la cadena de valor que impacta directamente a los objetivos estratégico de la empresa establecidos en el Plan-GTIC-002-SIST.'}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                touched={formik.touched.procesoCriticoAsfiAux}
-                errors={formik.errors.procesoCriticoAsfiAux}
-                disabled={true}
-                rows={2}
-              />
-            </FormGroup>
-            : null
+              <FormGroup tag={Col} sm='12' className='mb-0'>
+                <Label className='form-label'>
+                  Detalle proceso crítico ASFI
+                </Label>
+                <CInputReact
+                  type={"textarea"}
+                  id={'procesoCriticoAsfiAux'}
+                  value={'Se encuentra definido dentro del Mapa de Procesos, priorizando los Procesos Operativos de acuerdo a la cadena de valor que impacta directamente a los objetivos estratégico de la empresa establecidos en el Plan-GTIC-002-SIST.'}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  touched={formik.touched.procesoCriticoAsfiAux}
+                  errors={formik.errors.procesoCriticoAsfiAux}
+                  disabled={true}
+                  rows={2}
+                />
+              </FormGroup>
+              : null
           }
 
           <FormGroup tag={Col} sm='12' className='mb-0'>

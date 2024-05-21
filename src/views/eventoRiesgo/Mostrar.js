@@ -4,7 +4,7 @@ import { Row, Col, Card, CardBody, CardHeader, CardTitle, Badge, Button, ListGro
 import { CNav, CNavItem, CNavLink, CTabContent, CTabPane, CTabs, CButton, CCollapse, CCard, CModal, CModalBody, CModalHeader, CModalTitle, CBadge } from '@coreui/react'
 import { getEventoRiesgoId, getUltimaObservacion, putEvaluaEvento, getGeneraCodigo, getArchivosByEvento } from './controller/EventoController';
 import FormularioEvaluar from './component/FormularioEvaluar'
-import { formatSizeUnits } from 'src/functions/FunctionEvento'
+import { base64toPDF, formatSizeUnits, getFileIcon } from 'src/functions/FunctionEvento'
 import Swal from 'sweetalert2'
 import CIcon from '@coreui/icons-react';
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -33,7 +33,7 @@ const EventoRiesgo = ({ match }) => {
       <CButton onClick={() => base64toPDF(row.archivoBase64, row.nombreArchivo, row.tipo)}>
         <CIcon
           className="mb-2"
-          src={getFileIcon(row.mimeType)}
+          src={getFileIcon(row.tipo)}
           height={30}
         />
       </CButton>
@@ -213,57 +213,19 @@ const EventoRiesgo = ({ match }) => {
     return build
   }
 
-
-  function base64toPDF(data, filename, mimeType) {
-    var bufferArray = base64ToArrayBuffer(data);
-    var blobStore = new Blob([bufferArray], { type: mimeType });
-
-    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-      window.navigator.msSaveOrOpenBlob(blobStore, filename);
-      return;
-    }
-
-    var url = window.URL.createObjectURL(blobStore);
-    var link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    window.URL.revokeObjectURL(url);
-    link.remove();
+  // Lista cargos
+  const renderListCargos = (list) => {
+    var build = list.map((item) => {
+      return (
+        <li>{item.nombre}</li>
+      )
+    })
+    return build
   }
 
 
-  function base64ToArrayBuffer(data) {
-    var bString = window.atob(data);
-    var bLength = bString.length;
-    var bytes = new Uint8Array(bLength);
-    for (var i = 0; i < bLength; i++) {
-      var ascii = bString.charCodeAt(i);
-      bytes[i] = ascii;
-    }
-    return bytes;
-  };
-
-  const getFileIcon = (mimeType) => {
-    switch (mimeType) {
-      case 'application/pdf':
-        return '/icon/pdf.png';
-      case 'application/vnd.ms-excel':
-      case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-        return '/icon/pdf.png';
-      case 'application/msword':
-      case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-        return '/icon/pdf.png';
-      case 'application/vnd.ms-outlook':
-        return '/icon/pdf.png';
-      case 'application/zip':
-      case 'application/x-zip-compressed':
-        return '/icon/pdf.png';
-      default:
-        return '/icon/pdf.png';
-    }
-  };
+  
+  
 
   const ListaRiesgos = ({ listRiesgos }) => {
     if (listRiesgos.length === 0) {
@@ -533,7 +495,9 @@ const EventoRiesgo = ({ match }) => {
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>Cargo persona afectada ASFI: </div>
-                              <div className='text-data'>{dataApi.cargoId !== null ? dataApi.cargoId.nombre : <i>Sin registro</i>}</div>
+                              <div className='text-data'>
+                                {(dataApi.cargoId !== null && !_.isEmpty(dataApi.cargoId)) ? renderListCargos(dataApi.cargoId) : <i>Sin registro</i>}
+                              </div>
                             </Col>
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
@@ -565,7 +529,6 @@ const EventoRiesgo = ({ match }) => {
                           <Row>
                             <Col sm={12} md={{ size: 6, order: 0, offset: 3 }} className='pt-2'>
                               <div className='text-label pb-4'>Archivo(s) adjunto(s): </div>
-
                               <BootstrapTable
                                 bootstrap4={true}
                                 keyField="id"

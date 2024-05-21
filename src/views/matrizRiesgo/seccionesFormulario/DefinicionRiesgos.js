@@ -22,7 +22,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
     initialValues: { ...initValues, otrosAux2: false },
     validationSchema: Yup.object().shape(
       {
-        /* definicion: Yup.string().required(Messages.required),
+        definicion: Yup.string().required(Messages.required),
         causa: Yup.string().required(Messages.required),
         consecuencia: Yup.string().required(Messages.required),
         efectoPerdidaOtro: Yup.string().nullable().when('otrosAux2', {
@@ -42,7 +42,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
         defConcatenado: Yup.string().nullable(),
         otrosAux2: Yup.boolean(),
         riesgoInherente: Yup.number().nullable(),
-        valorRiesgoInherente: Yup.string().nullable(), // REVISAR AUTOCOMPLETADO DE ESTE CAMPO
+        valorRiesgoInherente: Yup.string().nullable(),
         probInherente: Yup.string().nullable(),
         probPorcentaje: Yup.string().nullable(),
         probValoracion: Yup.string().nullable(),
@@ -58,12 +58,12 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
         subtipoFraudeId: Yup.mixed().nullable().when('fraudeInterno', {
           is: (val) => (val === true),
           then: Yup.mixed().nullable().required(Messages.required),
-        }), */
+        }),
 
 
 
 
-        definicion : Yup.string().nullable(),
+        /* definicion : Yup.string().nullable(),
         causa : Yup.string().nullable(),
         consecuencia : Yup.string().nullable(),
         efectoPerdidaOtro: Yup.string().nullable().when('otrosAux2',{
@@ -90,6 +90,16 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
         impactoInherente : Yup.string().nullable(),
         impactoPorcentaje : Yup.string().nullable(),
         impactoValoracion : Yup.string().nullable(),
+
+        fraudeInterno: Yup.boolean(),
+        tipoFraudeId: Yup.mixed().nullable().when('fraudeInterno', {
+          is: (val) => (val === true),
+          then: Yup.mixed().nullable().required(Messages.required),
+        }),
+        subtipoFraudeId: Yup.mixed().nullable().when('fraudeInterno', {
+          is: (val) => (val === true),
+          then: Yup.mixed().nullable().required(Messages.required),
+        }),  */
       }
     ),
 
@@ -200,6 +210,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
     getTablaDescripcionRiesgoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true);
+        console.log('options tipo : ', res.data);
         setDataApiTipoFraude(options)
       }).catch((error) => {
         console.error('Error: ', error)
@@ -213,7 +224,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
 
   const getValueTipoFraude = (value) => {
     if (value !== null) {
-      callApiSubtipoFraude(13, value.id);
+      callApiSubtipoFraude(11, value.id);
     }
   }
 
@@ -232,6 +243,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
     getTablaDescripcionRiesgoN2(idTablaDes, idNivel2)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false);
+        console.log('options sub: ', options);
         setDataApiSubtipoFraude(options)
       }).catch((error) => {
         console.error('Error: ', error)
@@ -242,7 +254,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
   // Para el despliegue del select llenado al EDITAR
   useEffect(() => {
     if (isEdit && initValues.tipoFraudeId !== null) {
-      callApiSubtipoFraude(13, initValues.tipoFraudeId.id);
+      callApiSubtipoFraude(11, initValues.tipoFraudeId.id);
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -253,7 +265,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
     callApiEfectoPerdida(19)
     callApiPerdidaAsfi(1)
     callApiFactorRiesgo(26);
-    callApiTipoFraude(12)
+    callApiTipoFraude(10) //12
   }, [])
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
@@ -407,10 +419,6 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
             />
           </FormGroup>
 
-
-
-
-
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <br />
             <CInputCheckbox
@@ -426,7 +434,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
-              Tipo <span className='text-primary h5'><b>{formik.values.fraudeInterno? '*' : ''}</b></span>
+              Tipo fraude interno <span className='text-primary h5'><b>{formik.values.fraudeInterno? '*' : ''}</b></span>
             </Label>
             <CSelectReactTwo
               id={'tipoFraudeId'}
@@ -450,7 +458,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
 
           <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
             <Label className='form-label'>
-              Subtipo <span className='text-primary h5'><b>{formik.values.fraudeInterno ? '*' : ''}</b></span>
+              Subtipo fraude interno<span className='text-primary h5'><b>{formik.values.fraudeInterno ? '*' : ''}</b></span>
             </Label>
             <CSelectReact
               type={"select"}
