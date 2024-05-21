@@ -416,7 +416,6 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
 
   // Lista de Riesgos:
   const [listRiesgoRel, setListRiesgoRel] = useState([]);
-
   const callLListMatrizRiesgos = () => {
     getRiesgos()
       .then(res => {
@@ -665,7 +664,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
           </FormGroup>
           <FormGroup tag={Col} md='12' className='mb-0'>
             <Label className='form-label'>
-              Riesgo(s) relacionado(s) {/* <span className='text-primary h5'><b>*</b></span> */}
+              Riesgo(s) relacionado(s)
             </Label>
             <CSelectReact
               type={"select"}
@@ -677,7 +676,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
               error={formik.errors.listMatrizRiesgo}
               touched={formik.touched.listMatrizRiesgo}
               options={listRiesgoRel}
-              isMulti={true}
+              isMulti={tipoEvento!==null && tipoEvento==='A'? false: true}
             />
           </FormGroup>
         </Row>

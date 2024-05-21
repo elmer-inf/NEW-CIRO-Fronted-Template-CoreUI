@@ -32,8 +32,16 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
       Yup.object().shape({
         nroControl: Yup.number().nullable(),
         descripcion: Yup.string().nullable(),
-        formalizado: Yup.string().nullable(),
-        norma: Yup.mixed().nullable(),
+        formalizado: Yup.boolean().nullable(),
+        normaAux: Yup.boolean(),
+        normaOtro: Yup.string().nullable().when('normaAux', {
+          is: (val) => (val === true),
+          then: Yup.string().nullable().required(Messages.required),
+        }),
+        norma: Yup.mixed().nullable().when('normaAux', {
+          is: (val) => (val === false),
+          then: Yup.mixed().nullable().required(Messages.required),
+        }),
         tipo: Yup.mixed().nullable(),
         nivel: Yup.mixed().nullable()
       })
@@ -47,7 +55,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
     const previousNumber = parseInt(field.value || '0');
     if (previousNumber < nroControles) {
       for (let i = previousNumber; i < nroControles; i++) {
-        controles.push({ nroControl: i + 1, descripcion: '', formalizado: false, norma: '', tipo: '', nivel: '' });
+        controles.push({ nroControl: i + 1, descripcion: '', formalizado: 'false', norma: '', normaOtro: '', tipo: '', nivel: '' });
       }
     } else {
       for (let i = previousNumber; i >= nroControles; i--) {
@@ -55,13 +63,21 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
       }
     }
     setValues({ ...values, controles });
-    // call formik onChange method
     field.onChange(e);
   }
 
   function onSubmit(values) {
+    const controlesModificados = values.controles.map(control => {
+      const controlAjustado = _.omit(control, ['normaAux', 'normaOtro']);
+      if (!controlAjustado.norma && control.normaOtro) {
+        controlAjustado.norma = control.normaOtro;
+      }
+      return controlAjustado;
+    });
+
     const data = {
       ...values,
+      controles: controlesModificados,
       controlesTiene: Boolean(values.controlesTiene),
 
       controlId: (values.controlId !== null)
@@ -212,6 +228,8 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
     return result;
   }
 
+
+
   return (
     <Formik initialValues={initValues} validationSchema={formik} onSubmit={onSubmit}>
       {({ errors, values, touched, setValues, setFieldValue }) => (
@@ -274,7 +292,6 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
               <ErrorMessage name="controlObjetivo" component="div" className="invalid-feedback" />
             </Col>
 
-
             <Col sm='12' md='6'>
               <Row>
                 <Label xs='6' md='6' xl='6' className='text-label'>¿Tiene Controles?</Label>
@@ -325,15 +342,17 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
           {values.controlesTiene === 'true' ?
             <FieldArray name="controles">
               {() => (values.controles.map((control, i) => {
+
                 const controlErrors = (errors.controles?.length && errors.controles[i]) || {};
                 const controlTouched = (touched.controles?.length && touched.controles[i]) || {};
+
                 return (
                   <div key={i}>
                     <div className='divider divider-left divider-dark'>
                       <div className='divider-text '><span className='text-label'>Control {i + 1}</span></div>
                     </div>
                     <Row>
-                      <FormGroup tag={Col} md='6' lg='9' className='mb-2'>
+                      <FormGroup tag={Col} md='6' lg='12' className='mb-2'>
                         <Label>Descripción</Label>
                         <Field
                           name={`controles.${i}.descripcion`}
@@ -344,18 +363,16 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
                       </FormGroup>
 
                       <FormGroup tag={Col} md='6' lg='3' className='mb-2'>
-                        {/* <Field
-                          name={`controles.${i}.formalizado`}
-                          type="checkbox"
-                          className={'mr-2' + (controlErrors.formalizado && controlTouched.formalizado ? ' is-invalid' : '')}
-                        />
-                        <Label>¿Está Formalizado?</Label> */}
                         <Label>¿Está Formalizado?</Label><br />
                         <Field
                           type="radio"
                           name={`controles.${i}.formalizado`}
                           value="true"
-                          className={'mr-2' + (controlErrors.formalizado && controlTouched.formalizado ? ' is-invalid' : '')} />
+                          className={'mr-2' + (controlErrors.formalizado && controlTouched.formalizado ? ' is-invalid' : '')}
+                          onChange={() => {
+                            setFieldValue(`controles.${i}.formalizado`, 'true', false);
+                          }}
+                        />
                         <Label className='px-3'>Si</Label>
                         <Field
                           type="radio"
@@ -364,11 +381,42 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
                           className={'mr-2' + (controlErrors.formalizado && controlTouched.formalizado ? ' is-invalid' : '')}
                           onChange={() => {
                             setFieldValue(`controles.${i}.formalizado`, 'false', false);
-                            setFieldValue(`controles.${i}.norma`, '', true)
+                            setFieldValue(`controles.${i}.norma`, '', false);
+                            setFieldValue(`controles.${i}.normaAux`, '', false);
+                            setFieldValue(`controles.${i}.normaOtro`, '', false);
                           }}
                         />
                         <Label className='pl-3'>No</Label>
                         <ErrorMessage name={`controles.${i}.formalizado`} component="div" className="invalid-feedback" />
+                      </FormGroup>
+
+                      <FormGroup tag={Col} md='6' lg='3' className='mb-2'>
+                        <Label>Otros (Norma/procedimiento en la que está formalizado)</Label><br />
+                        <Field
+                          type="radio"
+                          name={`controles.${i}.normaAux`}
+                          value="true"
+                          className={'mr-2' + (controlErrors.normaAux && controlTouched.normaAux ? ' is-invalid' : '')}
+                          disabled={control.formalizado === 'false' ? true : false}
+                          onChange={() => {
+                            setFieldValue(`controles.${i}.normaAux`, 'true', false);
+                            setFieldValue(`controles.${i}.norma`, '', false);
+                          }}
+                        />
+                        <Label className='px-3'>Si</Label>
+                        <Field
+                          type="radio"
+                          name={`controles.${i}.normaAux`}
+                          value="false"
+                          className={'mr-2' + (controlErrors.normaAux && controlTouched.normaAux ? ' is-invalid' : '')}
+                          onChange={() => {
+                            setFieldValue(`controles.${i}.normaAux`, 'false', false);
+                            setFieldValue(`controles.${i}.normaOtro`, '', false);
+                          }}
+                          disabled={control.formalizado === 'false' ? true : false}
+                        />
+                        <Label className='pl-3'>No</Label>
+                        <ErrorMessage name={`controles.${i}.normaAux`} component="div" className="invalid-feedback" />
                       </FormGroup>
 
                       <FormGroup tag={Col} md='6' lg='6' className='mb-2'>
@@ -376,20 +424,32 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
                         <Select
                           placeholder="Seleccionar"
                           onChange={selectedOption => {
-                            setFieldValue(`controles.${i}.norma`, selectedOption.label, false)
+                            const value = selectedOption ? selectedOption.label : null;
+                            setFieldValue(`controles.${i}.norma`, value);
                           }}
-                          // onInputChange={e =>{return (control.formalizado=== 'false' || control.formalizado === false)?setFieldValue(`controles.${i}.norma`, null, false):null}}
-                          //value={selectedOption =>   console.log('selectedOption: ', selectedOption)                        }
                           options={dataApiProcedimiento}
                           name={`controles.${i}.norma`}
                           styles={customStyles}
                           defaultValue={buildSelectNorma(i)}
                           className={(controlErrors.norma && controlTouched.norma ? ' is-invalid' : '')}
-                          //isClearable={true}
-                          isDisabled={control.formalizado === 'true' ? false : true}
+                          isClearable={true}
+                          isDisabled={control.formalizado === 'true' && control.normaAux === 'false' ? false : true}
                         />
                         <ErrorMessage name={`controles.${i}.norma`} component="div" className="invalid-feedback" />
                       </FormGroup>
+
+                      <FormGroup tag={Col} md='6' lg='6' className='mb-2'>
+                        <Label>Otros (Norma/procedimiento en la que está formalizado)</Label>
+                        <Field
+                          name={`controles.${i}.normaOtro`}
+                          as="input"
+                          className={'form-control' + (controlErrors.normaOtro && controlTouched.normaOtro ? ' is-invalid' : '')}
+                          disabled={control.normaAux === 'true' ? false : true}
+                        />
+                        <ErrorMessage name={`controles.${i}.normaOtro`} component="div" className="invalid-feedback" />
+                      </FormGroup>
+
+
 
                       <FormGroup tag={Col} md='6' lg='3' className='mb-2'>
                         <Label>Tipo de control</Label>

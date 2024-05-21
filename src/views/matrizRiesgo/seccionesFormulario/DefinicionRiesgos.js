@@ -22,7 +22,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
     initialValues: { ...initValues, otrosAux2: false },
     validationSchema: Yup.object().shape(
       {
-        definicion: Yup.string().required(Messages.required),
+        /* definicion: Yup.string().required(Messages.required),
         causa: Yup.string().required(Messages.required),
         consecuencia: Yup.string().required(Messages.required),
         efectoPerdidaOtro: Yup.string().nullable().when('otrosAux2', {
@@ -58,15 +58,14 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
         subtipoFraudeId: Yup.mixed().nullable().when('fraudeInterno', {
           is: (val) => (val === true),
           then: Yup.mixed().nullable().required(Messages.required),
-        }),
+        }), */
 
 
 
 
-        /* definicion : Yup.string().nullable(),
+        definicion : Yup.string().nullable(),
         causa : Yup.string().nullable(),
         consecuencia : Yup.string().nullable(),
-        defConcatenado : Yup.string().nullable(),
         efectoPerdidaOtro: Yup.string().nullable().when('otrosAux2',{
           is:(val) => (val === true),
           then: Yup.string().nullable().required(Messages.required),
@@ -90,7 +89,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
         probValoracion : Yup.string().nullable(),
         impactoInherente : Yup.string().nullable(),
         impactoPorcentaje : Yup.string().nullable(),
-        impactoValoracion : Yup.string().nullable(), */
+        impactoValoracion : Yup.string().nullable(),
       }
     ),
 

@@ -139,17 +139,27 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
     if (cell === 'No iniciado') {
       return (
         <CBadge className="mt-1 mb-2 mr-1 px-2 py-1 badge-danger-light">{cell}</CBadge>
-      );
+      )
     }
     if (cell === 'Concluido') {
       return (
         <CBadge className="mt-1 mb-2 mr-1 px-2 py-1 badge-success-light">{cell}</CBadge>
-      );
+      )
     }
     if (cell === 'En proceso') {
       return (
         <CBadge className="mt-1 mb-2 mr-1 px-2 py-1 badge-warning-light">{cell}</CBadge>
-      );
+      )
+    }
+    if (cell === 'Vencido') {
+      return (
+        <CBadge className="mt-1 mb-2 mr-1 px-2 py-1 badge-danger-light">{cell}</CBadge>
+      )
+    }
+    if (cell === 'No aplicable') {
+      return (
+        <CBadge className="mt-1 mb-2 mr-1 px-2 py-1 badge-danger-light">{cell}</CBadge>
+      )
     }
   }
 
@@ -286,9 +296,9 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
                         <option value="" disabled>Seleccionar</option>
                         <option value="No iniciado">No iniciado</option>
                         <option value="En proceso">En proceso</option>
+                        <option value="Vencido">Vencido</option>
+                        <option value="No aplicable">No aplicable</option>
                         <option value="Concluido">Concluido</option>
-                        <option value="En proceso">Vencido</option>
-                        <option value="Concluido">No aplicable</option>
                       </Field>
                       <ErrorMessage name={`planesAccion.${i}.estado`} component="div" className="invalid-feedback" />
                     </FormGroup>
@@ -321,28 +331,42 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
               </div>
             </Col>
 
-            <Col xs='12' md='6' xl='3'>
+            <Col xs='12' md='6' xl='2'>
               <CCallout color="info">
                 <div className="text-label">Nro. de Tareas</div>
                 <div className="h4">{values.planesAccion.length}</div>
               </CCallout>
             </Col>
 
-            <Col xs='12' md='6' xl='3'>
+            <Col xs='12' md='6' xl='2'>
               <CCallout color="danger">
                 <div className="text-label">No iniciadas</div>
                 <div className="h4">{countEstadoPlanes(values.planesAccion, 'No iniciado')}</div>
               </CCallout>
             </Col>
 
-            <Col xs='12' md='6' xl='3'>
+            <Col xs='12' md='6' xl='2'>
               <CCallout color="warning">
                 <div className="text-label">En proceso</div>
                 <div className="h4">{countEstadoPlanes(values.planesAccion, 'En proceso')}</div>
               </CCallout>
             </Col>
 
-            <Col xs='12' md='6' xl='3'>
+            <Col xs='12' md='6' xl='2'>
+              <CCallout color="danger">
+                <div className="text-label">Vencido</div>
+                <div className="h4">{countEstadoPlanes(values.planesAccion, 'Vencido')}</div>
+              </CCallout>
+            </Col>
+
+            <Col xs='12' md='6' xl='2'>
+              <CCallout color="danger">
+                <div className="text-label">No aplicable</div>
+                <div className="h4">{countEstadoPlanes(values.planesAccion, 'No aplicable')}</div>
+              </CCallout>
+            </Col>
+
+            <Col xs='12' md='6' xl='2'>
               <CCallout color="success">
                 <div className="text-label">Concluido</div>
                 <div className="h4">{countEstadoPlanes(values.planesAccion, 'Concluido')}</div>
@@ -382,7 +406,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
                 <div>
                   <CBadge className='badge-warning-light'><AlertCircle size={30} className='text-warning' /></CBadge>
                   <span className='text-label pl-4'>Estado</span>
-                  <span className='text-warning text-label pl-5'>En Proceso</span>
+                  <span className='text-warning text-label pl-5'>En proceso</span>
                 </div>
                 : null}
 
