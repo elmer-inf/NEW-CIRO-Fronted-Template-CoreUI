@@ -84,7 +84,6 @@ export function base64toPDF(data, filename, mimeType) {
   link.remove();
 }
 
-
 export function base64ToArrayBuffer(data) {
   var bString = window.atob(data);
   var bLength = bString.length;
@@ -116,3 +115,23 @@ export const getFileIcon = (mimeType) => {
   }
 };
 
+// Para seleccionar elemtos de una lista a otra
+export const FilterText = (props) => {
+  return (
+    <div className="d-flex justify-content-center">
+      <input
+        autoFocus={props.autoFocus}
+        id={props.name}
+        type='text'
+        style={{ width: '100%' }}
+        placeholder={props.placeholder}
+        className="filter text-filter form-control form-control-sm"
+        name={props.name}
+        autoComplete="off"
+        onChange={props.onFilter}
+        value={props.value}
+        disabled={props.disabled}
+      />
+    </div>
+  );
+};

@@ -33,3 +33,8 @@ export const reporteAsfiExcel = (dataFilter) => {
     const uri = HOST + base + '/asfiexcel';
     return axios.post(uri, dataFilter, headerByExcel);
 }
+
+export const reporteConfigEventoExcel = (dataFilter) => {
+    const uri = HOST + base + '/eventoconfigexcel';
+    return axios.post(uri, dataFilter, headerByExcel);
+}

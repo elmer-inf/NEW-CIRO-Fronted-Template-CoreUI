@@ -687,7 +687,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, obtainFiles, optio
                   striped={true}
                   hover={false}
                   condensed={true}
-                  wrapperClasses=""
+                  wrapperClasses="table-responsive"
                 />
               </FormGroup>
             : null

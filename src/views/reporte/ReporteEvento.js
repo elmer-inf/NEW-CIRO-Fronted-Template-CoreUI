@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react'
-import { Card, CardHeader, CardBody, CardTitle, Button, Col, Label, Row, FormGroup, Form } from 'reactstrap'
-import { Delete, Download, File } from 'react-feather';
+import { Card, CardHeader, CardBody, CardTitle, Button, Col, Label, Row, FormGroup, Form, Input } from 'reactstrap'
+import { ChevronLeft, ChevronRight, Delete, Download, File } from 'react-feather';
 import { useFormik } from "formik"
 import * as Yup from "yup"
 import { CSelectReact } from 'src/reusable/CSelectReact';
@@ -11,9 +11,10 @@ import { generateAllReport } from './controller/ReporteCiroController';
 import ViewReportCIRO from './ciro/component/ViewReportCIRO';
 import { CInputReact } from 'src/reusable/CInputReact';
 import ViewReportEvento from './evento/ViewReportEvento';
-import { reporteAsfiExcel, reporteAuditExtExcel, reporteAuditIntExcel, reporteEventoExcel } from './controller/ReporteEventoController';
+import { reporteAsfiExcel, reporteAuditExtExcel, reporteAuditIntExcel, reporteConfigEventoExcel, reporteEventoExcel } from './controller/ReporteEventoController';
 import { saveAs } from 'file-saver';
 import { toastSweetAlert } from 'src/reusable/SweetAlert2';
+import { FilterText } from 'src/functions/FunctionEvento';
 var _ = require('lodash');
 
 const ReporteEventos = () => {
@@ -25,7 +26,6 @@ const ReporteEventos = () => {
 
   const [loadDataEvento, setLoadDataEvento] = useState(false);
   const [loadDataCiro, setLoadDataCiro] = useState(false);
-
 
   const formValueInitial = {
     tipo: null,
@@ -44,6 +44,7 @@ const ReporteEventos = () => {
     { value: 'auditoriaExt', label: 'Auditoria externa' },
     { value: 'auditoriaInt', label: 'Auditoria interna' },
     { value: 'asfi', label: 'ASFI' },
+    { value: 'configurar', label: 'Configurar reporte de Eventos de Riesgo' },
   ]
 
   // Opciones para Estado de Evento
@@ -97,15 +98,14 @@ const ReporteEventos = () => {
           is: (val) => (val !== null && val.value === 'ciro'),
           then: Yup.mixed().nullable().required(Messages.required),
         }),
-
-        // Campos para reporte de Auditoría y ASFI
+        // Campos para reporte de Auditoría, ASFI y Configurable Evento
         fechaDesde: Yup.mixed().when('tipo', {
-          is: (val) => val !== null && ['evento', 'auditoriaExt', 'auditoriaInt', 'asfi'].includes(val.value),
+          is: (val) => val !== null && ['evento', 'auditoriaExt', 'auditoriaInt', 'asfi', 'configurar'].includes(val.value),
           then: Yup.date().nullable().required(Messages.required),
           otherwise: Yup.date().nullable(), // No obligatorio para otros tipos
         }),
         fechaHasta: Yup.mixed().when('tipo', {
-          is: (val) => val !== null && ['evento', 'auditoriaExt', 'auditoriaInt', 'asfi'].includes(val.value),
+          is: (val) => val !== null && ['evento', 'auditoriaExt', 'auditoriaInt', 'asfi', 'configurar'].includes(val.value),
           then: Yup.date()
             .min(Yup.ref('fechaDesde'), Messages.dateValidation1)
             .max(today, Messages.dateValidation3)
@@ -113,7 +113,6 @@ const ReporteEventos = () => {
             .required(Messages.required),
           otherwise: Yup.date().nullable(), // No obligatorio para otros tipos
         }),
-
         // Campo para "estadoEvento" para tipo "evento"
         estadoEvento: Yup.mixed().when('tipo', {
           is: (val) => (val !== null && val.value === 'evento'),
@@ -122,6 +121,12 @@ const ReporteEventos = () => {
       }
     ),
     onSubmit: values => {
+      if (selectedFields.length === 0) {
+        setShowError(true);
+        return;
+      }
+      setShowError(false);
+
       if (values.tipo.value === 'ciro') {
         setshowCiroReport(true);
         setLoadDataCiro(true);
@@ -130,7 +135,7 @@ const ReporteEventos = () => {
         setshowEventoReport(true);
         setLoadDataEvento(true);
       }
-      if (values.tipo.value === 'auditoriaExt' || values.tipo.value === 'auditoriaInt' || values.tipo.value === 'asfi') {
+      if (values.tipo.value === 'auditoriaExt' || values.tipo.value === 'auditoriaInt' || values.tipo.value === 'asfi' || values.tipo.value === 'configurar') {
         getButtonAction();
       }
     }
@@ -237,9 +242,6 @@ const ReporteEventos = () => {
       })
   }
 
-
-
-
   //Genera reporte de Auditoria Externa
   const dataFilter = {
     fechaDesde: formik.values.fechaDesde,
@@ -311,6 +313,40 @@ const ReporteEventos = () => {
       })
   }
 
+  //Genera reporte configurable de Evento
+  const generateReportConfigEvento = async () => {
+
+    const data = {
+      dataFilter: {
+        fechaDesde: formik.values.fechaDesde,
+        fechaHasta: formik.values.fechaHasta
+      },
+      dataColumns: selectedFields.map(field => ({
+        id: field.id,
+        label: field.label
+      }))
+    };
+
+
+    setSpin(true);
+    await reporteConfigEventoExcel(data)
+      .then(res => {
+        if (res.status >= 200 && res.status < 300) {
+          const blob = new Blob([res.data], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+          });
+          saveAs(blob, 'Reporte configurado de Evento de Riesgo.xlsx');
+          toastSweetAlert('success', Messages.ok, 2000);
+        } else {
+          toastSweetAlert('error', Messages.no_ok, 2000);
+        }
+        setSpin(false);
+      }).catch((error) => {
+        console.error('Error al generar reporte ASFI: ', error);
+        toastSweetAlert('error', Messages.no_ok, 2000);
+        setSpin(false);
+      })
+  }
 
   const getButtonAction = () => {
     if (formik.values.tipo.value === 'auditoriaExt') {
@@ -319,9 +355,10 @@ const ReporteEventos = () => {
       return generateReportAuditInt();
     } else if (formik.values.tipo.value === 'asfi') {
       return generateReportAuditAsfi();
+    } else if (formik.values.tipo.value === 'configurar') {
+      return generateReportConfigEvento();
     }
   };
-
 
   useEffect(() => {
     if (formik.values.tipo === null || formik.values.tipo.value !== 'ciro') {
@@ -344,6 +381,166 @@ const ReporteEventos = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadDataEvento, loadDataCiro]);
 
+
+  // Campos para configurar reporte de Eventos de Riesgo
+  const camposDeEventosDeRiesgos = [
+    { id: 1, label: 'Código del Evento' },
+    { id: 2, label: 'Fecha del Inicio del Evento' },
+    { id: 3, label: 'Hora de Inicio' },
+    { id: 4, label: 'Fecha de Descubrimiento del Evento' },
+    { id: 5, label: 'Hora de Descubrimiento' },
+    { id: 6, label: 'CAMPO AUXILIAR MES-AÑO INICIO' },
+    { id: 7, label: 'CAMPO AUXILIAR AÑO INICIO' },
+    { id: 8, label: 'Fecha de Finalización del Evento' },
+    { id: 9, label: 'Hora de Finalización' },
+    { id: 10, label: 'CAMPO AUXILIAR MES-AÑO FIN' }, //10
+
+    { id: 11, label: 'CAMPO AUXILIAR AÑO FIN' },
+    { id: 12, label: 'Agencia' },
+    { id: 13, label: '(Lugar) Oficina' },
+    { id: 14, label: 'Área Involucrada (en la que se suscitó la incidencia)' },
+    { id: 15, label: 'Unidad' },
+    { id: 16, label: 'Descripción Resumida del Evento' },
+    { id: 17, label: 'Descripción Larga del Evento' },
+    { id: 18, label: 'Categoría (del Evento)' },
+    { id: 19, label: 'Descripción Clase de Evento' },
+    { id: 20, label: 'Tipo de Evento' }, //20
+
+    { id: 21, label: 'Definición' },
+    { id: 22, label: 'Subtipo de Evento' },
+    { id: 23, label: 'Clase de Evento' },
+    { id: 24, label: 'Evento Crítico' },
+    { id: 25, label: 'Detalle Evento Crítico' },
+    { id: 26, label: 'Factores de Riesgo Operativo' },
+    { id: 27, label: 'MacroProceso' },
+    { id: 28, label: 'Campo ASFI DE Macroproceso' },
+    { id: 29, label: 'Código Riesgo Relacionado' },
+    { id: 30, label: 'Descripción Riesgo' }, //30
+
+    { id: 31, label: 'Código Macroproceso' },
+    { id: 32, label: 'Procedimiento' },
+    { id: 33, label: 'Proceso Critico' },
+    { id: 34, label: 'Líneas de Negocio (Nivel 3)' },
+    { id: 35, label: 'Líneas de Negocio ASFI' },
+    { id: 36, label: 'Operación (Producto o Servicio afectado)' },
+    { id: 37, label: 'Tipo de Servicio' },
+    { id: 38, label: 'Descripción Operación, Producto o Servicio Afectado' },
+    { id: 39, label: 'Operaciones ASFI' },
+    { id: 40, label: 'Entidad o Comercio Afectado' }, //40
+
+    { id: 41, label: 'Acciones efectuadas por el área responsable de la incidencia' },
+    { id: 42, label: 'Estado del Evento' },
+    { id: 43, label: 'Moneda' },
+    { id: 44, label: 'Pérdida por Riesgo Operativo (Valor Contable) Monto de Pérdida' },
+    { id: 45, label: 'Monto de Pérdida por Riesgo Operativo USD' },
+    { id: 46, label: 'Gastos Asociados a la Pérdida (BS)' },
+    { id: 47, label: 'Monto Total Recuperado' },
+    { id: 48, label: 'Cobertura de Seguro SI / NO' },
+    { id: 49, label: 'Póliza de Seguro asociada' },
+    { id: 50, label: 'Monto Recuperado por Coberturas de Seguros BS' },//50
+
+    { id: 51, label: 'Pérdida por Riesgo Operativo (Valor de Mercado)' },
+    { id: 52, label: 'Recuperación de Activo' },
+    { id: 53, label: 'Monto Total Final de la Perdida Expresado en USD' },
+    { id: 54, label: 'Fecha de Registro Contable del evento de Pérdida' },
+    { id: 55, label: 'Cuentas Contables Afectadas' },
+    { id: 56, label: 'Nombre cuenta' },
+    { id: 57, label: 'Fuente de información' },
+    { id: 58, label: 'Impacto o Severidad' },
+    { id: 59, label: 'Riesgo Relacionado' },
+    { id: 60, label: 'Cargo(s) Involucrados' }, //60
+
+    { id: 61, label: 'Canal' },
+    { id: 62, label: 'Efectos de Pérdida' },
+    { id: 63, label: 'Proceso Crítico' },
+    { id: 64, label: 'Detalle Proceso Crítico' },
+    { id: 65, label: 'Operativo' },
+    { id: 66, label: 'Seguridad de la Información' },
+    { id: 67, label: 'Liquidez y Mercado' },
+    { id: 68, label: 'LGI FT y/o DP' },
+    { id: 69, label: 'Fraude con medios de Pago Electrónico' },
+    { id: 70, label: 'Legal y Regulatorio' }, //70
+
+    { id: 71, label: 'Reputacional' },
+    { id: 72, label: 'Cumplimiento' },
+    { id: 73, label: 'Estratégico' },
+    { id: 74, label: 'Gobierno Corporativo' },
+    { id: 75, label: 'Código Inicial' },
+    { id: 76, label: 'Sub Categorización' },
+    { id: 77, label: 'Trimestre' } //77
+  ];
+
+
+  const [availableFields, setAvailableFields] = useState(
+    camposDeEventosDeRiesgos.map(field => ({ ...field, selected: false }))
+  );
+  const [selectedFields, setSelectedFields] = useState([]);
+  const [filterText, setFilterText] = useState('');
+  const [selectAllAvailable, setSelectAllAvailable] = useState(false);
+  const [selectAllSelected, setSelectAllSelected] = useState(false);
+  const [showError, setShowError] = useState(false);
+
+  const handleAddField = () => {
+    const toAdd = availableFields.filter(field => field.selected);
+    setSelectedFields([...selectedFields, ...toAdd.map(field => ({ ...field, selected: false }))]);
+    setAvailableFields(availableFields.filter(field => !field.selected));
+    setSelectAllAvailable(false);
+  };
+
+  const handleRemoveField = () => {
+    const toRemove = selectedFields.filter(field => field.selected);
+    const newAvailableFields = [
+      ...availableFields,
+      ...toRemove.map(field => ({ ...field, selected: false }))
+    ].sort((a, b) => a.id - b.id);
+    setAvailableFields(newAvailableFields);
+    setSelectedFields(selectedFields.filter(field => !field.selected));
+    setSelectAllSelected(false);
+  };
+
+  const toggleSelection = (fieldId, isSelecting) => {
+    const updateSelection = fields => fields.map(field =>
+      field.id === fieldId ? { ...field, selected: !field.selected } : field
+    );
+    if (isSelecting) {
+      setAvailableFields(updateSelection(availableFields));
+    } else {
+      setSelectedFields(updateSelection(selectedFields));
+    }
+  };
+
+  const filteredAvailableFields = availableFields.filter(field =>
+    field.label.toLowerCase().includes(filterText.toLowerCase())
+  );
+
+  const handleToggleSelectAllAvailable = () => {
+    const newValue = !selectAllAvailable;
+    setAvailableFields(availableFields.map(field =>
+      filteredAvailableFields.includes(field) ? { ...field, selected: newValue } : field
+    ));
+    setSelectAllAvailable(newValue);
+  };
+
+  const handleToggleSelectAllSelected = () => {
+    const newValue = !selectAllSelected;
+    setSelectedFields(selectedFields.map(field => ({ ...field, selected: newValue })));
+    setSelectAllSelected(newValue);
+  };
+
+  useEffect(() => {
+    setShowError(false);
+    formik.setFieldValue('selectedFields', selectedFields);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedFields]);
+
+  const splitIntoTwoColumns = (fields) => {
+    const midpoint = Math.ceil(fields.length / 2);
+    return [fields.slice(0, midpoint), fields.slice(midpoint)];
+  };
+
+  const [availableCol1, availableCol2] = splitIntoTwoColumns(filteredAvailableFields);
+  const [selectedCol1, selectedCol2] = splitIntoTwoColumns(selectedFields);
+
   return (
     <div className='table-hover-animation'>
       <CCSpinner show={spin} />
@@ -358,7 +555,7 @@ const ReporteEventos = () => {
               <Row className='justify-content-center pt-4'>
                 <FormGroup tag={Col} xs='12' md='6' lg='4' xl='3' className='mb-0'>
                   <Label className='form-label text-label'>
-                    Tipo de Reporte
+                    Tipo de Reporte <span className='text-primary h5'><b>*</b></span>
                   </Label>
                   <CSelectReact
                     type={"select"}
@@ -410,12 +607,13 @@ const ReporteEventos = () => {
                         options={optionsTrimestre}
                       />
                     </FormGroup>
+
                   </Row>
                   : null
               }
 
               <Row className='justify-content-center'>
-                {(formik.values.tipo !== null && ['evento', 'auditoriaExt', 'auditoriaInt', 'asfi'].includes(formik.values.tipo.value)) && (
+                {(formik.values.tipo !== null && ['evento', 'auditoriaExt', 'auditoriaInt', 'asfi', 'configurar'].includes(formik.values.tipo.value)) && (
                   <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
                     <Label className='form-label'>
                       Fecha Desde <span className='text-primary h5'><b>*</b></span>
@@ -433,7 +631,7 @@ const ReporteEventos = () => {
                   </FormGroup>
                 )}
 
-                {(formik.values.tipo !== null && ['evento', 'auditoriaExt', 'auditoriaInt', 'asfi'].includes(formik.values.tipo.value)) && (
+                {(formik.values.tipo !== null && ['evento', 'auditoriaExt', 'auditoriaInt', 'asfi', 'configurar'].includes(formik.values.tipo.value)) && (
                   <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
                     <Label className='form-label'>
                       Fecha Hasta <span className='text-primary h5'><b>*</b></span>
@@ -471,6 +669,156 @@ const ReporteEventos = () => {
                 )}
               </Row>
 
+              {
+                (formik.values.tipo !== null && formik.values.tipo.value === 'configurar')
+                  ?
+                  <Row>
+                    <Col sm='12' xl='5'>
+                      <Label className='form-label text-label'>
+                        Seleccionar campo(s) de Eventos de Riesgo <span className='text-primary h5'><b>*</b></span>
+                      </Label>
+                      <FilterText
+                        autoFocus={true}
+                        name="searchAvailable"
+                        placeholder="Buscar campos"
+                        onFilter={e => setFilterText(e.target.value)}
+                        disabled={availableFields.length === 0}
+                      />
+                      <Card className='custom-container-scrooll mt-2'>
+                        <CardBody className='py-0'>
+                          <FormGroup check className='pl-0 pb-2'>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                className="orange-checkbox"
+                                checked={selectAllAvailable}
+                                onChange={handleToggleSelectAllAvailable}
+                                disabled={availableFields.length === 0}
+                              />{' '}
+                              <small>Seleccionar todos</small>
+                            </Label>
+                          </FormGroup>
+                          <Row>
+                            <Col>
+                              {availableCol1.map((field, index) => (
+                                <FormGroup check key={index}>
+                                  <Label check>
+                                    <Input
+                                      type="checkbox"
+                                      className="orange-checkbox"
+                                      checked={field.selected || false}
+                                      onChange={() => toggleSelection(field.id, true)}
+                                    />{' '}
+                                    <small>{field.label}</small>
+                                  </Label>
+                                </FormGroup>
+                              ))}
+                            </Col>
+                            <Col>
+                              {availableCol2.map((field, index) => (
+                                <FormGroup check key={index}>
+                                  <Label check>
+                                    <Input
+                                      type="checkbox"
+                                      className="orange-checkbox"
+                                      checked={field.selected || false}
+                                      onChange={() => toggleSelection(field.id, true)}
+                                    />{' '}
+                                    <small>{field.label}</small>
+                                  </Label>
+                                </FormGroup>
+                              ))}
+                            </Col>
+                          </Row>
+                        </CardBody>
+                      </Card>
+                      {showError && (
+                        <div className="text-danger text-center">Debe seleccionar al menos un campo de Evento de Riesgo.</div>
+                      )}
+                    </Col>
+                    <Col sm='12' xl='2' className='align-self-center'>
+                      <Row className='pt-2'>
+                        <Col xs="12">
+                          <Button
+                            block
+                            color="primary"
+                            className='text-white'
+                            onClick={handleAddField}
+                            disabled={filteredAvailableFields.every(field => !field.selected)}
+                          >
+                            Agregar <ChevronRight size={17} className='mr-1' />
+                          </Button>
+                        </Col>
+                      </Row>
+                      <Row className='py-4'>
+                        <Col xs="12">
+                          <Button
+                            block
+                            color="primary"
+                            className='text-white'
+                            onClick={handleRemoveField}
+                            disabled={selectedFields.every(field => !field.selected)}
+                          >
+                            <ChevronLeft size={17} className='mr-1' /> Quitar
+                          </Button>
+                        </Col>
+                      </Row>
+                    </Col>
+                    <Col sm='12' xl='5'>
+                      <Label className='form-label text-label'>Campos seleccionados:</Label>
+                      <Card className='custom-container-scrooll'>
+                        <CardBody className='py-0'>
+                          <FormGroup check className='pl-0 pb-2'>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                className="orange-checkbox"
+                                checked={selectAllSelected}
+                                onChange={handleToggleSelectAllSelected}
+                                disabled={selectedFields.length === 0}
+                              />{' '}
+                              <small>Seleccionar todos</small>
+                            </Label>
+                          </FormGroup>
+                          <Row>
+                            <Col>
+                              {selectedCol1.map((field, index) => (
+                                <FormGroup check key={index}>
+                                  <Label check>
+                                    <Input
+                                      type="checkbox"
+                                      className="orange-checkbox"
+                                      checked={field.selected || false}
+                                      onChange={() => toggleSelection(field.id, false)}
+                                    />{' '}
+                                    <small>{field.label}</small>
+                                  </Label>
+                                </FormGroup>
+                              ))}
+                            </Col>
+                            <Col>
+                              {selectedCol2.map((field, index) => (
+                                <FormGroup check key={index}>
+                                  <Label check>
+                                    <Input
+                                      type="checkbox"
+                                      className="orange-checkbox"
+                                      checked={field.selected || false}
+                                      onChange={() => toggleSelection(field.id, false)}
+                                      disabled={selectedFields.length === 0}
+                                    />{' '}
+                                    <small>{field.label}</small>
+                                  </Label>
+                                </FormGroup>
+                              ))}
+                            </Col>
+                          </Row>
+                        </CardBody>
+                      </Card>
+                    </Col>
+                  </Row>
+                  : null
+              }
 
               <Row className='justify-content-center py-4'>
                 <Col xs={4} md={2}>
@@ -478,7 +826,7 @@ const ReporteEventos = () => {
                     block
                     color="dark"
                     outline
-                    onClick={() => { formik.handleReset() }}
+                    onClick={() => { formik.handleReset(); setSelectedFields([]); setFilterText(''); setAvailableFields(camposDeEventosDeRiesgos.map(field => ({ ...field, selected: false }))); }}
                     disabled={!formik.dirty}
                   >
                     <Delete size={17} className='mr-2' />
@@ -494,7 +842,7 @@ const ReporteEventos = () => {
                   //disabled={formik.isSubmitting}
                   >
                     <File size={17} className='mr-2' />
-                    {(formik.values.tipo !== null && ['Auditoria externa', 'Auditoria interna'].includes(formik.values.tipo.label))? 'Descargar reporte' : 'Generar'}        
+                    {(formik.values.tipo !== null && ['Auditoria externa', 'Auditoria interna', 'asfi', 'configurar'].includes(formik.values.tipo.label)) ? 'Descargar reporte' : 'Generar'}
                   </Button>
                 </Col>
 
@@ -528,10 +876,9 @@ const ReporteEventos = () => {
                       </Button>
                       : null
                   }
-
-
                 </Col>
               </Row>
+
             </Form>
 
             {
