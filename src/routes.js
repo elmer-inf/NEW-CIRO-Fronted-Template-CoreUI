@@ -51,8 +51,8 @@ const SeguridadEditar = React.lazy(() => import('./views/seguridad/Editar'));
 const ReporteEvento = React.lazy(() => import('./views/reporte/ReporteEvento'));
 
 const routes = [
-  { path: '/', exact: true, name: 'Home' },
-  { path: '/main', name: 'Main', component: Main },
+  { path: '/', exact: true, name: 'Inicio' },
+  { path: '/main', name: '', component: Main },
   { path: '/eventoRiesgo/Mostrar/:id', name: 'Evento de Riesgo', component: EventoRiesgo }, // start
   { path: '/matrizRiesgo/Mostrar/:id', name: 'Matriz de Riesgo', component: MatrizRiesgoMostrar }, // start
   { path: '/matrizOportunidad/Mostrar/:id', name: 'Matriz de oportunidad', component: MatrizOportunidadMostrar }, // start

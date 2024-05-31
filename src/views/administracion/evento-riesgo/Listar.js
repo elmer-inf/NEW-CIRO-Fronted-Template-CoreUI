@@ -77,6 +77,7 @@ const AdministracionEventoListar = () => {
                 labelTabla === 'Gobierno' ||
                 labelTabla === 'Fraude' ||
                 labelTabla === 'Liquidez' ||
+                labelTabla === 'LGI FT y/o DP' ||
                 labelTabla === 'Operativo') ? 'NIVEL' : (labelTabla === 'Proceso') ?
                 'TIPO DOC' : (labelTabla === 'Seguridad de la información') ?
                   'CALIFICACION' : '',
@@ -86,7 +87,7 @@ const AdministracionEventoListar = () => {
         labelTabla === 'Póliza ATC' || labelTabla === 'Reputacional' || labelTabla === 'Legal' ||
         labelTabla === 'Cumplimiento' || labelTabla === 'Estratégico' || labelTabla === 'Gobierno' ||
         labelTabla === 'Fraude' || labelTabla === 'Liquidez' || labelTabla === 'Operativo' ||
-        labelTabla === 'Proceso' || labelTabla === 'Seguridad de la información') ? false : true,
+        labelTabla === 'Proceso' || labelTabla === 'Seguridad de la información' ||  labelTabla === 'LGI FT y/o DP') ? false : true,
       filter: textFilter({
         placeholder: 'Buscar'
       }),
@@ -102,7 +103,8 @@ const AdministracionEventoListar = () => {
           labelTabla === 'Fraude' ||
           labelTabla === 'Liquidez' ||
           labelTabla === 'Operativo' ||
-          labelTabla === 'Seguridad de la información') ?
+          labelTabla === 'Seguridad de la información' ||
+          labelTabla === 'LGI FT y/o DP') ?
           'DESCRIPTIVO' : (labelTabla === 'Recuperación activo' || labelTabla === 'Cuenta contable') ?
             'DESCRIPCION' : 'NOMBRE',
       sort: true,
@@ -119,7 +121,8 @@ const AdministracionEventoListar = () => {
         labelTabla === 'Reputacional' ||
         labelTabla === 'Estratégico' ||
         labelTabla === 'Operativo' ||
-        labelTabla === 'Seguridad de la información') ?
+        labelTabla === 'Seguridad de la información' ||
+        labelTabla === 'LGI FT y/o DP') ?
         'DESCRIPCION' : (labelTabla === 'Macroproceso') ?
           'NIVEL' : (labelTabla === 'Proceso') ?
             'NOMBRE DOC' : (labelTabla === 'Legal' || labelTabla === 'Liquidez') ?
@@ -132,7 +135,7 @@ const AdministracionEventoListar = () => {
         labelTabla === 'Reputacional' || labelTabla === 'Estratégico' || labelTabla === 'Operativo' ||
         labelTabla === 'Seguridad de la información' || labelTabla === 'Macroproceso' || labelTabla === 'Proceso' ||
         labelTabla === 'Legal' || labelTabla === 'Liquidez' || labelTabla === 'Cumplimiento' ||
-        labelTabla === 'Gobierno' || labelTabla === 'Fraude' || labelTabla === 'Responsable') ? false : true,
+        labelTabla === 'Gobierno' || labelTabla === 'Fraude' || labelTabla === 'Responsable' ||  labelTabla === 'LGI FT y/o DP') ? false : true,
       filter: textFilter({
         placeholder: 'Buscar'
       }),

@@ -255,7 +255,6 @@ const AdministracionMatrizRiesgosListar = () => {
   /* LISTA TABLA DESCRIPCION despendiento de seleccion tabla lista*/
   const handleSelectOnChange = (result) => {
     const labelTable = result.label;
-    console.log('labelTable: ', labelTable);
     setLabelTabla(labelTable);
     const valueTable = result.value;
     setValueTabla(valueTable);
@@ -265,7 +264,6 @@ const AdministracionMatrizRiesgosListar = () => {
   const getTablaDescripcion = (idTabla) => {
     getTablaDescripcionRiesgoN1(idTabla)
       .then(res => {
-        console.log('resss: ', res.data);
         setDAtaApi(res.data);
       }).catch((error) => {
         console.error('Error: ', error)

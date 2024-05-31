@@ -1,10 +1,11 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Card, CardHeader, CardTitle, CardBody } from 'reactstrap'
 import { useHistory } from 'react-router-dom'
 import Formulario from './component/Formulario'
-import { postTablaDescripcionRiesgo } from './controller/AdminRiesgoController'
+import { getTablaListaRiesgo, postTablaDescripcionRiesgo } from './controller/AdminRiesgoController'
 import { ToastContainer, toast } from 'react-toastify'
 import CCSpinner from 'src/reusable/spinner/CCSpinner'
+import { buildSelectTwo } from 'src/functions/Function'
 
 const AdministracionMatrizRiesgosRegistrar = () => {
 
@@ -20,7 +21,25 @@ const AdministracionMatrizRiesgosRegistrar = () => {
     campoE: '',
     campoF: '',
     campoG: '',
-    tablaId: null
+    tablaId: null,
+    nivel2_id: null,
+  }
+
+  const [tablaListaOptions, setTablaListaOptions] = useState([])
+
+  const optionsToFormik = {
+    tablaOp: tablaListaOptions,
+    tabla_n2: []
+  }
+
+  const getTablaLista =  ()=> {
+     getTablaListaRiesgo()
+      .then(res => {
+        const options = buildSelectTwo(res.data, 'id', 'nombreTabla', true);
+        setTablaListaOptions(options)
+      }).catch((error) => {
+        console.error('Error: ', error)
+      })
   }
 
   const notificationToast = (type, mensaje) => {
@@ -78,6 +97,11 @@ const AdministracionMatrizRiesgosRegistrar = () => {
       })
   }
 
+  useEffect(() => {
+    getTablaLista();
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <div>
       <CCSpinner show={spin} />
@@ -89,7 +113,9 @@ const AdministracionMatrizRiesgosRegistrar = () => {
           <CardBody className='mt-4'>
             <Formulario
               initialValuess={formValueInitial}
+              optionToSelect={optionsToFormik}
               handleOnSubmit={handleOnSubmit}
+              isEdit={false}
             />
           </CardBody>
         </Card>

@@ -3,12 +3,14 @@ import { useFormik } from "formik"
 import * as Yup from "yup"
 import { CInputReact } from 'src/reusable/CInputReact'
 import { FormGroup, Row, Col, Form, Button, Label } from 'reactstrap'
-import { CSelectReact } from 'src/reusable/CSelectReact'
-import { getTablaListaRiesgo } from '../controller/AdminRiesgoController';
+import { getTablaDescripcionRiesgoN1 } from '../controller/AdminRiesgoController';
 import { buildSelectTwo } from 'src/functions/Function'
 import { Delete, Save, XSquare } from 'react-feather'
+import CSelectReactTwo from 'src/reusable/CSelectReactTwo'
 
-const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
+const AdminFormMatrizRiesgo = ({ initialValuess, optionToSelect, handleOnSubmit, isEdit }) => {
+
+  const [varListN2, setVarListN2] = useState(optionToSelect.tabla_n2);
 
   const formik = useFormik({
     initialValues: initialValuess,
@@ -22,35 +24,73 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
         campoE: Yup.string().nullable(),
         campoF: Yup.string().nullable(),
         campoG: Yup.string().nullable(),
-
-        tablaId: Yup.mixed().required('Campo obligatorio')
+        tablaId: Yup.mixed().required('Campo obligatorio'),
+        nivel2_id: Yup.mixed()
       }
     ),
 
     onSubmit: values => {
       const data = {
         ...values,
-        tablaId: values.tablaId.value
+        tablaId: values.tablaId.value,
+        nivel2_id: (values.nivel2_id !== null) ? values.nivel2_id.value : 0,
       }
       handleOnSubmit(data)
     }
   })
 
-  /* LISTA LAS TABLAS LISTA DE MATRIZ DE RIESGO*/
-  const [tablaListaOptions, setTablaListaOptions] = useState([])
-
-  const callApi = () => {
-    getTablaListaRiesgo()
+  /* LISTA TABLA DESCRIPCION NIVEL 2 */
+  const callApi2 = (idn2) => {
+    getTablaDescripcionRiesgoN1(idn2)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombreTabla', true)
-        setTablaListaOptions(options)
+        const options = buildSelectTwo(res.data, 'id', 'nombre', true)
+        setVarListN2(options)
       }).catch((error) => {
+        console.error('Error: ', error)
       })
   }
 
+
+  const resetAllValues = () => {
+    formik.setFieldValue('campoA', '', false);
+    formik.setFieldValue('nombre', '', false);
+    formik.setFieldValue('campoB', '', false);
+    formik.setFieldValue('campoC', '', false);
+    formik.setFieldValue('campoD', '', false);
+    formik.setFieldValue('campoE', '', false);
+    formik.setFieldValue('campoF', '', false);
+    formik.setFieldValue('campoG', '', false);
+    formik.setFieldValue('nivel2_id', null, false);
+  }
+
+
+
+  /* Get List Level 2v*/
+  const clearAllDependences = () => {
+    resetAllValues();
+    setVarListN2([]);
+  }
+
+  const getSelectValueLevel2 = (value) => {
+    if (value.nivel2 !== null && value.nivel2 !== 0) {
+      const idnivel2 = value.nivel2;
+      callApi2(idnivel2);
+    }
+  }
+
+  const inputIsClearableLevel2 = (id) => {
+    //console.log('inputIsClearable aaa: ', id);
+    //formik.setFieldValue(id, null, false);
+    //clearAllDependences();
+  }
+
   useEffect(() => {
-    callApi();
-  }, [])
+    if (isEdit) {
+      setVarListN2(optionToSelect.tabla_n2);
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [optionToSelect]);
+
 
   return (
     <Form onSubmit={formik.handleSubmit} autoComplete="off">
@@ -59,16 +99,25 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
           Tabla
         </Label>
         <Col sm='9' lg='5'>
-          <CSelectReact
-            type={"select"}
+          <CSelectReactTwo
+            //label={""}
             id={'tablaId'}
             placeholder={'Seleccionar'}
             value={formik.values.tablaId}
             onChange={formik.setFieldValue}
             onBlur={formik.setFieldTouched}
-            error={formik.errors.tablaId}
+            errors={formik.errors.tablaId}
             touched={formik.touched.tablaId}
-            options={tablaListaOptions}
+            options={optionToSelect.tablaOp || []}
+            obligatorio={true}
+            isClearable={true}
+            isSearchable={true}
+            isDisabled={false}
+            dependence={true}
+            cleareableDependences={clearAllDependences}
+            getAddValue={true}
+            getSelectValue={getSelectValueLevel2}
+            inputIsClearable={inputIsClearableLevel2}
           />
         </Col>
       </FormGroup>
@@ -280,7 +329,39 @@ const AdminFormMatrizRiesgo = ({ initialValuess, handleOnSubmit }) => {
             </Row>
           </Col>
           : null}
+
       </Row>
+
+      {
+          (formik.values.tablaId !== null && // PARA NIVEL 2
+            (formik.values.tablaId.label === 'Subtipo fraude interno'))
+            ? <FormGroup row className='justify-content-center'>
+              <Label sm='3' lg='3' for='nivel2_id'>
+                {formik.values.tablaId.label === 'Subtipo fraude interno' ? 'Tipo de fraude interno' : null}
+              </Label>
+              <Col sm='9' lg='5'>
+                <CSelectReactTwo
+                  label={""}
+                  id={'nivel2_id'}
+                  placeholder={'Seleccione'}
+                  value={formik.values.nivel2_id}
+                  onChange={formik.setFieldValue}
+                  onBlur={formik.setFieldTouched}
+                  errors={formik.errors.nivel2_id}
+                  touched={formik.touched.nivel2_id}
+                  options={varListN2}
+                  obligatorio={true}
+                  isClearable={true}
+                  isSearchable={false}
+                  isDisabled={false}
+                  dependence={false}
+                  getAddValue={false}
+                />
+              </Col>
+            </FormGroup>
+
+            : null
+        }
 
       <Row className='pt-4'>
         <Col xs={4} md={{ size: 2, order: 0, offset: 3 }}>

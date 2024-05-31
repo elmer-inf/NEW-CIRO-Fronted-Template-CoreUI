@@ -175,7 +175,8 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
           formik.values.tablaLista.label === 'Fraude' ||
           formik.values.tablaLista.label === 'Liquidez' ||
           formik.values.tablaLista.label === 'Operativo' ||
-          formik.values.tablaLista.label === 'Seguridad de la información'
+          formik.values.tablaLista.label === 'Seguridad de la información' ||
+          formik.values.tablaLista.label === 'LGI FT y/o DP' 
         ))
         ? <FormGroup row className='justify-content-center'>
           <Label sm='3' lg='3' for='clave'>
@@ -194,7 +195,8 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
               formik.values.tablaLista.label === 'Gobierno' ||
               formik.values.tablaLista.label === 'Fraude' ||
               formik.values.tablaLista.label === 'Liquidez' ||
-              formik.values.tablaLista.label === 'Operativo') ? 'Nivel' : null}
+              formik.values.tablaLista.label === 'Operativo' ||
+              formik.values.tablaLista.label === 'LGI FT y/o DP') ? 'Nivel' : null}
             {formik.values.tablaLista.label === 'Seguridad de la información' ? 'Calificación' : null}
           </Label>
           <Col sm='9' lg='5'>
@@ -224,7 +226,8 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
                 formik.values.tablaLista.label === 'Fraude' ||
                 formik.values.tablaLista.label === 'Liquidez' ||
                 formik.values.tablaLista.label === 'Operativo' ||
-                formik.values.tablaLista.label === 'Seguridad de la información') ?
+                formik.values.tablaLista.label === 'Seguridad de la información' ||
+                formik.values.tablaLista.label === 'LGI FT y/o DP') ?
                 'Descriptivo' : (formik.values.tablaLista.label === 'Recuperación activo' || formik.values.tablaLista.label === 'Cuenta contable') ? 'Descripción' : 'Nombre'}
           </Label>
           <Col sm='9' lg='5'>
@@ -257,7 +260,8 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
           formik.values.tablaLista.label === 'Macroproceso' ||
           formik.values.tablaLista.label === 'Proceso' ||
           formik.values.tablaLista.label === 'Seguridad de la información' ||
-          formik.values.tablaLista.label === 'Responsable'))
+          formik.values.tablaLista.label === 'Responsable' ||
+          formik.values.tablaLista.label === 'LGI FT y/o DP'))
         ? <FormGroup row className='justify-content-center'>
           <Label sm='3' lg='3' for='descripcion'>
             {(formik.values.tablaLista.label === 'Categoria de tipo de Evento' ||
@@ -266,7 +270,8 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
               formik.values.tablaLista.label === 'Reputacional' ||
               formik.values.tablaLista.label === 'Estratégico' ||
               formik.values.tablaLista.label === 'Operativo' ||
-              formik.values.tablaLista.label === 'Seguridad de la información') ? 'Descripción' : null}
+              formik.values.tablaLista.label === 'Seguridad de la información' ||
+              formik.values.tablaLista.label === 'LGI FT y/o DP') ? 'Descripción' : null}
             {(formik.values.tablaLista.label === 'Legal' || formik.values.tablaLista.label === 'Liquidez') ? 'Impacto regulatorio' : null}
             {formik.values.tablaLista.label === 'Cumplimiento' ? 'Impacto de cumplimiento' : null}
             {formik.values.tablaLista.label === 'Gobierno' ? 'Nivel de gobernabilidad #' : null}

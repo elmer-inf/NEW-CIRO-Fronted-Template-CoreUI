@@ -31,6 +31,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
         fechaSeg: Yup.date().min(new Date('01-01-1900'), Messages.dateValidation4).max(new Date('12-31-2500'), Messages.dateValidation4).nullable(),
         comenPropuesta: Yup.string().nullable(),
         comenEnProceso: Yup.string().nullable(),
+        informadoPorCorreo: Yup.string().nullable(),
       })
     )
   });
@@ -42,7 +43,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
     const previousNumber = parseInt(field.value || '0');
     if (previousNumber < nroPlanes) {
       for (let i = previousNumber; i < nroPlanes; i++) {
-        planesAccion.push({ nroPlan: i + 1, estrategia: '', descripcion: '', cargo: '', fechaAccion: '', fechaImpl: '', estado: '', fechaSeg: '', comenPropuesta: '', comenEnProceso: '' });
+        planesAccion.push({ nroPlan: i + 1, estrategia: '', descripcion: '', cargo: '', fechaAccion: '', fechaImpl: '', estado: '', fechaSeg: '', comenPropuesta: '', comenEnProceso: '', informadoPorCorreo: 'NO' });
       }
     } else {
       for (let i = previousNumber; i >= nroPlanes; i--) {
@@ -59,7 +60,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
     const data = {
       ...values,
     }
-    //console.log('datos que se enviaran SECCION 5:', _.omit(data, ['nroPlanes']))
+    console.log('datos que se enviaran SECCION 5:', _.omit(data, ['nroPlanes']))
     setObject(_.omit(data, ['nroPlanes']));
     nextSection(5);
   }

@@ -78,7 +78,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
     const data = {
       ...values,
       controles: controlesModificados,
-      controlesTiene: Boolean(values.controlesTiene),
+      controlesTiene: values.controles.length===0? false : true,
 
       controlId: (values.controlId !== null)
         ? (Number.isInteger(values.controlId))
@@ -236,7 +236,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
         <Form>
           <Row className='pt-4'>
             <Col sm='12' md='12' xl='3'>
-              <Label>Ponderación Control</Label>
+              <Label>Ponderación Control <span className='text-primary h5'><b>*</b></span></Label> 
               <Select
                 placeholder="Seleccionar"
                 onChange={selectedOption => {
@@ -277,7 +277,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataAux,
             </Col>
 
             <Col sm='12' md='6' xl='6'>
-              <Label>Objetivo Control</Label>
+              <Label>Objetivo Control <span className='text-primary h5'><b>*</b></span></Label>
               <Select
                 placeholder="Seleccionar"
                 onChange={selectedOption => {

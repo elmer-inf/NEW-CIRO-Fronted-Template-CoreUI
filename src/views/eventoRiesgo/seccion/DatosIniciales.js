@@ -100,7 +100,14 @@ const DatosIniciales = ({ nextSection, setObject, initValues, obtainFiles, optio
       canalAsfiId: Yup.mixed().required(Messages.required),
       descripcion: Yup.string().required(Messages.required),
       descripcionCompleta: Yup.string().nullable(),
-      files: Yup.mixed().nullable()
+      //files: Yup.mixed().nullable()
+      files: Yup.array().of(Yup.mixed())
+        .test(
+          "fileSize",
+          "No se permite cargar mas de 4 archivos.",
+          files => !files || files.length <= 4
+        )
+        .nullable()
 
       /* fechaIni: Yup.date().max(new Date('12-31-3000'), Messages.yearOutOfRange).nullable(),
       horaIni: Yup.string().nullable(),
@@ -676,25 +683,25 @@ const DatosIniciales = ({ nextSection, setObject, initValues, obtainFiles, optio
 
           {isEdit ?
             <FormGroup tag={Col} sm={12} md={{ size: 6, order: 0, offset: 3 }} className='mb-0'>
-                <div className='text-label pb-4'>Archivo(s) adjunto(s): </div>
-                <BootstrapTable
-                  bootstrap4={true}
-                  keyField="id"
-                  data={dataArchivos}
-                  columns={columns}
-                  noDataIndication={() => 'Sin Archivos'}
-                  bordered={false}
-                  striped={true}
-                  hover={false}
-                  condensed={true}
-                  wrapperClasses="table-responsive"
-                />
-              </FormGroup>
+              <div className='text-label pb-4'>Archivo(s) adjunto(s): </div>
+              <BootstrapTable
+                bootstrap4={true}
+                keyField="id"
+                data={dataArchivos}
+                columns={columns}
+                noDataIndication={() => 'Sin Archivos'}
+                bordered={false}
+                striped={true}
+                hover={false}
+                condensed={true}
+                wrapperClasses="table-responsive"
+              />
+            </FormGroup>
             : null
           }
 
           {!isEdit ?
-            <FormGroup tag={Col} sm={12} md={{ size: 6, order: 0, offset: 3 }} className='mb-0'>
+            <FormGroup tag={Col} sm={12} md={{ size: 6, order: 0, offset: 3 }} className=''>
               <Label className='form-label'>Adjuntar archivos:</Label>
               <FilePond
                 files={formik.values.files}
@@ -713,12 +720,15 @@ const DatosIniciales = ({ nextSection, setObject, initValues, obtainFiles, optio
                   'application/vnd.ms-outlook' // MSG
                 ]}
               />
+              {formik.errors.files && formik.touched.files ? (
+                <div className='text-danger text-center'>{formik.errors.files}</div>
+              ) : null}
             </FormGroup>
+            
+            
             : null
           }
-          
         </Row>
-
 
         <Row className='pt-4'>
           <Col xs={4} md={{ size: 2, order: 0, offset: 3 }}>

@@ -121,11 +121,13 @@ const ReporteEventos = () => {
       }
     ),
     onSubmit: values => {
-      if (selectedFields.length === 0) {
-        setShowError(true);
-        return;
+      if (values.tipo.value === 'configurar') {
+        if (selectedFields.length === 0) {
+          setShowError(true);
+          return;
+        }
+        setShowError(false);
       }
-      setShowError(false);
 
       if (values.tipo.value === 'ciro') {
         setshowCiroReport(true);
@@ -842,7 +844,7 @@ const ReporteEventos = () => {
                   //disabled={formik.isSubmitting}
                   >
                     <File size={17} className='mr-2' />
-                    {(formik.values.tipo !== null && ['Auditoria externa', 'Auditoria interna', 'asfi', 'configurar'].includes(formik.values.tipo.label)) ? 'Descargar reporte' : 'Generar'}
+                    {(formik.values.tipo !== null && ['auditoriaExt', 'auditoriaInt', 'asfi', 'configurar'].includes(formik.values.tipo.value)) ? 'Descargar reporte' : 'Generar'}
                   </Button>
                 </Col>
 
