@@ -12,9 +12,6 @@ var _ = require('lodash');
 
 const Valoracion = ({ beforeSection, initValues, dataAux, dataAux2, dataApiProbabilidad, handleOnSubmmit, isEdit }) => {
 
-console.log('dataAux2 Valoracion: ', dataAux2);
-console.log('dataApiProbabilidad: ', dataApiProbabilidad);
-
   const formik = useFormik({
     initialValues: { ...initValues, montoRiesgo: 0 },
     validationSchema: Yup.object().shape(

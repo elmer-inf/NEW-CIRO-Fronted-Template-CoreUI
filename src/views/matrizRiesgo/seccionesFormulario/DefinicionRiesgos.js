@@ -210,7 +210,6 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
     getTablaDescripcionRiesgoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true);
-        console.log('options tipo : ', res.data);
         setDataApiTipoFraude(options)
       }).catch((error) => {
         console.error('Error: ', error)
@@ -243,7 +242,6 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
     getTablaDescripcionRiesgoN2(idTablaDes, idNivel2)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false);
-        console.log('options sub: ', options);
         setDataApiSubtipoFraude(options)
       }).catch((error) => {
         console.error('Error: ', error)

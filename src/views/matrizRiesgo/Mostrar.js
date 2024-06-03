@@ -596,6 +596,23 @@ const MatrizRiesgo = ({ match }) => {
                             </Col>
 
                             <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                              <div className='text-label'>Fraude interno: </div>
+                              <div className='text-data'>{dataApi.tipoFraudeId !== null ? "SI" : "No"}</div>
+                            </Col>
+
+
+                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                              <div className='text-label'>Tipo de Fraude interno: </div>
+                              <div className='text-data'>{dataApi.tipoFraudeId !== null ? dataApi.tipoFraudeId.nombre : "NA"}</div>
+                            </Col>
+
+
+                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
+                              <div className='text-label'>Fraude interno: </div>
+                              <div className='text-data'>{dataApi.subtipoFraudeId !== null ? dataApi.subtipoFraudeId.nombre : "NA"}</div>
+                            </Col>
+
+                            <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                               <div className='text-label'>{dataApi.efectoPerdidaId !== null ? 'Tipo de Pérdida' : 'Tipo de Pérdida (Otro)'} </div>
                               <div className='text-data'>{dataApi.efectoPerdidaId !== null ? dataApi.efectoPerdidaId.nombre : dataApi.efectoPerdidaOtro}</div>
                             </Col>
