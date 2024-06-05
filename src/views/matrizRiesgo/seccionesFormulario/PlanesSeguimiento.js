@@ -24,6 +24,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
         estrategia: Yup.string().nullable(),
         descripcion: Yup.string().nullable(),
         cargo: Yup.mixed().nullable(),
+        correoCargo: Yup.string().nullable(),
         fechaAccion: Yup.date().min(new Date('01-01-1900'), Messages.dateValidation4).max(new Date('12-31-2500'), Messages.dateValidation4).nullable(),
         fechaImpl: Yup.date().min(new Date('01-01-1900'), Messages.dateValidation4).max(new Date('12-31-2500'), Messages.dateValidation4).nullable(),
         estado: Yup.mixed().nullable(),
@@ -43,7 +44,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
     const previousNumber = parseInt(field.value || '0');
     if (previousNumber < nroPlanes) {
       for (let i = previousNumber; i < nroPlanes; i++) {
-        planesAccion.push({ nroPlan: i + 1, estrategia: '', descripcion: '', cargo: '', fechaAccion: '', fechaImpl: '', estado: '', fechaSeg: '', comenPropuesta: '', comenEnProceso: '', informadoPorCorreo: 'NO' });
+        planesAccion.push({ nroPlan: i + 1, estrategia: '', descripcion: '', cargo: '', correoCargo: '', fechaAccion: '', fechaImpl: '', estado: '', fechaSeg: '', comenPropuesta: '', comenEnProceso: '', informadoPorCorreo: 'NO' });
       }
     } else {
       for (let i = previousNumber; i >= nroPlanes; i--) {
@@ -60,7 +61,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
     const data = {
       ...values,
     }
-    console.log('datos que se enviaran SECCION 5:', _.omit(data, ['nroPlanes']))
+    //console.log('datos que se enviaran SECCION 5:', _.omit(data, ['nroPlanes']))
     setObject(_.omit(data, ['nroPlanes']));
     nextSection(5);
   }
@@ -83,7 +84,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
   const callApiCargo = (idTablaDes) => {
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
-        const options = buildSelectTwo(res.data, 'id', 'nombre', false)
+        const options = buildSelectTwo(res.data, 'id', 'nombre', true);
         setDataApiCargo(options)
       }).catch((error) => {
         console.error('Error: ', error)
@@ -256,7 +257,8 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
                       <Select
                         placeholder="Seleccionar"
                         onChange={selectedOption => {
-                          setFieldValue(`planesAccion.${i}.cargo`, selectedOption.label, false)
+                          setFieldValue(`planesAccion.${i}.cargo`, selectedOption.label, false);
+                          setFieldValue(`planesAccion.${i}.correoCargo`, selectedOption.descripcion, false);
                         }}
                         options={dataApiCargo}
                         name={`planesAccion.${i}.cargo`}
@@ -265,6 +267,17 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
                         className={(planErrors.cargo && planTouched.cargo ? ' is-invalid' : '')}
                       />
                       <ErrorMessage name={`planesAccion.${i}.cargo`} component="div" className="invalid-feedback" />
+                    </FormGroup>
+
+                    <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+                        <Label>Correo cargo</Label>
+                        <Field
+                          name={`planesAccion.${i}.correoCargo`}
+                          as="input"
+                          className={'form-control' + (planErrors.correoCargo && planTouched.correoCargo ? ' is-invalid' : '')}
+                          disabled={true}
+                        />
+                        <ErrorMessage name={`planesAccion.${i}.correoCargo`} component="div" className="invalid-feedback" />
                     </FormGroup>
 
                     <FormGroup tag={Col} md='6' lg='3' className='mb-2'>

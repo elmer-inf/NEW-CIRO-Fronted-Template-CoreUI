@@ -261,7 +261,8 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
           formik.values.tablaLista.label === 'Proceso' ||
           formik.values.tablaLista.label === 'Seguridad de la información' ||
           formik.values.tablaLista.label === 'Responsable' ||
-          formik.values.tablaLista.label === 'LGI FT y/o DP'))
+          formik.values.tablaLista.label === 'LGI FT y/o DP' ||
+          formik.values.tablaLista.label === 'Cargo'))
         ? <FormGroup row className='justify-content-center'>
           <Label sm='3' lg='3' for='descripcion'>
             {(formik.values.tablaLista.label === 'Categoria de tipo de Evento' ||
@@ -279,6 +280,7 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
             {formik.values.tablaLista.label === 'Macroproceso' ? 'Nivel' : null}
             {formik.values.tablaLista.label === 'Proceso' ? 'Nombre documento' : null}
             {formik.values.tablaLista.label === 'Responsable' ? 'Cargo' : null}
+            {formik.values.tablaLista.label === 'Cargo' ? 'Correo' : null}
           </Label>
           <Col sm='9' lg='5'>
             {formik.values.tablaLista.label === 'Responsable'
@@ -293,7 +295,19 @@ const AdminFormEvento = ({ initialValuess, handleOnSubmit, isEdit, optionToSelec
                 touched={formik.touched.descripcion}
                 options={dataApiCargo}
               />
-              : <CInputReact
+              : 
+              formik.values.tablaLista.label === 'Cargo'?
+              <CInputReact
+                type={"text"}
+                id={'descripcion'}
+                value={formik.values.descripcion}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                touched={formik.touched.descripcion}
+                errors={formik.errors.descripcion}
+              />
+              : 
+              <CInputReact
                 type={"textarea"}
                 id={'descripcion'}
                 value={formik.values.descripcion}

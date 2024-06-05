@@ -49,6 +49,10 @@ const SeguridadEditar = React.lazy(() => import('./views/seguridad/Editar'));
 
 // Modulo de Reportes
 const ReporteEvento = React.lazy(() => import('./views/reporte/ReporteEvento'));
+//const ReporteOportunidades = React.lazy(() => import('./views/reporte/oportunidad/ReporteOportunidad'));
+
+// Modulo de Eventos recurrentes Factor persona
+const EventoRecurrente = React.lazy(() => import('./views/eventoRecurrente/Listar'));
 
 const routes = [
   { path: '/', exact: true, name: 'Inicio' },
@@ -78,32 +82,36 @@ const routes = [
 
   // 1er Modulo: Eventos de riesgo
   { path: '/eventoRiesgo', name: 'Eventos de Riesgo', component: EventoRiesgoListar, exact: true },
-  { path: '/eventoRiesgo/Listar', name: 'Lista de Eventos de riesgo', component: EventoRiesgoListar },
+  { path: '/eventoRiesgo/Listar', name: 'Eventos de riesgo', component: EventoRiesgoListar },
   { path: '/eventoRiesgo/Registrar', name: 'Registrar Evento de Riesgo', component: EventoRiesgoRegistrar },
   { path: '/eventoRiesgo/Editar/:id', name: 'Editar Evento de Riesgo', component: UpdateEventoRiesgo },
 
   // 2do Modulo: Matriz de riesgo
   { path: '/matrizRiesgo', name: 'Matriz de Riesgo', component: MatrizRiesgoListar, exact: true },
-  { path: '/matrizRiesgo/Listar', name: 'Lista de Matriz de riesgos', component: MatrizRiesgoListar },
+  { path: '/matrizRiesgo/Listar', name: 'Matriz de riesgos', component: MatrizRiesgoListar },
   { path: '/matrizRiesgo/Registrar', name: 'Registrar Matriz de Riesgo', component: MatrizRiesgoRegistrar },
   { path: '/matrizRiesgo/editar/:id', name: 'Editar Matriz de Riesgo', component: MatrizRiesgoEditar },
 
   // 3er Modulo: Matriz de oportunidad
   { path: '/matrizOportunidad', name: 'Matriz de oportunidad', component: MatrizOportunidadListar, exact: true },
-  { path: '/matrizOportunidad/Listar', name: 'Lista de Matriz de oportunidades', component: MatrizOportunidadListar },
+  { path: '/matrizOportunidad/Listar', name: 'Matriz de oportunidades', component: MatrizOportunidadListar },
   { path: '/matrizOportunidad/Registrar', name: 'Registrar Matriz de oportunidad', component: MatrizOportunidadRegistrar },
   { path: '/matrizOportunidad/editar/:id', name: 'Editar Matriz de oportunidad', component: MatrizOportunidadEditar },
 
   // Modulo de Seguridad
   { path: '/seguridad', name: 'Riesgo en Seguridad', component: SeguridadListar, exact: true },
-  { path: '/seguridad/Listar', name: 'Lista de Riesgos en Seguridad', component: SeguridadListar },
+  { path: '/seguridad/Listar', name: 'Seguridad de la información', component: SeguridadListar },
   { path: '/seguridad/Registrar', name: 'Registrar Riesgo en Seguridad', component: SeguridadRegistrar },
   { path: '/seguridad/Control', name: 'Control de Riesgo en Seguridad', component: SeguridadControl },
   { path: '/seguridad/Editar/:id', name: 'Editar Riesgo en Seguridad', component: SeguridadEditar },
 
   // Modulo de Reportes
   { path: '/reporte', name: 'Reportes', component: SeguridadListar, exact: true },
-  { path: '/reporte/evento-riesgo', name: 'Reportes de Eventos', component: ReporteEvento },
+  { path: '/reporte/evento-riesgo', name: 'Reportes de Eventos de Riesgo', component: ReporteEvento },
+  //{ path: '/reporte/oportunidades', name: 'Reportes de Matriz de Oportunidades', component: ReporteOportunidades },
+
+  { path: '/eventoRecurrente', name: 'Eventos recurrentes', component: EventoRecurrente, exact: true },
+  { path: '/eventoRecurrente/factorPersona', name: 'Eventos recurrentes Factor persona ', component: EventoRecurrente },
 ];
 
 export default routes;

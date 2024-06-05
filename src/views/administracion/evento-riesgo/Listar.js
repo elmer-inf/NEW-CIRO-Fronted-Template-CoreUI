@@ -129,13 +129,13 @@ const AdministracionEventoListar = () => {
               'IMPACTO REGULATORIO' : (labelTabla === 'Cumplimiento') ?
                 "IMPACTO DE CUMPLIMIENTO" : (labelTabla === 'Gobierno') ?
                   'NIVEL DE GOB #' : (labelTabla === 'Fraude') ?
-                    'Imp reportado ($)' : (labelTabla === 'Responsable') ? 'CARGO' : '',
+                    'Imp reportado ($)' : (labelTabla === 'Responsable') ? 'CARGO' : (labelTabla === 'Cargo') ? 'CORREO:' :'',
       sort: true,
       hidden: (labelTabla === 'Categoria de tipo de Evento' || labelTabla === 'Efecto de pérdida' || labelTabla === 'Impacto' ||
         labelTabla === 'Reputacional' || labelTabla === 'Estratégico' || labelTabla === 'Operativo' ||
         labelTabla === 'Seguridad de la información' || labelTabla === 'Macroproceso' || labelTabla === 'Proceso' ||
         labelTabla === 'Legal' || labelTabla === 'Liquidez' || labelTabla === 'Cumplimiento' ||
-        labelTabla === 'Gobierno' || labelTabla === 'Fraude' || labelTabla === 'Responsable' ||  labelTabla === 'LGI FT y/o DP') ? false : true,
+        labelTabla === 'Gobierno' || labelTabla === 'Fraude' || labelTabla === 'Responsable' ||  labelTabla === 'LGI FT y/o DP' ||  labelTabla === 'Cargo') ? false : true,
       filter: textFilter({
         placeholder: 'Buscar'
       }),

@@ -248,7 +248,6 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
       })
   }
 
-
   // Para el despliegue del select llenado al EDITAR
   useEffect(() => {
     if (isEdit && initValues.tipoFraudeId !== null) {

@@ -724,8 +724,8 @@ const DatosIniciales = ({ nextSection, setObject, initValues, obtainFiles, optio
                 <div className='text-danger text-center'>{formik.errors.files}</div>
               ) : null}
             </FormGroup>
-            
-            
+
+
             : null
           }
         </Row>

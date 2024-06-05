@@ -3,9 +3,8 @@ import { Card, CardHeader, CardBody, CardTitle, Button, Col, Row } from 'reactst
 import { CBadge } from '@coreui/react'
 import BootstrapTable from 'react-bootstrap-table-next';
 import ActionFormatter from 'src/reusable/ActionFormatterEvento';
-import ActionFormatterEvaluar from 'src/reusable/ActionFormatterEvaluar';
 import { useHistory } from 'react-router-dom'
-import { putEvaluaEvento, getEventosPaging, getGeneraCodigo, deleteEventoRiesgoId } from './controller/EventoController'
+import { getEventosPaging } from '../eventoRiesgo/controller/EventoController'
 import { pagingInit } from 'src/reusable/variables/Variables';
 import CCSpinner from 'src/reusable/spinner/CCSpinner';
 import CPagination from 'src/reusable/pagination/CPagination';
@@ -14,30 +13,20 @@ import { getParams, hasPermission } from 'src/functions/Function';
 import { CFilterDate, CFilterText, handleChildClick, typeFormatter } from 'src/reusable/Component';
 import filterFactory, { customFilter } from 'react-bootstrap-table2-filter';
 import { PathContext } from 'src/containers/TheLayout';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify'; 
 import { Messages } from 'src/reusable/variables/Messages';
-import Swal from 'sweetalert2'
 import { PlusSquare } from 'react-feather';
 
 var _ = require('lodash');
 
 const EventoRiesgoListar = () => {
 
-  // Configuracion sweetalert2
-  const swalWithBootstrapButtons = Swal.mixin({
-    customClass: {
-      confirmButton: 'btn btn-primary text-white px-4',
-      cancelButton: 'btn btn-outline-primary px-4 mr-4',
-    },
-    buttonsStyling: false
-  })
-
   const valuePathFromContext = React.useContext(PathContext);
 
   const history = useHistory();
   const [pagination, setpagination] = useState(pagingInit);
   const [params, setParams] = useState({});
-  const [spin, setSpin] = useState(false);
+  const [spin, setSpin] = useState(false); 
 
   const redirect = (e) => {
     e.preventDefault();
@@ -137,14 +126,6 @@ const EventoRiesgoListar = () => {
         <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
       headerFormatter: typeFormatter,
     }, {
-      dataField: 'factorRiesgoId.nombre',
-      text: 'FACTOR RIESGO',
-      sort: true,
-      filter: customFilter(),
-      filterRenderer: (onFilter, column) =>
-        <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
-      headerFormatter: typeFormatter,
-    }, {
       dataField: 'procesoId.nombre',
       text: 'MACROPROCESO',
       sort: true,
@@ -176,12 +157,6 @@ const EventoRiesgoListar = () => {
       headerAlign: 'center',
       style: { textAlign: 'center' },
       formatter: (cell, row) => actionFormatter(cell, row),
-    }, {
-      dataField: 'xxx2',
-      text: 'EVALUAR',
-      headerAlign: 'center',
-      comun: { textAlign: 'center' },
-      formatter: (cell, row) => actionFormatterEvaluar(cell, row)
     }
   ]
 
@@ -222,7 +197,7 @@ const EventoRiesgoListar = () => {
   }
 
   const actionFormatter = (cell, row) => {
-    return <ActionFormatter cell={cell} row={row} detailFunction={detailsRow} editFunction={editRow} deleteFunction={deleteFunction} allowDelete={true} />
+    return <ActionFormatter cell={cell} row={row} detailFunction={detailsRow} editFunction={editRow} allowDelete={true} />
   }
 
   const detailsRow = (row) => {
@@ -235,156 +210,6 @@ const EventoRiesgoListar = () => {
       history.push('/eventoRiesgo/Editar/' + row.id);
     } else {
       notificationToast('permission', Messages.dontHavePermission);
-    }
-  }
-
-  const deleteFunction = (row) => {
-    const path = '/eventoRiesgo/eliminar';
-    if (hasPermission(path, valuePathFromContext)) {
-      deleteEventoRiesgoId(row.id)
-        .then((response) => {
-          callApi(pagination.page, pagination.size);
-          notificationToast('success', Messages.ok);
-        }).catch((error) => {
-          notificationToast('error', Messages.no_ok);
-        })
-    } else {
-      notificationToast('permission', Messages.dontHavePermission);
-    }
-  };
-
-
-  const actionFormatterEvaluar = (cell, row) => {
-    return <ActionFormatterEvaluar cell={cell} row={row} autorizarFunction={autorizaEvento} descartarFunction={descartaEvento} />
-  }
-
-  // Autoriza Registro
-  const autorizaEvento = async (row) => {
-    const data = {
-      estadoRegistro: 'Autorizado'
-    }
-    // Genera posible codigo al Autorizar Evento
-    await getGeneraCodigo(row.id)
-      .then((response) => {
-        if (response.data === 'ERROR EN CODIGO') {
-          Swal.fire({
-            position: 'top',
-            icon: 'error',
-            title: '',
-            text: 'ERROR AL GENERAR CODIGO',
-            showConfirmButton: false,
-            timer: 3000
-          })
-        } else {
-          if (row.estadoRegistro !== 'Descartado' && row.estadoRegistro !== 'Autorizado') {
-            swalWithBootstrapButtons.fire({
-              title: '',
-              text: 'Al autorizar el registro se asignará el siguiente código para ASFI: ' + response.data + ' ¿Está seguro de generarlo?',
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonText: 'Si',
-              cancelButtonText: 'No',
-              reverseButtons: true,
-              position: 'top',
-            }).then((result) => {
-              if (result.isConfirmed) {
-                putEvaluaEvento(row.id, data)
-                  .then(res => {
-                    swalWithBootstrapButtons.fire({
-                      title: '',
-                      text: 'Operación realizada exitósamente',
-                      icon: 'success',
-                      confirmButtonText: 'Aceptar',
-                      position: 'top',
-                    }).then(okay => {
-                      if (okay) {
-                        callApi(pagination.page, pagination.size);
-                      }
-                    })
-                  }).catch((error) => {
-                    console.error('Error al obtener datos: ', error);
-                  });
-              }
-            })
-          } else {
-            if (row.estadoRegistro === 'Descartado') {
-              swalWithBootstrapButtons.fire({
-                title: '',
-                text: 'Un registro Descartado no se puede Autorizar',
-                icon: 'error',
-                confirmButtonText: 'Aceptar',
-                position: 'top'
-              })
-            }
-            if (row.estadoRegistro === 'Autorizado') {
-              swalWithBootstrapButtons.fire({
-                title: '',
-                text: 'El registro ya está Autorizado',
-                icon: 'error',
-                confirmButtonText: 'Aceptar',
-                position: 'top'
-              })
-            }
-          }
-        }
-      }).catch((error) => {
-        console.error("Error: ", error);
-      });
-  }
-  // Descarta Registro
-  const descartaEvento = async (row) => {
-    const data = {
-      estadoRegistro: 'Descartado'
-    }
-    if (row.estadoRegistro !== 'Autorizado' && row.estadoRegistro !== 'Descartado') {
-      swalWithBootstrapButtons.fire({
-        title: '',
-        text: '¿Está seguro de modificar el estado de registro a Descartado?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Si',
-        cancelButtonText: 'No',
-        reverseButtons: true,
-        position: 'top'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          putEvaluaEvento(row.id, data)
-            .then(res => {
-              swalWithBootstrapButtons.fire({
-                title: '',
-                text: 'Operación realizada exitósamente',
-                icon: 'success',
-                confirmButtonText: 'Aceptar',
-                position: 'top',
-              }).then(okay => {
-                if (okay) {
-                  callApi(pagination.page, pagination.size);
-                }
-              })
-            }).catch((error) => {
-              console.error('Error al obtener datos: ', error);
-            });
-        }
-      })
-    } else {
-      if (row.estadoRegistro === 'Autorizado') {
-        swalWithBootstrapButtons.fire({
-          title: '',
-          text: 'Un registro Autorizado no se puede Descartar',
-          icon: 'error',
-          confirmButtonText: 'Aceptar',
-          position: 'top'
-        })
-      }
-      if (row.estadoRegistro === 'Descartado') {
-        swalWithBootstrapButtons.fire({
-          title: '',
-          text: 'El registro ya está Descartado',
-          icon: 'error',
-          confirmButtonText: 'Aceptar',
-          position: 'top'
-        })
-      }
     }
   }
 
@@ -483,13 +308,8 @@ const EventoRiesgoListar = () => {
             <Card>
               <CardHeader>
                 <Row>
-                  <Col xs={12} md={{ size: 6, offset: 0 }}>
+                  <Col xs={12} md={{ size: 12, offset: 0 }}>
                     <CardTitle className='float-left h4 pt-2'>Eventos de Riesgo</CardTitle>
-                  </Col>
-                  <Col xs={4} md={{ size: 2, offset: 4 }}>
-                    <Button block onClick={(e) => { redirect(e) }} color="primary" className='text-white'>
-                      <PlusSquare size={15} className='mr-2' /> Registrar
-                    </Button>
                   </Col>
                 </Row>
               </CardHeader>

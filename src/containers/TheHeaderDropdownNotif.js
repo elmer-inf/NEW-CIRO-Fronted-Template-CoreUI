@@ -35,6 +35,7 @@ const TheHeaderDropdownNotif = () => {
     getPlanesVencidos()
       .then(res => {
         setPlanesVencidos(res.data);
+        console.log('res.data: ', res.data);
       }).catch((error) => {
         console.error('Error: ', error);
       })
@@ -65,10 +66,11 @@ const TheHeaderDropdownNotif = () => {
           listDiezDiasAntes !== null && listDiezDiasAntes.length !== 0 ?
             <ListGroup flush className='pt-2'>
               {listDiezDiasAntes.map((riesgo) => {
-                return <ListGroupItem className='py-1' key={riesgo.descripcion}>
-                  <Calendar size={15} className='text-primary mr-2' />
-                  {riesgo.id} | {riesgo.codigo !== null ? riesgo.codigo : <span>Sin código</span>} | {riesgo.fechaImpl} | {riesgo.estado}
-                </ListGroupItem>
+                return  <ListGroupItem className='py-1' key={riesgo.descripcion}>
+                          <Calendar size={15} className='text-primary mr-2' />
+                          {riesgo.idRiesgo} | {riesgo.codigo !== null ? riesgo.codigo : <span>Sin código</span>} | {riesgo.fechaImpl} | 
+                          Informado: <CBadge className={riesgo.informadoPorCorreo==='SI'? "ml-1 badge-success px-2" : "ml-1 badge-danger px-1"} >{riesgo.informadoPorCorreo}</CBadge>
+                        </ListGroupItem>
               })}
             </ListGroup>
             : <CDropdownItem header><i>Sin notificaciones</i></CDropdownItem>
@@ -80,10 +82,11 @@ const TheHeaderDropdownNotif = () => {
           listCincoDiasAntes !== null && listCincoDiasAntes.length !== 0 ?
             <ListGroup flush className='pt-2'>
               {listCincoDiasAntes.map((riesgo) => {
-                return <ListGroupItem className='py-1' key={riesgo.descripcion}>
-                  <Calendar size={15} className='text-primary mr-2' />
-                  {riesgo.id} | {riesgo.codigo !== null ? riesgo.codigo : <span>Sin código</span>} | {riesgo.fechaImpl} | {riesgo.estado}
-                </ListGroupItem>
+                return  <ListGroupItem className='py-1' key={riesgo.descripcion}>
+                          <Calendar size={15} className='text-primary mr-2' />
+                          {riesgo.idRiesgo} | {riesgo.codigo !== null ? riesgo.codigo : <span>Sin código</span>} | {riesgo.fechaImpl} |
+                          Informado: <CBadge className={riesgo.informadoPorCorreo==='SI'? "ml-1 badge-success px-2" : "ml-1 badge-danger px-1"} >{riesgo.informadoPorCorreo}</CBadge>
+                        </ListGroupItem>
               })}
             </ListGroup>
             : <CDropdownItem header><i>Sin notificaciones</i></CDropdownItem>
@@ -95,10 +98,11 @@ const TheHeaderDropdownNotif = () => {
           listPlanesVencidos !== null && listPlanesVencidos.length !== 0 ?
             <ListGroup flush className='pt-2'>
               {listPlanesVencidos.map((riesgo) => {
-                return <ListGroupItem className='py-1' key={riesgo.descripcion}>
-                  <Calendar size={15} className='text-danger mr-2' />
-                  {riesgo.id} | {riesgo.codigo !== null ? riesgo.codigo : <span>Sin código</span>} | {riesgo.fechaImpl} | {riesgo.estado}
-                </ListGroupItem>
+                return  <ListGroupItem className='py-1' key={riesgo.descripcion}>
+                          <Calendar size={15} className='text-danger mr-2' />
+                          {riesgo.idRiesgo} | {riesgo.codigo !== null ? riesgo.codigo : <span>Sin código</span>} | {riesgo.fechaImpl} |
+                          Informado: <CBadge className={riesgo.informadoPorCorreo==='SI'? "ml-1 badge-success px-2" : "ml-1 badge-danger px-1"} >{riesgo.informadoPorCorreo}</CBadge>
+                        </ListGroupItem>
               })}
             </ListGroup>
             : <CDropdownItem header><i>Sin notificaciones</i></CDropdownItem>
