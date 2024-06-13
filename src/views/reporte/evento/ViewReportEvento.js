@@ -79,14 +79,14 @@ const ViewReportEvento = ({ fechaDesde, fechaHasta, estadoEvento, loadDataEvento
 
 
   return (
-    <div>
+    <div className='custom-react-bootstrap-table table-hover-animation'>
       <CCSpinner show={spin} />
       <Card>
         <CardBody>
           <Row className="d-flex justify-content-center">
             <Col sm="12" md={{ size: 12, offset: 0 }}>
               <BootstrapTable
-                classes={'table-hover-animation'}
+                classes={''}
                 bootstrap4={true}
                 noDataIndication={'No se encontraron resultados'}
                 keyField='uniqueKey'

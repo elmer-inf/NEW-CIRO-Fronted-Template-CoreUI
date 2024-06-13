@@ -181,6 +181,7 @@ const MatrizRiesgoListar = () => {
   ]
 
   function colorEstado(cell, row) {
+    console.log('cell: ', cell);
     if (cell === 'Observado') {
       return (
         <CBadge className="mr-1 px-2 py-1 badge-danger-light">{cell}</CBadge>
@@ -457,7 +458,7 @@ const MatrizRiesgoListar = () => {
 
 
   return (
-    <div className='table-hover-animation'>
+    <div className='custom-react-bootstrap-table table-hover-animation'>
       <CCSpinner show={spin} />
 
       <Fragment>
@@ -478,7 +479,7 @@ const MatrizRiesgoListar = () => {
               </CardHeader>
               <CardBody className='pb-4'>
                 <BootstrapTable
-                  classes={'table-hover-animation mt-2'}
+                  classes={'mt-2'}
                   bootstrap4={true}
                   sort={{ dataField: 'id', order: 'desc' }}
                   noDataIndication={'No se encontraron resultados'}

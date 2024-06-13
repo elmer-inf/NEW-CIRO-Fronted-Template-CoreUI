@@ -544,7 +544,7 @@ const ReporteEventos = () => {
   const [selectedCol1, selectedCol2] = splitIntoTwoColumns(selectedFields);
 
   return (
-    <div className='table-hover-animation'>
+    <div className=''>
       <CCSpinner show={spin} />
       <Fragment>
         <Card>

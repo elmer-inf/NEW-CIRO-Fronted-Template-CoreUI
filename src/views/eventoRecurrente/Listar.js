@@ -1,10 +1,10 @@
 import React, { Fragment, useState, useEffect } from 'react'
-import { Card, CardHeader, CardBody, CardTitle, Button, Col, Row } from 'reactstrap'
+import { Card, CardHeader, CardBody, CardTitle, Col, Row } from 'reactstrap'
 import { CBadge } from '@coreui/react'
 import BootstrapTable from 'react-bootstrap-table-next';
 import ActionFormatter from 'src/reusable/ActionFormatterEvento';
 import { useHistory } from 'react-router-dom'
-import { getEventosPaging } from '../eventoRiesgo/controller/EventoController'
+import { getEventosRecurrentesPaging } from './controller/EventoRecurrenteController'
 import { pagingInit } from 'src/reusable/variables/Variables';
 import CCSpinner from 'src/reusable/spinner/CCSpinner';
 import CPagination from 'src/reusable/pagination/CPagination';
@@ -15,7 +15,6 @@ import filterFactory, { customFilter } from 'react-bootstrap-table2-filter';
 import { PathContext } from 'src/containers/TheLayout';
 import { ToastContainer, toast } from 'react-toastify'; 
 import { Messages } from 'src/reusable/variables/Messages';
-import { PlusSquare } from 'react-feather';
 
 var _ = require('lodash');
 
@@ -28,15 +27,6 @@ const EventoRiesgoListar = () => {
   const [params, setParams] = useState({});
   const [spin, setSpin] = useState(false); 
 
-  const redirect = (e) => {
-    e.preventDefault();
-    const path = '/eventoRiesgo/Registrar';
-    if (hasPermission(path, valuePathFromContext)) {
-      history.push(path);
-    } else {
-      notificationToast('permission', Messages.dontHavePermission);
-    }
-  }
 
   const notificationToast = (type, mensaje) => {
     switch (type) {
@@ -197,17 +187,17 @@ const EventoRiesgoListar = () => {
   }
 
   const actionFormatter = (cell, row) => {
-    return <ActionFormatter cell={cell} row={row} detailFunction={detailsRow} editFunction={editRow} allowDelete={true} />
+    return <ActionFormatter cell={cell} row={row} detailFunction={detailsRow} editFunction={editRow} allowDelete={false} />
   }
 
   const detailsRow = (row) => {
-    history.push('/eventoRiesgo/mostrar/' + row.id);
+    history.push('/eventoRecurrente/mostrar/' + row.id);
   }
 
   const editRow = (row) => {
-    const path = '/eventoRiesgo/Editar/:id';
+    const path = '/eventoRecurrente/editar/:id';
     if (hasPermission(path, valuePathFromContext)) {
-      history.push('/eventoRiesgo/Editar/' + row.id);
+      history.push('/eventoRecurrente/editar/' + row.id);
     } else {
       notificationToast('permission', Messages.dontHavePermission);
     }
@@ -218,7 +208,7 @@ const EventoRiesgoListar = () => {
 
   const callApi = async (page, size) => {
     setSpin(true)
-    await getEventosPaging(page, size)
+    await getEventosRecurrentesPaging(page, size)
       .then(res => {
         const paging = res.data.paging;
         const toPaging = { ...paging }
@@ -282,7 +272,7 @@ const EventoRiesgoListar = () => {
       search = getParams(toSearch);
     }
 
-    const endpoint = 'v1/eventoRiesgo/';
+    const endpoint = 'v1/eventoRiesgo/eventosrecurrentes/';
 
     await getListPagingWithSearch(page, size, endpoint, search)
       .then((response) => {
@@ -290,16 +280,16 @@ const EventoRiesgoListar = () => {
         const toPaging = { ...paging }
         setEventos(response.data.data);
         setpagination(toPaging);
-        setSpin(false)
+        setSpin(false);
       }).catch((error) => {
         console.error("Error: ", error);
-        setSpin(false)
+        setSpin(false);
       });
   }
   // End search by columns
 
   return (
-    <div className='table-hover-animation'>
+    <div className='custom-react-bootstrap-table table-hover-animation'>
       <CCSpinner show={spin} />
 
       <Fragment>
@@ -309,13 +299,13 @@ const EventoRiesgoListar = () => {
               <CardHeader>
                 <Row>
                   <Col xs={12} md={{ size: 12, offset: 0 }}>
-                    <CardTitle className='float-left h4 pt-2'>Eventos de Riesgo</CardTitle>
+                    <CardTitle className='float-left h4 pt-2'>Eventos recurrentes - Factor persona</CardTitle>
                   </Col>
                 </Row>
               </CardHeader>
               <CardBody className='pb-4'>
                 <BootstrapTable
-                  classes={'table-hover-animation mt-2'}
+                  classes={'mt-2'}
                   bootstrap4={true}
                   sort={{ dataField: 'id', order: 'desc' }}
                   noDataIndication={'No se encontraron resultados'}

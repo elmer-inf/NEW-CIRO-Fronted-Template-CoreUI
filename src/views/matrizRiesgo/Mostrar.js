@@ -377,7 +377,7 @@ const MatrizRiesgo = ({ match }) => {
   const dataListaObservaciones = listaObservaciones.split(',');
 
   return (
-    <div className='table-hover-animation'>
+    <div className='custom-react-bootstrap-table table-hover-animation'>
       {
         (!_.isEmpty(dataApi)) ?
           <div>
@@ -738,7 +738,7 @@ const MatrizRiesgo = ({ match }) => {
                             {dataApi.controlesTiene === true ?
                               <Col xs='12' className='pt-2'>
                                 <BootstrapTable
-                                  classes={'table-hover-animation mt-2'}
+                                  classes={'mt-2'}
                                   bootstrap4={true}
                                   sort={{ dataField: 'nroControl', order: 'asc' }}
                                   noDataIndication={'No hay registros de Controles actuales'}
@@ -803,7 +803,7 @@ const MatrizRiesgo = ({ match }) => {
                           <Row>
                             <Col xs='12'>
                               <BootstrapTable
-                                classes={'table-hover-animation'}
+                                classes={''}
                                 bootstrap4={true}
                                 sort={{ dataField: 'nroPlan', order: 'asc' }}
                                 noDataIndication={'No hay registros de Planes de acción'}
@@ -915,7 +915,7 @@ const MatrizRiesgo = ({ match }) => {
                           <Row>
                             <Col xs='12'>
                               <BootstrapTable
-                                classes={'table-hover-animation'}
+                                classes={''}
                                 bootstrap4={true}
                                 sort={{ dataField: 'nroPlan', order: 'asc' }}
                                 noDataIndication={'No hay registros de Seguimiento de Planes de acción'}

@@ -269,10 +269,10 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
             }))}
           </FieldArray>
 
-          <Row className='pt-4 table-hover-animation'>
+          <Row className='pt-4 custom-react-bootstrap-table table-hover-animation'>
             <Col xs='12'>
               <BootstrapTable
-                classes={'table-hover-animation mt-2'}
+                classes={'mt-2'}
                 bootstrap4={true}
                 sort={{ dataField: 'nroPlan', order: 'asc' }}
                 noDataIndication={'No hay registros de Planes de acción'}

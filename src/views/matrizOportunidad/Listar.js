@@ -405,7 +405,7 @@ const MatrizOportunidadListar = () => {
   // End search by columns
 
   return (
-    <div className='table-hover-animation'>
+    <div className='custom-react-bootstrap-table table-hover-animation'>
       <CCSpinner show={spin} />
 
       <Fragment>
@@ -426,7 +426,7 @@ const MatrizOportunidadListar = () => {
               </CardHeader>
               <CardBody className='pb-4'>
                 <BootstrapTable
-                  classes={'table-hover-animation mt-2'}
+                  classes={'mt-2'}
                   bootstrap4={true}
                   sort={{ dataField: 'id', order: 'desc' }}
                   noDataIndication={'No se encontraron resultados'}

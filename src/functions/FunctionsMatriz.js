@@ -97,22 +97,22 @@ export const buscaValorLiteralRiesgoI = (arrayData, riesgo) => {
 
 // Obtiene ID de IMPACTO para el intervalo a cual pertenece "Monto Riesgo de Pérdida (Anual)""
 export const intervaloImpacto = (arrayData, perdida) => {
-  var montoPerdida = null;
+  var intervalo = null;
   try {
     if (Array.isArray(arrayData) && perdida !== null && perdida !== undefined) {
       for (let value in arrayData) {
         if (perdida >= arrayData[value].campoE && perdida <= arrayData[value].campoF) {
-          montoPerdida = arrayData[value].id;
+          intervalo = arrayData[value].id;
         }
         if (perdida > _.maxBy(arrayData, 'campoF').campoF) {
-          montoPerdida = _.maxBy(arrayData, 'campoF').id;
+          intervalo = _.maxBy(arrayData, 'campoF').id;
         }
       }
     }
   } catch (error) {
     console.error('Error al obtener Valoracion del Riesgo en el Intervalo: ', error);
   }
-  return montoPerdida;
+  return intervalo;
 }
 
 // Obtiene la Valoracion del Riesgo en el intervalo de IMPACTO

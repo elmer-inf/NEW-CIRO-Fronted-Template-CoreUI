@@ -197,7 +197,7 @@ const AdministracionSeguridadListar = () => {
   }
 
   return (
-    <div className='table-hover-animation'>
+    <div className='custom-react-bootstrap-table table-hover-animation'>
       <Fragment>
         <Card>
           <CardHeader>
@@ -239,7 +239,7 @@ const AdministracionSeguridadListar = () => {
             </Row>
 
             <BootstrapTable
-              classes={'table-hover-animation mt-5'}
+              classes={'mt-5'}
               bootstrap4={true}
               sort={{ dataField: 'id', order: 'asc' }}
               noDataIndication={'No se encontraron resultados'}

@@ -2,8 +2,10 @@ import React from 'react';
 import { Label, Input, FormGroup, Col, Row } from 'reactstrap';
 
 function CInputRadioCustom(props) {
+
   const checkboxList = () => {
     let structure = props.data.map((option, i) => {
+
       let valorSend = null;
       if (props.sendValue) {
         valorSend = option.value
@@ -11,8 +13,15 @@ function CInputRadioCustom(props) {
       } else {
         valorSend = option.label
       }
+
+      // Determina el tamaño de la columna en función del prop `column`
+      let colSize = { xs: '4', md: '3' }; // Tamaños por defecto
+      if (props.column && props.column === 2) {
+        colSize = { xs: '6' }; // Cambia tamaños si column es igual a 2
+      }
+
       return (
-        <Col key={i} className='text-center' xs='4' md='3'>
+        <Col key={i} className='text-center' xs={colSize.xs} md={colSize.md}>
           <Label >
             <Input
               type={'radio'}

@@ -81,7 +81,7 @@ const PlanesAccion = ({ beforeSection, tipoEvento, handleOnSubmmit, dataAuxListR
     return (
       <div>
         {listRiesgos.map((dataApi, index) => (
-          <div key={index}>
+          <div key={index} className='custom-react-bootstrap-table table-hover-animation'>
             <div className='divider divider-left divider-dark pt-2'>
               <div className='divider-text'><span className='text-label'>{dataApi.codigo !== null ? 'Riesgo relacionado: ' + dataApi.codigo : ''}</span></div>
             </div>
@@ -94,7 +94,7 @@ const PlanesAccion = ({ beforeSection, tipoEvento, handleOnSubmmit, dataAuxListR
               </Row>
               <Col xs='12'>
                 <BootstrapTable
-                  classes={'table-hover-animation'}
+                  classes={''}
                   bootstrap4={true}
                   sort={{ dataField: 'nroPlan', order: 'asc' }}
                   noDataIndication={'No hay registros de Planes de acción'}

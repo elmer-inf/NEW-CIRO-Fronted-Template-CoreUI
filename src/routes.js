@@ -49,18 +49,22 @@ const SeguridadEditar = React.lazy(() => import('./views/seguridad/Editar'));
 
 // Modulo de Reportes
 const ReporteEvento = React.lazy(() => import('./views/reporte/ReporteEvento'));
+const ReporteRiesgo = React.lazy(() => import('./views/reporte/riesgo/ReporteRiesgo'));
 //const ReporteOportunidades = React.lazy(() => import('./views/reporte/oportunidad/ReporteOportunidad'));
 
 // Modulo de Eventos recurrentes Factor persona
-const EventoRecurrente = React.lazy(() => import('./views/eventoRecurrente/Listar'));
+const EventoRecurrenteListar = React.lazy(() => import('./views/eventoRecurrente/Listar'));
+const EventoRecurrente = React.lazy(() => import('./views/eventoRecurrente/Mostrar'));
+const UpdateEventoRecurrente = React.lazy(() => import('./views/eventoRecurrente/Editar'));
 
 const routes = [
   { path: '/', exact: true, name: 'Inicio' },
   { path: '/main', name: '', component: Main },
-  { path: '/eventoRiesgo/Mostrar/:id', name: 'Evento de Riesgo', component: EventoRiesgo }, // start
-  { path: '/matrizRiesgo/Mostrar/:id', name: 'Matriz de Riesgo', component: MatrizRiesgoMostrar }, // start
-  { path: '/matrizOportunidad/Mostrar/:id', name: 'Matriz de oportunidad', component: MatrizOportunidadMostrar }, // start
+  { path: '/eventoRiesgo/Mostrar/:id', name: 'Evento de Riesgo', component: EventoRiesgo },
+  { path: '/matrizRiesgo/Mostrar/:id', name: 'Matriz de Riesgo', component: MatrizRiesgoMostrar },
+  { path: '/matrizOportunidad/Mostrar/:id', name: 'Matriz de oportunidad', component: MatrizOportunidadMostrar },
   { path: '/seguridad/Mostrar/:id', name: 'Riesgo en Seguridad', component: SeguridadMostrar },
+  { path: '/eventoRecurrente/Mostrar/:id', name: 'Evento recurrente - Factor persona', component: EventoRecurrente },
 
   // Parametrizacion
   { path: '/administracion', name: 'Administración', component: AdministracionEventoListar, exact: true },
@@ -108,10 +112,12 @@ const routes = [
   // Modulo de Reportes
   { path: '/reporte', name: 'Reportes', component: SeguridadListar, exact: true },
   { path: '/reporte/evento-riesgo', name: 'Reportes de Eventos de Riesgo', component: ReporteEvento },
+  { path: '/reporte/matriz-riesgo', name: 'Reportes de Matriz de Riesgos', component: ReporteRiesgo },
   //{ path: '/reporte/oportunidades', name: 'Reportes de Matriz de Oportunidades', component: ReporteOportunidades },
 
-  { path: '/eventoRecurrente', name: 'Eventos recurrentes', component: EventoRecurrente, exact: true },
-  { path: '/eventoRecurrente/factorPersona', name: 'Eventos recurrentes Factor persona ', component: EventoRecurrente },
+  { path: '/eventoRecurrente', name: 'Eventos recurrentes', component: EventoRecurrenteListar, exact: true },
+  { path: '/eventoRecurrente/listar', name: 'Eventos recurrentes - Factor persona', component: EventoRecurrenteListar },
+  { path: '/eventoRecurrente/editar/:id', name: 'Editar Eventos recurrentes - Factor persona', component: UpdateEventoRecurrente },
 ];
 
 export default routes;

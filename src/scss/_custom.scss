@@ -4,7 +4,13 @@
 }
 
 @media (min-width: 768px) {
-  .c-main > .container-fluid, .c-main > .container-sm, .c-main > .container-md, .c-main > .container-lg, .c-main > .container-xl, .c-main > .container-xxl {
+
+  .c-main>.container-fluid,
+  .c-main>.container-sm,
+  .c-main>.container-md,
+  .c-main>.container-lg,
+  .c-main>.container-xl,
+  .c-main>.container-xxl {
     padding-right: 0px;
     padding-left: 0px;
   }
@@ -12,20 +18,25 @@
 
 // S I D E B A R
 
-.c-sidebar .c-sidebar-nav-link.c-active, .c-sidebar .c-active.c-sidebar-nav-dropdown-toggle {
+.c-sidebar .c-sidebar-nav-link.c-active,
+.c-sidebar .c-active.c-sidebar-nav-dropdown-toggle {
   color: #fff;
   background: rgba(240, 150, 65, 1) !important;
   margin: 0px 5px;
   border-radius: 5px;
 }
 
-.c-sidebar .c-sidebar-nav-link.c-active:hover, .c-sidebar .c-active.c-sidebar-nav-dropdown-toggle {
+.c-sidebar .c-sidebar-nav-link.c-active:hover,
+.c-sidebar .c-active.c-sidebar-nav-dropdown-toggle {
   color: #fff;
   background: rgba(240, 150, 65, 1) !important;
 }
 
-@media (hover: hover), (-ms-high-contrast: none) {
-  .c-sidebar .c-sidebar-nav-link:hover, .c-sidebar .c-sidebar-nav-dropdown-toggle:hover {
+@media (hover: hover),
+(-ms-high-contrast: none) {
+
+  .c-sidebar .c-sidebar-nav-link:hover,
+  .c-sidebar .c-sidebar-nav-dropdown-toggle:hover {
     color: #fff;
     background: rgba(#009eb2, 0.4);
     margin: 0px 5px;
@@ -68,40 +79,41 @@ input[type='radio']:checked:after {
 
 // TABS personalizados
 .nav-tabs .nav-link,
-.nav-tabs .nav-item.show .nav-link{
-    font-weight: 600;
-    font-size: 15px;
-    color: rgba(black, 0.7);
-    background-color: transparent;
-    border-color: transparent;
-    padding-right: 0;
-    padding-left: 10px;
+.nav-tabs .nav-item.show .nav-link {
+  font-weight: 600;
+  font-size: 15px;
+  color: rgba(black, 0.7);
+  background-color: transparent;
+  border-color: transparent;
+  padding-right: 0;
+  padding-left: 10px;
 }
 
 .nav-tabs .nav-link.active,
-.nav-tabs .nav-item.show .nav-link{
-    font-weight: 700;
-    font-size: 15px;
-    color: #e79140;
-    background-color: transparent;
-    border-color: transparent;
+.nav-tabs .nav-item.show .nav-link {
+  font-weight: 700;
+  font-size: 15px;
+  color: #e79140;
+  background-color: transparent;
+  border-color: transparent;
 }
 
-.nav-tabs .nav-link:hover, .nav-tabs .nav-link:focus {
-    border-color: transparent;
+.nav-tabs .nav-link:hover,
+.nav-tabs .nav-link:focus {
+  border-color: transparent;
 }
 
 // Arrow Right para Tab
-.arrow-right-secondary{
+.arrow-right-secondary {
   color: 'black';
   opacity: 0.6;
 }
 
 //  F U E N T E  T I T U L O   S I S T E M A
-.system-tittle{
-  font-family:'Montserrat', Helvetica, Arial, serif;
+.system-tittle {
+  font-family: 'Montserrat', Helvetica, Arial, serif;
   //font-weight: 400;
- // font-style: 0.857rem;
+  // font-style: 0.857rem;
   letter-spacing: 0.6px;
 }
 
@@ -123,94 +135,96 @@ input[type='radio']:checked:after {
 }
 
 // Tablas personalizadas
- table{
-  thead{
+table {
+  thead {
     white-space: nowrap;
     background-color: #ededed;
     vertical-align: middle;
   }
-  tbody{
+
+  tbody {
+
     // for table row effects
-    td{
-     // padding: 0.8rem;
+    td {
+      // padding: 0.8rem;
       padding-top: 8px !important;
       padding-bottom: 0px !important;
       vertical-align: middle;
     }
   }
 
-  tbody {
-    tr {
-      &:nth-of-type(odd) {
-        background-color: #f8f8f8 !important;
-      }
-    }
-  }
+
 }
 
 // Para texto Label y datos en Mostrar Evento
-.text-label{
+.text-label {
   font-weight: 600;
   opacity: 1;
 }
-.text-data{
+
+.text-data {
   opacity: 0.8;
 }
 
 // Estilos varios: para que no colapse
-.sinSalto{
+.sinSalto {
   white-space: nowrap;
 }
 
-.mx-md-4{
+.mx-md-4 {
   @media (min-width: 768px) {
-    margin-left: 29px !important; margin-right: 29px !important;
-   }
+    margin-left: 29px !important;
+    margin-right: 29px !important;
+  }
 }
 
 // BADGES
-.badge-danger-light{
-  background-color:#fceaea;
+.badge-danger-light {
+  background-color: #fceaea;
   color: #ea5556;
   box-shadow: 0 0px 5px 0 rgba(#ea5556, 0.6);
   font-size: 12;
 }
-.badge-success-light{
-  background-color:#e5f8ed;
+
+.badge-success-light {
+  background-color: #e5f8ed;
   color: #2bc871;
   box-shadow: 0 0px 5px 0 rgba(#2bc871, 0.6);
   font-size: 12;
 }
-.badge-warning-light{
-  background-color:#fff3e8;
+
+.badge-warning-light {
+  background-color: #fff3e8;
   color: #ff9f44;
   box-shadow: 0 0px 5px 0 rgba(#ff9f44, 0.6);
   font-size: 12;
 }
-.badge-yellow-light{
-  background-color:#f9fab5;
+
+.badge-yellow-light {
+  background-color: #f9fab5;
   color: rgba(0, 0, 0, 0.4);
   box-shadow: 0 0px 5px 0 rgba(#fbff29, 0.6);
   font-size: 12;
-  
+
 }
-.badge-danger{
-  background-color:#ea5556;
+
+.badge-danger {
+  background-color: #ea5556;
   color: #fff;
   box-shadow: 0 0px 5px 0 rgba(#ea5556, 0.6);
   font-size: 12;
 }
 
-.badge-success{
-  background-color:#2bc871;
+.badge-success {
+  background-color: #2bc871;
   color: #fff;
   box-shadow: 0 0px 5px 0 rgba(#2bc871, 0.6);
   font-size: 12;
   border-radius: 15px;
 }
 
-.badge-warning{
-  background-color:#e79140;
+.badge-warning {
+  background-color: #e79140;
   color: #fff;
   box-shadow: 0 0px 5px 0 rgba(#e79140, 0.6);
   font-size: 12;
@@ -231,6 +245,7 @@ input[type='radio']:checked:after {
 
   &.divider-dark {
     .divider-text {
+
       &::before,
       &::after {
         border-color: rgba(black, 0.4) !important;
@@ -240,6 +255,7 @@ input[type='radio']:checked:after {
 
   &.divider-primary {
     .divider-text {
+
       &::before,
       &::after {
         border: 1px solid rgba(#ff9f44, 0.3) !important;
@@ -296,11 +312,13 @@ input[type='radio']:checked:after {
     .divider-text {
       float: left;
       padding-left: 0;
+
       &:before {
         display: none;
       }
     }
   }
+
   &.divider-left-center {
     .divider-text {
       left: -25%;
@@ -311,11 +329,13 @@ input[type='radio']:checked:after {
     .divider-text {
       float: right;
       padding-right: 0;
+
       &:after {
         display: none;
       }
     }
   }
+
   &.divider-right-center {
     .divider-text {
       right: -25%;
@@ -325,42 +345,45 @@ input[type='radio']:checked:after {
 
 
 
+
+
 // TABLE HOVER ANIMATION
 .table-hover-animation {
-  table{
-    border-collapse:separate;
+  table {
+    border-collapse: separate;
     border-spacing: 0 0.7rem;
     padding: 0 0.7rem;
   }
-  tbody{
-    // for table row effects
-    tr{
+  tbody {
+    tr {
       background-color: white;
-      box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 20px 0px;
+      box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 10px 0px;
       //cursor: pointer;
       transition: all .3s ease;
       border-radius: .5rem;
-      &:hover{
+      &:hover {
         transform: translateY(-2px);
         transition: all .3s ease;
       }
-      td:first-child{
+      td:first-child {
         padding-left: 1rem;
         border-top-left-radius: .5rem;
         border-bottom-left-radius: .5rem;
       }
-      td:last-child{
+      td:last-child {
         border-top-right-radius: .5rem;
         border-bottom-right-radius: .5rem;
       }
-
-      &.selected{
-        td{
+      &.selected {
+        td {
           border-radius: 0;
         }
       }
+      &:nth-of-type(odd) {
+        background-color: #f8f8f8 !important;
+      }
     }
-    td{
+    td {
       padding: 0.8rem;
       border: none;
       vertical-align: middle;
@@ -369,91 +392,54 @@ input[type='radio']:checked:after {
 }
 
 
-// table border radius
-/*.card .table {
-  margin-bottom: 0;
-  border-bottom-left-radius: $border-radius;
-  border-bottom-right-radius: $border-radius;
-  tbody {
-    tr:last-child {
-      td:first-child {
-        border-bottom-left-radius: $border-radius;
-      }
-      td:last-child {
-        border-bottom-right-radius: $border-radius;
-      }
-      &.selected{
-        td{
-          border-radius: 0;
-        }
-      }
-    }
-  }
-}
-
-// Contexual table inside card radius
-.card {
-  table {
-    tr[class*='table-']:last-child {
-      td:first-child {
-        border-bottom-left-radius: $border-radius;
-      }
-      td:last-child {
-        border-bottom-right-radius: $border-radius;
-      }
-    }
-  }
-}
-
-// IE Specific CSS
-@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
-  .table-hover-animation {
-    tr {
-      &:hover {
-        border-bottom-color: $table-border-color;
-      }
-    }
-  }
-}
- */
-
-
-/**Scroll*/
-
-.react-bootstrap-table {
+/* Scroll para Tabla*/
+.custom-react-bootstrap-table .react-bootstrap-table {
   overflow-y: auto;
   min-height: 100px;
   max-height: 600px;
-}
-
-.react-bootstrap-table thead th {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-}
-
-/* Just common table stuff. Really. */
-
-.react-bootstrap-table {
   border-collapse: collapse;
   width: 100%;
+}
+.custom-react-bootstrap-table .react-bootstrap-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: #ededed;
+  //margin-top: 35px; margin-bottom: 35px;
+}
+
+
+// Tablas para Mapas
+/* Estilos específicos para la tabla única */
+.unique-table .table {
+  border-collapse: collapse;
+}
+
+.unique-table .table th,
+.unique-table .table td {
+  border: 1px solid #b6b7b8 !important;
+  vertical-align: middle;
+  padding: 0px 5px !important; /* arriba y abajo 0x, izquierda y derecha 10px */
 
 }
 
-th, td {
-  /* padding: 2px 13;
-  min-width: 50px; */
+
+
+/* th, td {
   margin-top: 35px; margin-bottom: 35px;
 }
 
 th {
   background-color: #ededed;
-}
+} */
+
+
 
 
 /**** Sort icon****/
 
-.dropup .caret, .navbar-fixed-bottom .dropdown .caret {
+.dropup .caret,
+.navbar-fixed-bottom .dropdown .caret {
   content: "";
   border-top: 0;
   border-bottom: 4px dashed;
@@ -475,17 +461,7 @@ th {
 .Select.is-open {
   z-index: 1000 !important;
 }
-/* 
-.react-bootstrap-table select {
-  z-index: 25; 
-  position: relative; 
-}
 
-
-select {
-  z-index: 25; 
-  position: relative;
-} */
 
 .fixed-select-tre {
   z-index: 1;
@@ -527,4 +503,3 @@ input[type="checkbox"].orange-checkbox:checked::before {
   border-width: 0 2px 2px 0;
   transform: translate(-50%, -50%) rotate(45deg);
 }
-
