@@ -87,7 +87,6 @@ const EventoRiesgo = ({ match }) => {
     await getEventoRiesgoId(idEvento)
       .then((response) => {
         const res = response.data;
-        console.log('res: ', res);
         setDataApi(res)
       }).catch((error) => {
         console.error("Error: ", error);

@@ -1,10 +1,11 @@
 import { React, useState, useEffect } from 'react'
-import { Row, Col, Card, CardBody, CardHeader, CardTitle, Badge} from 'reactstrap';
-import { CButton} from '@coreui/react'
+import { Row, Col, Card, CardBody, CardHeader, CardTitle, Badge } from 'reactstrap';
+import { CButton } from '@coreui/react'
 import { getEventoRiesgoId } from '../eventoRiesgo/controller/EventoController';
 import { base64toPDF, formatSizeUnits, getFileIcon } from 'src/functions/FunctionEvento'
-import Swal from 'sweetalert2'
 import CIcon from '@coreui/icons-react';
+import { getArchivosByEventoRecurrente } from './controller/EventoRecurrenteController';
+import BootstrapTable from 'react-bootstrap-table-next';
 
 var _ = require('lodash');
 
@@ -38,27 +39,18 @@ const EventoRecurrente = ({ match }) => {
   }];
 
 
-  // Configuracion sweetalert2
-  const swalWithBootstrapButtons = Swal.mixin({
-    customClass: {
-      confirmButton: 'btn btn-primary px-4',
-      cancelButton: 'btn btn-outline-primary px-4 mr-4',
-    },
-    buttonsStyling: false
-  })
-
-  /* const getArchivos = (idEvento) => {
-    getArchivosByEvento(idEvento)
+  const getArchivos = (idEvento) => {
+    getArchivosByEventoRecurrente(idEvento)
       .then(res => {
-        setDataArchivo(res.data)
+        setDataArchivo(res.data);
       }).catch((error) => {
         console.error('Error: ', error)
       })
-  } */
+  }
 
   useEffect(() => {
     getById();
-    //getArchivos(match.params.id);
+    getArchivos(match.params.id);
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -69,36 +61,11 @@ const EventoRecurrente = ({ match }) => {
     const idEvento = match.params.id;
     await getEventoRiesgoId(idEvento)
       .then((response) => {
-        
-        console.log('res: ', response.data);
         setDataApi(response.data)
       }).catch((error) => {
         console.error("Error: ", error);
-        //notificationToast('error', Messages.notification.notOk)
       });
   }
-
-
-
-  // Collapse
-  const [collapse, setCollapse] = useState(false)
-  const toggle = (e) => {
-    setCollapse(!collapse)
-    e.preventDefault()
-  }
-
-  // Modal
-  const [danger, setDanger] = useState(false)
-
-  const formValueInitial = {
-    estadoRegistro: dataApi.estadoRegistro,
-    listaObservacion: '',
-    nota: '',
-    estado: '',
-    modulo: ''
-  }
-
-
 
   // Calcula "Monto de perdida" en bs en "Valor contable - monto perdida"
   const calculaCambio = () => {
@@ -129,14 +96,6 @@ const EventoRecurrente = ({ match }) => {
     })
     return build
   }
-
-  /* {(dataApi.tipoEvento === 'A') ?
-  <CNavItem>
-    <CNavLink>
-      <DollarSign size={20} /><span className='pl-1 pr-2 h6 font-weight-bold'>Importes relacionados</span>
-    </CNavLink>
-  </CNavItem>
-  : null} */
 
 
   return (
@@ -222,7 +181,7 @@ const EventoRecurrente = ({ match }) => {
                     <div className='text-label'>Descripción completa: </div>
                     <div className='text-data'>{dataApi.descripcionCompleta !== '' ? dataApi.descripcionCompleta : <i>Sin registro</i>}</div>
                   </Col>
-       
+
                   <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                     <div className='text-label'>Factor de riesgo operativo: </div>
                     <div className='text-data'>{dataApi.factorRiesgoId !== null ? dataApi.factorRiesgoId.nombre : <i>Sin registro</i>}</div>
@@ -240,7 +199,7 @@ const EventoRecurrente = ({ match }) => {
 
                   <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                     <div className='text-label'>Proceso crítico: </div>
-                    <div className='text-data'>{dataApi.procesoId !== null? dataApi.procesoId.campoA : <i>Sin registro</i>}</div>
+                    <div className='text-data'>{dataApi.procesoId !== null ? dataApi.procesoId.campoA : <i>Sin registro</i>}</div>
                   </Col>
 
                   <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
@@ -249,7 +208,7 @@ const EventoRecurrente = ({ match }) => {
                       {dataApi.tipoEvento === 'A' ? _.round(calculaCambio() - totalRecuperado(), 2) : 'NA'}
                     </div>
                   </Col>
-                      
+
                   <Col xs='12' sm='6' md='4' xl='3' className='pt-2'>
                     <div className='text-label'>Comité de sanciones: </div>
                     <div className='text-data'>{dataApi.comiteSanciones !== null ? dataApi.comiteSanciones : <i>Sin registro</i>}</div>
@@ -264,26 +223,25 @@ const EventoRecurrente = ({ match }) => {
                     <div className='text-label'>Determinación del comité: </div>
                     <div className='text-data'>{dataApi.comiteDeterminacion !== null ? dataApi.comiteDeterminacion : <i>Sin registro</i>}</div>
                   </Col>
-
-                  {/* <Row>
-                            <Col sm={12} md={{ size: 6, order: 0, offset: 3 }} className='pt-2'>
-                              <div className='text-label pb-4'>Archivo(s) adjunto(s): </div>
-                              <BootstrapTable
-                                bootstrap4={true}
-                                keyField="id"
-                                data={dataArchivos}
-                                columns={columns}
-                                noDataIndication={() => 'Sin Archivos'}
-                                bordered={false}
-                                striped={true}
-                                hover={false}
-                                condensed={true}
-                                wrapperClasses="table-responsive"
-                              />
-                            </Col>
-                          </Row> */}
-
                 </Row>
+
+                <Row>
+                    <Col sm={12} md={{ size: 6, order: 0, offset: 3 }} className='pt-2'>
+                      <div className='text-label pb-4'>Archivo adjunto: </div>
+                      <BootstrapTable
+                        bootstrap4={true}
+                        keyField="id"
+                        data={dataArchivos}
+                        columns={columns}
+                        noDataIndication={() => 'Sin Archivos'}
+                        bordered={false}
+                        striped={true}
+                        hover={false}
+                        condensed={true}
+                        wrapperClasses="table-responsive"
+                      />
+                    </Col>
+                  </Row>
               </CardBody>
             </Card>
           </div>

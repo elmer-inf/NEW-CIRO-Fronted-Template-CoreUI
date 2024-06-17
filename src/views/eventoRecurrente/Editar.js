@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from 'react';
-import { Row, Col, Card, CardBody, CardHeader, CardTitle, FormGroup, Label, Badge } from 'reactstrap';
+import { Row, Col, Card, CardBody, CardHeader, CardTitle, FormGroup, Label, Badge, Button } from 'reactstrap';
 import { useHistory } from 'react-router-dom';
 import { getEventoRiesgoId } from '../eventoRiesgo/controller/EventoController';
 import { buildOptionSelect } from 'src/functions/Function';
@@ -10,31 +10,23 @@ import CCSpinner from 'src/reusable/spinner/CCSpinner';
 import { CInputReact } from 'src/reusable/CInputReact';
 import CSelectReactTwo from 'src/reusable/CSelectReactTwo';
 import { CSelectReact } from 'src/reusable/CSelectReact';
+import { Messages } from 'src/reusable/variables/Messages';
+import { FilePond, registerPlugin } from 'react-filepond';
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+import 'filepond/dist/filepond.min.css';
+import { Delete, Save, XSquare } from 'react-feather';
 
 var _ = require('lodash');
 
 const UpdateEventoRecurrente = ({ match }) => {
-  console.log('match: ', match);
+
+  registerPlugin(FilePondPluginFileValidateType);
   const history = useHistory();
   const [spin, setSpin] = useState(true);
-  const [dataApiTipoEvento, setDataApiTipoEvento] = useState([]);
-  const [dataAuxListRiesgos, setDataAuxListRiesgos] = useState([]);
 
   const obtainFiles = (f) => {
     //setGetFiles(f)
   }
-
-  const formValueInitialTipoEvento = {
-    tipoEvento: null,
-  }
-
-  const formik = useFormik({
-    initialValues: formValueInitialTipoEvento,
-    validationSchema: Yup.object().shape({
-      tipoEvento: Yup.mixed().required('Campo obligatorio'),
-    })
-  })
-
 
   const formValueInitial = {
     codigo: '',
@@ -55,15 +47,49 @@ const UpdateEventoRecurrente = ({ match }) => {
     gastoAsociado: '',
     montoRecuperado: '',
     montoRecuperadoSeguro: '',
+
+    comiteSanciones: '',
+    comiteActa: '',
+    comiteDeterminacion: '',
+    files: []
   }
 
   const [formValueInitialToEdit, setformValueInitial] = useState(formValueInitial);
-console.log('formValueInitialToEdit: ', formValueInitialToEdit);
+
+
+  const formik = useFormik({
+    initialValues: formValueInitial,
+    validationSchema: Yup.object().shape({
+
+      comiteSanciones: Yup.string().required(Messages.required),
+      comiteActa: Yup.string().required(Messages.required),
+      comiteDeterminacion: Yup.string().required(Messages.required),
+      files: Yup.array().of(Yup.mixed())
+        .test(
+          "fileSize",
+          "No se permite cargar mas de 1 archivo.",
+          files => !files || files.length <= 1
+        )
+        .nullable()
+    }
+    ),
+
+    onSubmit: values => {
+
+      console.log('datos que se enviaran de Evento recurrente:', values)
+      //setObject(data);
+      //obtainFiles(values.files)
+    }
+  })
+
   const macthedValues = (args) => {
     const data = {
       codigo: args.codigo,
       estadoRegistro: args.estadoRegistro,
       estadoEvento: args.estadoEvento,
+      tipoEvento: args.tipoEvento,
+
+      fechaDesc: args.fechaDesc,
       fechaFin: args.fechaFin,
       areaID: buildOptionSelect(args.areaID, 'id', 'nombre', true, 'areaID'),
       unidadId: buildOptionSelect(args.unidadId, 'id', 'nombre', true, 'unidadId'),
@@ -79,6 +105,7 @@ console.log('formValueInitialToEdit: ', formValueInitialToEdit);
       gastoAsociado: args.gastoAsociado,
       montoRecuperado: args.montoRecuperado,
       coberturaSeguro: args.coberturaSeguro,
+      montoRecuperadoSeguro: args.montoRecuperadoSeguro
     };
     setformValueInitial(data);
   }
@@ -103,7 +130,7 @@ console.log('formValueInitialToEdit: ', formValueInitialToEdit);
   //const [requestData, setRequestData] = useState(dataResult);
 
 
-
+  console.log('formValueInitialToEdit: ', formValueInitialToEdit);
 
 
   const notificationToast = (type, mensaje) => {
@@ -182,6 +209,31 @@ console.log('formValueInitialToEdit: ', formValueInitialToEdit);
       });
   } */
 
+  // Calcula "Monto de perdida" en bs en "Valor contable - monto perdida"
+  const calculaCambio = () => {
+    var result = 0;
+    if (formValueInitialToEdit.monedaId !== null && (formValueInitialToEdit.monedaId.clave === 'BOB' || formValueInitialToEdit.monedaId.clave === 'Bs')) {
+      result = formValueInitialToEdit.montoPerdida;
+    } else {
+      if (formValueInitialToEdit.monedaId !== null && (formValueInitialToEdit.monedaId.clave === 'USD' || formValueInitialToEdit.monedaId.clave === '$')) {
+        result = formValueInitialToEdit.montoPerdida * formValueInitialToEdit.tasaCambioId;
+      } else {
+        result = 0;
+      }
+    }
+    return result;
+  }
+
+  // Calcula Monto total recuperado
+  const totalRecuperado = () => {
+    return formValueInitialToEdit.montoRecuperado + formValueInitialToEdit.gastoAsociado + formValueInitialToEdit.montoRecuperadoSeguro;
+  }
+
+  const redirect = (e) => {
+    history.push('/eventoRecurrente/listar');
+  }
+
+
   return (
     <div>
       <CCSpinner show={spin} />
@@ -211,10 +263,19 @@ console.log('formValueInitialToEdit: ', formValueInitialToEdit);
             </CardHeader>
             <CardBody>
 
-
-
-
               <Row>
+                <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+                  <Label className='form-label'>
+                    Fecha descubrimiento
+                  </Label>
+                  <CInputReact
+                    type={"date"}
+                    id={'fechaDesc'}
+                    value={formValueInitialToEdit.fechaDesc}
+                    disabled={true}
+                  />
+                </FormGroup>
+
                 <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
                   <Label className='form-label'>
                     Fecha Fin
@@ -229,7 +290,7 @@ console.log('formValueInitialToEdit: ', formValueInitialToEdit);
 
                 <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
                   <Label className='form-label'>
-                    Área <span className='text-primary h5'><b>*</b></span>
+                    Área
                   </Label>
                   <CSelectReactTwo
                     value={formValueInitialToEdit.areaID}
@@ -250,7 +311,7 @@ console.log('formValueInitialToEdit: ', formValueInitialToEdit);
 
                 <FormGroup tag={Col} md='12' lg='6' className='mb-0'>
                   <Label className='form-label'>
-                    Cargos Involucrados ASFI <span className='text-primary h5'><b>*</b></span>
+                    Cargos Involucrados ASFI
                   </Label>
                   <CSelectReact
                     type={"select"}
@@ -260,11 +321,10 @@ console.log('formValueInitialToEdit: ', formValueInitialToEdit);
                 </FormGroup>
 
                 <FormGroup tag={Col} md='6' lg='6' className='mb-0'>
-                  <Label className='form-label'>Descripción <span className='text-primary h5'><b>*</b></span>
-                  </Label>
+                  <Label className='form-label'>Descripción</Label>
                   <CInputReact
                     type={"textarea"}
-                    value={formik.values.descripcion}
+                    value={formValueInitialToEdit.descripcion}
                     rows={2}
                     disabled={true}
                   />
@@ -276,13 +336,168 @@ console.log('formValueInitialToEdit: ', formValueInitialToEdit);
                   </Label>
                   <CInputReact
                     type={"textarea"}
-                    value={formik.values.descripcionCompleta}
+                    value={formValueInitialToEdit.descripcionCompleta}
                     rows={3}
                     disabled={true}
                   />
                 </FormGroup>
+
+                <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+                  <Label className='form-label'>
+                    Factor de riesgo operativo
+                  </Label>
+                  <CSelectReact
+                    type={"select"}
+                    value={formValueInitialToEdit.factorRiesgoId}
+                    isDisabled={true}
+                  />
+                </FormGroup>
+
+                <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+                  <Label className='form-label'>
+                    Proceso
+                  </Label>
+                  <CSelectReact
+                    type={"select"}
+                    value={formValueInitialToEdit.procesoId}
+                    isDisabled={true}
+                  />
+                </FormGroup>
+
+                <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+                  <Label className='form-label'>
+                    Procedimiento
+                  </Label>
+                  <CSelectReact
+                    type={"select"}
+                    value={formValueInitialToEdit.procedimientoId}
+                    isDisabled={true}
+                  />
+                </FormGroup>
+
+                <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+                  <Label className='form-label'>Proceso crítico</Label>
+                  <CInputReact
+                    type={"text"}
+                    value={formValueInitialToEdit.procesoId.campoA}
+                    disabled={true}
+                  />
+                </FormGroup>
+
+                <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+                  <Label className='form-label'>Monto total de pérdida</Label>
+                  <CInputReact
+                    type={"text"}
+                    value={formValueInitialToEdit.tipoEvento === 'A' ? _.round(calculaCambio() - totalRecuperado(), 2) : 'NA'}
+                    disabled={true}
+                  />
+                </FormGroup>
+
+                <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+                  <Label className='form-label'>Comité de sanciones <span className='text-primary h5'><b>*</b></span>
+                  </Label>
+                  <CInputReact
+                    type={"text"}
+                    id={'comiteSanciones'}
+                    placeholder={'Descripción'}
+                    value={formik.values.comiteSanciones}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    touched={formik.touched.comiteSanciones}
+                    errors={formik.errors.comiteSanciones}
+                  />
+                </FormGroup>
+
+                <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
+                  <Label className='form-label'>Acta de comité <span className='text-primary h5'><b>*</b></span>
+                  </Label>
+                  <CInputReact
+                    type={"text"}
+                    id={'comiteActa'}
+                    placeholder={'Descripción'}
+                    value={formik.values.comiteActa}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    touched={formik.touched.comiteActa}
+                    errors={formik.errors.comiteActa}
+                  />
+                </FormGroup>
+
+                <FormGroup tag={Col} md='12' className='mb-0'>
+                  <Label className='form-label'>Determinación de comité <span className='text-primary h5'><b>*</b></span>
+                  </Label>
+                  <CInputReact
+                    type={"textarea"}
+                    id={'comiteDeterminacion'}
+                    placeholder={'Descripción'}
+                    value={formik.values.comiteDeterminacion}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    touched={formik.touched.comiteDeterminacion}
+                    errors={formik.errors.comiteDeterminacion}
+                    rows={2}
+                  />
+                </FormGroup>
+
+                <FormGroup tag={Col} sm={12} md={{ size: 6, order: 0, offset: 3 }} className=''>
+                  <Label className='form-label'>Adjuntar archivos:</Label>
+                  <FilePond
+                    files={formik.values.files}
+                    allowMultiple={true}
+                    onupdatefiles={fileItems => {
+                      const newFiles = fileItems.map(item => item.file);
+                      formik.setFieldValue('files', newFiles);
+                    }}
+                    name="files"
+                    labelIdle='Arrastra y suelta los archivos aquí o <span class="filepond--label-action">haz clic para seleccionar</span>'
+                    acceptedFileTypes={[
+                      'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // Excel
+                      'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // Word
+                      'application/pdf', // PDF
+                      'application/zip', // ZIP
+                      'application/vnd.ms-outlook' // MSG
+                    ]}
+                  />
+                  {formik.errors.files && formik.touched.files ? (
+                    <div className='text-danger text-center'>{formik.errors.files}</div>
+                  ) : null}
+                </FormGroup>
+
               </Row>
 
+              <Row className='pt-4'>
+                <Col xs={4} md={{ size: 2, order: 0, offset: 3 }}>
+                  <Button
+                    color="primary"
+                    outline
+                    block
+                    onClick={(e) => { redirect(e) }}
+                  >
+                    <XSquare size={17} className='mr-2' />Cancelar
+                  </Button>
+                </Col>
+                <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
+                  <Button
+                    color="dark"
+                    block
+                    onClick={() => { formik.handleReset(); }}
+                    disabled={!formik.dirty || formik.isSubmitting}
+                  >
+                    <Delete size={17} className='mr-2' /> Limpiar
+                  </Button>
+                </Col>
+                <Col xs={4} md={{ size: 2, order: 0, offset: 0 }}>
+                  <Button
+                    className='text-white'
+                    block
+                    color="primary"
+                    type="submit"
+                  >
+                    <Save size={17} className='mr-2' />
+                    Guardar
+                  </Button>
+                </Col>
+              </Row>
 
             </CardBody>
           </Card>

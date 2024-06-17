@@ -9,3 +9,9 @@ export const getInherente = () => {
     const response = axios.get(uri);
     return response;
 }
+
+export const getInherente2 = () => {
+    const uri = HOST + base + '/inherente2';
+    const response = axios.get(uri);
+    return response;
+}
