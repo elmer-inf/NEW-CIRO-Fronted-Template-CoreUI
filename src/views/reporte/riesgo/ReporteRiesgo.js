@@ -266,8 +266,7 @@ const ReporteRiesgo = () => {
     }
   }
 
-
-
+  // INHERENTE 1
   const getMapaInherente = () => {
     getInherente()
       .then(res => {
@@ -277,53 +276,6 @@ const ReporteRiesgo = () => {
         console.error('Error: ', error);
       })
   }
-
-  const getMapaInherente2 = () => {
-    getInherente2()
-      .then(res => {
-        const matrix = res.data;  // Asumiendo que la respuesta es la matriz directamente
-        const formattedData = matrix.map((row, rowIndex) => {
-          return row.reduce((acc, cell, colIndex) => {
-            acc[`col${colIndex + 1}`] = cell;
-            return acc;
-          }, {});
-        });
-        setData(formattedData);
-      })
-      .catch((error) => {
-        console.error('Error: ', error);
-      });
-  };
-
-  const columns = React.useMemo(() => [
-    { Header: '', accessor: 'col1' },
-    { Header: '', accessor: 'col2' },
-    { Header: '', accessor: 'col3' },
-    { Header: '', accessor: 'col4' },
-    { Header: '', accessor: 'col5' },
-    { Header: '', accessor: 'col6' },
-    { Header: '', accessor: 'col7' },
-    { Header: '', accessor: 'col8' }
-  ], []);
-
-  const {
-    getTableProps,
-    getTableBodyProps,
-    rows,
-    prepareRow
-  } = useTable({
-    columns,
-    data
-  });
-
-
-  useEffect(() => {
-    getMapaInherente();
-    getMapaInherente2();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-
 
   // Mapa por macroproceso
   const scatterOptions = {
@@ -400,6 +352,7 @@ const ReporteRiesgo = () => {
       });
     }
   };
+  
   ChartJS.register(backgroundPlugin);
 
   const colors = [
@@ -468,6 +421,62 @@ const ReporteRiesgo = () => {
       }
     }
   };
+
+  // INHERENTE 2
+  const getMapaInherente2 = () => {
+    getInherente2()
+      .then(res => {
+        const matrix = res.data;  
+        const formattedData = matrix.map((row, rowIndex) => {
+          return row.reduce((acc, cell, colIndex) => {
+            acc[`col${colIndex + 1}`] = cell;
+            return acc;
+          }, {});
+        });
+        setData(formattedData);
+      })
+      .catch((error) => {
+        console.error('Error: ', error);
+      });
+  };
+
+  const columns = React.useMemo(() => [
+    { Header: '', accessor: 'col1' },
+    { Header: '', accessor: 'col2' },
+    { Header: '', accessor: 'col3' },
+    { Header: '', accessor: 'col4' },
+    { Header: '', accessor: 'col5' },
+    { Header: '', accessor: 'col6' },
+    { Header: '', accessor: 'col7' },
+    { Header: '', accessor: 'col8' }
+  ], []);
+
+  const { getTableProps, getTableBodyProps, rows, prepareRow} = useTable({ columns, data});
+
+  const colorMapping = {
+    '#b8d6a4': [[4, 2], [4, 3], [3, 2], [1, 6]],                                                 // Verde Claro
+    '#ffff81': [[1, 2], [2, 2], [2, 3], [3, 3], [4, 4], [2, 6]],                                 // Amarillo
+    '#ffdf80': [[0, 2], [0, 3], [1, 3], [1, 4], [2, 4], [3, 4], [3, 5], [4, 5], [4, 6], [3, 6]], // Amarillo oscuro
+    '#f9c6c2': [[0, 4], [1, 5], [2, 5], [2, 6], [3, 6], [4, 6]],                                 // Rojo claro
+    '#ff7f7e': [[0, 5], [0, 6], [1, 6], [5, 6]],                                                 // Rojo
+    '#2f75b5': [[0, 1], [1, 1], [2, 1], [3, 1], [4, 1],  [5, 2], [5, 3], [5, 4], [5, 5], [5, 6],  [5, 0], [7,0], [6, 1], [7, 7]] // Azul
+  };
+
+  const boldWhiteText = [[5, 0], [6, 1], [7, 0], [7, 7]];
+
+  const textColorMapping = {
+    '#ff7f7e': [[0, 1], [5, 6]],
+    '#f9c6c2': [[1, 1], [5, 5]],
+    '#ffdf80': [[2, 1], [5, 4]],
+    '#ffff81': [[3, 1], [5, 3]],
+    '#b8d6a4': [[4, 1], [5, 2]]
+  };
+
+  useEffect(() => {
+    getMapaInherente();
+    getMapaInherente2();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
 
   return (
@@ -554,9 +563,17 @@ const ReporteRiesgo = () => {
             <Row>
               <Col xs={12} md={5}>
 
-                <table {...getTableProps()} style={{ width: '100%', border: '1px solid black' }}>
+
+                <table {...getTableProps()} style={{ width: '100%', border: '1px solid #878888' }}>
                   <thead>
-                    {/* Encabezado de la tabla */}
+                    <tr>
+                      <th colSpan={7} style={{ textAlign: 'center',  background: '#bdd7ee' }}>
+                        Mapa de Riesgo y Exposición al Riesgo Operativo
+                      </th>
+                      <th style={{ textAlign: 'center', background: '#2f75b5', color: '#ffffff' }}>
+                        <div>TOTAL</div> <div>PROBABILIDAD</div>
+                      </th>
+                    </tr>
                   </thead>
                   <tbody {...getTableBodyProps()}>
                     {rows.map((row, rowIndex) => {
@@ -564,8 +581,28 @@ const ReporteRiesgo = () => {
                       return (
                         <tr {...row.getRowProps()}>
                           {row.cells.map((cell, cellIndex) => {
-                            // Aplicar el estilo condicional para la celda en la columna 3 de la fila 4
-                            const style = (rowIndex === 3 && cellIndex === 2) ? { backgroundColor: 'orange' } : {};
+                            let style = {};
+
+                            Object.keys(colorMapping).forEach(color => {
+                              colorMapping[color].forEach(([ri, ci]) => {
+                                if (row.index === ri && cellIndex === ci) {
+                                  style.backgroundColor = color;
+                                  if (boldWhiteText.some(([bri, bci]) => bri === ri && bci === ci)) {
+                                    style.color = '#ffffff';
+                                    style.fontWeight = 'bold';
+                                  }
+                                }
+                              });
+                            });
+
+                            Object.keys(textColorMapping).forEach(color => {
+                              textColorMapping[color].forEach(([ri, ci]) => {
+                                if (row.index === ri && cellIndex === ci) {
+                                  style.color = color;
+                                }
+                              });
+                            });
+
                             return (
                               <td {...cell.getCellProps()} style={{ padding: '10px', border: '1px solid grey', textAlign: 'center', ...style }}>
                                 {cell.render('Cell')}

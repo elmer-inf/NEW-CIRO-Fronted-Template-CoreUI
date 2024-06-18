@@ -79,6 +79,8 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, d
   }, [])
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
+  console.log('dataAux: ', dataAux);
+  console.log('dataAux2: ', dataAux2);
   // calcula "Probabilidad e impacto residual" del valor "Probabilidad inherente"
   const disminucionAux = (dataAux.controlIdAux !== undefined && _.find(dataApiControl, ['id', _.toInteger(dataAux.controlIdAux)]) !== null) ? _.find(dataApiControl, ['id', _.toInteger(dataAux.controlIdAux)]).campoB : null;
   const probInherenteAux = parseInt(dataAux2.probabilidaNivelAux);
