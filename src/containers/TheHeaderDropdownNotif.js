@@ -35,7 +35,6 @@ const TheHeaderDropdownNotif = () => {
     getPlanesVencidos()
       .then(res => {
         setPlanesVencidos(res.data);
-        console.log('res.data: ', res.data);
       }).catch((error) => {
         console.error('Error: ', error);
       })

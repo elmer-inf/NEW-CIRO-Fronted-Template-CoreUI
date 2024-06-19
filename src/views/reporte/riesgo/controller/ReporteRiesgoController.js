@@ -4,14 +4,15 @@ import { HOSTURI } from 'src/config'
 const HOST = HOSTURI.endpoint_riesgos
 const base = '/v1/reporteriesgo/';
 
-export const getInherente = () => {
-    const uri = HOST + base + '/mapainherente1';
+export const getInherenteResidual1 = () => {
+    const uri = HOST + base + '/mapainherenteresidual1';
     const response = axios.get(uri);
     return response;
 }
 
-export const getInherente2 = () => {
-    const uri = HOST + base + '/mapainherente2';
+export const getInherenteResidual2 = (procesoId) => {
+    const uri = HOST + base + '/mapainherenteresidual2?procesoId=' + procesoId;
+    console.log('uri: ', uri);
     const response = axios.get(uri);
     return response;
 }
