@@ -5,7 +5,7 @@ import { useTable } from 'react-table';
 import CCSpinner from 'src/reusable/spinner/CCSpinner';
 
 const MapaInherenteResidual2 = ({ procesoId }) => {
-console.log('procesoId dentro: ', procesoId);
+
   const [spin, setSpin] = useState(false);
   const [dataMapaInherente, setMapaInherente] = useState([]);
   const [dataMapaResidual, setMapaResidual] = useState([]);
@@ -102,7 +102,7 @@ console.log('procesoId dentro: ', procesoId);
   useEffect(() => {
     getMapaInherenteResidual2(procesoId);
   }, [procesoId]);
-  
+
   return (
     <div>
       <CCSpinner show={spin} />

@@ -75,7 +75,10 @@ const MatrizRiesgoRegistrar = () => {
     controles: []
   }
 
-  const formValueInitialRiesgoResidual = {}
+  const formValueInitialRiesgoResidual = {
+    probabilidadResidual:'',
+    impactoResidual:''
+  }
 
   const formValueInitialPlanesSeguimiento = {
     nroPlanes: '',

@@ -5,13 +5,17 @@ import { Chart as ChartJS, registerables } from 'chart.js';
 import BootstrapTable from 'react-bootstrap-table-next';
 import { Scatter } from 'react-chartjs-2';
 import CCSpinner from 'src/reusable/spinner/CCSpinner';
+import { CNav, CNavItem, CNavLink, CTabContent, CTabPane, CTabs } from '@coreui/react';
 ChartJS.register(...registerables);
 
-const MapaInherenteResidual1 = ({ }) => {
+const MapaInherenteResidual1 = ({ fechaDesde, fechaHasta }) => {
 
   const [spin, setSpin] = useState(false);
-  const [dataValoracionExp, setValoracionExp] = useState([]);
-  const [dataPerfilRiesgo, setPerfilRiesgo] = useState([]);
+  const [dataValoracionExpInherente, setValoracionExpInherente] = useState([]);
+  const [dataPerfilRiesgoInherente, setPerfilRiesgoInherente] = useState([]);
+  const [dataValoracionExpResidual, setValoracionExpResidual] = useState([]);
+  const [dataPerfilRiesgoResidual, setPerfilRiesgoResidual] = useState([]);
+
 
   const columnsValoracion = [
     {
@@ -198,13 +202,15 @@ const MapaInherenteResidual1 = ({ }) => {
     }
   }
 
-  const getMapaInherenteResidual1 = () => {
-    setSpin(true); 
-    getInherenteResidual1()
+  const getMapaInherenteResidual1 = (fechaDesde, fechaHasta) => {
+    setSpin(true);
+    getInherenteResidual1(fechaDesde, fechaHasta)
       .then(res => {
-        console.log('res.data: ', res.data);
-        setValoracionExp(res.data.listValoracionExposicionDTO);
-        setPerfilRiesgo([res.data.perfilRiesgoDTO]);
+        setValoracionExpInherente(res.data.mapaInherente1DTO.listValoracionExposicionDTO);
+        setPerfilRiesgoInherente([res.data.mapaInherente1DTO.perfilRiesgoDTO]);
+
+        setValoracionExpResidual(res.data.mapaResidual1DTO.listValoracionExposicionDTO);
+        setPerfilRiesgoResidual([res.data.mapaResidual1DTO.perfilRiesgoDTO]);
       }).catch((error) => {
         console.error('Error: ', error);
       }).finally(() => {
@@ -297,13 +303,6 @@ const MapaInherenteResidual1 = ({ }) => {
     '#FFC0CB', '#FFD700', '#00FFFF', '#0000FF', '#8A2BE2'
   ];
 
-  const datasets = dataValoracionExp.map((item, index) => ({
-    label: item.macroproceso,
-    data: [{ x: item.impacto, y: item.probabilidad }],
-    backgroundColor: colors[index % colors.length],
-    pointRadius: 5
-  }));
-
   // Componente para mostrar la leyenda
   const Legend = ({ datasets }) => {
     return (
@@ -316,17 +315,6 @@ const MapaInherenteResidual1 = ({ }) => {
         ))}
       </div>
     );
-  };
-
-  // Mapa general
-  const perfilRiesgoDataset = {
-    label: 'PERFIL DE RIESGO',
-    data: dataPerfilRiesgo.map(item => ({
-      x: item.impacto,
-      y: item.probabilidad
-    })),
-    backgroundColor: 'orange', // Color naranja para el punto
-    pointRadius: 5
   };
 
   const scatterOptionsSingle = {
@@ -357,64 +345,175 @@ const MapaInherenteResidual1 = ({ }) => {
     }
   };
 
-  
+
+  // INHERENTE
+  const datasets = dataValoracionExpInherente.map((item, index) => ({
+    label: item.macroproceso,
+    data: [{ x: item.impacto, y: item.probabilidad }],
+    backgroundColor: colors[index % colors.length],
+    pointRadius: 5
+  }));
+
+
+  const perfilRiesgoDataset = {
+    label: 'PERFIL DE RIESGO',
+    data: dataPerfilRiesgoInherente.map(item => ({
+      x: item.impacto,
+      y: item.probabilidad
+    })),
+    backgroundColor: 'orange',
+    pointRadius: 5
+  };
+
+  // RESIDUAL
+  const datasetsResidual = dataValoracionExpResidual.map((item, index) => ({
+    label: item.macroproceso,
+    data: [{ x: item.impacto, y: item.probabilidad }],
+    backgroundColor: colors[index % colors.length],
+    pointRadius: 5
+  }));
+
+  const perfilRiesgoDatasetResidual = {
+    label: 'PERFIL DE RIESGO RESIDUAL',
+    data: dataPerfilRiesgoResidual.map(item => ({
+      x: item.impacto,
+      y: item.probabilidad
+    })),
+    backgroundColor: 'orange',
+    pointRadius: 5
+  };
+
+
   useEffect(() => {
-    getMapaInherenteResidual1();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    if (fechaDesde && fechaHasta) {
+      getMapaInherenteResidual1(fechaDesde, fechaHasta);
+    }
+  }, [fechaDesde, fechaHasta]);
+
+
 
   return (
     <div>
       <CCSpinner show={spin} />
-      <Label className='text-label'>VALORACIÓN EXPOSICIÓN AL RIESGO [USD]</Label>
-      <BootstrapTable
-        classes="unique-table"
-        bootstrap4={true}
-        sort={{ dataField: 'nro', order: 'asc' }}
-        noDataIndication={'No se encontraron resultados'}
-        keyField='nro'
-        data={dataValoracionExp}
-        columns={columnsValoracion}
-        bordered={false}
-        striped={false}
-        hover={false}
-        condensed={false}
-        wrapperClasses="table-responsive"
-      />
+      <CTabs>
+        <CNav variant="tabs" className='justify-content-center'>
+          <CNavItem>
+            <CNavLink>
+              <span className='font-weight-bold pr-4'>INHERENTE</span>
+            </CNavLink>
+          </CNavItem>
+          <CNavItem>
+            <CNavLink>
+              <span className='font-weight-bold pl-4'>RESIDUAL</span>
+            </CNavLink>
+          </CNavItem>
+        </CNav>
 
-      <Label className='text-label pt-3'>PERFIL DE RIESGO ATC</Label>
-      <BootstrapTable
-        classes="unique-table"
-        bootstrap4={true}
-        sort={{ dataField: 'prob', order: 'asc' }}
-        noDataIndication={'No se encontraron resultados'}
-        keyField='impactoPor'
-        data={dataPerfilRiesgo}
-        columns={columnsPerfil}
-        bordered={false}
-        striped={false}
-        hover={false}
-        condensed={false}
-        wrapperClasses="table-responsive"
-      />
+        <CTabContent>
+          <CTabPane>
+            <Label className='text-label pt-4'>VALORACIÓN EXPOSICIÓN AL RIESGO [USD]</Label>
+            <BootstrapTable
+              classes="unique-table"
+              bootstrap4={true}
+              sort={{ dataField: 'nro', order: 'asc' }}
+              noDataIndication={'No se encontraron resultados'}
+              keyField='nro'
+              data={dataValoracionExpInherente}
+              columns={columnsValoracion}
+              bordered={false}
+              striped={false}
+              hover={false}
+              condensed={false}
+              wrapperClasses="table-responsive"
+            />
 
-      <Row className='pt-3'>
-        <Col xs={12} md={3}>
-          <Label className='text-label'>MAPA DE RIESGOS ATC</Label>
-          <Scatter data={{ datasets }} options={scatterOptions} />
-        </Col>
-        <Col xs={12} md={3} className='align-self-center'>
-          <Legend datasets={datasets} />
-        </Col>
+            <Label className='text-label pt-3'>PERFIL DE RIESGO ATC</Label>
+            <BootstrapTable
+              classes="unique-table"
+              bootstrap4={true}
+              sort={{ dataField: 'prob', order: 'asc' }}
+              noDataIndication={'No se encontraron resultados'}
+              keyField='impactoPor'
+              data={dataPerfilRiesgoInherente}
+              columns={columnsPerfil}
+              bordered={false}
+              striped={false}
+              hover={false}
+              condensed={false}
+              wrapperClasses="table-responsive"
+            />
 
-        <Col xs={12} md={3}>
-          <Label className='text-label'>MAPA DE RIESGOS ATC</Label>
-          <Scatter data={{ datasets: [perfilRiesgoDataset] }} options={scatterOptionsSingle} />
-        </Col>
-        <Col xs={12} md={3} className='align-self-center'>
-          <Legend datasets={[perfilRiesgoDataset]} />
-        </Col>
-      </Row>
+            <Row className='pt-3'>
+              <Col xs={12} md={3}>
+                <Label className='text-label'>MAPA DE RIESGOS ATC</Label>
+                <Scatter data={{ datasets }} options={scatterOptions} />
+              </Col>
+              <Col xs={12} md={3} className='align-self-center'>
+                <Legend datasets={datasets} />
+              </Col>
+
+              <Col xs={12} md={3}>
+                <Label className='text-label'>MAPA DE RIESGOS ATC</Label>
+                <Scatter data={{ datasets: [perfilRiesgoDataset] }} options={scatterOptionsSingle} />
+              </Col>
+              <Col xs={12} md={3} className='align-self-center'>
+                <Legend datasets={[perfilRiesgoDataset]} />
+              </Col>
+            </Row>
+          </CTabPane>
+
+          <CTabPane>
+            <Label className='text-label'>VALORACIÓN EXPOSICIÓN AL RIESGO [USD]</Label>
+            <BootstrapTable
+              classes="unique-table"
+              bootstrap4={true}
+              sort={{ dataField: 'nro', order: 'asc' }}
+              noDataIndication={'No se encontraron resultados'}
+              keyField='nro'
+              data={dataValoracionExpResidual}
+              columns={columnsValoracion}
+              bordered={false}
+              striped={false}
+              hover={false}
+              condensed={false}
+              wrapperClasses="table-responsive"
+            />
+
+            <Label className='text-label pt-3'>PERFIL DE RIESGO ATC</Label>
+            <BootstrapTable
+              classes="unique-table"
+              bootstrap4={true}
+              sort={{ dataField: 'prob', order: 'asc' }}
+              noDataIndication={'No se encontraron resultados'}
+              keyField='impactoPor'
+              data={dataPerfilRiesgoResidual}
+              columns={columnsPerfil}
+              bordered={false}
+              striped={false}
+              hover={false}
+              condensed={false}
+              wrapperClasses="table-responsive"
+            />
+
+            <Row className='pt-3'>
+              <Col xs={12} md={3}>
+                <Label className='text-label'>MAPA DE RIESGOS ATC - RESIDUAL</Label>
+                <Scatter data={{ datasets: datasetsResidual }} options={scatterOptions} />
+              </Col>
+              <Col xs={12} md={3} className='align-self-center'>
+                <Legend datasets={datasetsResidual} />
+              </Col>
+              <Col xs={12} md={3}>
+                <Label className='text-label'>PERFIL DE RIESGO ATC - RESIDUAL</Label>
+                <Scatter data={{ datasets: [perfilRiesgoDatasetResidual] }} options={scatterOptionsSingle} />
+              </Col>
+              <Col xs={12} md={3} className='align-self-center'>
+                <Legend datasets={[perfilRiesgoDatasetResidual]} />
+              </Col>
+            </Row>
+          </CTabPane>
+        </CTabContent>
+      </CTabs>
     </div>
   )
 }

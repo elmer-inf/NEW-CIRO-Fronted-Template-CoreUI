@@ -16,9 +16,9 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, d
     initialValues: initValues,
     validationSchema: Yup.object().shape(
       {
-        probabilidad: Yup.number().nullable(),
+        probabilidadResidual: Yup.number().nullable(),
         probabilidadVal: Yup.string().nullable(),
-        impacto: Yup.number().nullable(),
+        impactoResidual: Yup.number().nullable(),
         impactoVal: Yup.string().nullable(),
         riesgo: Yup.number().nullable(),
         riesgoVal: Yup.string().nullable(),
@@ -29,7 +29,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, d
       const data = {
         ...values
       }
-      //console.log('datos que se enviaran SECCION 4:', data)
+      console.log('datos que se enviaran SECCION 4:', data)
       setObject(data, values);
       nextSection(4);
     }
@@ -79,42 +79,40 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, d
   }, [])
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
-  console.log('dataAux: ', dataAux);
-  console.log('dataAux2: ', dataAux2);
-  // calcula "Probabilidad e impacto residual" del valor "Probabilidad inherente"
+  // calcula "Probabilidad e impactoresidual" del valor "Probabilidad inherente"
   const disminucionAux = (dataAux.controlIdAux !== undefined && _.find(dataApiControl, ['id', _.toInteger(dataAux.controlIdAux)]) !== null) ? _.find(dataApiControl, ['id', _.toInteger(dataAux.controlIdAux)]).campoB : null;
   const probInherenteAux = parseInt(dataAux2.probabilidaNivelAux);
   const impactoInherenteAux = parseInt(dataAux2.impactoNivelAux);
   useEffect(() => {
     if (dataAux.controlObjetivoAux === 'Ambos') {
-      formik.setFieldValue('probabilidad', reduceProbabilidadImpacto(probInherenteAux, parseInt(disminucionAux)), false);
-      formik.setFieldValue('impacto', reduceProbabilidadImpacto(impactoInherenteAux, parseInt(disminucionAux)), false);
+      formik.setFieldValue('probabilidadResidual', reduceProbabilidadImpacto(probInherenteAux, parseInt(disminucionAux)), false);
+      formik.setFieldValue('impactoResidual', reduceProbabilidadImpacto(impactoInherenteAux, parseInt(disminucionAux)), false);
     } else if (dataAux.controlObjetivoAux === 'Probabilidad') {
-      formik.setFieldValue('probabilidad', reduceProbabilidadImpacto(probInherenteAux, parseInt(disminucionAux)), false);
-      formik.setFieldValue('impacto', impactoInherenteAux, false);
+      formik.setFieldValue('probabilidadResidual', reduceProbabilidadImpacto(probInherenteAux, parseInt(disminucionAux)), false);
+      formik.setFieldValue('impactoResidual', impactoInherenteAux, false);
     } else if (dataAux.controlObjetivoAux === 'Impacto') {
-      formik.setFieldValue('impacto', reduceProbabilidadImpacto(impactoInherenteAux, parseInt(disminucionAux)), false);
-      formik.setFieldValue('probabilidad', probInherenteAux, false);
+      formik.setFieldValue('impactoResidual', reduceProbabilidadImpacto(impactoInherenteAux, parseInt(disminucionAux)), false);
+      formik.setFieldValue('probabilidadResidual', probInherenteAux, false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataAux, dataAux2]);
 
   // Campo "probabilidadVal" Toma el valor literal de "Probabilidad residual" y Campo "impactoVal" Toma el valor literal de "Impacto residual"
   useEffect(() => {
-    var probValoracionAux = buscaValorLiteral(dataApiProbabilidad, formik.values.probabilidad)
+    var probValoracionAux = buscaValorLiteral(dataApiProbabilidad, formik.values.probabilidadResidual)
     formik.setFieldValue('probabilidadVal', probValoracionAux, false)
 
-    var impactoValoracionAux = buscaValorLiteral(dataApiImpacto, formik.values.impacto)
+    var impactoValoracionAux = buscaValorLiteral(dataApiImpacto, formik.values.impactoResidual)
     formik.setFieldValue('impactoVal', impactoValoracionAux, false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.probabilidad, formik.values.impacto])
+  }, [formik.values.probabilidadResidual, formik.values.impactoResidual])
 
 
-  // Obtiene el Riesgo inherente y su valoracion (Formula entre Probabilidad e impacto)
+  // Obtiene el Riesgo inherente y su valoracion (Formula entre Probabilidad res e impacto res )
   const calculoRiesgoResidual = () => {
-    if (formik.values.probabilidad !== null && formik.values.impacto !== null) {
-      const prob = parseInt(formik.values.probabilidad);
-      const imp = parseInt(formik.values.impacto);
+    if (formik.values.probabilidadResidual !== null && formik.values.impactoResidual !== null) {
+      const prob = parseInt(formik.values.probabilidadResidual);
+      const imp = parseInt(formik.values.impactoResidual);
       const riesgoCalculado = calculaRiesgo(prob, imp);
       formik.setFieldValue('riesgo', riesgoCalculado, false)
     }
@@ -123,7 +121,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, d
   useEffect(() => {
     calculoRiesgoResidual();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.probabilidad, formik.values.impacto]);
+  }, [formik.values.probabilidadResidual, formik.values.impactoResidual]);
 
   useEffect(() => {
     var riesgoValAux = buscaValorLiteralRiesgoI(dataApiRiesgoI, formik.values.riesgo)
@@ -144,12 +142,12 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, d
             </Label>
             <CInputReact
               type={"text"}
-              id={'probabilidad'}
-              value={formik.values.probabilidad}
+              id={'probabilidadResidual'}
+              value={formik.values.probabilidadResidual}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              touched={formik.touched.probabilidad}
-              errors={formik.errors.probabilidad}
+              touched={formik.touched.probabilidadResidual}
+              errors={formik.errors.probabilidadResidual}
               disabled={true}
             />
           </FormGroup>
@@ -176,12 +174,12 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, d
             </Label>
             <CInputReact
               type={"text"}
-              id={'impacto'}
-              value={formik.values.impacto}
+              id={'impactoResidual'}
+              value={formik.values.impactoResidual}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              touched={formik.touched.impacto}
-              errors={formik.errors.impacto}
+              touched={formik.touched.impactoResidual}
+              errors={formik.errors.impactoResidual}
               disabled={true}
             />
           </FormGroup>

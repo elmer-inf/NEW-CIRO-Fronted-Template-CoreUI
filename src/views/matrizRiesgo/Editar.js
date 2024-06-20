@@ -78,7 +78,10 @@ const MatrizRiesgoEditar = ({ match }) => {
     controles: []
   }
 
-  const formValueInitialRiesgoResidual = {}
+  const formValueInitialRiesgoResidual = {
+    probabilidadResidual:'',
+    impactoResidual:''
+  }
 
   const formValueInitialPlanesSeguimiento = {
     nroPlanes: '',
