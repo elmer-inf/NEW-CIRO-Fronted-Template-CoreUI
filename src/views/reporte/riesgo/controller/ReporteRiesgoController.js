@@ -5,7 +5,7 @@ const HOST = HOSTURI.endpoint_riesgos
 const base = '/v1/reporteriesgo/';
 
 export const getInherenteResidual1 = (fechaDesde, fechaHasta) => {
-    const uri = HOST + base + '/mapainherenteresidual1' + '?fechaDesde=' + fechaDesde + '&fechaHasta=' + fechaHasta;
+    const uri = `${HOST}${base}/mapainherenteresidual1?fechaDesde=${fechaDesde}&fechaHasta=${fechaHasta}`;
     const response = axios.get(uri);
     return response;
 }
