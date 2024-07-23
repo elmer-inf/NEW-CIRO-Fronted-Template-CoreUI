@@ -14,4 +14,4 @@ export const getInherenteResidual2 = (procesoId) => {
     const uri = HOST + base + '/mapainherenteresidual2?procesoId=' + procesoId;
     const response = axios.get(uri);
     return response;
-} 
+}  
