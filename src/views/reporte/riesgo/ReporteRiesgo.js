@@ -70,6 +70,8 @@ const ReporteRiesgo = () => {
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.procesoId]);
 
+  console.log('formik.values.procesoId: ', formik.values.procesoId);
+
   return (
     <div className='unique-table'>
       <Fragment>

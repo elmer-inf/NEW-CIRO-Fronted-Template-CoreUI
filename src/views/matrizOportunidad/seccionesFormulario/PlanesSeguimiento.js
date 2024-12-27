@@ -80,7 +80,8 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', false)
-        setDataApiCargo(options)
+        const sortedOptions = _.orderBy(options, ['nombre'], ['asc']);
+        setDataApiCargo(sortedOptions);
       }).catch((error) => {
         console.error('Error: ', error)
       })

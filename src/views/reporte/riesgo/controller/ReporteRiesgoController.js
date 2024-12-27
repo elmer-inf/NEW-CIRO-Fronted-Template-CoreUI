@@ -15,3 +15,17 @@ export const getInherenteResidual2 = (procesoId) => {
     const response = axios.get(uri);
     return response;
 }  
+
+
+
+export const getInherente2ConRiesgos = (procesoId) => {
+    const uri = HOST + base + '/mapainherente2conriesgos?procesoId=' + procesoId;
+    const response = axios.get(uri);
+    return response;
+}  
+
+export const getResidual2ConRiesgos = (procesoId) => {
+    const uri = HOST + base + '/maparesidual2conriesgos?procesoId=' + procesoId;
+    const response = axios.get(uri);
+    return response;
+}  

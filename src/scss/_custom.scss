@@ -503,3 +503,46 @@ input[type="checkbox"].orange-checkbox:checked::before {
   border-width: 0 2px 2px 0;
   transform: translate(-50%, -50%) rotate(45deg);
 }
+
+// Boton sin estilo
+.button-none {
+  border: none;
+  background: none; 
+  text-decoration: none;
+  cursor: pointer;
+  transition: none;
+}
+
+.button-none:hover{
+  border: none;
+  background: none; 
+  text-decoration: none;
+  cursor: pointer;
+  transition: none;
+}
+
+.button-none:active{
+  border: none;
+  background: none; 
+  text-decoration: none;
+  cursor: pointer;
+  transition: none;
+}
+
+
+.button-none:before{
+  border: none;
+  background: none; 
+  text-decoration: none;
+  cursor: pointer;
+  transition: none;
+}
+
+.button-none:focus{
+  border: none;
+  background: none; 
+  text-decoration: none;
+  cursor: pointer;
+  transition: none;
+}
+

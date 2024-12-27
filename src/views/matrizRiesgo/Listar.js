@@ -181,7 +181,6 @@ const MatrizRiesgoListar = () => {
   ]
 
   function colorEstado(cell, row) {
-    console.log('cell: ', cell);
     if (cell === 'Observado') {
       return (
         <CBadge className="mr-1 px-2 py-1 badge-danger-light">{cell}</CBadge>

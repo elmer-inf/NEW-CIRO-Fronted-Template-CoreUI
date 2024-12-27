@@ -96,6 +96,7 @@ export function base64ToArrayBuffer(data) {
 };
 
 export const getFileIcon = (mimeType) => {
+  console.log("MIME type received: ", mimeType);
   switch (mimeType) {
     case 'application/pdf':
       return '/icon/pdf.png';
@@ -105,8 +106,8 @@ export const getFileIcon = (mimeType) => {
     case 'application/msword':
     case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
       return '/icon/word.png';
-    case 'application/vnd.ms-outlook':
-      return '/icon/outlook.png';
+    case 'application/octet-stream':
+      return '/icon/msg.png';
     case 'application/zip':
     case 'application/x-zip-compressed':
       return '/icon/zip.png';

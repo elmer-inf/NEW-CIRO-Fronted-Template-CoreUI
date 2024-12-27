@@ -61,7 +61,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
     const data = {
       ...values,
     }
-    //console.log('datos que se enviaran SECCION 5:', _.omit(data, ['nroPlanes']))
+    console.log('datos que se enviaran SECCION 5:', _.omit(data, ['nroPlanes']))
     setObject(_.omit(data, ['nroPlanes']));
     nextSection(5);
   }
@@ -85,7 +85,8 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
     getTablaDescripcionEventoN1(idTablaDes)
       .then(res => {
         const options = buildSelectTwo(res.data, 'id', 'nombre', true);
-        setDataApiCargo(options)
+        const sortedOptions = _.orderBy(options, ['nombre'], ['asc']);
+        setDataApiCargo(sortedOptions);
       }).catch((error) => {
         console.error('Error: ', error)
       })
@@ -187,7 +188,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
     }
     return result;
   }
-
+ 
   return (
     <Formik initialValues={initValues} validationSchema={formik} onSubmit={onSubmit}>
       {({ errors, values, touched, setValues, setFieldValue }) => (
@@ -213,6 +214,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
                   <ErrorMessage name="nroPlanes" component="div" className="invalid-feedback" />
                 </Col>
               </Row>
+              
             </Col>
           </Row>
 
@@ -257,10 +259,20 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
                       <Select
                         placeholder="Seleccionar"
                         onChange={selectedOption => {
+                          console.log("Seleccionado:", selectedOption);
                           setFieldValue(`planesAccion.${i}.cargo`, selectedOption.label, false);
-                          setFieldValue(`planesAccion.${i}.correoCargo`, selectedOption.descripcion, false);
+                          // Actualizar 'correoCargo' asegurándose de que cada cambio fuerza la actualización de Formik
+                          setFieldValue(`planesAccion.${i}.correoCargo`, ''); // Primero resetear el campo
+                          setTimeout(() => {
+                            setFieldValue(`planesAccion.${i}.correoCargo`, selectedOption.descripcion); // Luego establecer el nuevo valor
+                          }, 50);
                         }}
-                        options={dataApiCargo}
+                        options={dataApiCargo.map(cargo => ({
+                          value: cargo.id, // Asumiendo que la propiedad 'id' es la que quieres como valor.
+                          label: cargo.nombre, // La propiedad 'nombre' se muestra en el Select.
+                          descripcion: cargo.descripcion // Asegurándonos de incluir la descripción para usarla en correoCargo.
+                        }))}
+
                         name={`planesAccion.${i}.cargo`}
                         styles={customStyles}
                         defaultValue={buildSelectCargo(i)}
@@ -321,118 +333,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
                 </div>
               );
             }))}
-          </FieldArray>
-
-          <Row className='custom-react-bootstrap-table table-hover-animation mt-2'>
-            <Col xs='12'>
-              <BootstrapTable
-                classes={'mt-2'}
-                bootstrap4={true}
-                sort={{ dataField: 'nroPlan', order: 'asc' }}
-                noDataIndication={'No hay registros de Planes de acción'}
-                keyField='nroPlan'
-                data={values.planesAccion}
-                columns={columns}
-                bordered={false}
-                striped={false}
-                hover={false}
-                condensed={false}
-                wrapperClasses="table-responsive"
-              />
-
-              <div className='divider divider-left divider-primary'>
-                <div className='divider-text '><span className='text-label text-primary'>Seguimiento</span></div>
-              </div>
-            </Col>
-
-            <Col xs='12' md='6' xl='2'>
-              <CCallout color="info">
-                <div className="text-label">Nro. de Tareas</div>
-                <div className="h4">{values.planesAccion.length}</div>
-              </CCallout>
-            </Col>
-
-            <Col xs='12' md='6' xl='2'>
-              <CCallout color="danger">
-                <div className="text-label">No iniciadas</div>
-                <div className="h4">{countEstadoPlanes(values.planesAccion, 'No iniciado')}</div>
-              </CCallout>
-            </Col>
-
-            <Col xs='12' md='6' xl='2'>
-              <CCallout color="warning">
-                <div className="text-label">En proceso</div>
-                <div className="h4">{countEstadoPlanes(values.planesAccion, 'En proceso')}</div>
-              </CCallout>
-            </Col>
-
-            <Col xs='12' md='6' xl='2'>
-              <CCallout color="danger">
-                <div className="text-label">Vencido</div>
-                <div className="h4">{countEstadoPlanes(values.planesAccion, 'Vencido')}</div>
-              </CCallout>
-            </Col>
-
-            <Col xs='12' md='6' xl='2'>
-              <CCallout color="danger">
-                <div className="text-label">No aplicable</div>
-                <div className="h4">{countEstadoPlanes(values.planesAccion, 'No aplicable')}</div>
-              </CCallout>
-            </Col>
-
-            <Col xs='12' md='6' xl='2'>
-              <CCallout color="success">
-                <div className="text-label">Concluido</div>
-                <div className="h4">{countEstadoPlanes(values.planesAccion, 'Concluido')}</div>
-              </CCallout>
-            </Col>
-
-            <Col xs='12' md='6' xl='6' className='pt-3'>
-              <div className="progress-group mb-4">
-                <div className="progress-group-header">
-                  <Percent size={15} className='mb-1' />
-                  <span className="pl-3 text-label">Avance</span>
-                  <span className="ml-auto font-weight-bold">
-                    {resultAvance(values.planesAccion)} <Percent size={15} className='mb-1' />
-                  </span>
-                </div>
-                <div className="progress-group-bars">
-                  <CProgress
-                    className="progress-sm"
-                    color={resultAvance(values.planesAccion) <= 32 ? 'danger' : resultAvance(values.planesAccion) <= 66 ? 'warning' : 'success'}
-                    value={resultAvance(values.planesAccion)}
-                  />
-                </div>
-              </div>
-            </Col>
-
-            <Col xs='12' md='6' xl='6' className='pt-3'>
-              {countEstadoPlanes(values.planesAccion, 'Concluido') === 0 ?
-                <div>
-                  <CBadge className='badge-danger-light'><X size={30} className='text-danger' /></CBadge>
-                  <span className='text-label pl-4'>Estado</span>
-                  <span className='text-danger text-label pl-5'>Sin progreso</span>
-                </div>
-                : null}
-
-              {(countEstadoPlanes(values.planesAccion, 'Concluido') < values.planesAccion.length &&
-                countEstadoPlanes(values.planesAccion, 'Concluido') !== 0) ?
-                <div>
-                  <CBadge className='badge-warning-light'><AlertCircle size={30} className='text-warning' /></CBadge>
-                  <span className='text-label pl-4'>Estado</span>
-                  <span className='text-warning text-label pl-5'>En proceso</span>
-                </div>
-                : null}
-
-              {countEstadoPlanes(values.planesAccion, 'Concluido') === values.planesAccion.length && values.planesAccion.length !== 0 ?
-                <div>
-                  <CBadge className='badge-success-light'><Check size={30} className='text-success' /></CBadge>
-                  <span className='text-label pl-4'>Estado</span>
-                  <span className='text-success text-label pl-5'>Concluido</span>
-                </div>
-                : null}
-            </Col>
-          </Row>
+          </FieldArray> 
 
           <FieldArray name="planesAccion">
             {() => (values.planesAccion.map((plan, i) => {
@@ -481,6 +382,122 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
               );
             }))}
           </FieldArray>
+
+          {
+            values.nroPlanes === '' ?
+            null:
+            <Row className='custom-react-bootstrap-table table-hover-animation mt-2'>
+              <Col xs='12'>
+                <BootstrapTable
+                  classes={'mt-2'}
+                  bootstrap4={true}
+                  sort={{ dataField: 'nroPlan', order: 'asc' }}
+                  noDataIndication={'No hay registros de Planes de acción'}
+                  keyField='nroPlan'
+                  data={values.planesAccion}
+                  columns={columns}
+                  bordered={false}
+                  striped={false}
+                  hover={false}
+                  condensed={false} 
+                  wrapperClasses="table-responsive"
+                />
+
+                <div className='divider divider-left divider-primary'>
+                  <div className='divider-text '><span className='text-label text-primary'>Seguimiento</span></div>
+                </div>
+              </Col>
+
+              <Col xs='12' md='6' xl='2'>
+                <CCallout color="info">
+                  <div className="text-label">Nro. de Tareas</div>
+                  <div className="h4">{values.planesAccion.length}</div>
+                </CCallout>
+              </Col>
+
+              <Col xs='12' md='6' xl='2'>
+                <CCallout color="danger">
+                  <div className="text-label">No iniciadas</div>
+                  <div className="h4">{countEstadoPlanes(values.planesAccion, 'No iniciado')}</div>
+                </CCallout>
+              </Col>
+
+              <Col xs='12' md='6' xl='2'>
+                <CCallout color="warning">
+                  <div className="text-label">En proceso</div>
+                  <div className="h4">{countEstadoPlanes(values.planesAccion, 'En proceso')}</div>
+                </CCallout>
+              </Col>
+
+              <Col xs='12' md='6' xl='2'>
+                <CCallout color="danger">
+                  <div className="text-label">Vencido</div>
+                  <div className="h4">{countEstadoPlanes(values.planesAccion, 'Vencido')}</div>
+                </CCallout>
+              </Col>
+
+              <Col xs='12' md='6' xl='2'>
+                <CCallout color="danger">
+                  <div className="text-label">No aplicable</div>
+                  <div className="h4">{countEstadoPlanes(values.planesAccion, 'No aplicable')}</div>
+                </CCallout>
+              </Col>
+
+              <Col xs='12' md='6' xl='2'>
+                <CCallout color="success">
+                  <div className="text-label">Concluido</div>
+                  <div className="h4">{countEstadoPlanes(values.planesAccion, 'Concluido')}</div>
+                </CCallout>
+              </Col>
+
+              <Col xs='12' md='6' xl='6' className='pt-3'>
+                <div className="progress-group mb-4">
+                  <div className="progress-group-header">
+                    <Percent size={15} className='mb-1' />
+                    <span className="pl-3 text-label">Avance</span>
+                    <span className="ml-auto font-weight-bold">
+                      {resultAvance(values.planesAccion)} <Percent size={15} className='mb-1' />
+                    </span>
+                  </div>
+                  <div className="progress-group-bars">
+                    <CProgress
+                      className="progress-sm"
+                      color={resultAvance(values.planesAccion) <= 32 ? 'danger' : resultAvance(values.planesAccion) <= 66 ? 'warning' : 'success'}
+                      value={resultAvance(values.planesAccion)}
+                    />
+                  </div>
+                </div>
+              </Col>
+
+              <Col xs='12' md='6' xl='6' className='pt-3'>
+                {countEstadoPlanes(values.planesAccion, 'Concluido') === 0 ?
+                  <div>
+                    <CBadge className='badge-danger-light'><X size={30} className='text-danger' /></CBadge>
+                    <span className='text-label pl-4'>Estado</span>
+                    <span className='text-danger text-label pl-5'>Sin progreso</span>
+                  </div>
+                  : null}
+
+                {(countEstadoPlanes(values.planesAccion, 'Concluido') < values.planesAccion.length &&
+                  countEstadoPlanes(values.planesAccion, 'Concluido') !== 0) ?
+                  <div>
+                    <CBadge className='badge-warning-light'><AlertCircle size={30} className='text-warning' /></CBadge>
+                    <span className='text-label pl-4'>Estado</span>
+                    <span className='text-warning text-label pl-5'>En proceso</span>
+                  </div>
+                  : null}
+
+                {countEstadoPlanes(values.planesAccion, 'Concluido') === values.planesAccion.length && values.planesAccion.length !== 0 ?
+                  <div>
+                    <CBadge className='badge-success-light'><Check size={30} className='text-success' /></CBadge>
+                    <span className='text-label pl-4'>Estado</span>
+                    <span className='text-success text-label pl-5'>Concluido</span>
+                  </div>
+                  : null}
+              </Col>
+            </Row>
+          }
+          
 
           <Row className='pt-4'>
             <Col xs={4} md={{ size: 2, order: 0, offset: 3 }}>
