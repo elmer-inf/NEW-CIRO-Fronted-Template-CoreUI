@@ -53,9 +53,12 @@ export const countEstadoPlanes = (array, data) => {
 
 // Calcula Porcentaje de Avance de los planes de accion
 export const resultAvance = (array) => {
-  var result = 0;
-  if (array.length !== 0)
-    result = Math.round((countEstadoPlanes(array, 'Concluido') / array.length) * 100);
+  let result = 0;
+  if (array.length !== 0) {
+    const concluidos = countEstadoPlanes(array, 'Concluido');
+    const noAplicables = countEstadoPlanes(array, 'No aplicable');
+    result = Math.round(((concluidos + noAplicables) / array.length) * 100);
+  }
   return result;
 }
 

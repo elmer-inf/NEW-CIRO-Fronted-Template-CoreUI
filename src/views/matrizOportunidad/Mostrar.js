@@ -123,6 +123,7 @@ const MatrizOportunidad = ({ match }) => {
     await getOportunidadId(idOportunidad)
       .then((response) => {
         const res = response.data;
+        console.log('res: ', res);
         setDataApi(res)
       }).catch((error) => {
         console.error("Error: ", error);

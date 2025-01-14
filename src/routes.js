@@ -50,7 +50,7 @@ const SeguridadEditar = React.lazy(() => import('./views/seguridad/Editar'));
 // Modulo de Reportes
 const ReporteEvento = React.lazy(() => import('./views/reporte/ReporteEvento'));
 const ReporteRiesgo = React.lazy(() => import('./views/reporte/riesgo/ReporteRiesgo'));
-//const ReporteOportunidades = React.lazy(() => import('./views/reporte/oportunidad/ReporteOportunidad'));
+const ReporteOportunidades = React.lazy(() => import('./views/reporte/oportunidad/ReporteOportunidad'));
 
 // Modulo de Eventos recurrentes Factor persona
 const EventoRecurrenteListar = React.lazy(() => import('./views/eventoRecurrente/Listar'));
@@ -113,7 +113,7 @@ const routes = [
   { path: '/reporte', name: 'Reportes', component: SeguridadListar, exact: true },
   { path: '/reporte/evento-riesgo', name: 'Reportes de Eventos de Riesgo', component: ReporteEvento },
   { path: '/reporte/matriz-riesgo', name: 'Reportes de Matriz de Riesgos', component: ReporteRiesgo },
-  //{ path: '/reporte/oportunidades', name: 'Reportes de Matriz de Oportunidades', component: ReporteOportunidades },
+  { path: '/reporte/matriz-oportunidad', name: 'Reportes de Matriz de Oportunidades', component: ReporteOportunidades },
 
   { path: '/eventoRecurrente', name: 'Eventos recurrentes', component: EventoRecurrenteListar, exact: true },
   { path: '/eventoRecurrente/listar', name: 'Eventos recurrentes - Factor persona', component: EventoRecurrenteListar },

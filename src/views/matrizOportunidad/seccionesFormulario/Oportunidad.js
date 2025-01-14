@@ -265,7 +265,7 @@ const Oportunidad = ({ nextSection, beforeSection, setObject, initValues, dataAp
 
           <FormGroup tag={Col} md='6' lg='4' className='mb-0'>
             <Label className='form-label text-label'>
-              Nivel Opotunidad
+              Nivel Oportunidad
             </Label>
             <CInputReact
               type={"number"}

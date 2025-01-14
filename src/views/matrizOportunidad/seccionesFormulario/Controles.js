@@ -12,7 +12,7 @@ var _ = require('lodash');
 const Controles = ({ nextSection, beforeSection, setObject, initValues, dataApiFortaleza, isEdit }) => {
 
   const formik = Yup.object().shape({
-    fortalezaId: Yup.mixed().nullable(),
+    fortalezaId: Yup.mixed().required(Messages.required),
     // campos solo para mostrar
     fortalezaValoracion: Yup.string().nullable(),
 
@@ -108,7 +108,7 @@ const Controles = ({ nextSection, beforeSection, setObject, initValues, dataApiF
         <Form>
           <Row className='pt-4'>
             <Col sm='12' md='12' xl='3'>
-              <Label>Ponderación Control/Fortaleza</Label>
+              <Label>Ponderación Control/Fortaleza</Label> <span className='text-primary h5'><b>*</b></span>
               <Select
                 placeholder="Seleccionar"
                 onChange={selectedOption => {

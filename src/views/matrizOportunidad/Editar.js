@@ -228,7 +228,7 @@ const MatrizOportunidadEditar = ({ match }) => {
       controles: JSON.stringify(dataRequest.controles),
       planesAccion: JSON.stringify(dataRequest.planesAccion)
     }
-
+console.log('edit dataValues: ', dataValues);
     const idOportunidad = match.params.id;
     putOportunidadId(idOportunidad, dataValues)
       .then(res => {

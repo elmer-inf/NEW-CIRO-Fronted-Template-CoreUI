@@ -61,7 +61,9 @@ const MatrizRiesgoRegistrar = () => {
 
   const formValueInitialPlanesSeguimiento = {
     nroPlanes: '',
-    planesAccion: []
+    planesAccion: [],
+    planesAccionAvance: '',
+    planesAccionEstado: '',
   }
 
   const dataResult = {

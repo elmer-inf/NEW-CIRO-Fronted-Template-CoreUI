@@ -360,7 +360,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
                       <Field
                         name={`planesAccion.${i}.comenPropuesta`}
                         as="textarea"
-                        rows="7"
+                        rows="2"
                         className={'form-control' + (planErrors.comenPropuesta && planTouched.comenPropuesta ? ' is-invalid' : '')}
                       />
                       <ErrorMessage name={`planesAccion.${i}.comenPropuesta`} component="div" className="invalid-feedback" />
@@ -371,7 +371,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
                       <Field
                         name={`planesAccion.${i}.comenEnProceso`}
                         as="textarea"
-                        rows="7"
+                        rows="2"
                         className={'form-control' + (planErrors.comenEnProceso && planTouched.comenEnProceso ? ' is-invalid' : '')}
                       />
                       <ErrorMessage name={`planesAccion.${i}.comenEnProceso`} component="div" className="invalid-feedback" />
@@ -470,7 +470,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
               </Col>
 
               <Col xs='12' md='6' xl='6' className='pt-3'>
-                {countEstadoPlanes(values.planesAccion, 'Concluido') === 0 ?
+                {countEstadoPlanes(values.planesAccion, 'Concluido') === 0 || countEstadoPlanes(values.planesAccion, 'No aplicable') === 0?
                   <div>
                     <CBadge className='badge-danger-light'><X size={30} className='text-danger' /></CBadge>
                     <span className='text-label pl-4'>Estado</span>
@@ -478,8 +478,7 @@ const PlanesAccion = ({ nextSection, beforeSection, setObject, initValues, isEdi
                   </div>
                   : null}
 
-                {(countEstadoPlanes(values.planesAccion, 'Concluido') < values.planesAccion.length &&
-                  countEstadoPlanes(values.planesAccion, 'Concluido') !== 0) ?
+                {(countEstadoPlanes(values.planesAccion, 'Concluido') < values.planesAccion.length && countEstadoPlanes(values.planesAccion, 'Concluido') !== 0) ?
                   <div>
                     <CBadge className='badge-warning-light'><AlertCircle size={30} className='text-warning' /></CBadge>
                     <span className='text-label pl-4'>Estado</span>

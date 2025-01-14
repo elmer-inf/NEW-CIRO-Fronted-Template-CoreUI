@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from 'react'
-import { AlertCircle, Check, ChevronLeft, Delete, Percent, Save, X } from 'react-feather'
+import { AlertCircle, Check, ChevronLeft, Delete, Percent, Save} from 'react-feather'
 import { Row, Col, FormGroup, Label, Button, } from 'reactstrap'
 import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController'
 import { getTablaDescripcionOportunidadN1 } from 'src/views/administracion/matriz-oportunidad/controller/AdminOportunidadController';
@@ -11,7 +11,6 @@ import BootstrapTable from 'react-bootstrap-table-next'
 import { CBadge, CCallout, CProgress } from '@coreui/react';
 import Select from "react-select";
 import { Messages } from 'src/reusable/variables/Messages';
-
 var _ = require('lodash');
 
 const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) => {
@@ -32,7 +31,9 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
         comenConcluido: Yup.string().nullable(),
         comenEnProceso: Yup.string().nullable(),
       })
-    )
+    ),
+    planesAccionAvance: Yup.string().nullable(),
+    planesAccionEstado: Yup.string().nullable(),
   });
 
   function onChangePlanes(e, field, values, setValues) {
@@ -54,9 +55,24 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
   }
 
   function onSubmit(values) {
+    // Para obtener valor de "planesAccionAvance"
+    const avance = resultAvance(values.planesAccion);
+    // Para obtener valor de "planesAccionEstado"
+    const totalPlanes = values.planesAccion.length;
+    const concluidos = countEstadoPlanes(values.planesAccion, 'Concluido');
+    var estado = "";
+    if (concluidos === totalPlanes && totalPlanes !== 0) {
+      estado = 'Concluido';
+    } else if (concluidos < totalPlanes) {
+      estado ='En proceso';
+    }
+
     const data = {
       ...values,
+      planesAccionAvance: avance + '%',
+      planesAccionEstado: estado,
     }
+
     //console.log('datos que se enviaran SECCION 5:', _.omit(data, ['nroPlanes']))
     handleOnSubmmit(_.omit(data, ['nroPlanes']))
   }
@@ -90,8 +106,8 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
   useEffect(() => {
     callApiTratamiento(5);
     callApiCargo(7);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
   /*  F  I  N     P  A  R  A  M  E  T  R  O  S  */
 
   const columns = [
@@ -340,16 +356,7 @@ const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) =>
             </Col>
 
             <Col xs='12' md='6' xl='6' className='pt-3'>
-              {countEstadoPlanes(values.planesAccion, 'Concluido') === 0 ?
-                <div>
-                  <CBadge className='badge-danger-light'><X size={30} className='text-danger' /></CBadge>
-                  <span className='text-label pl-4'>Estado</span>
-                  <span className='text-danger text-label pl-5'>Sin progreso</span>
-                </div>
-                : null}
-
-              {(countEstadoPlanes(values.planesAccion, 'Concluido') < values.planesAccion.length &&
-                countEstadoPlanes(values.planesAccion, 'Concluido') !== 0) ?
+              {countEstadoPlanes(values.planesAccion, 'Concluido') < values.planesAccion.length ?
                 <div>
                   <CBadge className='badge-warning-light'><AlertCircle size={30} className='text-warning' /></CBadge>
                   <span className='text-label pl-4'>Estado</span>
