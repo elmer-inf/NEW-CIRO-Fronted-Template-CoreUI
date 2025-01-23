@@ -13,7 +13,7 @@ import Select from "react-select";
 import { Messages } from 'src/reusable/variables/Messages';
 var _ = require('lodash');
 
-const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit, isEdit }) => {
+const PlanesAccion = ({ beforeSection, initValues, handleOnSubmmit }) => {
 
   const formik = Yup.object().shape({
     nroPlanes: Yup.string().nullable(),

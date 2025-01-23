@@ -1,8 +1,11 @@
 import axios from 'axios'
 import { HOSTURI } from 'src/config'
+import AuthService from 'src/views/authentication/AuthService';
 
 const HOST = HOSTURI.endpoint_riesgos
 const base = '/v1/reporteriesgo/';
+const Auth = new AuthService();
+const headerByExcel = Auth.getHeaderByExcel();
 
 export const getInherenteResidual1 = (fechaDesde, fechaHasta) => {
     const uri = `${HOST}${base}/mapainherenteresidual1?fechaDesde=${fechaDesde}&fechaHasta=${fechaHasta}`;
@@ -29,3 +32,8 @@ export const getResidual2ConRiesgos = (procesoId) => {
     const response = axios.get(uri);
     return response;
 }  
+
+export const reporteConfigRiesgoExcel = (dataFilter) => {
+    const uri = HOST + base + '/riesgoconfigexcel';
+    return axios.post(uri, dataFilter, headerByExcel);
+  }

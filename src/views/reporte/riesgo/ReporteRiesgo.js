@@ -5,6 +5,7 @@ import * as Yup from "yup"
 import { Chart as ChartJS, registerables } from 'chart.js';
 import MapaInherenteResidual2 from './components/MapaInherenteResidual2';
 import MapaInherenteResidual1 from './components/MapaInherenteResidual1';
+import ReporteConfigurable from './components/ReporteConfigurable';
 import { getTablaDescripcionEventoN1 } from 'src/views/administracion/evento-riesgo/controller/AdminEventoController';
 import { buildSelectThree } from 'src/functions/Function';
 import { CSelectReact } from 'src/reusable/CSelectReact';
@@ -45,7 +46,7 @@ const ReporteRiesgo = () => {
     validationSchema: Yup.object({
       procesoId: Yup.mixed().nullable(),
       fechaDesde: Yup.date().required(Messages.required),
-      fechaHasta: Yup.date().min(Yup.ref('fechaDesde'), Messages.dateValidation1).max(today, Messages.dateValidation3).required(Messages.required),
+      fechaHasta: Yup.date().min(Yup.ref('fechaDesde'), Messages.dateValidation1).max(today, Messages.dateValidation3).required(Messages.required)
     }),
     onSubmit: values => {
       setFiltroFechas({
@@ -70,28 +71,24 @@ const ReporteRiesgo = () => {
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.procesoId]);
 
-  console.log('formik.values.procesoId: ', formik.values.procesoId);
 
   return (
     <div className='unique-table'>
       <Fragment>
         <Card>
           <CardHeader>
-            <CardTitle className='float-left h4 pt-2'>Reporte de Eventos de Riesgo</CardTitle>
+            <CardTitle className='float-left h4 pt-2'>Reporte de Matriz de Riesgos</CardTitle>
           </CardHeader>
           <CardBody>
             <Form onSubmit={formik.handleSubmit} autoComplete="off">
-
               <div className='divider divider-left'>
                 <div className='divider-text'><span className='text-label h5'>PERFIL DE RIESGO</span></div>
               </div>
-              <Row className='justify-content-center align-self-center pb-4'>
-                <Col xs='4' md='3' lg='2'>
+              <Row className='justify-content-center'>
+                <Col xs='12' md='4' lg='3'>
                   <Label className='form-label'>
                     Fecha Desde <span className='text-primary h5'><b>*</b></span>
                   </Label>
-                </Col>
-                <Col xs='8' md='3' lg='3'>
                   <CInputReact
                     type={"date"}
                     id={'fechaDesde'}
@@ -103,13 +100,10 @@ const ReporteRiesgo = () => {
                     errors={formik.errors.fechaDesde}
                   />
                 </Col>
-
-                <Col xs='4' md='3' lg='2'>
+                <Col xs='12' md='4' lg='3'>
                   <Label className='form-label'>
                     Fecha Hasta <span className='text-primary h5'><b>*</b></span>
                   </Label>
-                </Col>
-                <Col xs='8' md='3' lg='3'>
                   <CInputReact
                     type={"date"}
                     id={'fechaHasta'}
@@ -121,8 +115,9 @@ const ReporteRiesgo = () => {
                     errors={formik.errors.fechaHasta}
                   />
                 </Col>
-
-                <Col xs='6' md='6' lg='2'>
+              </Row>
+              <Row className='justify-content-center pb-4'>
+                <Col xs='6' md='6' lg='3'>
                   <Button
                     className='text-white'
                     block
@@ -134,7 +129,6 @@ const ReporteRiesgo = () => {
                   </Button>
                 </Col>
               </Row>
-
               {
                 showMapa1 ?
                   <MapaInherenteResidual1 fechaDesde={filtroFechas.fechaDesde} fechaHasta={filtroFechas.fechaHasta} />
@@ -162,9 +156,13 @@ const ReporteRiesgo = () => {
                   />
                 </Col>
               </Row>
+              <MapaInherenteResidual2 procesoId={filtroProcesoId} />
             </Form>
 
-            <MapaInherenteResidual2 procesoId={filtroProcesoId} />
+            <div className='divider divider-left pt-4'>
+              <div className='divider-text'><span className='text-label h5'>CONFIGURAR REPORTE DE MATRIZ DE RIESGOS</span></div>
+            </div>
+            <ReporteConfigurable />
           </CardBody>
         </Card>
       </Fragment>

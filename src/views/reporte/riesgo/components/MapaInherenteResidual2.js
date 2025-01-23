@@ -305,7 +305,7 @@ const MapaInherenteResidual2 = ({ procesoId }) => {
           </CModalBody>
         </CModal>
 
-        <Col xs={12} md={6}>
+        <Col xs={12} xl={6}>
           <Label className='text-label pt-4'>RIESGO INHERENTE - RIESGO OPERATIVO</Label>
           <table {...getTablePropsInherente()} style={{ width: '100%', border: '1px solid #878888' }}>
             <thead>
@@ -587,7 +587,7 @@ const MapaInherenteResidual2 = ({ procesoId }) => {
           </table>
         </Col>
 
-        <Col xs={12} md={6}>
+        <Col xs={12} xl={6}>
           <Label className='text-label pt-4'>RIESGO RESIDUAL - RIESGO OPERATIVO</Label>
           <table {...getTablePropsResidual()} style={{ width: '100%', border: '1px solid #878888' }}>
             <thead>

@@ -135,7 +135,7 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
 
         listMatrizRiesgo: arrayIdMatrizRiesgo
       }
-      console.log('datos que se enviaran SECCION 2:', data)
+      //console.log('datos que se enviaran SECCION 2:', data)
       setObject(data);
 
       if (tipoEvento === 'A')

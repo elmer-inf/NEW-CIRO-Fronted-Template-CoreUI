@@ -85,7 +85,9 @@ const MatrizRiesgoEditar = ({ match }) => {
 
   const formValueInitialPlanesSeguimiento = {
     nroPlanes: '',
-    planesAccion: []
+    planesAccion: [],
+    planesAccionEstado: '',
+    planesAccionAvance: ''
   }
 
   const formValueInitialValoracion = {
@@ -150,13 +152,15 @@ const MatrizRiesgoEditar = ({ match }) => {
       controlComentario: args.controlComentario,
 
       controlesTiene: (args.controlesTiene === true) ? 'true' : (args.controlesTiene === false) ? 'false' : '',
-      nroControles: (JSON.parse(args.controles).length !== 0) ? JSON.parse(args.controles).length : '',
-      controles: JSON.parse(args.controles)
+      nroControles: args.controles===null? '' : (JSON.parse(args.controles).length !== 0) ? JSON.parse(args.controles).length : '',
+      controles: args.controles===null? [] : JSON.parse(args.controles)
     };
 
     const planesAccion = {
-      nroPlanes: (JSON.parse(args.planesAccion).length !== 0) ? JSON.parse(args.planesAccion).length : '',
-      planesAccion: JSON.parse(args.planesAccion)
+      nroPlanes: args.planesAccion===null? '' : (JSON.parse(args.planesAccion).length !== 0) ? JSON.parse(args.planesAccion).length : '',
+      planesAccion: args.planesAccion === null ? [] : JSON.parse(args.planesAccion).sort((a, b) => a.nroPlan - b.nroPlan),
+      planesAccionEstado: args.planesAccionEstado,
+      planesAccionAvance: args.planesAccionAvance
     };
 
     const valoracion = {
@@ -188,7 +192,6 @@ const MatrizRiesgoEditar = ({ match }) => {
       });
   }
 
-  //Life Cycle
   useEffect(() => {
     getById(match.params.id);
     //eslint-disable-next-line react-hooks/exhaustive-deps
@@ -272,9 +275,9 @@ const MatrizRiesgoEditar = ({ match }) => {
     // Obtiene valores auxiliares de "Riesgo residual" para "Valoracion cuantitativa"
     if (activeTab === '4' && realValues !== undefined) {
       const dataAuxSeccion4 = {
-        probabilidadAux: realValues.probabilidad,
+        probabilidadAux: realValues.probabilidadResidual,
         probabilidadValAux: realValues.probabilidadVal,
-        impactoAux: realValues.impacto,
+        impactoAux: realValues.impactoResidual,
         impactoValAux: realValues.impactoVal,
         riesgoAux: realValues.riesgo,
         riesgoValAux: realValues.riesgoVal,

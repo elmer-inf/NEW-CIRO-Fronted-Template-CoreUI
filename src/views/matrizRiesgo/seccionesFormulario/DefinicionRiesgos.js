@@ -117,7 +117,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, optionsMon
         subtipoFraudeId: (values.subtipoFraudeId !== null) ? values.subtipoFraudeId.value : 0,
       }
       const dataSelect = _.omit(data, ['defConcatenado', 'probInherente', 'probPorcentaje', 'probValoracion', 'impactoInherente', 'impactoPorcentaje', 'impactoValoracion', 'riesgoInherente', 'valorRiesgoInherente']);
-      console.log('datos que se enviaran SECCION 2:', dataSelect)
+      //console.log('datos que se enviaran SECCION 2:', dataSelect)
       setObject(dataSelect, values);
       nextSection(2);
     }

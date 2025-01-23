@@ -130,7 +130,6 @@ const SeguridadEditar = ({ match }) => {
     await getSeguridadId(idSeguridad)
       .then((response) => {
         const res = response.data;
-        console.log("" + JSON.stringify(res, null, 2));
         matched(res);
         setSpin(false);
       }).catch((error) => {

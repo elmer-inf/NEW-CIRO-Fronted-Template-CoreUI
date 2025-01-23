@@ -186,9 +186,6 @@ const FormEvaluaEvento = ({ initialValuess, handleOnSubmit }) => {
     }
   })
 
-  /* var string = JSON.stringify(_.map(observados, 'text'));
-  console.log('observados string : ', string);
-  console.log('observados json  convert : ', JSON.parse(string)) ; */
 
   return (
     <Form onSubmit={formik.handleSubmit} autoComplete="off">

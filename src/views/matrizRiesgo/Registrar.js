@@ -82,7 +82,9 @@ const MatrizRiesgoRegistrar = () => {
 
   const formValueInitialPlanesSeguimiento = {
     nroPlanes: '',
-    planesAccion: []
+    planesAccion: [],
+    planesAccionEstado: '',
+    planesAccionAvance: ''
   }
 
   const formValueInitialValoracion = {
@@ -100,7 +102,7 @@ const MatrizRiesgoRegistrar = () => {
   }
 
   const [requestData, setRequestData] = useState(dataResult);
-  const [activeTab, setActiveTap] = useState('5');
+  const [activeTab, setActiveTap] = useState('1');
 
   /* manejo de botones siguiente */
   const nextSection = (tab) => {

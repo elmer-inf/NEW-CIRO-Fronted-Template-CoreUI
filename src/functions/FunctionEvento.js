@@ -96,7 +96,6 @@ export function base64ToArrayBuffer(data) {
 };
 
 export const getFileIcon = (mimeType) => {
-  console.log("MIME type received: ", mimeType);
   switch (mimeType) {
     case 'application/pdf':
       return '/icon/pdf.png';

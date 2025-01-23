@@ -29,7 +29,7 @@ const Riesgos = ({ nextSection, beforeSection, setObject, initValues, dataAux, d
       const data = {
         ...values
       }
-      console.log('datos que se enviaran SECCION 4:', data)
+      //console.log('datos que se enviaran SECCION 4:', data)
       setObject(data, values);
       nextSection(4);
     }

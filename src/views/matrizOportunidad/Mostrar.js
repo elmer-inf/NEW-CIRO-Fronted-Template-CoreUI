@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from 'react'
-import { FileText, BarChart2, Trello, CheckSquare, Percent, X, AlertCircle, Check, Columns } from 'react-feather'
+import { FileText, BarChart2, Trello, CheckSquare, Percent, AlertCircle, Check, Columns } from 'react-feather'
 import { Row, Col, Card, CardBody, CardHeader, CardTitle, Badge, Button, ListGroup, ListGroupItem } from 'reactstrap';
 import { CNav, CNavItem, CNavLink, CTabContent, CTabPane, CTabs, CButton, CCollapse, CCard, CModal, CModalBody, CModalHeader, CModalTitle, CBadge, CCallout, CProgress } from '@coreui/react'
 import { getOportunidadId, getUltimaObservacion, putEvaluaOportunidad, getGeneraCodigo } from './controller/OportunidadController';
@@ -123,7 +123,6 @@ const MatrizOportunidad = ({ match }) => {
     await getOportunidadId(idOportunidad)
       .then((response) => {
         const res = response.data;
-        console.log('res: ', res);
         setDataApi(res)
       }).catch((error) => {
         console.error("Error: ", error);
@@ -610,27 +609,18 @@ const MatrizOportunidad = ({ match }) => {
                             </Col>
 
                             <Col xs='12' md='6' xl='6' className='pt-3'>
-                              {countEstadoPlanes(JSON.parse(dataApi.planesAccion), 'Concluido') === 0 ?
-                                <div>
-                                  <CBadge className='badge-danger-light'><X size={30} className='text-danger' /></CBadge>
-                                  <span className='text-label pl-4'>Estado</span>
-                                  <span className='text-danger text-label pl-5'>Sin progreso</span>
-                                </div>
-                                : null}
-
-                              {(countEstadoPlanes(JSON.parse(dataApi.planesAccion), 'Concluido') < JSON.parse(dataApi.planesAccion).length &&
-                                countEstadoPlanes(JSON.parse(dataApi.planesAccion), 'Concluido') !== 0) ?
+                              {dataApi.planesAccionEstado=== 'En proceso' ?
                                 <div>
                                   <CBadge className='badge-warning-light'><AlertCircle size={30} className='text-warning' /></CBadge>
-                                  <span className='text-label pl-4'>Estado</span>
-                                  <span className='text-warning text-label pl-5'>En Proceso</span>
+                                  <span className='text-label pl-4'>Estado:</span>
+                                  <span className='text-warning text-label pl-5'>En proceso</span>
                                 </div>
                                 : null}
 
-                              {countEstadoPlanes(JSON.parse(dataApi.planesAccion), 'Concluido') === JSON.parse(dataApi.planesAccion).length && JSON.parse(dataApi.planesAccion).length !== 0 ?
+                              {dataApi.planesAccionEstado=== 'Concluido' ?
                                 <div>
                                   <CBadge className='badge-success-light'><Check size={30} className='text-success' /></CBadge>
-                                  <span className='text-label pl-4'>Estado</span>
+                                  <span className='text-label pl-4'>Estado:</span>
                                   <span className='text-success text-label pl-5'>Concluido</span>
                                 </div>
                                 : null}

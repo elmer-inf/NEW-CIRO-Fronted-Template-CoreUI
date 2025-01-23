@@ -160,7 +160,12 @@ const MatrizRiesgo = ({ match }) => {
     const idRiesgo = match.params.id;
     await getRiesgoId(idRiesgo)
       .then((response) => {
-        const res = response.data;
+        let planesAccion = response.data.planesAccion;
+        planesAccion = JSON.stringify(JSON.parse(planesAccion).sort((a, b) => a.nroPlan - b.nroPlan));
+        const res={
+          ...response.data,
+          planesAccion: planesAccion
+        }
         setDataApi(res)
       }).catch((error) => {
         console.error("Error: ", error);
@@ -882,28 +887,35 @@ const MatrizRiesgo = ({ match }) => {
                             </Col>
 
                             <Col xs='12' md='6' xl='6' className='pt-3'>
-                              {countEstadoPlanes(JSON.parse(dataApi.planesAccion), 'Concluido') === 0 ?
-                                <div>
-                                  <CBadge className='badge-danger-light'><X size={30} className='text-danger' /></CBadge>
-                                  <span className='text-label pl-4'>Estado</span>
-                                  <span className='text-danger text-label pl-5'>Sin progreso</span>
-                                </div>
-                                : null}
-
-                              {(countEstadoPlanes(JSON.parse(dataApi.planesAccion), 'Concluido') < JSON.parse(dataApi.planesAccion).length &&
-                                countEstadoPlanes(JSON.parse(dataApi.planesAccion), 'Concluido') !== 0) ?
+                              {dataApi.planesAccionEstado=== 'En proceso' ?
                                 <div>
                                   <CBadge className='badge-warning-light'><AlertCircle size={30} className='text-warning' /></CBadge>
-                                  <span className='text-label pl-4'>Estado</span>
+                                  <span className='text-label pl-4'>Estado:</span>
                                   <span className='text-warning text-label pl-5'>En proceso</span>
                                 </div>
                                 : null}
 
-                              {countEstadoPlanes(JSON.parse(dataApi.planesAccion), 'Concluido') === JSON.parse(dataApi.planesAccion).length && JSON.parse(dataApi.planesAccion).length !== 0 ?
+                              {dataApi.planesAccionEstado=== 'Concluido' ?
                                 <div>
                                   <CBadge className='badge-success-light'><Check size={30} className='text-success' /></CBadge>
-                                  <span className='text-label pl-4'>Estado</span>
+                                  <span className='text-label pl-4'>Estado:</span>
                                   <span className='text-success text-label pl-5'>Concluido</span>
+                                </div>
+                                : null}
+
+                              {dataApi.planesAccionEstado=== 'No aplica' ?
+                                <div>
+                                  <CBadge className='badge-success-info'><X size={30} className='text-info' /></CBadge>
+                                  <span className='text-label pl-4'>Estado:</span>
+                                  <span className='text-info text-label pl-5'>No aplica</span>
+                                </div>
+                                : null}
+
+                              {dataApi.planesAccionEstado=== 'Vencido' ?
+                                <div>
+                                  <CBadge className='badge-success-danger'><X size={30} className='text-danger' /></CBadge>
+                                  <span className='text-label pl-4'>Estado:</span>
+                                  <span className='text-danger text-label pl-5'>Vencido</span>
                                 </div>
                                 : null}
                             </Col>

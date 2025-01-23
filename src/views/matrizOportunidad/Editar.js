@@ -63,7 +63,9 @@ const MatrizOportunidadEditar = ({ match }) => {
 
   const formValueInitialPlanesSeguimiento = {
     nroPlanes: '',
-    planesAccion: []
+    planesAccion: [],
+    planesAccionAvance: '',
+    planesAccionEstado: '',
   }
 
   const [formValueInitialDatosToEdit, setformValueInitialDatos] = useState(formValueInitialDatosIniciales)
@@ -109,12 +111,14 @@ const MatrizOportunidadEditar = ({ match }) => {
       controlesTiene: (args.controlesTiene === true) ? 'true' : (args.controlesTiene === false) ? 'false' : '',
       controlComentario: args.controlComentario,
       fortalezaId: buildOptionSelect(args.fortalezaId, 'id', 'campoA', false, 'fortalezaId'),
-      nroControles: (JSON.parse(args.controles).length !== 0) ? JSON.parse(args.controles).length : '',
-      controles: JSON.parse(args.controles)
+      nroControles: args.controles===null? '' : (JSON.parse(args.controles).length !== 0) ? JSON.parse(args.controles).length : '',
+      controles: args.controles===null? [] : JSON.parse(args.controles)
     };
     const planes = {
-      nroPlanes: (JSON.parse(args.planesAccion).length !== 0) ? JSON.parse(args.planesAccion).length : '',
-      planesAccion: JSON.parse(args.planesAccion)
+      nroPlanes: args.planesAccion===null? '' : (JSON.parse(args.planesAccion).length !== 0) ? JSON.parse(args.planesAccion).length : '',
+      planesAccion: args.planesAccion===null? [] : JSON.parse(args.planesAccion),
+      planesAccionEstado: args.planesAccionEstado,
+      planesAccionAvance: args.planesAccionAvance
     };
 
     setformValueInitialDatos(datosIniciales);
@@ -228,7 +232,7 @@ const MatrizOportunidadEditar = ({ match }) => {
       controles: JSON.stringify(dataRequest.controles),
       planesAccion: JSON.stringify(dataRequest.planesAccion)
     }
-console.log('edit dataValues: ', dataValues);
+
     const idOportunidad = match.params.id;
     putOportunidadId(idOportunidad, dataValues)
       .then(res => {
