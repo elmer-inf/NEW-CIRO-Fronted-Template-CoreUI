@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { Card, CardHeader, CardBody, CardTitle, Button, Col, Label, Row, FormGroup, Form, Input } from 'reactstrap'
+import { Card, CardBody, Button, Col, Label, Row, FormGroup, Form, Input } from 'reactstrap'
 import CCSpinner from 'src/reusable/spinner/CCSpinner';
 import { Messages } from 'src/reusable/variables/Messages';
 import { useFormik } from "formik"
@@ -376,8 +376,8 @@ const ReporteConfigurable = () => {
                   )}
                 </Col>
                 <Col sm='12' xl='2' className='align-self-center'>
-                  <Row className='pt-2'>
-                    <Col xs="12">
+                  <Row className='pt-2 justify-content-center'>
+                    <Col xs="6" md="12">
                       <Button
                         block
                         color="primary"
@@ -389,8 +389,8 @@ const ReporteConfigurable = () => {
                       </Button>
                     </Col>
                   </Row>
-                  <Row className='py-4'>
-                    <Col xs="12">
+                  <Row className='py-4 justify-content-center'>
+                    <Col xs="6" md="12">
                       <Button
                         block
                         color="primary"
@@ -458,7 +458,7 @@ const ReporteConfigurable = () => {
               </Row>
 
               <Row className='justify-content-center py-4'>
-                <Col xs={4} md={2}>
+                <Col xs={6} md={4} xl={2}>
                   <Button
                     block
                     color="dark"
@@ -470,13 +470,12 @@ const ReporteConfigurable = () => {
                     Limpiar
                   </Button>
                 </Col>
-                <Col xs={4} md={2}>
+                <Col xs={6} md={4} xl={2}>
                   <Button
                     block
                     className='text-white'
                     color="primary"
                     type="submit"
-                  //disabled={formik.isSubmitting}
                   >
                     <File size={17} className='mr-2' />Descargar reporte
                   </Button>

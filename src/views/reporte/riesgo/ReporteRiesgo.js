@@ -12,6 +12,7 @@ import { CSelectReact } from 'src/reusable/CSelectReact';
 import { Messages } from 'src/reusable/variables/Messages'
 import { CInputReact } from 'src/reusable/CInputReact';
 import { BarChart2 } from 'react-feather';
+import ReporteGerencial from './components/ReporteGerencial';
 ChartJS.register(...registerables);
 
 const ReporteRiesgo = () => {
@@ -85,7 +86,7 @@ const ReporteRiesgo = () => {
                 <div className='divider-text'><span className='text-label h5'>PERFIL DE RIESGO</span></div>
               </div>
               <Row className='justify-content-center'>
-                <Col xs='12' md='4' lg='3'>
+                <Col sm='12' md='6' lg='3'>
                   <Label className='form-label'>
                     Fecha Desde <span className='text-primary h5'><b>*</b></span>
                   </Label>
@@ -100,7 +101,7 @@ const ReporteRiesgo = () => {
                     errors={formik.errors.fechaDesde}
                   />
                 </Col>
-                <Col xs='12' md='4' lg='3'>
+                <Col sm='12' md='6' lg='3'>
                   <Label className='form-label'>
                     Fecha Hasta <span className='text-primary h5'><b>*</b></span>
                   </Label>
@@ -163,6 +164,11 @@ const ReporteRiesgo = () => {
               <div className='divider-text'><span className='text-label h5'>CONFIGURAR REPORTE DE MATRIZ DE RIESGOS</span></div>
             </div>
             <ReporteConfigurable />
+
+            <div className='divider divider-left pt-4'>
+              <div className='divider-text'><span className='text-label h5'>REPORTE GERENCIAL</span></div>
+            </div>
+            <ReporteGerencial />
           </CardBody>
         </Card>
       </Fragment>

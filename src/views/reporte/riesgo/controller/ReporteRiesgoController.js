@@ -36,4 +36,10 @@ export const getResidual2ConRiesgos = (procesoId) => {
 export const reporteConfigRiesgoExcel = (dataFilter) => {
     const uri = HOST + base + '/riesgoconfigexcel';
     return axios.post(uri, dataFilter, headerByExcel);
-  }
+}
+
+export const getReporteGerencial = (fechaDesde, fechaHasta) => {
+    const uri = `${HOST}${base}/reportegerencial?fechaDesde=${fechaDesde}&fechaHasta=${fechaHasta}`;
+    const response = axios.get(uri);
+    return response;
+}

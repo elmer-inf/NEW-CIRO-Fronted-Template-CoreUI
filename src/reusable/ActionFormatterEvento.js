@@ -52,7 +52,7 @@ const ActionFormatterEvento = ({ row, detailFunction, editFunction, deleteFuncti
             <MoreVertical size={15} className='text-dark' />
           </CDropdownToggle>
         </CTooltip>
-        <CDropdownMenu placement='left'>
+        <CDropdownMenu className='mt-4' placement='left'>
           <CDropdownItem onClick={() => detailFunction(row)}>
             <FileText size={15} className='mr-2 text-primary' /> Mostrar
           </CDropdownItem>
