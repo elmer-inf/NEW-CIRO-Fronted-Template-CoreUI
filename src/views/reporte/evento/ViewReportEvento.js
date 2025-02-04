@@ -3,7 +3,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import CCSpinner from 'src/reusable/spinner/CCSpinner';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-import { reporteEvento } from '../controller/ReporteEventoController';
+import { reporteEvento } from './controller/ReporteEventoController';
 
 const ViewReportEvento = ({ fechaDesde, fechaHasta, estadoEvento, loadDataEvento }) => {
 

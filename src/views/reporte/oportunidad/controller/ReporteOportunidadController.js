@@ -11,3 +11,15 @@ export const reporteConfigOportunidadExcel = (dataFilter) => {
   const uri = HOST + base + '/oportunidadconfigexcel';
   return axios.post(uri, dataFilter, headerByExcel);
 }
+
+export const getInherente = (procesoId) => {
+  const uri = HOST + base + 'mapainherente?procesoId=' + procesoId;
+  const response = axios.get(uri);
+  return response;
+}  
+
+export const getInherenteConOportunidades = (procesoId) => {
+  const uri = HOST + base + 'mapainherenteconoportunidades?procesoId=' + procesoId;
+  const response = axios.get(uri);
+  return response;
+}  

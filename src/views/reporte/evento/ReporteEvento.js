@@ -10,7 +10,7 @@ import CCSpinner from 'src/reusable/spinner/CCSpinner';
 import { generateAllReport } from './controller/ReporteCiroController';
 import ViewReportCIRO from './ciro/component/ViewReportCIRO';
 import { CInputReact } from 'src/reusable/CInputReact';
-import ViewReportEvento from './evento/ViewReportEvento';
+import ViewReportEvento from './ViewReportEvento';
 import { reporteAsfiExcel, reporteAuditExtExcel, reporteAuditIntExcel, reporteConfigEventoExcel, reporteEventoExcel } from './controller/ReporteEventoController';
 import { saveAs } from 'file-saver';
 import { toastSweetAlert } from 'src/reusable/SweetAlert2';
@@ -739,8 +739,8 @@ const ReporteEventos = () => {
                       )}
                     </Col>
                     <Col sm='12' xl='2' className='align-self-center'>
-                      <Row className='pt-2'>
-                        <Col xs="12">
+                      <Row className='pt-2 justify-content-center'>
+                        <Col xs="6" xl="12">
                           <Button
                             block
                             color="primary"
@@ -752,8 +752,8 @@ const ReporteEventos = () => {
                           </Button>
                         </Col>
                       </Row>
-                      <Row className='py-4'>
-                        <Col xs="12">
+                      <Row className='py-4 justify-content-center'>
+                        <Col xs="6" xl="12">
                           <Button
                             block
                             color="primary"
@@ -823,7 +823,7 @@ const ReporteEventos = () => {
               }
 
               <Row className='justify-content-center py-4'>
-                <Col xs={4} md={2}>
+                <Col xs={6} md={4} xl={2}>
                   <Button
                     block
                     color="dark"
@@ -835,7 +835,7 @@ const ReporteEventos = () => {
                     Limpiar
                   </Button>
                 </Col>
-                <Col xs={4} md={2}>
+                <Col xs={6} md={4} xl={2}>
                   <Button
                     block
                     className='text-white'

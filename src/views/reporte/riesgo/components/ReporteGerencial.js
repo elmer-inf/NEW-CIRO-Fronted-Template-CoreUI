@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react';
-import { Card, CardBody, Button, Col, Label, Row, FormGroup, Form } from 'reactstrap'
+import { Button, Col, Label, Row, FormGroup, Form } from 'reactstrap'
 import CCSpinner from 'src/reusable/spinner/CCSpinner';
 import { Messages } from 'src/reusable/variables/Messages';
 import { useFormik } from "formik"
@@ -63,124 +63,120 @@ const ReporteGerencial = () => {
     <div>
       <CCSpinner show={spin} />
       <Fragment>
-        <Card>
-          <CardBody>
-            <Form onSubmit={formik.handleSubmit} autoComplete="off">
-              <Row className='justify-content-center'>
-                <FormGroup tag={Col} md='4' xl='3' className='mb-0'>
-                  <Label className='form-label'>
-                    Fecha Desde <span className='text-primary h5'><b>*</b></span>
-                  </Label>
-                  <CInputReact
-                    type={"month"}
-                    id={'fechaDesde'}
-                    placeholder={'Fecha desde'}
-                    value={formik.values.fechaDesde}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    touched={formik.touched.fechaDesde}
-                    errors={formik.errors.fechaDesde}
-                  />
-                </FormGroup>
-                <FormGroup tag={Col} md='4' xl='3' className='mb-0'>
-                  <Label className='form-label'>
-                    Fecha Hasta <span className='text-primary h5'><b>*</b></span>
-                  </Label>
-                  <CInputReact
-                    type={"month"}
-                    id={'fechaHasta'}
-                    placeholder={'Fecha hasta'}
-                    value={formik.values.fechaHasta}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    touched={formik.touched.fechaHasta}
-                    errors={formik.errors.fechaHasta}
-                  />
-                </FormGroup>
-              </Row>
+        <Form onSubmit={formik.handleSubmit} autoComplete="off">
+          <Row className='justify-content-center'>
+            <FormGroup tag={Col} md='4' xl='3' className='mb-0'>
+              <Label className='form-label'>
+                Fecha Desde <span className='text-primary h5'><b>*</b></span>
+              </Label>
+              <CInputReact
+                type={"month"}
+                id={'fechaDesde'}
+                placeholder={'Fecha desde'}
+                value={formik.values.fechaDesde}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                touched={formik.touched.fechaDesde}
+                errors={formik.errors.fechaDesde}
+              />
+            </FormGroup>
+            <FormGroup tag={Col} md='4' xl='3' className='mb-0'>
+              <Label className='form-label'>
+                Fecha Hasta <span className='text-primary h5'><b>*</b></span>
+              </Label>
+              <CInputReact
+                type={"month"}
+                id={'fechaHasta'}
+                placeholder={'Fecha hasta'}
+                value={formik.values.fechaHasta}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                touched={formik.touched.fechaHasta}
+                errors={formik.errors.fechaHasta}
+              />
+            </FormGroup>
+          </Row>
 
-              <Row className='justify-content-center pt-4 pb-5'>
-                <Col xs={6} md={4} xl={2}>
-                  <Button
-                    block
-                    color="dark"
-                    outline
-                    onClick={() => { formik.handleReset(); setMeses([]); setApetitoRiesgo([]); setBusquedaIniciada(false); }}
-                    disabled={!formik.dirty}
-                  >
-                    <Delete size={17} className='mr-2' />
-                    Limpiar
-                  </Button>
+          <Row className='justify-content-center pt-4 pb-5'>
+            <Col xs={6} md={4} xl={2}>
+              <Button
+                block
+                color="dark"
+                outline
+                onClick={() => { formik.handleReset(); setMeses([]); setApetitoRiesgo([]); setBusquedaIniciada(false); }}
+                disabled={!formik.dirty}
+              >
+                <Delete size={17} className='mr-2' />
+                Limpiar
+              </Button>
+            </Col>
+            <Col xs={6} md={4} xl={2}>
+              <Button
+                block
+                className='text-white'
+                color="primary"
+                type="submit"
+              >
+                <BarChart2 size={17} className='mr-2' />Generar
+              </Button>
+            </Col>
+          </Row>
+        </Form>
+
+        {dataMeses.length > 0 &&
+          <Fragment>
+            <Row className="justify-content-center pb-4">
+              <Col xs="4" md="3" xl="2">
+                <div className='text-right'>
+                  <CBadge className="px-2 py-1 badge-info">Apetito de Riesgo</CBadge>
+                </div>
+              </Col>
+              <Col xs="3" md="6" xl="4">
+                <div className="progress-group">
+                  <div className="progress-group-bars mr-3 pt-1">
+                    <CProgress
+                      className="progress-md"
+                      color={'info'}
+                      value={100}
+                    />
+                  </div>
+                </div>
+              </Col>
+              <Col xs="5" md="3" xl="2">
+                {dataApetitoRiesgo}$ = <CBadge className="px-2 py-1 badge-info h6">100%</CBadge>
+              </Col>
+            </Row>
+
+            {dataMeses.map((mes, index) => (
+              <Row key={index} className="justify-content-center">
+                <Col xs="3" md="3" xl="2">
+                  <div className='text-right'>
+                    <CBadge className="px-2 py-1 badge-grey-light">{mes.mes} {mes.anio}</CBadge>
+                  </div>
                 </Col>
-                <Col xs={6} md={4} xl={2}>
-                  <Button
-                    block
-                    className='text-white'
-                    color="primary"
-                    type="submit"
-                  >
-                    <BarChart2 size={17} className='mr-2' />Generar
-                  </Button>
+                <Col xs="4" md="6" xl="4">
+                  <div className="progress-group">
+                    <div className="progress-group-bars mr-3 pt-1">
+                      <CProgress
+                        className="progress-md"
+                        color={mes.porcentajeTotalPerdida <= 32 ? 'success' : mes.porcentajeTotalPerdida <= 66 ? 'warning' : 'danger'}
+                        value={mes.porcentajeTotalPerdida}
+                      />
+                    </div>
+                  </div>
+                </Col>
+                <Col xs="5" md="3" xl="2">
+                  <span className='text-data'>{mes.totalPerdida}$ =  </span><CBadge className="px-2 py-1 badge-grey-light h6 ml-1">{mes.porcentajeTotalPerdida}%</CBadge>
                 </Col>
               </Row>
-            </Form>
+            ))}
+          </Fragment>
+        }
 
-            {dataMeses.length > 0 &&
-              <Fragment>
-                <Row className="justify-content-center pb-4">
-                  <Col xs="4" md="3" xl="2">
-                    <div className='text-right'>
-                      <CBadge className="px-2 py-1 badge-info">Apetito de Riesgo</CBadge>
-                    </div>
-                  </Col>
-                  <Col xs="3" md="6" xl="4">
-                    <div className="progress-group">
-                      <div className="progress-group-bars mr-3 pt-1">
-                        <CProgress
-                          className="progress-md"
-                          color={'info'}
-                          value={100}
-                        />
-                      </div>
-                    </div>
-                  </Col>
-                  <Col xs="5" md="3" xl="2">
-                    {dataApetitoRiesgo}$ = <CBadge className="px-2 py-1 badge-info h6">100%</CBadge>
-                  </Col>
-                </Row>
-
-                {dataMeses.map((mes, index) => (
-                  <Row key={index} className="justify-content-center">
-                    <Col xs="3" md="3" xl="2">
-                      <div className='text-right'>
-                        <CBadge className="px-2 py-1 badge-secondary">{mes.mes} {mes.anio}</CBadge>
-                      </div>
-                    </Col>
-                    <Col xs="4" md="6" xl="4">
-                      <div className="progress-group">
-                        <div className="progress-group-bars mr-3 pt-1">
-                          <CProgress
-                            className="progress-md"
-                            color={mes.porcentajeTotalPerdida <= 32 ? 'success' : mes.porcentajeTotalPerdida <= 66 ? 'warning' : 'danger'}
-                            value={mes.porcentajeTotalPerdida}
-                          />
-                        </div>
-                      </div>
-                    </Col>
-                    <Col xs="5" md="3" xl="2">
-                      <span className='text-data'>{mes.totalPerdida}$ =  </span><CBadge className="px-2 py-1 badge-secondary h6 ml-1">{mes.porcentajeTotalPerdida}%</CBadge>
-                    </Col>
-                  </Row>
-                ))}
-              </Fragment>
-            }
-
-            {busquedaIniciada && dataMeses.length === 0 ?
-              <div className='text-data text-center pb-4'>No existen registros de Eventos de Riesgo en el intervalo seleccionado.</div>
-              : null
-            }
-          </CardBody>
-        </Card>
+        {busquedaIniciada && dataMeses.length === 0 ?
+          <div className='text-data text-center pb-4'>No existen registros de Eventos de Riesgo en el intervalo seleccionado.</div>
+          : null
+        }
       </Fragment>
     </div>
   )

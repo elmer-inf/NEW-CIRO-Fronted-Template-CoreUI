@@ -48,7 +48,7 @@ const SeguridadControl = React.lazy(() => import('./views/seguridad/Control'));
 const SeguridadEditar = React.lazy(() => import('./views/seguridad/Editar'));
 
 // Modulo de Reportes
-const ReporteEvento = React.lazy(() => import('./views/reporte/ReporteEvento'));
+const ReporteEvento = React.lazy(() => import('./views/reporte/evento/ReporteEvento'));
 const ReporteRiesgo = React.lazy(() => import('./views/reporte/riesgo/ReporteRiesgo'));
 const ReporteOportunidades = React.lazy(() => import('./views/reporte/oportunidad/ReporteOportunidad'));
 
@@ -111,7 +111,7 @@ const routes = [
 
   // Modulo de Reportes
   { path: '/reporte', name: 'Reportes', component: ReporteEvento, exact: true },
-  { path: '/reporte/evento-riesgo', name: 'Reportes de Eventos de Riesgo', component: ReporteEvento },
+  { path: '/reporte/evento-riesgo', name: 'Reportes de Eventos de Riesgo', component: ReporteEvento }, 
   { path: '/reporte/matriz-riesgo', name: 'Reportes de Matriz de Riesgos', component: ReporteRiesgo },
   { path: '/reporte/matriz-oportunidad', name: 'Reportes de Matriz de Oportunidades', component: ReporteOportunidades },
 
