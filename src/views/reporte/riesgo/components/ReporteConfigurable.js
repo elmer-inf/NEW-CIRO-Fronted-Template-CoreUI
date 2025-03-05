@@ -309,7 +309,7 @@ const ReporteConfigurable = () => {
           <Row>
             <Col sm='12' xl='5'>
               <Label className='form-label text-label'>
-                Seleccionar campo(s) de Matriz de Oportunidad <span className='text-primary h5'><b>*</b></span>
+                Seleccionar campo(s) de Matriz de Riesgos <span className='text-primary h5'><b>*</b></span>
               </Label>
               <FilterText
                 autoFocus={true}

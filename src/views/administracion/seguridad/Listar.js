@@ -68,8 +68,8 @@ const AdministracionSeguridadListar = () => {
     }, {
       dataField: 'nombre',
       text: (labelTabla === 'Tipo de activo de información') ?
-        'NOMBRE TIPO' : (labelTabla === 'Tratamiento o estado') ?
-          'NOMBRE ESTADO' : '',
+        'Nombre tipo' : (labelTabla === 'Tratamiento o estado') ?
+          'Nombre estado' : '',
       sort: true,
       hidden: (labelTabla === 'Tipo de activo de información' || labelTabla === 'Tratamiento o estado') ? false : true,
       filter: textFilter({
@@ -77,7 +77,7 @@ const AdministracionSeguridadListar = () => {
       }),
       headerFormatter: typeFormatter,
     }, {
-      text: (labelTabla.length !== 0) ? 'ACCIONES' : '',
+      text: (labelTabla.length !== 0) ? 'Acciones' : '',
       headerAlign: 'center',
       style: { textAlign: 'center' },
       formatter: (cell, row) => actionFormatter(cell, row)
@@ -214,8 +214,8 @@ const AdministracionSeguridadListar = () => {
           </CardHeader>
           <CardBody>
             <Row className='justify-content-center pt-4'>
-              <Label sm='3' lg='2' className='font-weight-bold'>
-                Seleccione Tabla
+              <Label sm='3' lg='2'>
+                Seleccione parámetro
               </Label>
               <Col sm='9' lg='4'>
                 <Select

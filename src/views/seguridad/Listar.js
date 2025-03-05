@@ -21,7 +21,6 @@ var _ = require('lodash');
 
 const SeguridadListar = () => {
 
-  //useContext
   const valuePathFromContext = React.useContext(PathContext);
 
   const history = useHistory()
@@ -58,7 +57,7 @@ const SeguridadListar = () => {
       hidden: true
     }, {
       dataField: 'fechaRegistro',
-      text: 'REGISTRO',
+      text: 'Registro',
       sort: true,
       filter: customFilter(),
       filterRenderer: (onFilter, column) =>
@@ -66,7 +65,7 @@ const SeguridadListar = () => {
       headerFormatter: typeFormatter,
     }, {
       dataField: 'tipoActivoId.nombre',
-      text: 'TIPO ACTIVO',
+      text: 'Tipo activo',
       sort: true,
       filter: customFilter(),
       filterRenderer: (onFilter, column) =>
@@ -74,7 +73,7 @@ const SeguridadListar = () => {
       headerFormatter: typeFormatter,
     }, {
       dataField: 'nivelRiesgoId.campoB',
-      text: 'NIVEL DE RIESGO',
+      text: 'Nivel de riesgo',
       sort: true,
       formatter: colorNivel,
       filter: customFilter(),
@@ -83,7 +82,7 @@ const SeguridadListar = () => {
       headerFormatter: typeFormatter,
     }, {
       dataField: 'descripcionRiesgo',
-      text: 'DESCRIPCION',
+      text: 'Descripción',
       sort: true,
       filter: customFilter(),
       filterRenderer: (onFilter, column) =>
@@ -91,7 +90,7 @@ const SeguridadListar = () => {
       headerFormatter: typeFormatter,
     }, {
       dataField: 'areaId.clave',
-      text: 'AREA',
+      text: 'Área',
       sort: true,
       filter: customFilter(),
       filterRenderer: (onFilter, column) =>
@@ -99,7 +98,7 @@ const SeguridadListar = () => {
       headerFormatter: typeFormatter,
     }, {
       dataField: 'estadoId.nombre',
-      text: 'ESTADO',
+      text: 'Estado',
       sort: true,
       formatter: colorEstado,
       filter: customFilter(),
@@ -107,7 +106,7 @@ const SeguridadListar = () => {
         <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
       headerFormatter: typeFormatter,
     }, {
-      text: 'ACCIONES',
+      text: 'Acciones',
       headerAlign: 'center',
       style: { textAlign: 'center' },
       formatter: (cell, row) => actionFormatter(cell, row),

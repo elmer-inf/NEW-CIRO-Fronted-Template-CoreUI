@@ -32,7 +32,6 @@ const MatrizOportunidadListar = () => {
     buttonsStyling: false
   })
 
-  //useContext
   const valuePathFromContext = React.useContext(PathContext);
 
   const history = useHistory()
@@ -42,7 +41,6 @@ const MatrizOportunidadListar = () => {
 
 
   const redirect = (e) => {
-    //history.push('/matrizOportunidad/Registrar');
     e.preventDefault();
     const path = '/matrizOportunidad/Registrar';
     if (hasPermission(path, valuePathFromContext)) {
@@ -76,7 +74,7 @@ const MatrizOportunidadListar = () => {
       headerFormatter: typeFormatter,
     }, {
       dataField: 'codigo',
-      text: 'CODIGO',
+      text: 'Código',
       style: { whiteSpace: 'nowrap' },
       sort: true,
       filter: customFilter(),
@@ -85,7 +83,7 @@ const MatrizOportunidadListar = () => {
       headerFormatter: typeFormatter,
     }, {
       dataField: 'fechaEvaluacion',
-      text: 'FECHA EVAL',
+      text: 'Fecha eval.',
       sort: true,
       filter: customFilter(),
       filterRenderer: (onFilter, column) =>
@@ -93,7 +91,7 @@ const MatrizOportunidadListar = () => {
       headerFormatter: typeFormatter,
     }, {
       dataField: 'procesoId.clave',
-      text: 'COD MACRO',
+      text: 'Cod. macro',
       sort: true,
       filter: customFilter(),
       filterRenderer: (onFilter, column) =>
@@ -101,23 +99,15 @@ const MatrizOportunidadListar = () => {
       headerFormatter: typeFormatter,
     }, {
       dataField: 'procesoId.nombre',
-      text: 'MACROPROCESO',
+      text: 'Macroproceso',
       sort: true,
       filter: customFilter(),
       filterRenderer: (onFilter, column) =>
         <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
       headerFormatter: typeFormatter,
-    }, /* {
-      dataField: 'unidadId.nombre',
-      text: 'UNIDAD',
-      sort: true,
-      filter: customFilter(),
-      filterRenderer: (onFilter, column) =>
-        <CFilterText placeholder={'Buscar'} onFilter={handleOnFilter} column={column} handleChildClick={handleChildClick} />,
-      headerFormatter: typeFormatter,
-    }, */ {
+    }, {
       dataField: 'duenoCargoId.nombre',
-      text: 'DUEÑO PROCESO',
+      text: 'Dueño proceso',
       sort: true,
       filter: customFilter(),
       filterRenderer: (onFilter, column) =>
@@ -125,7 +115,7 @@ const MatrizOportunidadListar = () => {
       headerFormatter: typeFormatter,
     }, {
       dataField: 'estadoRegistro',
-      text: 'ESTADO',
+      text: 'Estado',
       sort: true,
       formatter: colorEstado,
       filter: customFilter(),
@@ -134,13 +124,13 @@ const MatrizOportunidadListar = () => {
       headerFormatter: typeFormatter,
     }, {
       dataField: 'acciones',
-      text: 'ACCIONES',
+      text: 'Acciones',
       headerAlign: 'center',
       style: { textAlign: 'center' },
       formatter: (cell, row) => actionFormatter(cell, row),
     }, {
       dataField: 'evaluar',
-      text: 'EVALUAR',
+      text: 'Evaluar',
       headerAlign: 'center',
       comun: { textAlign: 'center' },
       formatter: (cell, row) => actionFormatterEvaluar(cell, row)

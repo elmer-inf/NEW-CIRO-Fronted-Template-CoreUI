@@ -67,10 +67,10 @@ const AdministracionEventoListar = () => {
     }, {
       dataField: 'clave',
       text: (labelTabla === 'Área' || labelTabla === 'Unidad' || labelTabla === 'Macroproceso') ?
-        'CODIGO' : (labelTabla === 'Entidad' || labelTabla === 'Tipo de evento') ?
-          'SIGLA' : (labelTabla === 'Moneda') ?
-            'ABREVIATURA' : (labelTabla === 'Póliza ATC') ?
-              'NRO' : (labelTabla === 'Reputacional' ||
+        'Código' : (labelTabla === 'Entidad' || labelTabla === 'Tipo de evento') ?
+          'Sigla' : (labelTabla === 'Moneda') ?
+            'Abreviatura' : (labelTabla === 'Póliza ATC') ?
+              'Nro.' : (labelTabla === 'Reputacional' ||
                 labelTabla === 'Legal' ||
                 labelTabla === 'Cumplimiento' ||
                 labelTabla === 'Estratégico' ||
@@ -78,9 +78,9 @@ const AdministracionEventoListar = () => {
                 labelTabla === 'Fraude' ||
                 labelTabla === 'Liquidez' ||
                 labelTabla === 'LGI FT y/o DP' ||
-                labelTabla === 'Operativo') ? 'NIVEL' : (labelTabla === 'Proceso') ?
-                'TIPO DOC' : (labelTabla === 'Seguridad de la información') ?
-                  'CALIFICACION' : '',
+                labelTabla === 'Operativo') ? 'Nivel' : (labelTabla === 'Proceso') ?
+                'Tipo doc.' : (labelTabla === 'Seguridad de la información') ?
+                  'Calificación' : '',
       sort: true,
       hidden: (labelTabla === 'Área' || labelTabla === 'Unidad' || labelTabla === 'Macroproceso' ||
         labelTabla === 'Entidad' || labelTabla === 'Tipo de evento' || labelTabla === 'Moneda' ||
@@ -95,7 +95,7 @@ const AdministracionEventoListar = () => {
     }, {
       dataField: 'nombre',
       text: (labelTabla === 'Proceso') ?
-        'CODIGO DOC' : (labelTabla === 'Reputacional' ||
+        'Código doc.' : (labelTabla === 'Reputacional' ||
           labelTabla === 'Legal' ||
           labelTabla === 'Cumplimiento' ||
           labelTabla === 'Estratégico' ||
@@ -105,8 +105,8 @@ const AdministracionEventoListar = () => {
           labelTabla === 'Operativo' ||
           labelTabla === 'Seguridad de la información' ||
           labelTabla === 'LGI FT y/o DP') ?
-          'DESCRIPTIVO' : (labelTabla === 'Recuperación activo' || labelTabla === 'Cuenta contable') ?
-            'DESCRIPCION' : 'NOMBRE',
+          'Descriptivo' : (labelTabla === 'Recuperación activo' || labelTabla === 'Cuenta contable') ?
+            'Descripción' : 'Nombre',
       sort: true,
       hidden: (labelTabla.length !== 0) ? false : true,
       filter: textFilter({
@@ -123,13 +123,13 @@ const AdministracionEventoListar = () => {
         labelTabla === 'Operativo' ||
         labelTabla === 'Seguridad de la información' ||
         labelTabla === 'LGI FT y/o DP') ?
-        'DESCRIPCION' : (labelTabla === 'Macroproceso') ?
-          'NIVEL' : (labelTabla === 'Proceso') ?
-            'NOMBRE DOC' : (labelTabla === 'Legal' || labelTabla === 'Liquidez') ?
-              'IMPACTO REGULATORIO' : (labelTabla === 'Cumplimiento') ?
-                "IMPACTO DE CUMPLIMIENTO" : (labelTabla === 'Gobierno') ?
-                  'NIVEL DE GOB #' : (labelTabla === 'Fraude') ?
-                    'Imp reportado ($)' : (labelTabla === 'Responsable') ? 'CARGO' : (labelTabla === 'Cargo') ? 'CORREO:' :'',
+        'Descripción' : (labelTabla === 'Macroproceso') ?
+          'Nivel' : (labelTabla === 'Proceso') ?
+            'Nombre doc' : (labelTabla === 'Legal' || labelTabla === 'Liquidez') ?
+              'Impacto regulatorio' : (labelTabla === 'Cumplimiento') ?
+                "Impacto de cumplimiento" : (labelTabla === 'Gobierno') ?
+                  'Nivel de gob. #' : (labelTabla === 'Fraude') ?
+                    'Imp. reportado ($)' : (labelTabla === 'Responsable') ? 'Cargo' : (labelTabla === 'Cargo') ? 'Correo:' :'',
       sort: true,
       hidden: (labelTabla === 'Categoria de tipo de Evento' || labelTabla === 'Efecto de pérdida' || labelTabla === 'Impacto' ||
         labelTabla === 'Reputacional' || labelTabla === 'Estratégico' || labelTabla === 'Operativo' ||
@@ -143,12 +143,12 @@ const AdministracionEventoListar = () => {
     }, {
       dataField: 'campoA',
       text: (labelTabla === 'Macroproceso') ?
-        'VALORACION' : (labelTabla === 'Proceso') ?
-          'PROCESO' : (labelTabla === 'Gobierno') ?
-            'NIVEL DE GOB' : (labelTabla === 'Fraude') ?
+        'Valoración' : (labelTabla === 'Proceso') ?
+          'Proceso' : (labelTabla === 'Gobierno') ?
+            'Nivel de gob.' : (labelTabla === 'Fraude') ?
               'Fraude a ventas ($)' : (labelTabla === 'Liquidez') ?
-                'LIQUIDEZ' : (labelTabla === 'Seguridad de la información') ?
-                  'PLAZO HASTA' : (labelTabla === 'Responsable') ? 'DESCRIPCION' : '',
+                'Liquidez' : (labelTabla === 'Seguridad de la información') ?
+                  'Plazo hasta' : (labelTabla === 'Responsable') ? 'Descripción' : '',
       sort: true,
       hidden: (labelTabla === 'Macroproceso' || labelTabla === 'Proceso' || labelTabla === 'Gobierno' ||
         labelTabla === 'Fraude' || labelTabla === 'Liquidez' || labelTabla === 'Seguridad de la información' ||
@@ -160,10 +160,10 @@ const AdministracionEventoListar = () => {
     }, {
       dataField: 'campoB',
       text: (labelTabla === 'Proceso') ?
-        'GERENCIA' : (labelTabla === 'Gobierno') ?
-          'PUNTUACION AUTOEVAL' : (labelTabla === 'Fraude') ?
-            'Imp reportado 2 ($)' : (labelTabla === 'Liquidez') ?
-              "CAPITAL DE TRABAJO" : (labelTabla === 'Responsable') ? 'USUARIO' : '',
+        'Gerencia' : (labelTabla === 'Gobierno') ?
+          'Puntuación autoeval' : (labelTabla === 'Fraude') ?
+            'Imp. reportado 2 ($)' : (labelTabla === 'Liquidez') ?
+              "Capital de trabajo" : (labelTabla === 'Responsable') ? 'Usuario' : '',
       sort: true,
       hidden: (labelTabla === 'Proceso' || labelTabla === 'Gobierno' ||
         labelTabla === 'Fraude' || labelTabla === 'Liquidez' || labelTabla === 'Responsable') ? false : true,
@@ -173,7 +173,7 @@ const AdministracionEventoListar = () => {
       headerFormatter: typeFormatter,
     }, {
       dataField: 'campoC',
-      text: (labelTabla === 'Fraude') ? "IMPACTO - SEVERIDAD" : (labelTabla === 'Responsable') ? 'TIPO' : '',
+      text: (labelTabla === 'Fraude') ? "Impacto - Severidad" : (labelTabla === 'Responsable') ? 'Tipo' : '',
       sort: true,
       hidden: (labelTabla === 'Fraude' || labelTabla === 'Responsable') ? false : true,
       filter: textFilter({
@@ -182,7 +182,7 @@ const AdministracionEventoListar = () => {
       headerFormatter: typeFormatter,
     }, {
       dataField: 'campoD',
-      text: (labelTabla === 'Fraude') ? "IMPACTO - SEVERIDAD 2" : '',
+      text: (labelTabla === 'Fraude') ? "Impacto - Severidad 2" : '',
       sort: true,
       hidden: (labelTabla === 'Fraude') ? false : true,
       filter: textFilter({
@@ -202,7 +202,7 @@ const AdministracionEventoListar = () => {
         labelTabla === 'Moneda' ||
         labelTabla === 'Recuperación activo' ||
         labelTabla === 'Cuenta contable' ||
-        labelTabla === 'Macroproceso') ? "COD ASFI" : '',
+        labelTabla === 'Macroproceso') ? "Cod. ASFI" : '',
       sort: true,
       hidden: (labelTabla === 'Ciudad' || labelTabla === 'Tipo de evento' || labelTabla === 'Canal ASFI' ||
         labelTabla === 'Clase Evento - Basilea' || labelTabla === 'Factor de riesgo' || labelTabla === 'Proceso' ||
@@ -217,15 +217,8 @@ const AdministracionEventoListar = () => {
       text: 'TABLA',
       sort: true,
       hidden: true
-    }
-     /* {
-      dataField: 'tablaLista.nivel2',
-      text: (tablaLista.nivel2 === 1)?
-              'Agencia' : (tablaLista.nivel2 === 3)?
-                          'Área' : '',
-      sort: true,
-     } */, {
-      text: (labelTabla.length !== 0) ? labelTabla==='Macroproceso'? '' : 'ACCIONES' : '',
+    }, {
+      text: (labelTabla.length !== 0) ? labelTabla==='Macroproceso'? '' : 'Acciones' : '',
       headerAlign: 'center',
       style: { textAlign: 'center' },
       formatter: (cell, row) => labelTabla==='Macroproceso'? null : actionFormatter(cell, row)
@@ -362,8 +355,8 @@ const AdministracionEventoListar = () => {
           </CardHeader>
           <CardBody>
             <Row className='justify-content-center pt-4'>
-              <Label sm='3' lg='2' className='font-weight-bold'>
-                Seleccione Tabla
+              <Label sm='3' lg='2'>
+                Seleccione parámetro
               </Label>
               <Col sm='9' lg='4'>
                 <Select

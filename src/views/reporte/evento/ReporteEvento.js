@@ -556,7 +556,7 @@ const ReporteEventos = () => {
             <Form onSubmit={formik.handleSubmit} autoComplete="off">
               <Row className='justify-content-center pt-4'>
                 <FormGroup tag={Col} xs='12' md='6' lg='4' xl='3' className='mb-0'>
-                  <Label className='form-label text-label'>
+                  <Label className='form-label'>
                     Tipo de Reporte <span className='text-primary h5'><b>*</b></span>
                   </Label>
                   <CSelectReact

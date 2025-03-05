@@ -105,7 +105,7 @@ const EventoRiesgoListar = () => {
       headerFormatter: typeFormatter,
     }, {
       dataField: 'codigo',
-      text: 'CODIGO',
+      text: 'Código',
       style: { whiteSpace: 'nowrap' },
       sort: true,
       filter: customFilter(),
@@ -114,7 +114,7 @@ const EventoRiesgoListar = () => {
       headerFormatter: typeFormatter,
     }, {
       dataField: 'fechaDesc',
-      text: 'FECHA DESC',
+      text: 'Fecha desc.',
       sort: true,
       filter: customFilter(),
       filterRenderer: (onFilter, column) =>
@@ -122,7 +122,7 @@ const EventoRiesgoListar = () => {
       headerFormatter: typeFormatter,
     }, {
       dataField: 'fechaFin',
-      text: 'FECHA FIN',
+      text: 'Fecha fin',
       sort: true,
       filter: customFilter(),
       filterRenderer: (onFilter, column) =>
@@ -130,7 +130,7 @@ const EventoRiesgoListar = () => {
       headerFormatter: typeFormatter,
     }, {
       dataField: 'tipoEvento',
-      text: 'TIPO',
+      text: 'Tipo',
       sort: true,
       filter: customFilter(),
       filterRenderer: (onFilter, column) =>
@@ -138,7 +138,7 @@ const EventoRiesgoListar = () => {
       headerFormatter: typeFormatter,
     }, {
       dataField: 'factorRiesgoId.nombre',
-      text: 'FACTOR RIESGO',
+      text: 'Factor riesgo',
       sort: true,
       filter: customFilter(),
       filterRenderer: (onFilter, column) =>
@@ -146,7 +146,7 @@ const EventoRiesgoListar = () => {
       headerFormatter: typeFormatter,
     }, {
       dataField: 'procesoId.nombre',
-      text: 'MACROPROCESO',
+      text: 'Macroproceso',
       sort: true,
       filter: customFilter(),
       filterRenderer: (onFilter, column) =>
@@ -154,7 +154,7 @@ const EventoRiesgoListar = () => {
       headerFormatter: typeFormatter,
     }, {
       dataField: 'estadoRegistro',
-      text: 'ESTADO R.',
+      text: 'Estado r.',
       sort: true,
       formatter: colorEstadoRegistro,
       filter: customFilter(),
@@ -163,7 +163,7 @@ const EventoRiesgoListar = () => {
       headerFormatter: typeFormatter,
     }, {
       dataField: 'estadoEvento',
-      text: 'ESTADO E.',
+      text: 'Estado e.',
       sort: true,
       formatter: colorEstadoEvento,
       filter: customFilter(),
@@ -172,13 +172,13 @@ const EventoRiesgoListar = () => {
       headerFormatter: typeFormatter,
     }, {
       dataField: 'xxx1',
-      text: 'ACCIONES',
+      text: 'Acciones',
       headerAlign: 'center',
       style: { textAlign: 'center' },
       formatter: (cell, row) => actionFormatter(cell, row),
     }, {
       dataField: 'xxx2',
-      text: 'EVALUAR',
+      text: 'Evaluar',
       headerAlign: 'center',
       comun: { textAlign: 'center' },
       formatter: (cell, row) => actionFormatterEvaluar(cell, row)

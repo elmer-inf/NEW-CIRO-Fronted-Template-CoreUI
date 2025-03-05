@@ -32,7 +32,6 @@ const MatrizRiesgoListar = () => {
     buttonsStyling: false
   })
 
-  //useContext
   const valuePathFromContext = React.useContext(PathContext);
 
   const history = useHistory()
@@ -41,7 +40,6 @@ const MatrizRiesgoListar = () => {
   const [spin, setSpin] = useState(false);
 
   const redirect = (e) => {
-    //history.push('/matrizRiesgo/Registrar');
     e.preventDefault();
     const path = '/matrizRiesgo/Registrar';
     if (hasPermission(path, valuePathFromContext)) {
@@ -108,7 +106,7 @@ const MatrizRiesgoListar = () => {
       headerFormatter: typeFormatter,
     }, {
       dataField: 'codigo',
-      text: 'CODIGO',
+      text: 'Código',
       style: { whiteSpace: 'nowrap' },
       sort: true,
       filter: customFilter(),
@@ -117,7 +115,7 @@ const MatrizRiesgoListar = () => {
       headerFormatter: typeFormatter,
     }, {
       dataField: 'fechaEvaluacion',
-      text: 'FECHA EVAL',
+      text: 'Fecha eval.',
       sort: true,
       filter: customFilter(),
       filterRenderer: (onFilter, column) =>
@@ -126,7 +124,7 @@ const MatrizRiesgoListar = () => {
       align: 'right',
     }, {
       dataField: 'procesoId.clave',
-      text: 'COD MACRO',
+      text: 'Cod. macro',
       sort: true,
       filter: customFilter(),
       filterRenderer: (onFilter, column) =>
@@ -134,7 +132,7 @@ const MatrizRiesgoListar = () => {
       headerFormatter: typeFormatter,
     }, {
       dataField: 'procesoId.nombre',
-      text: 'MACROPROCESO',
+      text: 'Macroproceso',
       sort: true,
       filter: customFilter(),
       filterRenderer: (onFilter, column) =>
@@ -142,7 +140,7 @@ const MatrizRiesgoListar = () => {
       headerFormatter: typeFormatter,
     }, {
       dataField: 'unidadId.nombre',
-      text: 'UNIDAD',
+      text: 'Unidad',
       sort: true,
       filter: customFilter(),
       filterRenderer: (onFilter, column) =>
@@ -150,7 +148,7 @@ const MatrizRiesgoListar = () => {
       headerFormatter: typeFormatter,
     }, {
       dataField: 'duenoCargoId.nombre',
-      text: 'DUEÑO PROCESO',
+      text: 'Dueño proceso',
       sort: true,
       filter: customFilter(),
       filterRenderer: (onFilter, column) =>
@@ -158,7 +156,7 @@ const MatrizRiesgoListar = () => {
       headerFormatter: typeFormatter,
     }, {
       dataField: 'estadoRegistro',
-      text: 'ESTADO',
+      text: 'Estado',
       sort: true,
       formatter: colorEstado,
       filter: customFilter(),
@@ -167,13 +165,13 @@ const MatrizRiesgoListar = () => {
       headerFormatter: typeFormatter,
     }, {
       dataField: 'acciones',
-      text: 'ACCIONES',
+      text: 'Acciones',
       headerAlign: 'center',
       style: { textAlign: 'center' },
       formatter: (cell, row) => actionFormatter(cell, row),
     }, {
       dataField: 'evaluar',
-      text: 'EVALUAR',
+      text: 'Evaluar',
       headerAlign: 'center',
       comun: { textAlign: 'center' },
       formatter: (cell, row) => actionFormatterEvaluar(cell, row)

@@ -67,11 +67,11 @@ const AdministracionMatrizOportunidadListar = () => {
     }, {
       dataField: 'campoA',
       text: (labelTabla === 'Matriz FODA - Listado') ?
-        'CODIGO' : (labelTabla === 'Grupos de interés') ?
-          'INT/EXT' : (labelTabla === 'Impacto de oportunidad') ?
-            'NIVEL' : (labelTabla === 'Tratamiento - oportunidad') ?
-              "CALIFICACION" : (labelTabla === 'Fortaleza - oportunidad') ?
-                "PONDERACION" : '',
+        'Código' : (labelTabla === 'Grupos de interés') ?
+          'Int./Ext.' : (labelTabla === 'Impacto de oportunidad') ?
+            'Nivel' : (labelTabla === 'Tratamiento - oportunidad') ?
+              "Calificación" : (labelTabla === 'Fortaleza - oportunidad') ?
+                "Ponderación" : '',
       sort: true,
       hidden: (labelTabla === 'Matriz FODA - Listado' || labelTabla === 'Grupos de interés' ||
         labelTabla === 'Impacto de oportunidad' || labelTabla === 'Tratamiento - oportunidad' ||
@@ -83,12 +83,12 @@ const AdministracionMatrizOportunidadListar = () => {
     }, {
       dataField: 'nombre',
       text: (labelTabla === 'Matriz FODA') ?
-        'NOMBRE' : (labelTabla === 'Matriz FODA - Listado' ||
+        'Nombre' : (labelTabla === 'Matriz FODA - Listado' ||
           labelTabla === 'Fortaleza - oportunidad') ?
-          'DESCRIPCION' : (labelTabla === 'Grupos de interés') ?
-            'PARTE INTERESADA' : (labelTabla === 'Impacto de oportunidad') ?
-              'DESCRIPTIVO' : (labelTabla === 'Tratamiento - oportunidad') ?
-                "NIVEL" : '',
+          'Descripción' : (labelTabla === 'Grupos de interés') ?
+            'Parte interesada' : (labelTabla === 'Impacto de oportunidad') ?
+              'Descriptivo' : (labelTabla === 'Tratamiento - oportunidad') ?
+                "Nivel" : '',
       sort: true,
       hidden: (labelTabla === 'Matriz FODA' || labelTabla === 'Matriz FODA - Listado' ||
         labelTabla === 'Fortaleza - oportunidad' || labelTabla === 'Grupos de interés' ||
@@ -100,8 +100,8 @@ const AdministracionMatrizOportunidadListar = () => {
     }, {
       dataField: 'campoB',
       text: (labelTabla === 'Impacto de oportunidad') ?
-        'DESCRIPTIVO 2' : (labelTabla === 'Tratamiento - oportunidad') ?
-          "DESCRIPTIVO" : '',
+        'Descriptivo 2' : (labelTabla === 'Tratamiento - oportunidad') ?
+          "Descriptivo" : '',
       sort: true,
       hidden: (labelTabla === 'Impacto de oportunidad' || labelTabla === 'Tratamiento - oportunidad') ? false : true,
       filter: textFilter({
@@ -111,8 +111,8 @@ const AdministracionMatrizOportunidadListar = () => {
     }, {
       dataField: 'campoC',
       text: (labelTabla === 'Impacto de oportunidad') ?
-        'IMPACTO-OPORTUNIDAD' : (labelTabla === 'Tratamiento - oportunidad') ?
-          "DESCRIPCION" : '',
+        'Impacto-Oportunidad' : (labelTabla === 'Tratamiento - oportunidad') ?
+          "Descripción" : '',
       sort: true,
       hidden: (labelTabla === 'Impacto de oportunidad' || labelTabla === 'Tratamiento - oportunidad') ? false : true,
       filter: textFilter({
@@ -122,8 +122,8 @@ const AdministracionMatrizOportunidadListar = () => {
     }, {
       dataField: 'campoD',
       text: (labelTabla === 'Impacto de oportunidad') ?
-        '% IMPACTO OPORTUNIDAD' : (labelTabla === 'Tratamiento - oportunidad') ?
-          "TRATAMIENTO" : '',
+        '% Impacto Oportunidad' : (labelTabla === 'Tratamiento - oportunidad') ?
+          "Tratamiento" : '',
       sort: true,
       hidden: (labelTabla === 'Impacto de oportunidad' || labelTabla === 'Tratamiento - oportunidad') ? false : true,
       filter: textFilter({
@@ -131,7 +131,7 @@ const AdministracionMatrizOportunidadListar = () => {
       }),
       headerFormatter: typeFormatter,
     }, {
-      text: (labelTabla.length !== 0) ? 'ACCIONES' : '',
+      text: (labelTabla.length !== 0) ? 'Acciones' : '',
       headerAlign: 'center',
       style: { textAlign: 'center' },
       formatter: (cell, row) => actionFormatter(cell, row)
@@ -268,8 +268,8 @@ const AdministracionMatrizOportunidadListar = () => {
           </CardHeader>
           <CardBody>
             <Row className='justify-content-center pt-4'>
-              <Label sm='3' lg='2' className='font-weight-bold'>
-                Seleccione Tabla
+              <Label sm='3' lg='2'>
+                Seleccione parámetro
               </Label>
               <Col sm='9' lg='4'>
                 <Select

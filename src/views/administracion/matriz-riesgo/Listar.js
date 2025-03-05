@@ -67,10 +67,10 @@ const AdministracionMatrizRiesgosListar = () => {
     }, {
       dataField: 'campoA',
       text: (labelTabla === 'Probabilidad' || labelTabla === 'Impacto de Riesgo') ?
-        'NIVEL' : (labelTabla === 'Normas para control') ?
-          'CODIGO' : (labelTabla === 'Nivel de riesgo inherente') ?
-            'CALIFICACION' : (labelTabla === 'Controles') ?
-              'VALORACION' : '',
+        'Nivel' : (labelTabla === 'Normas para control') ?
+          'Código' : (labelTabla === 'Nivel de riesgo inherente') ?
+            'Calificación' : (labelTabla === 'Controles') ?
+              'Valoración' : '',
       sort: true,
       hidden: (labelTabla === 'Probabilidad' || labelTabla === 'Impacto de Riesgo' ||
         labelTabla === 'Normas para control' || labelTabla === 'Nivel de riesgo inherente' ||
@@ -88,11 +88,11 @@ const AdministracionMatrizRiesgosListar = () => {
         labelTabla === 'Estrategia para administrar el riesgo' ||
         labelTabla === 'Tipo fraude interno' ||
         labelTabla === 'Subtipo fraude interno' ) ?
-        'NOMBRE' : (labelTabla === 'Probabilidad' || labelTabla === 'Impacto de Riesgo') ?
-          'DESCRIPTIVO' : (labelTabla === 'Normas para control') ?
-            'TITULO DEL DOCUMENTO' : (labelTabla === 'Controles') ?
-              'DESCRIPCION' : (labelTabla === 'Nivel de riesgo inherente') ?
-                'NIVEL' : '',
+        'Nombre' : (labelTabla === 'Probabilidad' || labelTabla === 'Impacto de Riesgo') ?
+          'Descriptivo' : (labelTabla === 'Normas para control') ?
+            'Título del documento' : (labelTabla === 'Controles') ?
+              'Descripción' : (labelTabla === 'Nivel de riesgo inherente') ?
+                'Nivel' : '',
       sort: true,
       hidden: (labelTabla === 'Pérdida ASFI' || labelTabla === 'Tipo de control' ||
         labelTabla === 'Nivel de automatización' || labelTabla === 'Identificado por' ||
@@ -106,10 +106,10 @@ const AdministracionMatrizRiesgosListar = () => {
     }, {
       dataField: 'campoB',
       text: (labelTabla === 'Probabilidad') ?
-        'PROB CUALITATIVA' : (labelTabla === 'Impacto de Riesgo') ?
-          'IMPACTO CUALITATIVO' : (labelTabla === 'Controles') ?
-            '% MITIGACION' : (labelTabla === 'Nivel de riesgo inherente') ?
-              'DESCRIPTIVO' : '',
+        'Prob. cualitativa' : (labelTabla === 'Impacto de Riesgo') ?
+          'Impacto cualitativo' : (labelTabla === 'Controles') ?
+            '% Mitigación' : (labelTabla === 'Nivel de riesgo inherente') ?
+              'Descriptivo' : '',
       sort: true,
       hidden: (labelTabla === 'Probabilidad' || labelTabla === 'Impacto de Riesgo' ||
         labelTabla === 'Controles' || labelTabla === 'Nivel de riesgo inherente') ? false : true,
@@ -120,9 +120,9 @@ const AdministracionMatrizRiesgosListar = () => {
     }, {
       dataField: 'campoC',
       text: (labelTabla === 'Probabilidad') ?
-        'TEMPORALIDAD' : (labelTabla === 'Impacto de Riesgo') ?
-          'IMPACTO CUANTITATIVO' : (labelTabla === 'Nivel de riesgo inherente') ?
-            'DESCRIPCION' : '',
+        'Temporalidad' : (labelTabla === 'Impacto de Riesgo') ?
+          'Impacto cuantitativo' : (labelTabla === 'Nivel de riesgo inherente') ?
+            'Descripción' : '',
       sort: true,
       hidden: (labelTabla === 'Probabilidad' || labelTabla === 'Impacto de Riesgo' ||
         labelTabla === 'Nivel de riesgo inherente') ? false : true,
@@ -133,9 +133,9 @@ const AdministracionMatrizRiesgosListar = () => {
     }, {
       dataField: 'campoD',
       text: (labelTabla === 'Probabilidad') ?
-        'PROB TEMPORALIDAD' : (labelTabla === 'Impacto de Riesgo') ?
-          'IMPACTO RESUMEN' : (labelTabla === 'Nivel de riesgo inherente') ?
-            'TOLERANCIA AL RIESGO ($)' : '',
+        'Prob. temporalidad' : (labelTabla === 'Impacto de Riesgo') ?
+          'Impacto resumen' : (labelTabla === 'Nivel de riesgo inherente') ?
+            'Tolerancia al riesgo ($)' : '',
       sort: true,
       hidden: (labelTabla === 'Probabilidad' || labelTabla === 'Impacto de Riesgo' ||
         labelTabla === 'Nivel de riesgo inherente') ? false : true,
@@ -146,8 +146,8 @@ const AdministracionMatrizRiesgosListar = () => {
     }, {
       dataField: 'campoE',
       text: (labelTabla === 'Impacto de Riesgo') ?
-        'LIMITE INF ($)' : (labelTabla === 'Probabilidad') ?
-          'VECES AL AÑO' : '',
+        'Límite inf. ($)' : (labelTabla === 'Probabilidad') ?
+          'Veces al año' : '',
       sort: true,
       hidden: (labelTabla === 'Impacto de Riesgo' || labelTabla === 'Probabilidad') ? false : true,
       filter: textFilter({
@@ -157,7 +157,7 @@ const AdministracionMatrizRiesgosListar = () => {
     }, {
       dataField: 'campoF',
       text: (labelTabla === 'Impacto de Riesgo') ?
-        'LIMITE SUP ($)' : '',
+        'Límite sup. ($)' : '',
       sort: true,
       hidden: (labelTabla === 'Impacto de Riesgo') ? false : true,
       filter: textFilter({
@@ -167,9 +167,9 @@ const AdministracionMatrizRiesgosListar = () => {
     }, {
       dataField: 'campoG',
       text: (labelTabla === 'Impacto de Riesgo') ?
-        '% IMPACTO' : (labelTabla === 'Probabilidad') ?
-          '% OCURRENCIA' : (labelTabla === 'Nivel de riesgo inherente') ?
-            'TRATAMIENTO' : '',
+        '% Impacto' : (labelTabla === 'Probabilidad') ?
+          '% Ocurrencia' : (labelTabla === 'Nivel de riesgo inherente') ?
+            'Tratamiento' : '',
       sort: true,
       hidden: (labelTabla === 'Impacto de Riesgo' || labelTabla === 'Probabilidad' ||
         labelTabla === 'Nivel de riesgo inherente') ? false : true,
@@ -178,7 +178,7 @@ const AdministracionMatrizRiesgosListar = () => {
       }),
       headerFormatter: typeFormatter,
     }, {
-      text: (labelTabla.length !== 0) ? 'ACCIONES' : '',
+      text: (labelTabla.length !== 0) ? 'Acciones' : '',
       headerAlign: 'center',
       style: { textAlign: 'center' },
       formatter: (cell, row) => actionFormatter(cell, row)
@@ -313,8 +313,8 @@ const AdministracionMatrizRiesgosListar = () => {
           </CardHeader>
           <CardBody>
             <Row className='justify-content-center pt-4'>
-              <Label sm='3' lg='2' className='font-weight-bold'>
-                Seleccione Tabla
+              <Label sm='3' lg='2'>
+                Seleccione parámetro
               </Label>
               <Col sm='9' lg='4'>
                 <Select
