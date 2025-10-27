@@ -7,6 +7,7 @@
 import 'react-toastify/dist/ReactToastify.css';
 var _ = require('lodash');
 
+
 export const buildSelect = (result, fieldName) => {
   const select = [];
   try {
@@ -169,8 +170,45 @@ export const hasPermission = (path, pathRoutes) => {
   return false;
 }
 
+
 export const exportFile = (dataRespose, nameFileWithExtention) => {
-  const blob = new Blob([dataRespose], { type: 'text/plain;charset=utf-8' });
-  const FileSaver = require('file-saver');
-  FileSaver.saveAs(blob, nameFileWithExtention);
-}
+  try {
+    // Conversión manual a bytes ANSI
+    const bytes = [];
+    for (let i = 0; i < dataRespose.length; i++) {
+      const code = dataRespose.charCodeAt(i);
+      // Si el carácter está dentro del rango ISO-8859-1 (0–255)
+      bytes.push(code <= 255 ? code : 63); // 63 = '?'
+    }
+    // Crear un Uint8Array con esos bytes
+    const ansiBytes = new Uint8Array(bytes);
+    // Crear Blob con datos reales en ISO-8859-1
+    const blob = new Blob([ansiBytes], { type: 'text/plain' });
+    // Descargar archivo
+    const FileSaver = require('file-saver');
+    FileSaver.saveAs(blob, nameFileWithExtention);
+
+  } catch (error) {
+    console.error('Error al exportar archivo ANSI:', error);
+  }
+};
+
+
+/* export const exportFile = (dataRespose, nameFileWithExtention) => {
+  try {
+    console.log('genera en ansi');
+    // Codifica en UTF-8
+    const utf8Encoder = new TextEncoder();
+    const utf8Bytes = utf8Encoder.encode(dataRespose);
+    // Crea un blob ANSI (reinterpretación byte a byte)
+    const blob = new Blob([utf8Bytes], { type: 'text/plain;charset=ISO-8859-1' });
+    const FileSaver = require('file-saver');
+    FileSaver.saveAs(blob, nameFileWithExtention);
+  } catch (error) {
+    console.error('Error al exportar archivo ANSI:', error);
+  }
+  //PARA UTF-8
+  //const blob = new Blob([dataRespose], { type: 'text/plain;charset=utf-8' });
+  //const FileSaver = require('file-saver');
+  //FileSaver.saveAs(blob, nameFileWithExtention);
+} */

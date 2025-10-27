@@ -40,7 +40,8 @@ const ReporteEventos = () => {
   // Opciones Tipo de Reporte
   const optionsTipo = [
     { value: 'evento', label: 'Eventos de Riesgos' },
-    { value: 'ciro', label: 'CIRO' },
+    { value: 'ciro', label: 'CIRO - Trimestral' },
+    { value: 'ciroRangoFechas', label: 'CIRO - Rango de fechas' },
     { value: 'auditoriaExt', label: 'Auditoria externa' },
     { value: 'auditoriaInt', label: 'Auditoria interna' },
     { value: 'asfi', label: 'ASFI' },
@@ -100,12 +101,12 @@ const ReporteEventos = () => {
         }),
         // Campos para reporte de Auditoría, ASFI y Configurable Evento
         fechaDesde: Yup.mixed().when('tipo', {
-          is: (val) => val !== null && ['evento', 'auditoriaExt', 'auditoriaInt', 'asfi', 'configurar'].includes(val.value),
+          is: (val) => val !== null && ['evento', 'auditoriaExt', 'auditoriaInt', 'asfi', 'configurar', 'ciroRangoFechas'].includes(val.value),
           then: Yup.date().nullable().required(Messages.required),
           otherwise: Yup.date().nullable(), // No obligatorio para otros tipos
         }),
         fechaHasta: Yup.mixed().when('tipo', {
-          is: (val) => val !== null && ['evento', 'auditoriaExt', 'auditoriaInt', 'asfi', 'configurar'].includes(val.value),
+          is: (val) => val !== null && ['evento', 'auditoriaExt', 'auditoriaInt', 'asfi', 'configurar', 'ciroRangoFechas'].includes(val.value),
           then: Yup.date()
             .min(Yup.ref('fechaDesde'), Messages.dateValidation1)
             .max(today, Messages.dateValidation3)
@@ -133,6 +134,16 @@ const ReporteEventos = () => {
         setshowCiroReport(true);
         setLoadDataCiro(true);
       }
+
+      if (values.tipo.value === 'ciroRangoFechas') {
+        generateAllReportCiroRangoFechas();
+        return;
+      }
+
+      if (values.tipo.value === 'ciroRangoFechas') {
+        generateAllReportCiroRangoFechas();
+      }
+
       if (values.tipo.value === 'evento') {
         setshowEventoReport(true);
         setLoadDataEvento(true);
@@ -143,7 +154,7 @@ const ReporteEventos = () => {
     }
   });
 
-  // Genera Reporte CIRO
+  // Genera Reporte CIRO - Trimestral
   const generateAllReportCiro = async () => {
     setSpin(true);
     const sendRequest = {
@@ -195,6 +206,57 @@ const ReporteEventos = () => {
       })
 
   }
+
+  // Genera Reporte CIRO - Rango de fechas
+  const generateAllReportCiroRangoFechas = async () => {
+    setSpin(true);
+    const sendRequest = {
+      fechaIniTrim: formik.values.fechaDesde,
+      fechaFinTrim: formik.values.fechaHasta
+    };
+
+    var formatDate = _.replace(sendRequest.fechaFinTrim, new RegExp("-", "g"), "");
+    const dateFile = { 'periodoEnvio': formatDate };
+
+    var compiledA = _.template(nameFiles.fileA);
+    var compiledB = _.template(nameFiles.fileB);
+    var compiledC = _.template(nameFiles.fileC);
+    var compiledD = _.template(nameFiles.fileD);
+    var compiledE = _.template(nameFiles.fileE);
+    var compiledF = _.template(nameFiles.fileF);
+    var compiledG = _.template(nameFiles.fileG);
+    var compiledH = _.template(nameFiles.fileH);
+    var compiledI = _.template(nameFiles.fileI);
+
+    var resultFileNameA = compiledA(dateFile);
+    var resultFileNameB = compiledB(dateFile);
+    var resultFileNameC = compiledC(dateFile);
+    var resultFileNameD = compiledD(dateFile);
+    var resultFileNameE = compiledE(dateFile);
+    var resultFileNameF = compiledF(dateFile);
+    var resultFileNameG = compiledG(dateFile);
+    var resultFileNameH = compiledH(dateFile);
+    var resultFileNameI = compiledI(dateFile);
+
+    try {
+      const response = await generateAllReport(sendRequest);
+      exportFile(response.data.reportA, resultFileNameA);
+      exportFile(response.data.reportB, resultFileNameB);
+      exportFile(response.data.reportC, resultFileNameC);
+      exportFile(response.data.reportD, resultFileNameD);
+      exportFile(response.data.reportE, resultFileNameE);
+      exportFile(response.data.reportF, resultFileNameF);
+      exportFile(response.data.reportG, resultFileNameG);
+      exportFile(response.data.reportH, resultFileNameH);
+      exportFile(response.data.reportI, resultFileNameI);
+      toastSweetAlert('success', Messages.ok, 2000);
+    } catch (error) {
+      console.error("Error CIRO rango fechas: ", error);
+      toastSweetAlert('error', Messages.no_ok, 2000);
+    }
+    setSpin(false);
+  };
+
 
   // Genera Fecha Inicio y fecha Fin para el Reporte CIRO (Intervalo)
   const fechaReporte = (tipo) => {
@@ -615,7 +677,7 @@ const ReporteEventos = () => {
               }
 
               <Row className='justify-content-center'>
-                {(formik.values.tipo !== null && ['evento', 'auditoriaExt', 'auditoriaInt', 'asfi', 'configurar'].includes(formik.values.tipo.value)) && (
+                {(formik.values.tipo !== null && ['evento', 'auditoriaExt', 'auditoriaInt', 'asfi', 'configurar', 'ciroRangoFechas'].includes(formik.values.tipo.value)) && (
                   <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
                     <Label className='form-label'>
                       Fecha Desde <span className='text-primary h5'><b>*</b></span>
@@ -633,7 +695,7 @@ const ReporteEventos = () => {
                   </FormGroup>
                 )}
 
-                {(formik.values.tipo !== null && ['evento', 'auditoriaExt', 'auditoriaInt', 'asfi', 'configurar'].includes(formik.values.tipo.value)) && (
+                {(formik.values.tipo !== null && ['evento', 'auditoriaExt', 'auditoriaInt', 'asfi', 'configurar', 'ciroRangoFechas'].includes(formik.values.tipo.value)) && (
                   <FormGroup tag={Col} md='6' lg='3' className='mb-0'>
                     <Label className='form-label'>
                       Fecha Hasta <span className='text-primary h5'><b>*</b></span>
@@ -835,18 +897,24 @@ const ReporteEventos = () => {
                     Limpiar
                   </Button>
                 </Col>
-                <Col xs={6} md={4} xl={2}>
-                  <Button
-                    block
-                    className='text-white'
-                    color="primary"
-                    type="submit"
-                  //disabled={formik.isSubmitting}
-                  >
-                    <File size={17} className='mr-2' />
-                    {(formik.values.tipo !== null && ['auditoriaExt', 'auditoriaInt', 'asfi', 'configurar'].includes(formik.values.tipo.value)) ? 'Descargar reporte' : 'Generar'}
-                  </Button>
-                </Col>
+
+                {formik.values.tipo !== null && (
+                  <Col xs={6} md={4} xl={2}>
+                    <Button
+                      block
+                      className='text-white'
+                      color="primary"
+                      type="submit"
+                    >
+                      <File size={17} className='mr-2' />
+                      {(() => {
+                        if (formik.values.tipo.value === 'ciroRangoFechas') return 'Descargar 9 reportes';
+                        if (['auditoriaExt', 'auditoriaInt', 'asfi', 'configurar'].includes(formik.values.tipo.value)) return 'Descargar reporte';
+                        return 'Generar';
+                      })()}
+                    </Button>
+                  </Col>
+                )}
 
                 <Col xs={4} md={2} className={formik.values.tipo !== null && (
                   (formik.values.tipo.value === 'ciro' && formik.values.trimestre !== null && formik.values.anio !== null) ||
