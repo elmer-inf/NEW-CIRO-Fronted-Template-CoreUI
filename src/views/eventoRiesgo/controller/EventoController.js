@@ -15,14 +15,8 @@ export const postEventoRiesgo = (data) => {
     return axios.post(uri, data);
 }
 
-/* export const putEventoRiesgoId = (id, data) => {
-    const uri = HOST + 'v1/eventoRiesgo/editarwithfiles/' + id;
-    const headerFormData = Auth.getHeaderFormData(data);
-    return axios.put(uri, data, headerFormData);
-} */
-
 export const putEventoRiesgoId = (id, data) => {
-    const uri = HOST + 'v1/eventoRiesgo/editar/' + id;
+    const uri = HOST + "v1/eventoRiesgo/editarwithfiles/" + id;
     return axios.put(uri, data);
 }
 
@@ -77,8 +71,8 @@ export const deleteEventoRiesgoId = (id) => {
 }
 
 // Eliminacion logica de Archivo por ID
-export const deleteArchivoId = (id) => {
+/* export const deleteArchivoId = (id) => {
     const uri = HOST + 'v1/archivo/eliminar/' + id;
     return axios.put(uri, {});
 }
-
+ */

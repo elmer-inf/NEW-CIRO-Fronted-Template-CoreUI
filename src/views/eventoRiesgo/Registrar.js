@@ -23,7 +23,7 @@ const EventoRiesgoRegistrar = () => {
 
   const history = useHistory();
   const [spin, setSpin] = useState(false);
-  const [getFiles, setGetFiles] = useState(null);
+  const [filePayload, setFilePayload] = useState({ newFiles: [], filesToDelete: [] });
   const [dataApiTipoEvento, setDataApiTipoEvento] = useState([]);
 
   const callApiTipoEvento = (idTablaDes) => {
@@ -36,9 +36,12 @@ const EventoRiesgoRegistrar = () => {
       })
   }
 
-  const obtainFiles = (f) => {
-    setGetFiles(f)
-  }
+  const obtainFiles = (payload) => {
+    setFilePayload({
+      newFiles: payload?.newFiles || [],
+      filesToDelete: payload?.filesToDelete || []
+    });
+  };
 
   useEffect(() => {
     callApiTipoEvento(6);
@@ -284,13 +287,9 @@ const EventoRiesgoRegistrar = () => {
 
     formData.append('eventoRiesgoPostDTO', JSON.stringify(_.omit(request, ['files'])));
 
-    if (getFiles !== null) {
-      for (let i = 0; i < getFiles.length; i++) {
-        formData.append("file", getFiles[i]);
-      }
-    } else {
-      formData.append("file", new Blob([]));
-    }
+    (filePayload.newFiles || []).forEach((f) => {
+      formData.append("file", f);
+    });
 
     postEventoRiesgoFormData(formData)
       .then(res => {

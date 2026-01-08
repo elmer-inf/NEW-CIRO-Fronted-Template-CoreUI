@@ -1,5 +1,5 @@
 import { React, Fragment, useState, useEffect } from 'react'
-import { ChevronRight, Delete, XSquare } from 'react-feather'
+import { ChevronRight, Delete, Trash2, XSquare } from 'react-feather'
 import { Label, FormGroup, Row, Col, Form, Button } from 'reactstrap'
 import { useFormik } from "formik"
 import * as Yup from "yup"
@@ -30,7 +30,8 @@ const DatosIniciales = ({ nextSection, setObject, initValues, obtainFiles, optio
   const profile = Auth.getProfile();
   const user = profile.usuario;
 
-  const [dataArchivos, setDataArchivo] = useState([]);
+  const [dataArchivos, setDataArchivo] = useState([]);       // existentes (API)
+  const [filesToDelete, setFilesToDelete] = useState([]);    // ids marcados para delete
 
 
   const columns = [{
@@ -41,36 +42,50 @@ const DatosIniciales = ({ nextSection, setObject, initValues, obtainFiles, optio
     dataField: 'size',
     text: 'Tamaño',
     formatter: (cell,) => formatSizeUnits(cell),
-    style: {
-      whiteSpace: 'nowrap'
-    }
+    style: { whiteSpace: 'nowrap' }
   }, {
     dataField: 'archivoBase64',
     text: 'Archivo',
     formatter: (cell, row) => (
       <CButton onClick={() => base64toPDF(row.archivoBase64, row.nombreArchivo, row.tipo)}>
-        <CIcon
-          className="mb-2"
-          src={getFileIcon(row.tipo)}
-          height={30}
-        />
+        <CIcon className="mb-2" src={getFileIcon(row.tipo)} height={30} />
       </CButton>
     )
+  }, {
+    dataField: 'acciones',
+    text: 'Acción',
+    formatter: (_, row) => (
+      <Button
+        color="primary"
+        size="sm"
+        outline
+        onClick={() => markFileToDelete(row.id)}
+      >
+        <Trash2 size={14} className="mr-1" />
+        Eliminar
+      </Button>
+    )
   }];
+
+  const markFileToDelete = (fileId) => {
+    // evitar duplicados
+    setFilesToDelete(prev => prev.includes(fileId) ? prev : [...prev, fileId]);
+    // ocultar de la tabla (UI)
+    setDataArchivo(prev => prev.filter(a => a.id !== fileId));
+  };
 
   const getArchivos = (idEvento) => {
     getArchivosByEvento(idEvento)
       .then(res => {
-        setDataArchivo(res.data)
+        setDataArchivo(res.data || []);
+        setFilesToDelete([]); // resetea marcas al cargar
       }).catch((error) => {
         console.error('Error: ', error)
       })
-  }
+  };
 
   useEffect(() => {
-    if (isEdit) {
-      getArchivos(idEvento);
-    }
+    if (isEdit) getArchivos(idEvento);
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -163,7 +178,11 @@ const DatosIniciales = ({ nextSection, setObject, initValues, obtainFiles, optio
       }
       //console.log('datos que se enviaran SECCION 1:', data)
       setObject(data);
-      obtainFiles(values.files)
+      // NUEVO: mandar al padre los archivos nuevos y los ids a borrar
+      obtainFiles({
+        newFiles: values.files || [],
+        filesToDelete: filesToDelete || []
+      });
       nextSection(1);
     }
   })
@@ -172,10 +191,11 @@ const DatosIniciales = ({ nextSection, setObject, initValues, obtainFiles, optio
   // Rellena Datos para Editar
   useEffect(() => {
     if (isEdit) {
-      formik.setValues({ ...initValues })
+      // IMPORTANTE: inicializar files vacío (nuevos)
+      formik.setValues({ ...initValues, files: [] });
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initValues])
+  }, [initValues]);
 
   /*   P  A  R  A  M  E  T  R  O  S   */
   /* Agencia */
@@ -681,26 +701,52 @@ const DatosIniciales = ({ nextSection, setObject, initValues, obtainFiles, optio
             />
           </FormGroup>
 
-          {isEdit ?
-            <FormGroup tag={Col} sm={12} md={{ size: 6, order: 0, offset: 3 }} className='mb-0'>
-              <div className='text-label pb-4'>Archivo(s) adjunto(s): </div>
-              <BootstrapTable
-                bootstrap4={true}
-                keyField="id"
-                data={dataArchivos}
-                columns={columns}
-                noDataIndication={() => 'Sin Archivos'}
-                bordered={false}
-                striped={true}
-                hover={false}
-                condensed={true}
-                wrapperClasses="table-responsive"
-              />
-            </FormGroup>
-            : null
-          }
+          {isEdit ? (
+            <>
+              <FormGroup tag={Col} sm={12} md={{ size: 8, order: 0, offset: 2 }} className='mb-0'>
+                <div className='text-label pb-2'>Archivo(s) adjunto(s):</div>
 
-          {!isEdit ?
+                <BootstrapTable
+                  bootstrap4={true}
+                  keyField="id"
+                  data={dataArchivos}
+                  columns={columns}
+                  noDataIndication={() => 'Sin Archivos'}
+                  bordered={false}
+                  striped={true}
+                  hover={false}
+                  condensed={true}
+                  wrapperClasses="table-responsive"
+                />
+              </FormGroup>
+
+              <FormGroup tag={Col} sm={12} md={{ size: 8, order: 0, offset: 2 }} className='pt-3'>
+                <Label className='form-label'>Adjuntar archivos nuevos:</Label>
+                <FilePond
+                  files={formik.values.files}
+                  allowMultiple={true}
+                  onupdatefiles={fileItems => {
+                    const newFiles = fileItems.map(item => item.file);
+                    formik.setFieldValue('files', newFiles);
+                  }}
+                  name="file" // IMPORTANTE: tu backend espera key "file"
+                  labelIdle='Arrastra y suelta los archivos aquí o <span class="filepond--label-action">haz clic para seleccionar</span>'
+                  acceptedFileTypes={[
+                    'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                    'application/pdf',
+                    'application/zip',
+                    'application/vnd.ms-outlook'
+                  ]}
+                />
+                {formik.errors.files && formik.touched.files ? (
+                  <div className='text-danger text-center'>{formik.errors.files}</div>
+                ) : null}
+              </FormGroup>
+            </>
+          ) : null}
+
+          {!isEdit ? (
             <FormGroup tag={Col} sm={12} md={{ size: 6, order: 0, offset: 3 }} className=''>
               <Label className='form-label'>Adjuntar archivos:</Label>
               <FilePond
@@ -710,24 +756,21 @@ const DatosIniciales = ({ nextSection, setObject, initValues, obtainFiles, optio
                   const newFiles = fileItems.map(item => item.file);
                   formik.setFieldValue('files', newFiles);
                 }}
-                name="files"
+                name="file" // también usar "file" para alinear con backend
                 labelIdle='Arrastra y suelta los archivos aquí o <span class="filepond--label-action">haz clic para seleccionar</span>'
                 acceptedFileTypes={[
-                  'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // Excel
-                  'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // Word
-                  'application/pdf', // PDF
-                  'application/zip', // ZIP
-                  'application/vnd.ms-outlook' // MSG
+                  'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                  'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                  'application/pdf',
+                  'application/zip',
+                  'application/vnd.ms-outlook'
                 ]}
               />
               {formik.errors.files && formik.touched.files ? (
                 <div className='text-danger text-center'>{formik.errors.files}</div>
               ) : null}
             </FormGroup>
-
-
-            : null
-          }
+          ) : null}
         </Row>
 
         <Row className='pt-4'>

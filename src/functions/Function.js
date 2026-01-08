@@ -52,36 +52,54 @@ export const buildSelectThree = (data, fieldValue, fieldLabel, fieldLabel2, mant
 }
 
 export const buildOptionSelect = (data, fieldValue, fieldLabel, mantainAllData, nameData) => {
-  var optionSelect = null;
-  try {
-    if (mantainAllData === true) {
-      optionSelect = { value: data[fieldValue], label: data[fieldLabel], ...data }
-    } else {
-      optionSelect = { value: data[fieldValue], label: data[fieldLabel] }
-    }
+  // null/undefined safe
+  if (data == null) return null;
 
-  } catch (error) {
-    console.error('Error in ' + nameData + ' - buildOptionSelect : ', error)
+  // si por algún motivo no es objeto (p.ej. 0 o string), también evitar romper
+  if (typeof data !== 'object') return null;
 
-  }
-  return optionSelect;
-}
+  const value = data[fieldValue];
+  const label = data[fieldLabel];
 
-export const buildOptionSelectThree = (data, fieldValue, fieldLabel, fieldLabel2, mantainAllData, nameData) => {
-  var optionSelect = null;
-  try {
-    if (mantainAllData === true) {
-      optionSelect = { value: data[fieldValue], label: data[fieldLabel] + ' - ' + data[fieldLabel2], ...data }
-    } else {
-      optionSelect = { value: data[fieldValue], label: data[fieldLabel] + ' - ' + data[fieldLabel2] }
-    }
+  // si no hay value/label, retornar null
+  if (value == null || label == null) return null;
 
-  } catch (error) {
-    console.error('Error in ' + nameData + ' - buildOptionSelect : ', error)
+  return mantainAllData
+    ? { value, label, ...data }
+    : { value, label };
+};
 
-  }
-  return optionSelect;
-}
+
+export const buildOptionSelectThree = (
+  data,
+  fieldValue,
+  fieldLabel,
+  fieldLabel2,
+  mantainAllData,
+  nameData
+) => {
+  // null/undefined safe
+  if (data == null) return null;
+  if (typeof data !== "object") return null;
+
+  const value = data[fieldValue];
+  const l1 = data[fieldLabel];
+  const l2 = data[fieldLabel2];
+
+  // si no hay value, no tiene sentido armar option
+  if (value == null) return null;
+
+  // label tolerante: evita "null - null" o "undefined - undefined"
+  const labelParts = [l1, l2].filter(v => v != null && String(v).trim() !== "");
+  const label = labelParts.join(" - ");
+
+  // si no hay label usable, puedes devolver null o fallback
+  if (!label) return null; // o: const label = String(value);
+
+  return mantainAllData
+    ? { value, label, ...data }
+    : { value, label };
+};
 
 export const buildSelectTwo = (data, fieldValue, fieldLabel, mantainAllData) => {
 

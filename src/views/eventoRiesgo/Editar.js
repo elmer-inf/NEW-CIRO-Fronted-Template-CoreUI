@@ -25,10 +25,14 @@ const UpdateEventoRiesgo = ({ match }) => {
   const [spin, setSpin] = useState(true);
   const [dataApiTipoEvento, setDataApiTipoEvento] = useState([]);
   const [dataAuxListRiesgos, setDataAuxListRiesgos] = useState([]);
+  const [newFiles, setNewFiles] = useState([]);          // archivos nuevos (File objects)
+  const [filesToDelete, setFilesToDelete] = useState([]); // ids (Long) para soft delete
 
-  const obtainFiles = (f) => {
-  //setGetFiles(f)
-  }
+  // callback desde DatosIniciales
+  const obtainFiles = ({ newFiles, filesToDelete }) => {
+    setNewFiles(Array.isArray(newFiles) ? newFiles : []);
+    setFilesToDelete(Array.isArray(filesToDelete) ? filesToDelete : []);
+  };
 
   const formValueInitialTipoEvento = {
     tipoEvento: null,
@@ -206,7 +210,7 @@ const UpdateEventoRiesgo = ({ match }) => {
       canalAsfiId: buildOptionSelect(args.canalAsfiId, 'id', 'nombre', true, 'canalAsfiId'),
       descripcion: args.descripcion,
       descripcionCompleta: args.descripcionCompleta,
-      files: null,
+      files: [], // en edición manejamos nuevos files en FilePond, no en DTO
       responsableElaborador: args.responsableElaborador,
     };
 
@@ -274,16 +278,21 @@ const UpdateEventoRiesgo = ({ match }) => {
 
   // Evento de riesgo ID
   const getById = async (idEventoRiesgo) => {
-    setSpin(true)
+    setSpin(true);
     await getEventoRiesgoId(idEventoRiesgo)
       .then((response) => {
         const res = response.data;
         macthedValues(res);
-        setSpin(false)
+        // reset estados de archivos al cargar
+        setNewFiles([]);
+        setFilesToDelete([]);
+        setSpin(false);
       }).catch((error) => {
         console.error("Error: ", error);
+        setSpin(false);
       });
-  }
+  };
+
 
   useEffect(() => {
     callApiTipoEvento(6);
@@ -396,12 +405,26 @@ const UpdateEventoRiesgo = ({ match }) => {
     }
 
     const idEvento = match.params.id;
-    putEventoRiesgoId(idEvento, _.omit(request, ['files', 'riesgoRelacionado']))
+    // NO enviar "files" ni otros campos UI
+    const dto = _.omit(request, ['files', 'riesgoRelacionado']);
+
+    // Armado multipart
+    const formData = new FormData();
+
+    formData.append('eventoRiesgoPutDTO', JSON.stringify(dto));
+    formData.append('filesToDelete', JSON.stringify(filesToDelete || []));
+
+    // key: file (n archivos nuevos)
+    (newFiles || []).forEach((f) => {
+      formData.append('file', f);
+    });
+
+    putEventoRiesgoId(idEvento, formData)
       .then(res => {
         if (res.status >= 200 && res.status < 300) {
           notificationToast('success', 'Evento de Riesgo modificado exitósamente');
         } else {
-          console.error('Hubo un  error ', res);
+          console.error('Hubo un error ', res);
           notificationToast('error', 'Algo salió mal, intente nuevamente');
         }
       }).catch((error) => {
@@ -517,7 +540,6 @@ const UpdateEventoRiesgo = ({ match }) => {
                           obtainFiles={obtainFiles}
                           optionsEstado={optionsEstado}
                           isEdit={true}
-                          existingFiles={formValueInitialDatosSec.files}
                         />
                       </TabPane>
                       <TabPane tabId="2">
