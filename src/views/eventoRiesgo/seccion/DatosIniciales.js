@@ -33,7 +33,6 @@ const DatosIniciales = ({ nextSection, setObject, initValues, obtainFiles, optio
   const [dataArchivos, setDataArchivo] = useState([]);       // existentes (API)
   const [filesToDelete, setFilesToDelete] = useState([]);    // ids marcados para delete
 
-
   const columns = [{
     dataField: 'nombreArchivo',
     text: 'Nombre',
@@ -56,7 +55,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, obtainFiles, optio
     text: 'Acción',
     formatter: (_, row) => (
       <Button
-        color="primary"
+        color="danger"
         size="sm"
         outline
         onClick={() => markFileToDelete(row.id)}
@@ -72,6 +71,12 @@ const DatosIniciales = ({ nextSection, setObject, initValues, obtainFiles, optio
     setFilesToDelete(prev => prev.includes(fileId) ? prev : [...prev, fileId]);
     // ocultar de la tabla (UI)
     setDataArchivo(prev => prev.filter(a => a.id !== fileId));
+    // revalida luego de actualizar el state
+    setTimeout(() => {
+      if (formik.touched.files || formik.submitCount > 0) {
+        formik.validateField('files');
+      }
+    }, 0);
   };
 
   const getArchivos = (idEvento) => {
@@ -79,6 +84,7 @@ const DatosIniciales = ({ nextSection, setObject, initValues, obtainFiles, optio
       .then(res => {
         setDataArchivo(res.data || []);
         setFilesToDelete([]); // resetea marcas al cargar
+        setTimeout(() => formik.validateField("files"), 0);
       }).catch((error) => {
         console.error('Error: ', error)
       })
@@ -115,14 +121,19 @@ const DatosIniciales = ({ nextSection, setObject, initValues, obtainFiles, optio
       canalAsfiId: Yup.mixed().required(Messages.required),
       descripcion: Yup.string().required(Messages.required),
       descripcionCompleta: Yup.string().nullable(),
-      //files: Yup.mixed().nullable()
-      files: Yup.array().of(Yup.mixed())
+      files: Yup.array()
+        .of(Yup.mixed())
         .test(
-          "fileSize",
-          "No se permite cargar mas de 4 archivos.",
-          files => !files || files.length <= 4
+          "maxTotalFiles",
+          "No se permite cargar más de 4 archivos",
+          function (files) {
+            const newCount = (files || []).length;
+            const existingCount = isEdit ? (dataArchivos?.length || 0) : 0;
+            return (existingCount + newCount) <= 4;
+          }
         )
         .nullable()
+
 
       /* fechaIni: Yup.date().max(new Date('12-31-3000'), Messages.yearOutOfRange).nullable(),
       horaIni: Yup.string().nullable(),
@@ -370,6 +381,15 @@ const DatosIniciales = ({ nextSection, setObject, initValues, obtainFiles, optio
     history.push('/eventoRiesgo/Listar');
   }
 
+
+  useEffect(() => {
+    if (!isEdit) return;
+    // Si ya se tocó el campo o ya hubo submit, revalida para que se actualice el mensaje
+    if (formik.touched.files || formik.submitCount > 0) {
+      formik.validateField('files');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEdit, dataArchivos.length]);
 
   return (
     <Fragment>
@@ -721,13 +741,16 @@ const DatosIniciales = ({ nextSection, setObject, initValues, obtainFiles, optio
               </FormGroup>
 
               <FormGroup tag={Col} sm={12} md={{ size: 8, order: 0, offset: 2 }} className='pt-3'>
-                <Label className='form-label'>Adjuntar archivos nuevos:</Label>
+                <Label className='form-label'>Adjuntar archivos:</Label>
                 <FilePond
                   files={formik.values.files}
                   allowMultiple={true}
                   onupdatefiles={fileItems => {
                     const newFiles = fileItems.map(item => item.file);
-                    formik.setFieldValue('files', newFiles);
+                    // 1) marcar touched para que el error se muestre inmediatamente
+                    formik.setFieldTouched('files', true, false);
+                    // 2) setear y VALIDAR de inmediato (3er parámetro = shouldValidate)
+                    formik.setFieldValue('files', newFiles, true);
                   }}
                   name="file" // IMPORTANTE: tu backend espera key "file"
                   labelIdle='Arrastra y suelta los archivos aquí o <span class="filepond--label-action">haz clic para seleccionar</span>'
@@ -739,9 +762,10 @@ const DatosIniciales = ({ nextSection, setObject, initValues, obtainFiles, optio
                     'application/vnd.ms-outlook'
                   ]}
                 />
-                {formik.errors.files && formik.touched.files ? (
+                {formik.errors.files && (formik.touched.files || formik.submitCount > 0) ? (
                   <div className='text-danger text-center'>{formik.errors.files}</div>
                 ) : null}
+
               </FormGroup>
             </>
           ) : null}
@@ -754,7 +778,10 @@ const DatosIniciales = ({ nextSection, setObject, initValues, obtainFiles, optio
                 allowMultiple={true}
                 onupdatefiles={fileItems => {
                   const newFiles = fileItems.map(item => item.file);
-                  formik.setFieldValue('files', newFiles);
+                  // 1) marcar touched para que el error se muestre inmediatamente
+                  formik.setFieldTouched('files', true, false);
+                  // 2) setear y VALIDAR de inmediato (3er parámetro = shouldValidate)
+                  formik.setFieldValue('files', newFiles, true);
                 }}
                 name="file" // también usar "file" para alinear con backend
                 labelIdle='Arrastra y suelta los archivos aquí o <span class="filepond--label-action">haz clic para seleccionar</span>'

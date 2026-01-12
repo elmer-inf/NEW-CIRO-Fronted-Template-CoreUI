@@ -680,7 +680,8 @@ const CategoriaNegocio = ({ nextSection, beforeSection, setObject, initValues, i
               error={formik.errors.listMatrizRiesgo}
               touched={formik.touched.listMatrizRiesgo}
               options={listRiesgoRel}
-              isMulti={tipoEvento !== null && tipoEvento === 'A' ? false : true}
+              /* isMulti={tipoEvento !== null && tipoEvento === 'A' ? false : true} // Restriccion solicitada por Andrea Fresco  */
+              isMulti={true}
             />
           </FormGroup>
         </Row>
