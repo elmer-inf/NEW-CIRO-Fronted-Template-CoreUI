@@ -167,7 +167,9 @@ const DatosIniciales = ({ nextSection, setObject, initValues, obtainFiles, optio
 
       const data = {
         ...values,
-        estadoRegistro: 'Pendiente',
+        //estadoRegistro: 'Pendiente',
+        estadoRegistro: isEdit? initValues?.estadoRegistro ?? values.estadoRegistro : (values.estadoRegistro?.trim() ? values.estadoRegistro : 'Pendiente'),
+
         fechaDescAux: values.fechaDesc.substring(0, 4),
         responsableElaborador: user.nombre + ' ' + user.primerApellido,
         estadoEvento: ((values.horaFin === null || values.horaFin === '') || (values.fechaFin === null || values.fechaFin === '')) ? 'Seguimiento' : 'Solución',
